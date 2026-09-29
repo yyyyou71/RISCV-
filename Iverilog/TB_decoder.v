@@ -120,33 +120,29 @@ module TB_decoder ();
     localparam MS_WORD = 2'b10;
 
     // ---- 各类指令「应有的」控制信号组合 ----
-    //  e_dp 位序（刻意与 decoder 端口声明顺序一致）：
-    //      {RegWrite, MemRead, MemWrite, MemSize[1:0], MemUnsigned,
-    //       wb_type[1:0], ALUen, ALUSrc1, ALUSrc2}
-    //  无条件有效的 4 位：RegWrite / MemRead / MemWrite / ALUen
-    //  其余只在"信号真被使用"时比较，don't care 处填 x：
-    //      MemSize         仅 MemRead|MemWrite（访存扩展器要用）
-    //      MemUnsigned     仅 MemRead（store 不关心符号扩展）
-    //      wb_type         仅 RegWrite
-    //      ALUSrc1/ALUSrc2 仅 ALUen
-    localparam DP_R      = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_ALU, 1'b1, 1'b0, 1'b1}; // R 型
-    localparam DP_IALU   = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_ALU, 1'b1, 1'b0, 1'b0}; // I 型算术
-    localparam DP_JALR   = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_PC4, 1'b1, 1'b0, 1'b0}; // JALR
-    localparam DP_BRANCH = {1'b0, 1'b0, 1'b0, 2'bx,     1'bx, 2'bx,   1'b1, 1'b0, 1'b1}; // branch
-    localparam DP_LUI    = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_IMM, 1'b0, 1'bx, 1'bx}; // LUI
-    localparam DP_AUIPC  = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_ALU, 1'b1, 1'b1, 1'b0}; // AUIPC：A 口取 PC
-    localparam DP_JAL    = {1'b1, 1'b0, 1'b0, 2'bx,     1'bx, WB_PC4, 1'b0, 1'bx, 1'bx}; // JAL
-    localparam DP_SYS    = {1'b0, 1'b0, 1'b0, 2'bx,     1'bx, 2'bx,   1'b0, 1'bx, 1'bx}; // SYSTEM/非法
-    // load / store 必须按 funct3 拆开：宽度和符号扩展必须能被区分，
-    // 否则数据通路不知道要取几个字节、要不要符号扩展。
+    //  e_dp = {RegWrite, MemRead, MemWrite, MemSize[1:0], MemUnsigned,
+    //          wb_type[1:0], ALUen, ALUSrc1, ALUSrc2}
+    //  ★ RTL 现在对**每条指令**都给出确定值（用不到的信号走统一默认值），
+    //    所以这里不再有 don't care —— 每一位都可以无条件比较。
+    //    · 地址类默认 x0   · 其余控制信号默认中性值（00 / 0 / OP_ADD）
+    localparam DP_R      = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_ALU, 1'b1, 1'b0, 1'b1}; // R 型
+    localparam DP_IALU   = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_ALU, 1'b1, 1'b0, 1'b0}; // I 型算术
+    localparam DP_JALR   = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_PC4, 1'b1, 1'b0, 1'b0}; // JALR
+    localparam DP_BRANCH = {1'b0, 1'b0, 1'b0, 2'b00,   1'b0, WB_ALU, 1'b1, 1'b0, 1'b1}; // branch
+    localparam DP_LUI    = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_IMM, 1'b0, 1'b0, 1'b0}; // LUI：不用 ALU
+    localparam DP_AUIPC  = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_ALU, 1'b1, 1'b1, 1'b0}; // AUIPC：A 口取 PC
+    localparam DP_JAL    = {1'b1, 1'b0, 1'b0, 2'b00,   1'b0, WB_PC4, 1'b1, 1'b1, 1'b0}; // JAL：目标 PC+imm 走 ALU
+    localparam DP_SYS    = {1'b0, 1'b0, 1'b0, 2'b00,   1'b0, WB_ALU, 1'b0, 1'b0, 1'b0}; // SYSTEM/非法
+    // load / store 按 funct3 拆开：宽度和符号扩展必须能被区分。
+    // lw 的 MemUnsigned 也无条件定为 0（字宽不需要扩展，取的就是 funct3[2]=0）
     localparam DP_LB     = {1'b1, 1'b1, 1'b0, MS_BYTE, 1'b0, WB_MEM, 1'b1, 1'b0, 1'b0};
     localparam DP_LH     = {1'b1, 1'b1, 1'b0, MS_HALF, 1'b0, WB_MEM, 1'b1, 1'b0, 1'b0};
-    localparam DP_LW     = {1'b1, 1'b1, 1'b0, MS_WORD, 1'bx, WB_MEM, 1'b1, 1'b0, 1'b0};
+    localparam DP_LW     = {1'b1, 1'b1, 1'b0, MS_WORD, 1'b0, WB_MEM, 1'b1, 1'b0, 1'b0};
     localparam DP_LBU    = {1'b1, 1'b1, 1'b0, MS_BYTE, 1'b1, WB_MEM, 1'b1, 1'b0, 1'b0};
     localparam DP_LHU    = {1'b1, 1'b1, 1'b0, MS_HALF, 1'b1, WB_MEM, 1'b1, 1'b0, 1'b0};
-    localparam DP_SB     = {1'b0, 1'b0, 1'b1, MS_BYTE, 1'bx, 2'bx,   1'b1, 1'b0, 1'b0};
-    localparam DP_SH     = {1'b0, 1'b0, 1'b1, MS_HALF, 1'bx, 2'bx,   1'b1, 1'b0, 1'b0};
-    localparam DP_SW     = {1'b0, 1'b0, 1'b1, MS_WORD, 1'bx, 2'bx,   1'b1, 1'b0, 1'b0};
+    localparam DP_SB     = {1'b0, 1'b0, 1'b1, MS_BYTE, 1'b0, WB_ALU, 1'b1, 1'b0, 1'b0};
+    localparam DP_SH     = {1'b0, 1'b0, 1'b1, MS_HALF, 1'b0, WB_ALU, 1'b1, 1'b0, 1'b0};
+    localparam DP_SW     = {1'b0, 1'b0, 1'b1, MS_WORD, 1'b0, WB_ALU, 1'b1, 1'b0, 1'b0};
 
     // ---------------------------------------------------------------------
     //  指令编码构造：按手册字段摆位，避免手写 32 位常量出错
@@ -217,9 +213,9 @@ module TB_decoder ();
         end
     endtask
 
-    // mask[2]=检查 rs1_addr, mask[1]=检查 rs2_addr, mask[0]=检查 rd_addr
-    // 因为 RTL 里 rs1/rs2/rd 无条件取自指令位域，某些类型下这些位域其实是
-    // 立即数的一部分（如 S 型的 rd、J 型的 rs1），所以按类型选择性检查。
+    // 地址三个端口现在**每条指令都有确定值**：真读/写寄存器的桶给真实编号，
+    // 其余桶给默认值 x0（x0 永远不会被写，所以不可能造成假依赖）。
+    // 因此三个都无条件检查——mask 参数保留只为兼容调用点，已不再使用。
     task expect_regs;
         input [255:0] name;
         input [4:0]   e_rs1;
@@ -227,36 +223,28 @@ module TB_decoder ();
         input [4:0]   e_rd;
         input [2:0]   mask;
         begin
-            if (mask[2]) begin
-                checks = checks + 1;
-                if (rs1_addr !== e_rs1) begin
-                    errors = errors + 1;
-                    $display("  [FAIL] %0s  rs1_addr = x%0d，期望 x%0d", name, rs1_addr, e_rs1);
-                end
+            checks = checks + 3;
+            if (rs1_addr !== e_rs1) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  rs1_addr = x%0d，期望 x%0d", name, rs1_addr, e_rs1);
             end
-            if (mask[1]) begin
-                checks = checks + 1;
-                if (rs2_addr !== e_rs2) begin
-                    errors = errors + 1;
-                    $display("  [FAIL] %0s  rs2_addr = x%0d，期望 x%0d", name, rs2_addr, e_rs2);
-                end
+            if (rs2_addr !== e_rs2) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  rs2_addr = x%0d，期望 x%0d", name, rs2_addr, e_rs2);
             end
-            if (mask[0]) begin
-                checks = checks + 1;
-                if (rd_addr !== e_rd) begin
-                    errors = errors + 1;
-                    $display("  [FAIL] %0s  rd_addr = x%0d，期望 x%0d", name, rd_addr, e_rd);
-                end
+            if (rd_addr !== e_rd) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  rd_addr = x%0d，期望 x%0d", name, rd_addr, e_rd);
             end
         end
     endtask
 
     //  ------------------------------------------------------------------
-    //  期望值参数（don't care 请传 x，会被自动跳过检查）
+    //  期望值参数
     //  ------------------------------------------------------------------
     //  name     : 指令文本（打印用，必须 ASCII 且 <= 32 字符）
     //  e_imm    : 期望 immediate（已按规范符号扩展）
-    //  chk_imm  : 0 = 该类型根本不驱动 immediate（如 R 型），跳过检查
+    //  chk_imm  : 保留参数（兼容调用点）；immediate 现在恒有确定值，一律检查
     //  e_dp     : {RegWrite, MemRead, MemWrite, MemSize[1:0], MemUnsigned,
     //               wb_type[1:0], ALUen, ALUSrc1, ALUSrc2}
     //  e_bj     : {Branch, Jump}
@@ -264,16 +252,9 @@ module TB_decoder ();
     //  e_btype  : 期望 Branch_type
     //  e_valid  : 期望 valid_out
     //
-    //  @note RTL 的设计约定是"下游用不到的信号就保持不变"（减少翻转功耗）。
-    //        因此这些信号的**检查时机必须由消费者的使能决定**：
-    //            MemSize          → 访存扩展器 → 只在 MemRead|MemWrite 时检查
-    //            MemUnsigned      → 只在 MemRead 时检查（store 不关心）
-    //            wb_type          → 写回 mux   → 只在 RegWrite 时检查
-    //            ALUSrc1/ALUSrc2  → ALU        → 只在 ALUen 时检查
-    //            ALUOp            → ALU        → 只在 ALUen 时检查
-    //            Branch_type      → PC 选择    → 只在 Branch 时检查
-    //        在 don't care 的位置上 DP_* 填的是 x：万一哪天门控条件写错了
-    //        （该查的没查、不该查的查了），x 会立刻失配报出来。
+    //  ★ RTL 现在对每条指令都给出确定的默认值（不再"保持旧值"），
+    //    所以这里**没有任何条件门控**：每个信号每一拍都断言。
+    //    检查强度比之前更高 —— 之前那些 don't care 位现在也全在查。
     //  ------------------------------------------------------------------
     task expect_ctrl;
         input [255:0] name;
@@ -287,9 +268,8 @@ module TB_decoder ();
         integer       e0;
         begin
             e0 = errors;
-            checks = checks + 13;
+            checks = checks + 11;
 
-            // ---------------- 无条件有效的信号 ----------------
             if ({RegWrite, MemRead, MemWrite} !== e_dp[10:8]) begin
                 errors = errors + 1;
                 $display("  [FAIL] %0s  {RegWrite,MemRead,MemWrite} = %b，期望 %b",
@@ -303,40 +283,38 @@ module TB_decoder ();
                 errors = errors + 1;
                 $display("  [FAIL] %0s  {Branch,Jump} = %b，期望 %b", name, {Branch, Jump}, e_bj);
             end
-            if (chk_imm && (immediate !== e_imm)) begin
+            if (MemSize !== e_dp[7:6]) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  MemSize = %b，期望 %b", name, MemSize, e_dp[7:6]);
+            end
+            if (MemUnsigned !== e_dp[5]) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  MemUnsigned = %b，期望 %b", name, MemUnsigned, e_dp[5]);
+            end
+            if (wb_type !== e_dp[4:3]) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  wb_type = %0d，期望 %0d", name, wb_type, e_dp[4:3]);
+            end
+            if ({ALUSrc1, ALUSrc2} !== e_dp[1:0]) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  {ALUSrc1,ALUSrc2} = %b，期望 %b",
+                         name, {ALUSrc1, ALUSrc2}, e_dp[1:0]);
+            end
+            if (ALUOp !== e_aluop) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  ALUOp = %0d，期望 %0d", name, ALUOp, e_aluop);
+            end
+            if (Branch_type !== e_btype) begin
+                errors = errors + 1;
+                $display("  [FAIL] %0s  Branch_type = %0d，期望 %0d", name, Branch_type, e_btype);
+            end
+            if (immediate !== e_imm) begin
                 errors = errors + 1;
                 $display("  [FAIL] %0s  immediate = %h，期望 %h", name, immediate, e_imm);
             end
             if (valid_out !== e_valid) begin
                 errors = errors + 1;
                 $display("  [FAIL] %0s  valid_out = %b，期望 %b", name, valid_out, e_valid);
-            end
-
-            // ---------- 只在被真正使用时才比较的信号 ----------
-            if ((MemRead | MemWrite) && (MemSize !== e_dp[7:6])) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  MemSize = %b，期望 %b", name, MemSize, e_dp[7:6]);
-            end
-            if (MemRead && (e_dp[7:6] !== MS_WORD) && (MemUnsigned !== e_dp[5])) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  MemUnsigned = %b，期望 %b", name, MemUnsigned, e_dp[5]);
-            end
-            if (RegWrite && (wb_type !== e_dp[4:3])) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  wb_type = %0d，期望 %0d", name, wb_type, e_dp[4:3]);
-            end
-            if (ALUen && ({ALUSrc1, ALUSrc2} !== e_dp[1:0])) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  {ALUSrc1,ALUSrc2} = %b，期望 %b",
-                         name, {ALUSrc1, ALUSrc2}, e_dp[1:0]);
-            end
-            if (ALUen && (ALUOp !== e_aluop)) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  ALUOp = %0d，期望 %0d", name, ALUOp, e_aluop);
-            end
-            if (Branch && (Branch_type !== e_btype)) begin
-                errors = errors + 1;
-                $display("  [FAIL] %0s  Branch_type = %0d，期望 %0d", name, Branch_type, e_btype);
             end
 
             if (errors == e0) $display("  [ ok ] %0s", name);
@@ -675,8 +653,9 @@ module TB_decoder ();
         drive(ins, 1'b1, 1'b0, 1'b1);
         expect_ctrl("stall=1: hold addi ctrl", 32'h0000_0001, 1'b1, DP_IALU, 2'b00, ALU_ADD, 3'd0, 1'b1);
 
+        // sub 是 R 型，不驱动 immediate → 现在是默认值 0（以前是"保持"addi 的 1）
         drive(ins, 1'b1, 1'b0, 1'b0);                           // 释放 stall
-        expect_ctrl("stall released: decode sub", 32'h0000_0001, 1'b1, DP_R, 2'b00, ALU_SUB, 3'd0, 1'b1);
+        expect_ctrl("stall released: decode sub", 32'd0, 1'b1, DP_R, 2'b00, ALU_SUB, 3'd0, 1'b1);
 
         // -----------------------------------------------------------------
         // 12. flush：清 valid_out

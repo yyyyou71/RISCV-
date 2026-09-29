@@ -1,6 +1,7 @@
 module decoder(
     input [31:0]instruction,
     input clk,
+    input rst_n,
 
     input valid_in,
     input flush,
@@ -58,7 +59,7 @@ module decoder(
 
     // 是否载入流水线标志位
     always @(posedge clk) begin
-        if(flush)
+        if(flush | !rst_n)
             valid_out <= 1'b0;
         else if(stall)
             valid_out <= valid_out;
@@ -113,10 +114,18 @@ module decoder(
         end
 
         else begin
-            // MemSize / MemUnsigned 只有 load 和 store 两个桶会用到，
-            // 其余桶一律保持（don't care → 不动，省翻转）。
-            MemSize     <= MemSize;
-            MemUnsigned <= MemUnsigned;
+            //  默认值：本条指令"用不到"的输出一律取确定的默认值。
+            rs1_addr    <= 5'd0;
+            rs2_addr    <= 5'd0;
+            rd_addr     <= 5'd0;
+            wb_type     <= WB_ALU;
+            ALUSrc1     <= 1'b0;
+            ALUSrc2     <= 1'b0;
+            ALUOp       <= OP_ADD;
+            MemSize     <= 2'b00;
+            MemUnsigned <= 1'b0;
+            Branch_type <= 3'd0;
+            immediate   <= 32'd0;
 
             case (type_flag)            
                 10'b00_0000_0001: begin   // if_R
@@ -170,7 +179,6 @@ module decoder(
                     ALUen <= 1;
 
                     rs1_addr <= instruction[19:15];
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7]; 
                     case (funct3)
                         3'h0: ALUOp <= OP_ADD;
@@ -206,7 +214,6 @@ module decoder(
                     ALUen <= 1;
 
                     rs1_addr <= instruction[19:15];
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7]; 
                 end  
                 10'b00_0000_1000: begin   // if_I_J (JALR)
@@ -224,15 +231,13 @@ module decoder(
                     ALUen <= 1;
 
                     rs1_addr <= instruction[19:15];
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7]; 
                 end  
                 10'b00_0001_0000: begin   // if_S
                     RegWrite <= 0;
                     MemRead <= 0;
                     MemWrite <= 1;
-                    MemSize <= funct3[1:0];     // SB/SH/SW 的宽度（MemUnsigned 对 store 无意义 → 保持）
-                    wb_type <= wb_type;       // 不写回 → 下游不用 → 保持
+                    MemSize <= funct3[1:0];     // SB/SH/SW 的宽度（MemUnsigned 对 store 无意义 → 默认 0）
                     ALUSrc1 <= 0;
                     
                     ALUSrc2 <= 0;
@@ -244,13 +249,11 @@ module decoder(
 
                     rs1_addr <= instruction[19:15];
                     rs2_addr <= instruction[24:20];
-                    rd_addr <= rd_addr; 
                 end  
                 10'b00_0010_0000: begin   // if_B
                     RegWrite <= 0;
                     MemRead <= 0;
                     MemWrite <= 0;
-                    wb_type <= wb_type;       // 不写回 → 下游不用 → 保持
                     ALUSrc1 <= 0;
                     
                     ALUSrc2 <= 1;
@@ -261,7 +264,6 @@ module decoder(
 
                     rs1_addr <= instruction[19:15];
                     rs2_addr <= instruction[24:20];
-                    rd_addr <= rd_addr; 
                     case (funct3)
                         3'h0: begin                 // 等于跳转
                             ALUOp <= OP_EQ;
@@ -288,7 +290,7 @@ module decoder(
                             Branch_type <= BR_BGEU;
                         end
                         default: begin
-                            
+                            Branch <= 0;
                         end
                     endcase
                 end  
@@ -297,17 +299,11 @@ module decoder(
                     MemRead <= 0;
                     MemWrite <= 0;
                     wb_type <= WB_IMM;        // 写回立即数本身
-                    ALUSrc1 <= ALUSrc1;       // ALUen=0 → 下游不用 → 保持
-                    
                     Branch <= 0;
                     Jump <= 0;
                     immediate <= {instruction[31:12],12'b0};
-                    ALUOp <= ALUOp;           // ALUen=0 → 保持
-                    ALUen <= 0;
-                    ALUSrc2 <= ALUSrc2;       // ALUen=0 → 保持
+                    ALUen <= 0;               // 不用 ALU → ALUOp / ALUSrc1 / ALUSrc2 用默认值
 
-                    rs1_addr <= rs1_addr;
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7]; 
                 end  
                 10'b00_1000_0000: begin   // if_U_A (AUIPC)
@@ -323,63 +319,40 @@ module decoder(
                     ALUOp <= OP_ADD;
                     ALUen <= 1;               // 必须开 ALU 才能做加法
 
-                    rs1_addr <= rs1_addr;     // AUIPC 不读寄存器，地址 don't care
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7];
                 end
                 10'b01_0000_0000: begin   // if_J
                     RegWrite <= 1;
                     MemRead <= 0;
                     MemWrite <= 0;
-                    wb_type <= WB_PC4;        // 写回链接值 PC+4
-                    ALUSrc1 <= ALUSrc1;       // ALUen=0 → 下游不用 → 保持
-                    
-                    ALUSrc2 <= ALUSrc2;       // ALUen=0 → 保持
+                    wb_type <= WB_PC4;        // 写回链接值 PC+4（不是 ALU 这个结果）
+                    ALUSrc1 <= 1;             // A 口取 PC
+                    ALUSrc2 <= 0;             // B 口取立即数
                     Branch <= 0;
                     Jump <= 1;
                     immediate <= {{12{instruction[31]}},instruction[19:12],instruction[20],instruction[30:25],instruction[24:21],1'b0};
-                    ALUOp <= ALUOp;           // ALUen=0 → 保持
-                    ALUen <= 0;
+                    ALUOp <= OP_ADD;
+                    ALUen <= 1;               // 用 ALU 算跳转目标 PC+imm；结果→PC，不写回
 
-                    rs1_addr <= rs1_addr;
-                    rs2_addr <= rs2_addr;
                     rd_addr <= instruction[11:7];
                 end  
                 10'b10_0000_0000: begin   // if_e
                     RegWrite <= 0;
                     MemRead <= 0;
                     MemWrite <= 0;
-                    wb_type <= wb_type;       // 不写回 → 保持
-                    ALUSrc1 <= ALUSrc1;       // ALUen=0 → 保持
-                    
-                    ALUSrc2 <= ALUSrc2;       // ALUen=0 → 保持
                     Branch <= 0;
                     Jump <= 0;
                     immediate <= 0;
-                    ALUOp <= ALUOp;           // ALUen=0 → 保持
                     ALUen <= 0;
-
-                    rs1_addr <= rs1_addr;
-                    rs2_addr <= rs2_addr;
-                    rd_addr <= rd_addr;
                 end 
                 default: begin
                     RegWrite <= 0;
                     MemRead <= 0;
                     MemWrite <= 0;
-                    wb_type <= wb_type;       // 不写回 → 保持
-                    ALUSrc1 <= ALUSrc1;       // ALUen=0 → 保持
-                    
-                    ALUSrc2 <= ALUSrc2;       // ALUen=0 → 保持
                     Branch <= 0;
                     Jump <= 0;
                     immediate <= 0;
-                    ALUOp <= ALUOp;           // ALUen=0 → 保持
                     ALUen <= 0;
-
-                    rs1_addr <= rs1_addr;
-                    rs2_addr <= rs2_addr;
-                    rd_addr <= rd_addr;
                 end
             endcase
         end
