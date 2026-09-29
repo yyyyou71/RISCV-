@@ -1,0 +1,16 @@
+obj_dir
+obj_iv
+build
+.vscode
+.claude
+*.vsd
+*.vvp
+*.vcd
+*.png
+*.jpg
+
+# digitalJS的仿真文件
+digital_sim
+note.md
+
+*.pdf
