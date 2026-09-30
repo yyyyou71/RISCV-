@@ -6,10 +6,18 @@ SRC_CPP = TB_test.cpp
 WAVE = waveform.vcd
 
 # ---- Icarus Verilog：行为级仿真（decoder 自检测试台）----
-IVSRC = ./Iverilog/TB_decoder.v ./vsrc/decoder.v
+# -----------decoder模块测试------------------------
+# IVSRC = ./Iverilog/TB_decoder.v ./vsrc/decoder.v
+# IVDIR = ./obj_iv
+# IVOUT = $(IVDIR)/TB_decoder.out
+# IVVCD = TB_decoder.vcd
+# IVFLAG = -Wall -g2005
+
+# -----------memory模块测试-----------------------
+IVSRC = ./Iverilog/TB_mem.v ./vsrc/memory.v
 IVDIR = ./obj_iv
-IVOUT = $(IVDIR)/TB_decoder.out
-IVVCD = TB_decoder.vcd
+IVOUT = $(IVDIR)/TB_mem.out
+IVVCD = TB_mem.vcd
 IVFLAG = -Wall -g2005
 
 

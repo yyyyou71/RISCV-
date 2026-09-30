@@ -1,6 +1,6 @@
 module GPR_matrix(
     input clk,
-    input rst,
+    input rst_n,
 
     input wr_en,
     input [4:0]wr_addr,
@@ -27,11 +27,11 @@ module GPR_matrix(
     generate
         for (i = 1; i < 32; i = i + 1) begin : g_reg
             Reg #(.WIDTH(32), .RESET_VAL(0)) u_Reg (
-                .clk  (clk),
-                .rst  (rst),
-                .din  (wr_data),
-                .dout (dout[i]),
-                .wen  (we[i])
+                .clk    (clk),
+                .rst_n  (rst_n),
+                .din    (wr_data),
+                .dout   (dout[i]),
+                .wen    (we[i])
             );
         end
     endgenerate
