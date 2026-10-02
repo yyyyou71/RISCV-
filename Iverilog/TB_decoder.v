@@ -5,6 +5,7 @@ module TB_decoder ();
     // ---------------- 时钟与激励 ----------------
     reg         clk         = 1'b0;
     reg  [31:0] instruction = 32'h0;
+    reg         rst_n       = 1'b1;     // 低有效复位
     reg         valid_in    = 1'b0;
     reg         flush       = 1'b0;
     reg         stall       = 1'b0;
@@ -42,6 +43,7 @@ module TB_decoder ();
     decoder u_decoder(
         .instruction (instruction ),
         .clk         (clk         ),
+        .rst_n       (rst_n       ),
         .valid_in    (valid_in    ),
         .flush       (flush       ),
         .stall       (stall       ),
@@ -186,11 +188,12 @@ module TB_decoder ();
             instruction = 32'h0;
             valid_in    = 1'b0;
             stall       = 1'b0;
-            flush       = 1'b1;
+            flush       = 1'b0;
+            rst_n       = 1'b0;         // 低有效复位
             repeat (2) @(posedge clk);
             #1;
             @(negedge clk);
-            flush = 1'b0;
+            rst_n = 1'b1;
             @(posedge clk);
             #1;
         end
@@ -349,8 +352,24 @@ module TB_decoder ();
         // 0. 复位
         // -----------------------------------------------------------------
         reset_dut;
-        $display("\n--- 0. 复位后（控制信号应全 0，valid_out = 0）---");
-        expect_ctrl("reset", 32'h0000_0000, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+        $display("\n--- 0. 复位 ---");
+        expect_ctrl("reset released (rst_n=1)", 32'h0000_0000, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+
+        // ★ 复位期间（rst_n=0）即使指令是 JAL，输出也必须整体是 NOP：
+        //   只清 valid_out 不够 —— Jump=1 会让 PC 在复位期间乱跳。
+        @(negedge clk);
+        instruction = J_TYPE(21'h000010, 5'd1);   // jal x1,+16
+        valid_in    = 1'b1;
+        flush       = 1'b0;
+        stall       = 1'b0;
+        rst_n       = 1'b0;
+        @(posedge clk);
+        #1;
+        expect_ctrl("rst_n=0 -> NOP (Jump=0)", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+        @(negedge clk);
+        rst_n = 1'b1;
+        @(posedge clk);
+        #1;
 
         // -----------------------------------------------------------------
         // 1. R 型指令 (opcode 0110011)
@@ -640,6 +659,14 @@ module TB_decoder ();
         drive(ins, 1'b1, 1'b0, 1'b0);
         expect_valid("valid_in=1 -> valid_out=1", 1'b1);
 
+        // ★ valid_in=0 不能只把 valid_out 拉低：ID 里装的是"无效指令"，
+        //   控制信号必须整体变 NOP，否则照样译码 → 垃圾 Jump/RegWrite 进 EX。
+        //   气泡进流水线只有这一个入口，用 JAL 才测得出这条不变量。
+        ins = J_TYPE(21'h000010, 5'd1);
+        drive(ins, 1'b0, 1'b0, 1'b0);
+        expect_regs("valid_in=0 -> addr = x0", 5'd0, 5'd0, 5'd0, 3'b000);
+        expect_ctrl("valid_in=0 kills JAL (Jump=0)", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+
         // -----------------------------------------------------------------
         // 11. stall：保持控制信号与 valid_out
         // -----------------------------------------------------------------
@@ -658,22 +685,37 @@ module TB_decoder ();
         expect_ctrl("stall released: decode sub", 32'd0, 1'b1, DP_R, 2'b00, ALU_SUB, 3'd0, 1'b1);
 
         // -----------------------------------------------------------------
-        // 12. flush：清 valid_out
+        // 12. flush：冲刷时必须把所有"有副作用"的使能清 0
+        //     ★ 尤其别漏 Jump / Branch —— 否则被冲掉的 JAL 还会去改 PC
         // -----------------------------------------------------------------
         $display("\n--- 12. flush ---");
 
         ins = R_TYPE(7'h00, 5'd2, 5'd1, 3'b000, 5'd3);          // add
         drive(ins, 1'b1, 1'b1, 1'b0);
         expect_valid("flush=1 -> valid_out=0", 1'b0);
-        $display("  [info] flush 期间控制信号未被清除：RegWrite=%b, ALUOp=%0d（RTL 只清 valid_out）",
-                 RegWrite, ALUOp);
+        // 冲刷 = 注入 NOP：所有输出取默认值（DP_SYS 就是全 0 使能）
+        expect_ctrl("flush R -> NOP", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
 
+        // ★ 最危险的一条：被冲掉的 JAL 绝不能留下 Jump=1
+        ins = J_TYPE(21'h000010, 5'd1);                          // jal x1,+16
+        drive(ins, 1'b1, 1'b1, 1'b0);
+        expect_ctrl("flush kills JAL (Jump=0)", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+
+        // 同理：被冲掉的 store 绝不能留下 MemWrite=1
+        ins = S_TYPE(12'h008, 5'd5, 5'd1, 3'b010);               // sw x5,8(x1)
+        drive(ins, 1'b1, 1'b1, 1'b0);
+        expect_ctrl("flush kills store (MemWrite=0)", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
+
+        // flush 释放后立即恢复正常译码
+        ins = R_TYPE(7'h00, 5'd2, 5'd1, 3'b000, 5'd3);           // add
         drive(ins, 1'b1, 1'b0, 1'b0);
         expect_valid("flush released -> valid_out=1", 1'b1);
+        expect_ctrl("flush released -> decode add", 32'd0, 1'b1, DP_R, 2'b00, ALU_ADD, 3'd0, 1'b1);
 
-        drive(ins, 1'b1, 1'b1, 1'b1);                           // flush 与 stall 同时
+        // flush 与 stall 同时：flush 优先（与 valid_out 的优先级一致）
+        drive(ins, 1'b1, 1'b1, 1'b1);
         expect_valid("flush=1 & stall=1 -> flush wins", 1'b0);
-        $display("  [info] flush&stall 同时时控制信号被 stall 保持：ALUOp=%0d", ALUOp);
+        expect_ctrl("flush&stall -> NOP", 32'd0, 1'b1, DP_SYS, 2'b00, ALU_ADD, 3'd0, 1'b0);
 
         // -----------------------------------------------------------------
         // 汇总

@@ -57,9 +57,20 @@ module decoder(
     localparam WB_IMM = 2'b10; 
     localparam WB_PC4 = 2'b11; 
 
+    // 冲刷 / 复位：两者都是"向流水线注入一条 NOP"（清掉所有有副作用的使能）
+    //   flush     : 分支/跳转在 EX 判定为 taken 的**同一拍**拉高，杀掉此刻正在译码的
+    //               那条年轻指令。本设计取指与译码同拍（ROM 组合输出、无 IF/ID 寄存器），
+    //               在途的只有这一条 → 冲一拍就够（经典五级要冲两拍）。
+    //   !rst_n    : 上电/复位，让输出停在安全的 NOP 上
+    //   !valid_in : ID 里装的是"无效指令" → 输出 NOP。有了它才有无条件的不变量
+    //               「valid_out=0 ⟺ kill ⟺ 控制信号全 0」，下游 EX/MEM、MEM/WB
+    //               因此不必再各带一个 valid 位。
+    // 优先级：复位/冲刷 > stall（下面两个 always 块保持一致）
+    wire kill = flush | ~rst_n | ~valid_in;
+
     // 是否载入流水线标志位
     always @(posedge clk) begin
-        if(flush | !rst_n)
+        if(kill)
             valid_out <= 1'b0;
         else if(stall)
             valid_out <= valid_out;
@@ -91,7 +102,7 @@ module decoder(
 
     // 各种输出信号
     always @(posedge clk) begin
-        if(stall)begin
+        if(stall && !kill)begin
             RegWrite <= RegWrite;
             MemRead <= MemRead;
             MemWrite <= MemWrite; 
@@ -127,7 +138,13 @@ module decoder(
             Branch_type <= 3'd0;
             immediate   <= 32'd0;
 
-            case (type_flag)            
+            // 冲刷 = 注入 NOP：把选择子置 0（不匹配任何有效桶），自动落入下面的
+            // default: 桶 → 所有有副作用的使能（RegWrite/MemWrite/**Jump**/**Branch**/
+            // ALUen/MemRead）全部清零，其余信号取上方默认值。
+            // 这样被冲掉的指令在 ID/EX 里就是完整的惰性 NOP，不会写坏寄存器/内存，
+            // 更不会把 PC 跳到错误的地方。
+            // 优先级与 valid_out 一致：kill（复位/冲刷）高于 stall。
+            case (kill ? 10'b0 : type_flag)            
                 10'b00_0000_0001: begin   // if_R
                     RegWrite <= 1;
                     MemRead <= 0;
