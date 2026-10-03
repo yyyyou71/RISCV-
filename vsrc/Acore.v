@@ -94,6 +94,9 @@ module Acore(
     reg [31:0]imm_MEM;
     reg [31:0]pc_4_MEM;
 
+    // 和前面的valid关系不大，主要是为了解决stall引起的空泡问题
+    reg valid_out_MEM;
+
     //-------------stage5-WB-----------------
     wire wr_en_WB;
     wire [4:0]wr_addr_WB;
@@ -102,6 +105,16 @@ module Acore(
     wire [4:0]rd_addr2_GPR;
     wire [31:0]rd_data1_GPR;
     wire [31:0]rd_data2_GPR;
+
+    // 和前面的valid关系不大，主要是为了解决stall引起的空泡问题
+    reg valid_out_WB;
+
+    // ------------冒险检测/前递--------------------
+    wire hazard_rs1;
+    wire hazard_rs2;
+    wire stall;
+    wire [31:0]rs1_data_hazard;
+    wire [31:0]rs2_data_hazard;
 
     //========================================================================
 
@@ -150,13 +163,17 @@ module Acore(
         .instruction (instruction )
     );
     
-    // state2-ID
+    //------------------state2-ID-----------------------
     assign valid_in_ID = valid_out_IF; 
 
     always @(posedge clk) begin
         if(!rst_n)begin
             pc_ID <= 0;
             pc_4_ID <= 0;
+        end
+        else if(stall_ID)begin
+            pc_ID <= pc_ID;
+            pc_4_ID <= pc_4_ID;
         end
         else begin
             pc_ID <= pc;
@@ -204,6 +221,12 @@ module Acore(
             wb_type_EX <= 0;          
         end
 
+        // 上一级停顿，在下一级产生空泡
+        else if(stall_ID)begin
+            rd_addr_EX_reg <= 5'b0;
+            RegWrite_EX <= 0;  
+            wb_type_EX <= 0;    
+        end
         else begin
             rd_addr_EX_reg <= rd_addr_ID;
             RegWrite_EX <= RegWrite_ID;
@@ -219,6 +242,16 @@ module Acore(
             MemSize_EX <= 0;
             MemUnsigned_EX <= 0;
         end
+
+        // 上一级停顿，在下一级产生空泡
+        else if(stall_ID)begin
+            MemRead_EX <= 0;
+            MemWrite_EX <= 0;
+            MemSize_EX <= 0;
+            MemUnsigned_EX <= 0;
+
+        end
+
         else begin
             MemRead_EX <= MemRead_ID;
             MemWrite_EX <= MemWrite_ID;
@@ -234,6 +267,14 @@ module Acore(
             pc_EX <= 0;
             pc_4_EX <= 0;
         end
+
+        // 上一级停顿，在下一级产生空泡
+        else if(stall_ID)begin
+            imm_EX <= 0;
+            pc_EX <= 0;
+            pc_4_EX <= 0;
+        end
+
         else begin
             imm_EX <= immediate_ID;
             pc_EX <= pc_ID;
@@ -243,11 +284,14 @@ module Acore(
 
     // ALUSrc1,数据选择器信号，选择第一个操作数来源，选择1说明来自PC 
     // ALUSrc2,数据选择器信号，选择第二个操作数来源，选择1说明来自寄存器
-    assign oprand1_EX = ALUSrc1_ID ? pc_ID : rd_data1_GPR;          // 暂时还没有考虑数据冒险
-    assign oprand2_EX = ALUSrc2_ID ? rd_data2_GPR : immediate_ID;   // 暂时还没有考虑数据冒险
+    assign oprand1_EX = ALUSrc1_ID ? pc_ID : 
+                        (hazard_rs1) ? rs1_data_hazard : rd_data1_GPR;
+    assign oprand2_EX = ~ALUSrc2_ID ? immediate_ID :
+                        (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
+
     assign en_EX = ALUen_ID;
     assign opcode_EX = ALUOp_ID;
-    assign valid_in_EX = valid_out_ID;
+    assign valid_in_EX = valid_out_ID; 
     ALU u_ALU(
         .clk       (clk       ),
         .opcode    (opcode_EX    ),
@@ -368,9 +412,27 @@ module Acore(
     assign flush_EX = 1'b0;         // ALU 不需要冲刷：错路径指令在 ID/EX 就已变成 NOP
 
     // 冒险单元还没做，先接地（做了之后换成 冒险检测 的输出）
-    assign stall_IF = 1'b0;
-    assign stall_ID = 1'b0;
+    assign stall_IF = stall;
+    assign stall_ID = stall;
     assign stall_EX = 1'b0;
+
+    hazard_detection_unit u_hazard_detection_unit(
+        .wb_type_EX      (wb_type_EX      ),
+        .rs1_addr_ID     (rs1_addr_ID     ),
+        .rs2_addr_ID     (rs2_addr_ID     ),
+        .rd_addr_EX      (rd_addr_EX_reg      ),
+        .rd_addr_MEM     (rd_addr_MEM_reg     ),
+        .ALU_OUT_EX      (out_EX      ),
+        .imm_EX          (imm_EX          ),
+        .pc_4_EX         (pc_4_EX         ),
+        .wr_data_WB_comb (wr_data_WB      ),
+        .stall           (stall           ),
+        .hazard_rs1      (hazard_rs1      ),
+        .hazard_rs2      (hazard_rs2      ),
+        .rs1_data        (rs1_data_hazard        ),
+        .rs2_data        (rs2_data_hazard        )
+    );
+    
     
     //===============================================================
 endmodule
