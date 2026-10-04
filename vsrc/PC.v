@@ -9,8 +9,7 @@ module PC (
     input valid_in,
     
     output reg valid_out,
-    output [31:0]pc,
-    output [31:0]pc_4
+    output [31:0]pc
 );
     reg [31:0]PC_counter;
 
@@ -41,6 +40,5 @@ module PC (
     end
 
     assign pc   = PC_counter;
-    assign pc_4 = PC_counter + 32'h4;      // 链接值：本条指令的 PC+4，随流水线传到 WB 写回
 
 endmodule

@@ -17,12 +17,16 @@ module Acore(
     */
 
     //===================================variable=====================================
-    //---------state1-IF--------------
+    //------------PC-----------------
     wire [31:0]pc;
-    wire [31:0]pc_4;
-    wire [31:0]instruction;
     wire load_pc_en;
     wire [31:0]load_pc;
+    wire stall_pc;
+    wire valid_out_pc;
+    //---------state1-IF--------------
+    wire [31:0]pc_IF;
+    wire [31:0]pc_4_IF;
+    wire [31:0]instruction;
     wire stall_IF;
     wire flush_IF;
     wire valid_in_IF;
@@ -120,8 +124,21 @@ module Acore(
 
 
     //======================================core===================================
+    // ---------------------pc--------------------------
+    PC u_PC(
+        .clk        (clk        ),
+        .rst_n      (rst_n      ),
+        .load_pc_en (load_pc_en ),
+        .load_pc    (load_pc    ),
+        .stall      (stall_pc      ),
+        .flush      (0      ),
+        .valid_in   (1   ),
+        .valid_out  (valid_out_pc  ),
+        .pc         (pc         )
+    );
+    
     //-------------------state1-IF-----------------------
-    assign valid_in_IF = 1; // 似乎PC是否有效单纯只是看是否被冲刷了，没有被冲刷那么PC需要一直加载指令
+    assign valid_in_IF = valid_out_pc; 
 
 
     // localparam BR_BEQ  = 3'h0; // 3'b000, 相等则跳转
@@ -144,24 +161,19 @@ module Acore(
     // 送到 PC
     assign load_pc_en = branch_taken | jump_taken;
     assign load_pc    = jump_taken ? out_comb_EX : branch_target;
-
-    PC u_PC(
-        .clk        (clk        ),
-        .rst_n      (rst_n      ),
-        .load_pc_en (load_pc_en ),
-        .load_pc    (load_pc    ),
-        .stall      (stall_IF    ),
-        .flush      (flush_IF    ),
-        .valid_in   (valid_in_IF ),
-        .valid_out  (valid_out_IF),
-        .pc         (pc         ),
-        .pc_4       (pc_4       )
-    );
-
     ROM u_ROM(
-        .pc          (pc          ),
+        .clk         (clk         ),
+        .rst_n       (rst_n       ),
+        .flush       (flush_IF       ),
+        .stall       (stall_IF       ),
+        .pc_in       (pc       ),
+        .valid_in    (valid_in_IF    ),
+        .pc_out      (pc_IF      ),
+        .pc_4_out    (pc_4_IF    ),
+        .valid_out   (valid_out_IF   ),
         .instruction (instruction )
     );
+    
     
     //------------------state2-ID-----------------------
     assign valid_in_ID = valid_out_IF; 
@@ -176,8 +188,8 @@ module Acore(
             pc_4_ID <= pc_4_ID;
         end
         else begin
-            pc_ID <= pc;
-            pc_4_ID <= pc_4;
+            pc_ID <= pc_IF;
+            pc_4_ID <= pc_4_IF;
         end
     end
 
@@ -408,10 +420,11 @@ module Acore(
 
     // --------------flush / stall Logic--------------
     assign flush_ID = load_pc_en;   // ★ 同拍：杀掉此刻正在译码的那条错路径指令
-    assign flush_IF = 1'b0;         // PC 不需要冲刷，它只负责 load_pc（valid 链不能滞后一拍）
+    assign flush_IF = load_pc_en;   // PC 不需要冲刷,但是IF需要冲刷，现在IF处于pc下一级
     assign flush_EX = 1'b0;         // ALU 不需要冲刷：错路径指令在 ID/EX 就已变成 NOP
 
-    // 冒险单元还没做，先接地（做了之后换成 冒险检测 的输出）
+
+    assign stall_pc = stall;
     assign stall_IF = stall;
     assign stall_ID = stall;
     assign stall_EX = 1'b0;
