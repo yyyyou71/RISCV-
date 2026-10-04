@@ -6,9 +6,8 @@ module PC (
 
     input stall,
     input flush,
-    input valid_in,
     
-    output reg valid_out,
+    output valid_out,       
     output [31:0]pc
 );
     reg [31:0]PC_counter;
@@ -28,16 +27,11 @@ module PC (
         end
     end
 
-    always @(posedge clk) begin
-        if(!rst_n | flush)
-            valid_out <= 0;
-        else begin
-            if(stall)
-                valid_out <= valid_out;
-            else
-                valid_out <= valid_in;      // 必须非阻塞：写成 = 会和同拍读它的逻辑抢时序
-        end
-    end
+    // valid 与 PC 同拍（组合）：复位 或 冲刷时为 0，其余为 1。
+    //   它描述的是"本拍发出的取指是否有意义"，由 ROM 采样成 IF/ID 的 valid。
+    //   绝不能用寄存器——寄存会滞后一拍，复位释放那一拍的取指会被当成无效丢掉
+    //   （症状：程序从地址 4 开始跑，地址 0 的指令消失）。
+    assign valid_out = rst_n & ~flush;
 
     assign pc   = PC_counter;
 

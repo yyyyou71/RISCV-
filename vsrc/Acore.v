@@ -131,14 +131,16 @@ module Acore(
         .load_pc_en (load_pc_en ),
         .load_pc    (load_pc    ),
         .stall      (stall_pc      ),
-        .flush      (0      ),
-        .valid_in   (1   ),
+        .flush      (load_pc_en  ),   // 重定向那一拍的取指是无效的，让 PC 的 valid 语义也正确
         .valid_out  (valid_out_pc  ),
         .pc         (pc         )
     );
     
     //-------------------state1-IF-----------------------
-    assign valid_in_IF = valid_out_pc; 
+    // PC.valid_out 现在是**组合**信号（与 PC 同拍）：复位/冲刷时为 0，其余为 1。
+    //   它描述的是"本拍发出的取指是否有意义"，交给 ROM 采成 IF/ID 的 valid。
+    //   以前它是寄存器，复位后滞后一拍，导致复位释放那一拍取到的地址 0 指令被丟掉。
+    assign valid_in_IF = valid_out_pc;
 
 
     // localparam BR_BEQ  = 3'h0; // 3'b000, 相等则跳转

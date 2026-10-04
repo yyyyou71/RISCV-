@@ -39,9 +39,9 @@ module hazard_detection_unit(
     reg rs1_stall;
     reg rs2_stall;
 
-    // rs1前递
+    // rs1前递，去掉x0假前递
     always @(*) begin
-        if(rd_addr_EX == rs1_addr_ID)begin
+        if(rd_addr_EX != 0 && rd_addr_EX == rs1_addr_ID)begin
             if(wb_type_EX == WB_MEM)begin
                 rs1_stall = 1;
                 hazard_rs1 = 1;
@@ -59,7 +59,7 @@ module hazard_detection_unit(
             end
         end
 
-        else if(rd_addr_MEM == rs1_addr_ID)begin
+        else if(rd_addr_MEM != 0 && rd_addr_MEM == rs1_addr_ID)begin
             rs1_stall = 0;
             hazard_rs1 = 1;
             rs1_data = wr_data_WB_comb;
@@ -72,9 +72,9 @@ module hazard_detection_unit(
         end
     end
 
-    // rs2前递
+    // rs2前递，去掉x0假前递
     always @(*) begin
-        if(rd_addr_EX == rs1_addr_ID)begin
+        if(rd_addr_EX != 0 && rd_addr_EX == rs2_addr_ID)begin
             if(wb_type_EX == WB_MEM)begin
                 rs2_stall = 1;
                 hazard_rs2 = 1;
@@ -92,7 +92,7 @@ module hazard_detection_unit(
             end
         end
 
-        else if(rd_addr_MEM == rs1_addr_ID)begin
+        else if(rd_addr_MEM != 0 && rd_addr_MEM == rs2_addr_ID)begin
             rs2_stall = 0;
             hazard_rs2 = 1;
             rs2_data = wr_data_WB_comb;
