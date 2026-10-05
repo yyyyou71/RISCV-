@@ -47,7 +47,7 @@ module TB_Acore();
     endtask
     task exam_result;
         $display("\n=========test result=========");
-        if((gpr[1] === 55) & (gpr[2] === 10) & (gpr[3] === 0))
+        if(gpr[31] === 1)
             $display("result OK!\n"); 
         else begin
             $display(" result fail!\n");

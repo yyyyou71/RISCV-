@@ -14,4 +14,7 @@ digital_sim
 *.md
 *.pdf
 
+*.elf
+*.bin
+
 !README.md
