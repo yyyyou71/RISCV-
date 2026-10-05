@@ -20,12 +20,21 @@ WAVE = waveform.vcd
 # IVVCD = TB_mem.vcd
 # IVFLAG = -Wall -g2005
 
-# -----------Acore模块测试------------------------
-IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
+# # -----------Acore模块测试------------------------
+# IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
+# 												   # 也可以向这里用wildcard函数来解释通配符*
+# IVDIR = ./obj_iv
+# IVOUT = $(IVDIR)/TB_Acore.out
+# IVVCD = TB_Acore.vcd
+# IVFLAG = -Wall -g2012
+
+
+# -----------内存模块测试------------------------
+IVSRC = ./Iverilog/TB_testMem.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
 												   # 也可以向这里用wildcard函数来解释通配符*
 IVDIR = ./obj_iv
-IVOUT = $(IVDIR)/TB_Acore.out
-IVVCD = TB_Acore.vcd
+IVOUT = $(IVDIR)/TB_testMem.out
+IVVCD = TB_testMem.vcd
 IVFLAG = -Wall -g2012
 
 # 进行整体构建

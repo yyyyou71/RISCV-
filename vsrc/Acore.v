@@ -361,7 +361,7 @@ module Acore(
     reg [31:0]rd_data2_EX;
     always @(posedge clk) begin
         if(!rst_n) rd_data2_EX <= 32'b0;
-        else       rd_data2_EX <= rd_data2_GPR;
+        else       rd_data2_EX <= (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
     end
 
     assign MemSize_MEM = MemSize_EX;
