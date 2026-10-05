@@ -11,8 +11,7 @@ build
 
 # digitalJS的仿真文件
 digital_sim
-note.md
-
+*.md
 *.pdf
 
 !README.md

@@ -7,11 +7,11 @@ WAVE = waveform.vcd
 
 # ---- Icarus Verilog：行为级仿真 ----
 # -----------decoder模块测试------------------------
-IVSRC = ./Iverilog/TB_decoder.v ./vsrc/decoder.v
-IVDIR = ./obj_iv
-IVOUT = $(IVDIR)/TB_decoder.out
-IVVCD = TB_decoder.vcd
-IVFLAG = -Wall -g2005
+# IVSRC = ./Iverilog/TB_decoder.v ./vsrc/decoder.v
+# IVDIR = ./obj_iv
+# IVOUT = $(IVDIR)/TB_decoder.out
+# IVVCD = TB_decoder.vcd
+# IVFLAG = -Wall -g2005
 
 # # -----------memory模块测试-----------------------
 # IVSRC = ./Iverilog/TB_mem.v ./vsrc/memory.v
@@ -20,6 +20,12 @@ IVFLAG = -Wall -g2005
 # IVVCD = TB_mem.vcd
 # IVFLAG = -Wall -g2005
 
+# -----------Acore模块测试------------------------
+IVSRC = ./Iverilog/TB_Acore.v  # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块
+IVDIR = ./obj_iv
+IVOUT = $(IVDIR)/TB_Acore.out
+IVVCD = TB_Acore.vcd
+IVFLAG = -Wall -g2012
 
 # 进行整体构建
 .PHONY:verilator
@@ -84,7 +90,7 @@ iv:$(IVOUT)
 
 $(IVOUT):$(IVSRC)
 	mkdir -p $(IVDIR)
-	iverilog $(IVFLAG) -o $(IVOUT) $(IVSRC)
+	iverilog $(IVFLAG) -y vsrc -o $(IVOUT) $(IVSRC)
 
 # 只编译不运行
 .PHONY:iv-build
