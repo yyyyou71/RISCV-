@@ -2,8 +2,8 @@ ENTRY(_start)
 
 MEMORY
 {
-    ROM (rx)  : ORIGIN = 0x00000000, LENGTH = 4K
-    RAM (rwx) : ORIGIN = 0x00001000, LENGTH = 60K
+    ROM (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
+    RAM (rwx) : ORIGIN = 0x00010000, LENGTH = 64K
 }
 
 SECTIONS
@@ -22,7 +22,7 @@ SECTIONS
     /* 无初值的：RAM 本来就是 0，天然正确，不用导出 */
     .bss : { *(.bss .bss.*) *(.sbss .sbss.*) *(COMMON) } > RAM
 
-    _stack_top = 0x00010000;
+    _stack_top = 0x00020000;  /* 栈顶为内存顶部 */
 
     /DISCARD/ : { *(.comment) *(.note .note.*) *(.riscv.attributes) }
 }

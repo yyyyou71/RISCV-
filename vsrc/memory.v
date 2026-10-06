@@ -30,7 +30,7 @@ module memory #(
         for(i=0;i < DEPTH ; i++)begin
             mem[i]=0;
         end
-        $readmemh(`DATA_FILE,mem,16'h1000);  /* ← 第三个参数：起始下标 */
+        $readmemh(`DATA_FILE,mem,0);  /* ← 第三个参数：起始下标 */
     end
 
     always @(posedge clk) begin
