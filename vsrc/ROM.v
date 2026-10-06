@@ -1,3 +1,7 @@
+`ifndef PROG_FILE
+  `define PROG_FILE "program/sum_1_10_c.hex" // 宏定义
+`endif
+
 module ROM(
     /* verilator lint_off UNUSEDSIGNAL */
     input clk,
@@ -25,7 +29,7 @@ module ROM(
         for (i = 0; i < 1024; i = i + 1) begin
             rom[i] = 32'h00000013; // NOP 指令
         end
-        $readmemh("program/test_memory.hex", rom);
+        $readmemh(`PROG_FILE, rom);
     end
 
     always @(posedge clk) begin

@@ -1,3 +1,4 @@
+# ---------------------- Verilator仿真(不太常用就是) -------------------
 CFLAG = -Wall --trace --Wno-MULTITOP
 TARGET = VAcore
 
@@ -5,7 +6,19 @@ SRC_V = ./vsrc/GPR_matrix.v ./vsrc/Reg.v ./vsrc/ROM.v
 SRC_CPP = TB_test.cpp
 WAVE = waveform.vcd
 
-# ---- Icarus Verilog：行为级仿真 ----
+# --------------------- Icarus Verilog：行为级仿真 ----------------------
+
+# -----------Acore模块测试(之后会用来长期跑测试)------------------------
+IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
+												   # 也可以向这里用wildcard函数来解释通配符*
+PROG     ?= sum_1_10_c
+PROGFILE  = program/$(PROG).hex
+IVDIR = ./obj_iv
+IVOUT = $(IVDIR)/TB_Acore_$(PROG).out      # ★ 加 _$(PROG)
+IVVCD = TB_Acore.vcd
+IVFLAG = -Wall -g2012 -DPROG_FILE='"$(PROGFILE)"'
+
+
 # -----------decoder模块测试------------------------
 # IVSRC = ./Iverilog/TB_decoder.v ./vsrc/decoder.v
 # IVDIR = ./obj_iv
@@ -20,22 +33,21 @@ WAVE = waveform.vcd
 # IVVCD = TB_mem.vcd
 # IVFLAG = -Wall -g2005
 
-# # -----------Acore模块测试------------------------
-# IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
+# # -----------内存模块测试------------------------
+# IVSRC = ./Iverilog/TB_testMem.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
 # 												   # 也可以向这里用wildcard函数来解释通配符*
 # IVDIR = ./obj_iv
-# IVOUT = $(IVDIR)/TB_Acore.out
-# IVVCD = TB_Acore.vcd
+# IVOUT = $(IVDIR)/TB_testMem.out
+# IVVCD = TB_testMem.vcd
 # IVFLAG = -Wall -g2012
 
 
-# -----------内存模块测试------------------------
-IVSRC = ./Iverilog/TB_testMem.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
-												   # 也可以向这里用wildcard函数来解释通配符*
-IVDIR = ./obj_iv
-IVOUT = $(IVDIR)/TB_testMem.out
-IVVCD = TB_testMem.vcd
-IVFLAG = -Wall -g2012
+
+
+
+# ==========================================================
+# verilator部分
+# ==========================================================
 
 # 进行整体构建
 .PHONY:verilator
@@ -70,7 +82,7 @@ wave:$(WAVE)
 .PHONY:clean
 clean:
 	rm -rf obj_dir
-	rm -rf waveform.vcd
+	rm -rf *.vcd
 	rm -rf $(IVDIR)
 	rm -f $(IVVCD)
 
@@ -82,11 +94,13 @@ help:
 	@echo "run		run the simulation"
 	@echo "wave		check the waveform"
 	@echo "clean		remove all the build file"
-	@echo "iv		build and run the iverilog testbench"
+	@echo "iv		build and run the iverilog testbench,using parameter < PROG= >  can choose .hex file"
 	@echo "iv-build	compile the testbench only"
 	@echo "iv-lint		check sources only (verilator --lint-only)"
 	@echo "iv-wave		check the waveform (TB*.vcd)"
 	@echo "iv-clean	remove iverilog build output"
+
+
 
 
 # ==========================================================
@@ -98,7 +112,7 @@ help:
 iv:$(IVOUT)
 	vvp $(IVOUT)
 
-$(IVOUT):$(IVSRC)
+$(IVOUT):$(IVSRC) $(PROGFILE)
 	mkdir -p $(IVDIR)
 	iverilog $(IVFLAG) -o $(IVOUT) $(IVSRC)
 

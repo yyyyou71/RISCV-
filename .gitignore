@@ -14,7 +14,9 @@ digital_sim
 *.md
 *.pdf
 
+# 编译链接的中间文件
 *.elf
 *.bin
+*.o
 
 !README.md
