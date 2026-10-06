@@ -1,3 +1,7 @@
+`ifndef DATA_FILE
+    `define DATA_FILE "data_test.data"
+`endif
+
 module memory #(
     parameter DATA_WIDTH = 8,
     parameter ADDR_WIDTH = 16,
@@ -19,12 +23,21 @@ module memory #(
 );
 
     integer i;
-    reg [DATA_WIDTH-1:0]mem[DEPTH-1 : 0];
+    reg [DATA_WIDTH-1:0]mem[0 : DEPTH-1];
+
+    // 初始化加载全局变量
+    initial begin
+        for(i=0;i < DEPTH ; i++)begin
+            mem[i]=0;
+        end
+        $readmemh(`DATA_FILE,mem,16'h1000);  /* ← 第三个参数：起始下标 */
+    end
+
     always @(posedge clk) begin
+
+        // 复位只清理输出寄存器
         if(!rst_n)begin
-            for(i = 0;i < DEPTH; i++)begin
-                mem[i] <= 0;
-            end
+            rd_data <= 0;
         end
 
         else begin

@@ -61,7 +61,11 @@ module TB_Acore();
     // 退休轨迹
     always @(posedge clk) begin
         if((u_Acore.wr_en_WB == 1) & (u_Acore.wr_addr_WB != 0))begin
-            $display("Wr_GPR_addr = %0d  , Wr_GPR_data = %0d\n",u_Acore.wr_addr_WB,u_Acore.wr_data_WB);
+            $display("Write GPR:  Wr_GPR_addr = %0d  , Wr_GPR_data = %0d\n",u_Acore.wr_addr_WB,u_Acore.wr_data_WB);
+        end
+
+        if(u_Acore.wr_en_MEM == 1)begin
+            $display("Write Mem:  wr_addr_MEM = %0d  , wr_data_MEM = %0d\n",u_Acore.wr_addr_MEM,u_Acore.wr_data_MEM);
         end
     end
 

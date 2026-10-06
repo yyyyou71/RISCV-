@@ -17,37 +17,48 @@
 
 set -e
 
-if [ "$#" -lt 2 ] ;then
-        echo "用法:bash $0 <输出文件> <源文件> [更多源文件...] " 
+if [ "$#" -lt 3 ] ;then
+        echo "用法:bash $0 <输出程序文件> <输出数据文件> <源文件> [更多源文件...] " 
         exit 1
 fi
 
 OUT="$1"
-shift 1
+OUT_DATA="$2"
+shift 2
 SRC="$@"
 
 ELF="${OUT%.hex}.elf"
 BIN="${OUT%.hex}.bin"
+
+BIN_DATA="${OUT_DATA%.hex}.bin"
 # %从右边（结尾）开始，删掉最短匹配的内容 #从左边（开头）开始，删掉最短匹配的内容
 # %%从右边（结尾）开始，删掉最长匹配的内容  ##从左边（开头）开始，删掉最长匹配的内容。
 
-
+# -msmall-data-limit=0 表示关闭小数据优化。
+# 开启小数据优化时：gp(x3) 指向小数据区（.sdata）的中间，
+#   这样访问附近的全局变量只需一条 lw/sw offset(gp) 即可。
+# 关闭小数据优化后：所有全局变量都不在 gp 的 ±2KB 范围内，
+#   访问它们需要两条指令：先 lui 取高 20 位，再 addi/lw/sw 取低 12 位
 echo "[1/4]编译+链接, ${SRC} ->  ${ELF}"
-riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 \
-        -ffreestanding -nostdlib -nostartfiles -Ttext=0 \
+riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -msmall-data-limit=0 \
+        -ffreestanding -nostdlib -nostartfiles -T link.ld \
         -e _start -O1 -o "${ELF}" "$@"
 
 echo "[2/4]提取裸字节, ${ELF}  ->  ${BIN}"
-riscv64-unknown-elf-objcopy -O binary "${ELF}" "${BIN}"
+riscv64-unknown-elf-objcopy -j .text -O binary "${ELF}" "${BIN}" # -j .text的意思是只粘代码段
+riscv64-unknown-elf-objcopy -j .data -O binary "${ELF}" "${BIN_DATA}"   # 数据 → 给 RAM
 
 echo "[3/4]转成 hex   ${BIN}  ->  ${OUT}"
 od -An -tx4 -v "${BIN}" | tr -s ' ' '\n' | grep . > "${OUT}"
+od -An -tx1 -v "${BIN_DATA}" | tr -s ' ' '\n' | grep . > "${OUT_DATA}"
 
 echo "finish!"
 
 if [ -n "$KEEP" ]; then
     echo "[4/4] 保留中间文件"
+    echo "查看反汇编："
+    riscv64-unknown-elf-objdump -d program/data_test.elf
 else
     echo "[4/4] 清理中间文件 ${ELF} ${BIN}"
-    rm -f "${ELF}" "${BIN}"
+    rm -f "${ELF}" "${BIN}" "${ELF_DATA}" "${BIN_DATA}"
 fi

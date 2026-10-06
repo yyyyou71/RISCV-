@@ -16,7 +16,8 @@ PROGFILE  = program/$(PROG).hex
 IVDIR = ./obj_iv
 IVOUT = $(IVDIR)/TB_Acore_$(PROG).out      # ★ 加 _$(PROG)
 IVVCD = TB_Acore.vcd
-IVFLAG = -Wall -g2012 -DPROG_FILE='"$(PROGFILE)"'
+IVFLAG = -Wall -g2012 -DPROG_FILE='"$(PROGFILE)"' \
+			-DDATA_FILE='"program/$(PROG).data"'
 
 
 # -----------decoder模块测试------------------------
