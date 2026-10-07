@@ -50,15 +50,18 @@ riscv64-unknown-elf-objcopy -j .data -O binary "${ELF}" "${BIN_DATA}"   # 数据
 
 echo "[3/4]转成 hex   ${BIN}  ->  ${OUT}"
 od -An -tx4 -v "${BIN}" | tr -s ' ' '\n' | grep . > "${OUT}"
-od -An -tx1 -v "${BIN_DATA}" | tr -s ' ' '\n' | grep . > "${OUT_DATA}"
+# .data 为空是合法的（所有全局变量初值都是 0 → 被放进 .bss，不进 .data）。
+# 此时 od 没有任何输出，grep 找不到行会返回退出码 1，
+# 而 set -e 会把它当成「失败」并直接中止脚本 —— 于是后面的 finish! / [4/4] 全都不执行。
+# || true 明确表示：空也是正常结果，不算失败。
+od -An -tx1 -v "${BIN_DATA}" | tr -s ' ' '\n' | grep . > "${OUT_DATA}" || true
 
 echo "finish!"
 
 if [ -n "$KEEP" ]; then
-    echo "[4/4] 保留中间文件"
-    echo "查看反汇编："
-    riscv64-unknown-elf-objdump -d program/data_test.elf
+    echo "[4/4] 保留中间文件，反汇编如下："
+    riscv64-unknown-elf-objdump -d "${ELF}"
 else
-    echo "[4/4] 清理中间文件 ${ELF} ${BIN}"
-    rm -f "${ELF}" "${BIN}" "${ELF_DATA}" "${BIN_DATA}"
+    echo "[4/4] 清理中间文件 ${ELF} ${BIN} ${BIN_DATA}"
+    rm -f "${ELF}" "${BIN}" "${BIN_DATA}"
 fi

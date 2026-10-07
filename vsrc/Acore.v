@@ -1,7 +1,17 @@
 module Acore(
     input clk,
-    input rst_n
+    input rst_n,
 
+    // 设备总线（内存映射外设）
+    output     dev_we,       // 写选通
+    output     dev_re,       // 读选通
+    output      bus_err,       // 访问了未映射地址
+
+    output  [31:0] dev_addr_wr,     // 32位地址，写
+    output  [31:0] dev_addr_rd,     // 32位地址，读
+    output  [31:0] dev_wdata,
+    output  [1:0]  dev_size,     // 00/01/10 = 字节/半字/字
+    input  [31:0] dev_rdata
 );
     // 统一一下：分支指令(B-type)计算分支条件时使用alu，计算跳转地址则使用独立加法器
     /* 
@@ -80,6 +90,14 @@ module Acore(
     reg [31:0]imm_EX;
     reg [31:0]pc_EX;
     reg [31:0]pc_4_EX;
+    reg [31:0]rd_data2_EX;  // s-type指令提前采样rs2，给MEM准备
+
+
+    //----------------IO port----------------------
+    wire [31:0]addr_EX;    // 外设和内存公用地址
+    wire sel_ram;                   // 内存有效
+    wire sel_dev;                   // 外设有效
+    
 
     //----------stage4-MEM------------------
     wire [1:0]MemSize_MEM;
@@ -90,6 +108,7 @@ module Acore(
     wire rd_en_MEM;
     wire [15:0]rd_addr_MEM;
     wire [31:0]rd_data_MEM;
+    wire [31:0]rd_data_mem_dev_MEM;
 
     reg [4:0]rd_addr_MEM_reg;
     reg RegWrite_MEM;
@@ -100,6 +119,7 @@ module Acore(
 
     // 和前面的valid关系不大，主要是为了解决stall引起的空泡问题
     reg valid_out_MEM;
+    reg sel_dev_MEM;
 
     //-------------stage5-WB-----------------
     wire wr_en_WB;
@@ -152,10 +172,10 @@ module Acore(
 
     // 分支条件：bit0 为 1 的类型对 ALU 比较结果取反
     wire branch_cond  = out_comb_EX[0] ^ Branch_type_ID[0];
-    wire branch_taken = Branch_ID & branch_cond;
+    wire branch_taken = Branch_ID & branch_cond & ~stall;
 
     // 跳转无条件
-    wire jump_taken = Jump_ID;
+    wire jump_taken = Jump_ID & ~stall;
 
     // 分支目标地址
     wire [31:0] branch_target = pc_ID + immediate_ID;
@@ -296,6 +316,18 @@ module Acore(
         end
     end
 
+    // EX/MEM：store 数据（rs2）—— 必须在 EX 拍末锁存。
+    //   GPR 读的地址 rs2_addr_ID 属于 EX 那条指令（T-1 拍译码），
+    //   而内存写发生在下一拍，直接用组合值会写成"下一条指令的 rs2"。
+    //   这和前递无关：前递修的是"值旧"，这里错的是"属于哪条指令"。
+    //   将来加前递时，把采样源换成转发后的 rs2 值即可，这一级寄存器保留。
+    
+    always @(posedge clk) begin
+        if(!rst_n) rd_data2_EX <= 32'b0;
+        else       rd_data2_EX <= (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
+    end
+
+
     // ALUSrc1,数据选择器信号，选择第一个操作数来源，选择1说明来自PC 
     // ALUSrc2,数据选择器信号，选择第二个操作数来源，选择1说明来自寄存器
     assign oprand1_EX = ALUSrc1_ID ? pc_ID : 
@@ -320,6 +352,30 @@ module Acore(
         .valid_out (valid_out_EX )
     );
     
+
+    //--------------------IO port(MEM同级)-------------------------
+    assign addr_EX = out_EX;
+    assign sel_dev = (addr_EX[31:16] == 3); // 选择外设
+    assign dev_size = MemSize_EX;           // 数据大小
+    assign dev_we = sel_dev & MemWrite_EX;  // 写外设使能
+    assign dev_re = sel_dev & MemRead_EX;   // 读外设使能
+
+    // 外设地址32位输出
+    assign dev_addr_wr = addr_EX;            
+    assign dev_addr_rd = addr_EX;    
+
+    // 外设数据
+    
+    assign dev_wdata = rd_data2_EX;
+
+    always @(posedge clk) begin
+        if(!rst_n)begin
+            sel_dev_MEM <= 0;
+        end
+        else begin
+            sel_dev_MEM <= dev_re;
+        end
+    end
 
     //--------------------state4-MEM-----------------------
     // 流水线存储下来的 目的寄存器地址/数据/控制信号，同时也是后续 冒险检测/前递 的支点
@@ -351,26 +407,21 @@ module Acore(
         end
     end
 
-    
-
-    // EX/MEM：store 数据（rs2）—— 必须在 EX 拍末锁存。
-    //   GPR 读的地址 rs2_addr_ID 属于 EX 那条指令（T-1 拍译码），
-    //   而内存写发生在下一拍，直接用组合值会写成"下一条指令的 rs2"。
-    //   这和前递无关：前递修的是"值旧"，这里错的是"属于哪条指令"。
-    //   将来加前递时，把采样源换成转发后的 rs2 值即可，这一级寄存器保留。
-    reg [31:0]rd_data2_EX;
-    always @(posedge clk) begin
-        if(!rst_n) rd_data2_EX <= 32'b0;
-        else       rd_data2_EX <= (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
-    end
+    assign sel_ram = (addr_EX[31:16] == 1);     // 选择内存
 
     assign MemSize_MEM = MemSize_EX;
     assign MemUnsigned_MEM = MemUnsigned_EX;
-    assign wr_en_MEM = MemWrite_EX;
-    assign wr_addr_MEM = out_EX[15:0];
+
+    // 内存读写使能
+    assign wr_en_MEM = MemWrite_EX & sel_ram;
+    assign rd_en_MEM = MemRead_EX & sel_ram;
+
+    // 内存读写地址
+    assign wr_addr_MEM = addr_EX[15:0];
+    assign rd_addr_MEM = addr_EX[15:0];
+
+    // 内存写数据
     assign wr_data_MEM = rd_data2_EX;
-    assign rd_en_MEM = MemRead_EX;
-    assign rd_addr_MEM = out_EX[15:0];
 
     // 64KB内存,addr:0-65535 
     memory #(
@@ -388,7 +439,8 @@ module Acore(
         .rd_addr     (rd_addr_MEM     ),
         .rd_data     (rd_data_MEM     )
     );
-    
+
+    assign bus_err = (!(sel_dev | sel_ram)) & (MemRead_EX | MemWrite_EX);  // 即没有映射内存也没有映射外设
 
     //-------------------state5-WB---------------------
 
@@ -401,8 +453,9 @@ module Acore(
     localparam WB_IMM = 2'b10; 
     localparam WB_PC4 = 2'b11; 
 
-    assign wr_data_WB =  (wb_type_MEM == WB_ALU) ? ALU_OUT_MEM : 
-                            (wb_type_MEM == WB_MEM) ? rd_data_MEM : 
+    assign wr_data_WB = sel_dev_MEM ? dev_rdata : // 添加一个从外设读取数据进入寄存器的通道
+                            (wb_type_MEM == WB_ALU) ? ALU_OUT_MEM : 
+                            (wb_type_MEM == WB_MEM) ? rd_data_MEM : // 如果是非映射的区域最后还是会从内存读取
                             (wb_type_MEM == WB_IMM) ? imm_MEM:
                             (wb_type_MEM == WB_PC4) ? pc_4_MEM : pc_4_MEM;
     assign wr_en_WB = RegWrite_MEM;
@@ -447,7 +500,7 @@ module Acore(
         .rs1_data        (rs1_data_hazard        ),
         .rs2_data        (rs2_data_hazard        )
     );
-    
+
     
     //===============================================================
 endmodule

@@ -44,3 +44,44 @@
 10.6 12：08
 使用汇编添加了一个简单的启动桩，实现了简单c语言程序的编译和运行，并且修改了ROM读取程序的方法，现在可以用make iv PROC=  *.hex来指定加载的程序。  
 不过仍然存在问题：1、由于RAM没有预先加载数据，c的全局变量还无法加载进入程序当中 2、缺少规范的链接脚本，目前是依靠gcc第一个源文件为start.s的操作，才让启动桩放置在pc=0的位置。
+
+10.7 17：11
+1、修了一个比较重要的bug，Acore中分支和跳转的信号不受stall信号控制。  
+当分支/跳转恰好碰上load-use冒险，即出现指令：
+```
+0x3c:  lw    a5,0(a5)
+0x40:  bge   a3,a5,0x2c
+```
+触发stall的同时，lw也进入了ID/EX级，因此有可能误触发了Branch/Jump，由于设计缺陷，导致ID/EX级和IF/ID级寄存器没有stall，而是被冲刷变成了NOP。具体原因如下：
+
+原本代码：
+```v
+wire branch_taken = Branch_ID & branch_cond;
+wire jump_taken   = Jump_ID；
+```
+而 branch_cond 和 jump_taken 直接驱动pc是否加载 load_pc_en，load_pc_en又直接驱动flush信号，那么最后的结果就是pc被stall保持不变，但是ID/EX和IF/ID寄存器被冲刷成为了NOP。因此后续pc则跳转失败。  
+正常的情况是：当冒险检测单元发出stall信号后，pc和IF/ID和ID/EX应该都保持不变。在ROM.v和decoder.v中，stall的优先级应该高于flash。当然，也可以在顶层补救，比如目前的方案就是：stall信号同样参与跳转/分支信号的驱动。如下：
+```v
+wire branch_taken = Branch_ID & branch_cond & ~stall;
+wire jump_taken   = Jump_ID & ~stall;
+```
+2、另外，给Acore添加了一个简单的外设。目前地址分配:
+```
+    0x00000 ~ 0x07FFF    ROM
+    0x10000 ~ 0x1FFFF    RAM
+    0x30000 ~            外设 
+```
+目前支持：``` 地址：0x30000：可以写入程序退出码,一旦写入后仿真程序(TB_Acore)会检查结果并结束 ```   
+```地址：0x30004：可以写入一些需要调试的数据，仿真程序(TB_Acore)会在终端直接打印出来 ```   
+具体的访问地址的方式如下:(也可以查阅csrc/software/sort.c)
+```c
+#define EXIT  (*(volatile unsigned int *)0x00030000)
+#define PRINT (*(volatile unsigned int *)0x00030004)
+
+int main(){
+    PRINT = 0xFFFF;
+    EXIT = 0x1; // 1一般表示成功退出
+}
+```
+另外，start.s中，当c的main函数正常退出后，同样会往0x00030000写入1表示正常退出。  
+当然，为了防止程序真的出bug，TB_Acore固定了一个退出时间，为MAX_CYCLES = 500000;
