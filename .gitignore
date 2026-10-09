@@ -19,4 +19,9 @@ digital_sim
 *.bin
 *.o
 
+# 编译结果文件
+*.hex
+*.data
+
+
 !README.md
