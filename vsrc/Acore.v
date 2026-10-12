@@ -140,11 +140,43 @@ module Acore(
     wire [31:0]rs1_data_hazard;
     wire [31:0]rs2_data_hazard;
 
+    //-------------branch_predictor---------------
+    wire if_predict;
+    wire [31:0]pc_predict;
+    wire [31:0]upd_pc;
+    wire [1:0]upd_type;
+    wire upd_valid;
+    wire [31:0]upd_target_pc;
+
+    reg if_predict_PC;
+    reg [31:0]pc_predict_PC;
+    reg if_predict_IF;
+    reg [31:0]pc_predict_IF;
+    reg if_predict_ID;
+    reg [31:0]pc_predict_ID;
+
     //========================================================================
 
 
     //======================================core===================================
     // ---------------------pc--------------------------
+    // always @(posedge clk) begin
+    //     if(!rst_n & flush_IF)begin
+    //         if_predict_PC <= 0;
+    //         pc_predict_PC <= 0;
+    //     end
+
+    //     else if(stall)begin
+    //         if_predict_PC <= if_predict_PC;
+    //         pc_predict_PC <= pc_predict_PC;
+    //     end
+
+    //     else begin
+    //         if_predict_PC <= if_predict;
+    //         pc_predict_PC <= pc_predict;
+    //     end
+    // end
+
     PC u_PC(
         .clk        (clk        ),
         .rst_n      (rst_n      ),
@@ -501,6 +533,27 @@ module Acore(
         .rs2_data        (rs2_data_hazard        )
     );
 
+    //---------------branch_predictor---------------
+    assign upd_pc = pc_ID;
+    assign upd_type = {Jump_ID, ALUSrc1_ID};
+    assign upd_valid = branch_taken | jump_taken;
+    assign upd_target_pc = jump_taken ? out_comb_EX : branch_target;
+
+    branch_predictor u_branch_predictor(
+        .clk           (clk           ),
+        .rst_n         (rst_n         ),
+        .stall         (stall         ),
+        .pc            (pc            ),
+
+        .if_predict    (if_predict    ),    // 输出：是否预测
+        .pc_predict    (pc_predict    ),    // 输出：预测pc
+
+        .upd_pc        (upd_pc        ),
+        .upd_type      (upd_type      ),
+        .upd_valid     (upd_valid     ),
+        .upd_target_pc (upd_target_pc )
+    );
     
+
     //===============================================================
 endmodule

@@ -1,13 +1,30 @@
 module TB_testMem();
     reg clk;
     reg rst_n;
+    reg [31:0]dev_rdata;
+    wire bus_err;
+    wire [31:0]dev_addr_wr;
+    wire [31:0]dev_addr_rd;
+    wire [31:0]dev_wdata;
+    wire dev_we;
+    wire dev_re;
+    wire [1:0]dev_size;
 
     always #10 clk = ~clk;
 
     Acore u_Acore(
-        .clk   (clk   ),
-        .rst_n (rst_n )
+        .clk         (clk         ),
+        .rst_n       (rst_n       ),
+        .dev_we      (dev_we      ),
+        .dev_re      (dev_re      ),
+        .bus_err     (bus_err     ),
+        .dev_addr_wr (dev_addr_wr ),
+        .dev_addr_rd (dev_addr_rd ),
+        .dev_wdata   (dev_wdata   ),
+        .dev_size    (dev_size    ),
+        .dev_rdata   (dev_rdata   )
     );
+
     
     initial begin
         clk = 0;
