@@ -141,7 +141,7 @@ module Acore(
     wire [31:0]rs2_data_hazard;
 
     //-------------branch_predictor---------------
-    wire if_predict;
+    wire J_predict;
     wire [31:0]pc_predict;
     wire [31:0]upd_pc;
     wire [1:0]upd_type;
@@ -149,12 +149,18 @@ module Acore(
     wire upd_taken;         // 是否真的执行跳转
     wire [31:0]upd_target_pc;
 
+    // 是否真正表示跳转
+    wire J_taken;
+    wire [31:0]J_pc;
+
+    // 判断预测是否正确
+    wire predict_correct;
+    
+
     reg if_predict_PC;
     reg [31:0]pc_predict_PC;
     reg if_predict_IF;
     reg [31:0]pc_predict_IF;
-    reg if_predict_ID;
-    reg [31:0]pc_predict_ID;
 
     //========================================================================
 
@@ -163,7 +169,7 @@ module Acore(
     // ---------------------pc--------------------------
     // 预测结果pc
     always @(posedge clk) begin
-        if(!rst_n & flush_IF)begin
+        if(!rst_n | flush_IF)begin
             if_predict_PC <= 0;
             pc_predict_PC <= 0;
         end
@@ -174,7 +180,7 @@ module Acore(
         end
 
         else begin
-            if_predict_PC <= if_predict;
+            if_predict_PC <= J_predict;
             pc_predict_PC <= pc_predict;
         end
     end
@@ -185,7 +191,6 @@ module Acore(
         .load_pc_en (load_pc_en ),
         .load_pc    (load_pc    ),
         .stall      (stall_pc      ),
-        .flush      (load_pc_en  ),   // 重定向那一拍的取指是无效的，让 PC 的 valid 语义也正确
         .valid_out  (valid_out_pc  ),
         .pc         (pc         )
     );
@@ -214,13 +219,22 @@ module Acore(
     // 分支目标地址
     wire [31:0] branch_target = pc_ID + immediate_ID;
 
+    // 表示真实跳转
+    assign J_taken = branch_taken | jump_taken;
+    assign J_pc = jump_taken ? out_comb_EX : branch_target;
+
+    // 判断预测是否正确
+    assign predict_correct = (J_taken == if_predict_IF) & ((J_pc == pc_predict_IF) | !if_predict_IF);
+
     // 送到 PC
-    assign load_pc_en = branch_taken | jump_taken;
-    assign load_pc    = jump_taken ? out_comb_EX : branch_target;
+    // 
+    assign load_pc_en = J_predict | !predict_correct; 
+    assign load_pc    = predict_correct ? pc_predict : 
+                        ~J_taken ? pc_4_ID : J_pc;
 
     // 预测结果IF
     always @(posedge clk) begin
-        if(!rst_n & flush_IF)begin
+        if(!rst_n | flush_IF)begin
             if_predict_IF <= 0;
             pc_predict_IF <= 0;
         end
@@ -267,25 +281,6 @@ module Acore(
             pc_4_ID <= pc_4_IF;
         end
     end
-
-    // 预测结果ID
-    always @(posedge clk) begin
-        if(!rst_n & flush_IF)begin
-            if_predict_ID <= 0;
-            pc_predict_ID <= 0;
-        end
-
-        else if(stall)begin
-            if_predict_ID <= if_predict_ID;
-            pc_predict_ID <= pc_predict_ID;
-        end
-
-        else begin
-            if_predict_ID <= if_predict_IF;
-            pc_predict_ID <= pc_predict_IF;
-        end        
-    end
-
 
     decoder u_decoder(
         .instruction (instruction ),
@@ -546,8 +541,9 @@ module Acore(
     );
 
     // --------------flush / stall Logic--------------
-    assign flush_ID = load_pc_en;   // ★ 同拍：杀掉此刻正在译码的那条错路径指令
-    assign flush_IF = load_pc_en;   // PC 不需要冲刷,但是IF需要冲刷，现在IF处于pc下一级
+    assign flush_ID = !predict_correct & ~stall;       //  !predict_correct & ~stall; // 预测错误：冲刷
+    assign flush_IF = !predict_correct & ~stall;      //  !predict_correct & ~stall;  // 预测错误：冲刷
+
     assign flush_EX = 1'b0;         // ALU 不需要冲刷：错路径指令在 ID/EX 就已变成 NOP
 
 
@@ -586,7 +582,7 @@ module Acore(
         .stall         (stall         ),
         .pc            (pc            ),
 
-        .if_predict    (if_predict    ),    // 输出：是否预测
+        .if_predict    (J_predict     ),    // 输出：1：预测需要跳转
         .pc_predict    (pc_predict    ),    // 输出：预测pc
         
         .upd_pc        (upd_pc        ),
