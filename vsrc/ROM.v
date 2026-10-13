@@ -17,31 +17,29 @@ module ROM(
     output reg [31:0]pc_out,
     output [31:0]pc_4_out,
     output reg valid_out,
-    output reg [31:0]instruction
+    output [31:0]instruction
 );
 
-    reg [31:0] rom [0:8192];
+    wire [31:0]addr1 = (pc_in>>2);
+    wire [31:0]instruction_buffer1;
 
-    // 初始化，从 hex 文件加载
-    integer i;
-    initial begin
-        // 可以在这里给个默认值，防止文件没找到导致读出 X 态
-        for (i = 0; i < 8192; i = i + 1) begin
-            rom[i] = 32'h00000013; // NOP 指令
-        end
-        $readmemh(`PROG_FILE, rom);
-    end
+    reg flush_buffer;
+
+    ROM_core u_ROM_core(
+        .clk         (clk            ),
+        .addr        (addr1[12:0]    ),
+        .rst         (!rst_n         ),
+        .addr_strobe (stall          ),
+        .rd_data     (instruction_buffer1)
+    );
+    
 
     always @(posedge clk) begin
-        if(!rst_n | flush | !valid_in)
-            instruction <= 32'h00000013;
-        else begin
-            if(stall)
-                instruction <= instruction;
-            else
-                instruction <= rom[(pc_in>>2)];
-        end
+        flush_buffer <= !rst_n | flush | !valid_in;
     end
+
+    assign instruction = flush_buffer ? 32'h00000013 : instruction_buffer1;
+    
 
     always @(posedge clk) begin
         if(!rst_n | flush | !valid_in)
