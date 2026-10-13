@@ -145,7 +145,8 @@ module Acore(
     wire [31:0]pc_predict;
     wire [31:0]upd_pc;
     wire [1:0]upd_type;
-    wire upd_valid;
+    wire upd_en;            // 是否为跳转/分支指令
+    wire upd_taken;         // 是否真的执行跳转
     wire [31:0]upd_target_pc;
 
     reg if_predict_PC;
@@ -160,22 +161,23 @@ module Acore(
 
     //======================================core===================================
     // ---------------------pc--------------------------
-    // always @(posedge clk) begin
-    //     if(!rst_n & flush_IF)begin
-    //         if_predict_PC <= 0;
-    //         pc_predict_PC <= 0;
-    //     end
+    // 预测结果pc
+    always @(posedge clk) begin
+        if(!rst_n & flush_IF)begin
+            if_predict_PC <= 0;
+            pc_predict_PC <= 0;
+        end
 
-    //     else if(stall)begin
-    //         if_predict_PC <= if_predict_PC;
-    //         pc_predict_PC <= pc_predict_PC;
-    //     end
+        else if(stall)begin
+            if_predict_PC <= if_predict_PC;
+            pc_predict_PC <= pc_predict_PC;
+        end
 
-    //     else begin
-    //         if_predict_PC <= if_predict;
-    //         pc_predict_PC <= pc_predict;
-    //     end
-    // end
+        else begin
+            if_predict_PC <= if_predict;
+            pc_predict_PC <= pc_predict;
+        end
+    end
 
     PC u_PC(
         .clk        (clk        ),
@@ -215,6 +217,25 @@ module Acore(
     // 送到 PC
     assign load_pc_en = branch_taken | jump_taken;
     assign load_pc    = jump_taken ? out_comb_EX : branch_target;
+
+    // 预测结果IF
+    always @(posedge clk) begin
+        if(!rst_n & flush_IF)begin
+            if_predict_IF <= 0;
+            pc_predict_IF <= 0;
+        end
+
+        else if(stall)begin
+            if_predict_IF <= if_predict_IF;
+            pc_predict_IF <= pc_predict_IF;
+        end
+
+        else begin
+            if_predict_IF <= if_predict_PC;
+            pc_predict_IF <= pc_predict_PC;
+        end        
+    end
+
     ROM u_ROM(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
@@ -246,6 +267,25 @@ module Acore(
             pc_4_ID <= pc_4_IF;
         end
     end
+
+    // 预测结果ID
+    always @(posedge clk) begin
+        if(!rst_n & flush_IF)begin
+            if_predict_ID <= 0;
+            pc_predict_ID <= 0;
+        end
+
+        else if(stall)begin
+            if_predict_ID <= if_predict_ID;
+            pc_predict_ID <= pc_predict_ID;
+        end
+
+        else begin
+            if_predict_ID <= if_predict_IF;
+            pc_predict_ID <= pc_predict_IF;
+        end        
+    end
+
 
     decoder u_decoder(
         .instruction (instruction ),
@@ -536,7 +576,8 @@ module Acore(
     //---------------branch_predictor---------------
     assign upd_pc = pc_ID;
     assign upd_type = {Jump_ID, ALUSrc1_ID};
-    assign upd_valid = branch_taken | jump_taken;
+    assign upd_en = (Branch_ID | Jump_ID) & ~stall;
+    assign upd_taken = branch_taken | jump_taken;
     assign upd_target_pc = jump_taken ? out_comb_EX : branch_target;
 
     branch_predictor u_branch_predictor(
@@ -547,10 +588,11 @@ module Acore(
 
         .if_predict    (if_predict    ),    // 输出：是否预测
         .pc_predict    (pc_predict    ),    // 输出：预测pc
-
+        
         .upd_pc        (upd_pc        ),
         .upd_type      (upd_type      ),
-        .upd_valid     (upd_valid     ),
+        .upd_en        (upd_en        ),
+        .upd_taken     (upd_taken     ),
         .upd_target_pc (upd_target_pc )
     );
     
