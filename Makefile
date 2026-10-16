@@ -90,6 +90,8 @@ clean:
 # help
 .PHONY:help
 help:
+	@echo "iv-memory       build and run the memory wrapper self-check testbench"
+	@echo "iv-memory-core  build and run the memory_core self-check testbench"
 	@echo "CLASS  		verilator the circuit to cpp class"
 	@echo "verilator  	verilator the whole TestBench"
 	@echo "run		run the simulation"
@@ -107,6 +109,24 @@ help:
 # ==========================================================
 # Iverilog部分：行为级仿真 + decoder 自检测试台
 # ==========================================================
+
+# memory 适配层自检。
+.PHONY:iv-memory
+iv-memory:$(IVDIR)/TB_mem_$(PROG).out
+	vvp $<
+
+$(IVDIR)/TB_mem_$(PROG).out: Iverilog/TB_mem.v vsrc/memory.v vsrc/memory_core.v program/$(PROG).data
+	mkdir -p $(IVDIR)
+	iverilog -Wall -g2012 -s TB_mem -DDATA_FILE='"program/$(PROG).data"' -o $@ $(filter %.v,$^)
+
+# memory_core 独立自检，不依赖处理器程序文件。
+.PHONY:iv-memory-core
+iv-memory-core:$(IVDIR)/TB_memory_core.out
+	vvp $<
+
+$(IVDIR)/TB_memory_core.out: Iverilog/TB_memory_core.v vsrc/memory_core.v
+	mkdir -p $(IVDIR)
+	iverilog -Wall -g2012 -s TB_memory_core -o $@ $^
 
 # 仿真：先编译，再运行
 .PHONY:iv

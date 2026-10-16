@@ -1,7 +1,10 @@
+`timescale 1ns/1ps
+
 `ifndef DATA_FILE
     `define DATA_FILE "data_test.data"
 `endif
 
+// CPU 字节地址接口与 16384 x 32 bit 单端口 RAM 之间的适配层。
 module memory #(
     parameter DATA_WIDTH = 8,
     parameter ADDR_WIDTH = 16,
@@ -22,95 +25,87 @@ module memory #(
     output reg [31:0]rd_data
 );
 
-    integer i;
-    reg [DATA_WIDTH-1:0]mem[0 : DEPTH-1];
+    wire [13:0] core_word_addr = wr_en ? wr_addr[15:2] : rd_addr[15:2];
+    reg [3:0] core_byte_en;
+    wire [31:0] core_wr_data = wr_data << {wr_addr[1:0], 3'b000};
+    wire [31:0] core_rd_data;
 
-    // 初始化加载全局变量
-    initial begin
-        for(i=0;i < DEPTH ; i++)begin
-            mem[i]=0;
-        end
-        $readmemh(`DATA_FILE,mem,0);  /* ← 第三个参数：起始下标 */
+    always @* begin
+        case(MemSize)
+            2'b00: core_byte_en = 4'b0001 << wr_addr[1:0];
+            2'b01: core_byte_en = 4'b0011 << wr_addr[1:0];
+            2'b10: core_byte_en = 4'b1111;
+            default: core_byte_en = 4'b0000;
+        endcase
     end
 
+    memory_core #(
+        .INIT_FILE(`DATA_FILE)
+    ) u_memory_core (
+        .a_addr(core_word_addr),
+        .a_wr_data(core_wr_data),
+        .a_wr_en(wr_en),
+        .a_wr_byte_en(core_byte_en),
+        .a_clk(clk),
+        .a_rst(!rst_n),
+        .a_rd_data(core_rd_data)
+    );
+
+    reg [1:0] rd_offset_q;
+    reg [1:0] rd_size_q;
+    reg rd_unsigned_q;
+    reg rd_valid_q;
+    reg [31:0] held_rd_data;
+    wire [31:0] shifted_rd_data = core_rd_data >> {rd_offset_q, 3'b000};
+
+    // 元信息和 RAM 读数据在同一上升沿锁存，输出扩展不再额外寄存一拍。
+    // held_rd_data 保存上一次输出，使未读取的周期仍保持原接口的输出行为。
     always @(posedge clk) begin
-
-        // 复位只清理输出寄存器
-        if(!rst_n)begin
-            rd_data <= 0;
+        if(!rst_n) begin
+            rd_offset_q <= 2'b0;
+            rd_size_q <= 2'b0;
+            rd_unsigned_q <= 1'b0;
+            rd_valid_q <= 1'b0;
+            held_rd_data <= 32'b0;
         end
-
         else begin
-            case ({wr_en,rd_en})
-                2'b10: begin    // 只写
-                    case (MemSize)
-                        2'b00:begin
-                            mem[wr_addr] <= wr_data[7:0];
-                        end 
-                        2'b01:begin
-                            mem[wr_addr] <= wr_data[7:0];
-                            mem[wr_addr + 1] <= wr_data[15:8];
-                        end
-                        2'b10:begin
-                            mem[wr_addr] <= wr_data[7:0];
-                            mem[wr_addr + 1] <= wr_data[15:8];
-                            mem[wr_addr + 2] <= wr_data[23:16];
-                            mem[wr_addr + 3] <= wr_data[31:24];                             
-                        end
-                        default:begin
-                            // 什么也不做？
-                        end
-                    endcase
-                end
-                2'b01: begin    // 只读
-                    case ({MemUnsigned,MemSize})
-                        3'b000:begin    // 读字节(符号位扩展)  
-                            rd_data <= {{24{mem[rd_addr][7]}},mem[rd_addr]};
-                        end
-                        3'b001:begin    // 读半字(符号位扩展)
-                            rd_data <= {{16{mem[rd_addr + 1][7]}},mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        3'b010:begin    // 读整字
-                            rd_data <= {mem[rd_addr + 3],mem[rd_addr + 2],mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        3'b100:begin    // 读字节(零扩展)
-                            rd_data <= {24'b0,mem[rd_addr]};
-                        end
-                        3'b101:begin    // 读半字(零扩展)
-                            rd_data <= {16'b0,mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        default:begin
-                            
-                        end
-                    endcase
-                end
-                2'b11: begin    // 如果读写同时拉高，那么只读，不过大概率不会出现这种情况
-                    case ({MemUnsigned,MemSize})
-                        3'b000:begin    // 读字节(符号位扩展)  
-                            rd_data <= {{24{mem[rd_addr][7]}},mem[rd_addr]};
-                        end
-                        3'b001:begin    // 读半字(符号位扩展)
-                            rd_data <= {{16{mem[rd_addr + 1][7]}},mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        3'b010:begin    // 读整字
-                            rd_data <= {mem[rd_addr + 3],mem[rd_addr + 2],mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        3'b100:begin    // 读字节(零扩展)
-                            rd_data <= {24'b0,mem[rd_addr]};
-                        end
-                        3'b101:begin    // 读半字(零扩展)
-                            rd_data <= {16'b0,mem[rd_addr + 1],mem[rd_addr]};
-                        end
-                        default:begin
-                            
-                        end
-                    endcase 
-                end
-                default: begin  // 其他，同样大概率不会出现这个情况
-                    
-                end
+            rd_offset_q <= rd_addr[1:0];
+            rd_size_q <= MemSize;
+            rd_unsigned_q <= MemUnsigned;
+            rd_valid_q <= rd_en && (MemSize != 2'b11);
+            held_rd_data <= rd_data;
+        end
+    end
+
+    always @* begin
+        rd_data = held_rd_data;
+        if(rd_valid_q) begin
+            case(rd_size_q)
+                2'b00: rd_data = {{24{!rd_unsigned_q && shifted_rd_data[7]}}, shifted_rd_data[7:0]};
+                2'b01: rd_data = {{16{!rd_unsigned_q && shifted_rd_data[15]}}, shifted_rd_data[15:0]};
+                2'b10: rd_data = shifted_rd_data;
+                default: rd_data = held_rd_data;
             endcase
         end
     end
 
+    // 当前 RAM IP 的固定容量，以及单端口单拍访问的约束。
+    // synthesis translate_off
+    initial begin
+        if(DATA_WIDTH != 8 || ADDR_WIDTH != 16 || DEPTH != 65536)
+            $fatal(1, "memory_core requires DATA_WIDTH=8, ADDR_WIDTH=16, DEPTH=65536");
+    end
+
+    always @(posedge clk) begin
+        if(rst_n) begin
+            if(wr_en && rd_en && wr_addr[ADDR_WIDTH-1:2] != rd_addr[ADDR_WIDTH-1:2])
+                $fatal(1, "Single-port RAM cannot read and write different word addresses in one cycle");
+            if((wr_en && ((MemSize == 2'b01 && wr_addr[1:0] == 2'b11) ||
+                          (MemSize == 2'b10 && wr_addr[1:0] != 2'b00))) ||
+               (rd_en && ((MemSize == 2'b01 && rd_addr[1:0] == 2'b11) ||
+                          (MemSize == 2'b10 && rd_addr[1:0] != 2'b00))))
+                $fatal(1, "Single-port RAM access crosses a word boundary");
+        end
+    end
+    // synthesis translate_on
 endmodule

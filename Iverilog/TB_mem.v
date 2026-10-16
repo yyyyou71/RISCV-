@@ -125,7 +125,7 @@ module TB_mem();
             mem_write(size, addr, data);
             mem_read (size, unsigned_en, addr, got);
             if (got !== exp_data)
-                $display("[%0t] FAIL %0s @0x%04h: got %h, expect %h",
+                $fatal(1, "[%0t] FAIL %0s @0x%04h: got %h, expect %h",
                          $time, name, addr, got, exp_data);
             else
                 $display("[%0t] PASS %0s @0x%04h: %h",
@@ -147,7 +147,7 @@ module TB_mem();
         begin
             mem_read(size, unsigned_en, addr, got);
             if (got !== exp_data)
-                $display("[%0t] FAIL %0s @0x%04h: got %h, expect %h",
+                $fatal(1, "[%0t] FAIL %0s @0x%04h: got %h, expect %h",
                          $time, name, addr, got, exp_data);
             else
                 $display("[%0t] PASS %0s @0x%04h: %h",
@@ -156,6 +156,37 @@ module TB_mem();
     endtask
 
     //========================================================
+    // 连续周期自检：检查上升沿前输出保持、上升沿后立即得到当拍读结果。
+    task cycle_check;
+        input we;
+        input re;
+        input [1:0] size;
+        input unsigned_en;
+        input [15:0] wa;
+        input [15:0] ra;
+        input [31:0] data;
+        input [31:0] expected;
+        reg [31:0] previous;
+        begin
+            @(negedge clk);
+            previous = rd_data;
+            wr_en = we;
+            rd_en = re;
+            MemSize = size;
+            MemUnsigned = unsigned_en;
+            wr_addr = wa;
+            rd_addr = ra;
+            wr_data = data;
+            #1;
+            if(rd_data !== previous)
+                $fatal(1, "Read output changed before rising edge");
+            @(posedge clk);
+            #1;
+            if(rd_data !== expected)
+                $fatal(1, "Cycle read: got %h, expected %h", rd_data, expected);
+        end
+    endtask
+
     // 主测试流程
     //========================================================
     reg [31:0] rdata;
@@ -253,7 +284,7 @@ module TB_mem();
             addr_w = i * 4;
             mem_read(2'b10, 1'b0, addr_w, rdata);
             if (rdata !== (32'hA0000000 + i))
-                $display("[%0t] FAIL bulk[%0d]: got %h, expect %h",
+                $fatal(1, "[%0t] FAIL bulk[%0d]: got %h, expect %h",
                          $time, i, rdata, 32'hA0000000 + i);
             else
                 $display("[%0t] PASS bulk[%0d] = %h", $time, i, rdata);
@@ -285,6 +316,31 @@ module TB_mem();
         //--------------------------------------------------
         // 结束
         //--------------------------------------------------
+        $display("---- Test 11: back-to-back reads and output hold ----");
+        mem_write(2'b10, 16'h0100, 32'h807FFF01);
+        mem_write(2'b10, 16'h0104, 32'h8000AABB);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0100, 0, 32'h807FFF01);
+        cycle_check(0, 1, 2'b00, 0, 0, 16'h0103, 0, 32'hFFFFFF80);
+        cycle_check(0, 1, 2'b00, 1, 0, 16'h0103, 0, 32'h00000080);
+        cycle_check(0, 1, 2'b01, 0, 0, 16'h0102, 0, 32'hFFFF807F);
+        cycle_check(0, 1, 2'b01, 1, 0, 16'h0102, 0, 32'h0000807F);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0104, 0, 32'h8000AABB);
+        cycle_check(0, 0, 2'b00, 1, 0, 16'h0100, 0, 32'h8000AABB);
+        cycle_check(1, 0, 2'b00, 0, 16'h0100, 0, 32'h55, 32'h8000AABB);
+        cycle_check(0, 0, 2'b10, 0, 0, 0, 0, 32'h8000AABB);
+
+        $display("---- Test 12: simultaneous read/write and persistence ----");
+        cycle_check(1, 1, 2'b00, 0, 16'h0101, 16'h0101, 32'hEE, 32'hFFFFFFEE);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0100, 0, 32'h807FEE55);
+        cycle_check(1, 1, 2'b01, 1, 16'h0102, 16'h0102, 32'h1234, 32'h00001234);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0100, 0, 32'h1234EE55);
+        cycle_check(1, 1, 2'b10, 0, 16'h0100, 16'h0100, 32'hDEADBEEF, 32'hDEADBEEF);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0100, 0, 32'hDEADBEEF);
+        // 同一个字内允许写、读选择不同字节。
+        cycle_check(1, 1, 2'b00, 1, 16'h0100, 16'h0103, 32'h11, 32'h000000DE);
+        cycle_check(0, 1, 2'b10, 0, 0, 16'h0100, 0, 32'hDEADBE11);
+        cycle_check(0, 0, 2'b10, 0, 0, 0, 0, 32'hDEADBE11);
+
         repeat(5) @(posedge clk);
         $display("---- All tests done ----");
         $finish;
