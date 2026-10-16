@@ -52,7 +52,7 @@ module TB_testMem();
     task init;
     begin
         $display("\n=========test rst=========");
-        if(gpr[1] === 0 & (u_Acore.u_memory.mem[1] == 0))begin
+        if(gpr[1] === 0 & (u_Acore.u_memory.u_memory_core.memory[1] == 0))begin
             $display("Reset OK!\n");          
         end
         else begin
