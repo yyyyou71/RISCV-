@@ -7,7 +7,7 @@ module peripheral_bus #(
     input  wire        rst_n,
 
     // 连接 Acore 的 dev_* 接口。
-    input  wire        dev_we,
+    input  wire        dev_we,//CPU写外设
     input  wire        dev_re,
     input  wire [31:0] dev_addr_wr,
     input  wire [31:0] dev_addr_rd,
