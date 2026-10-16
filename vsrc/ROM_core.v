@@ -10,7 +10,7 @@ module ROM_core(
     input addr_strobe,  // 输入1锁存输出
     output reg [31:0]rd_data
 );
-    reg [31:0] rom [0:8192];
+    reg [31:0] rom [0:8191];
     integer i;
     initial begin
         for (i = 0; i < 8192; i = i + 1) begin
