@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import subprocess
@@ -93,6 +94,14 @@ def check_report(report, mode, iterations):
     final_crc = field(report, r"^\[0\]crcfinal\s*:\s*0x([0-9a-fA-F]+)\s*$", 16)
     if not ticks or actual_iterations != iterations or size != 666:
         raise ValueError("Invalid timing, iteration count or data size")
+    # 核验 CPU 软件浮点及 %f 输出，避免 CRC 正确但成绩格式化错误。
+    for name, expected in [("Total time (secs)", ticks / CLOCK_HZ),
+                           ("Iterations/Sec", iterations * CLOCK_HZ / ticks)]:
+        values = re.findall(rf"^{re.escape(name)}\s*:\s*(\d+\.\d+)\s*$",
+                            report, re.MULTILINE)
+        if len(values) != 1 or not math.isclose(float(values[0]), expected,
+                                               rel_tol=1e-9, abs_tol=1e-6):
+            raise ValueError(f"Incorrect floating-point report: {name}")
     if "Cannot validate" in report:
         raise ValueError("CoreMark could not validate its results")
     errors = [line for line in report.splitlines() if "ERROR" in line]

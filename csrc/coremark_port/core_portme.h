@@ -40,7 +40,8 @@ Original Author: Shay Gal-on
         Define to 1 if the platform supports floating point.
 */
 #ifndef HAS_FLOAT
-#define HAS_FLOAT 0
+/* RV32I 使用 libgcc 软件浮点，不要求 F/D 硬件扩展。 */
+#define HAS_FLOAT 1
 #endif
 /* Configuration : HAS_TIME_H
         Define to 1 if platform has the time.h header file,

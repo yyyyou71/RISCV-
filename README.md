@@ -41,8 +41,10 @@ Verilator 的产物在 `build/coremark/verilator/<模式>-<迭代次数>/`；Ica
 
 报告中的 `Total ticks` 是目标 CPU 计时周期；目标频率为 50 MHz，
 `simulation_wall_seconds` 则是电脑实际执行仿真的秒数（不含编译），二者不能混用。
-当前 `HAS_FLOAT=0`，原版报告的秒数和 `Iterations/Sec` 使用整数运算；
-精确的小数时间及性能请看脚本汇总和 `result.json`，它们直接用原始周期数计算。
+当前 `HAS_FLOAT=1`，原版报告的秒数和 `Iterations/Sec` 显示小数。
+处理器仍按 RV32I/ILP32 编译，浮点计算由 `libgcc` 用整数指令实现，不要求 F/D 扩展。
+移植层的 `cvt.c` 负责浮点转字符串，并在本地实现小数/整数拆分，避免依赖 libc/libm。
+脚本会核对 CPU 打印的小数与原始周期计算结果是否一致；`result.json` 保存未按六位小数截断的结果。
 短于 10 秒的目标运行会保留原版 CoreMark 的时长错误，仅标为短运行估算。
 增加迭代次数后，脚本仍独立检查 CRC，并按原始周期计算性能。
 这属于当前 RTL/存储器模型的仿真结果，50 MHz 是设定的目标频率，未证明 FPGA 时序收敛。

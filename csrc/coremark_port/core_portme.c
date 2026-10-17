@@ -68,7 +68,7 @@ get_time(void)
 secs_ret
 time_in_secs(CORE_TICKS ticks)
 {
-    /* HAS_FLOAT=0 时返回整数秒，不足一秒返回 0；原始周期由 get_time 保留。 */
+    /* HAS_FLOAT=1 时 secs_ret 为 double，保留不足一秒的小数部分。 */
     return (secs_ret)ticks / (secs_ret)CPU_CLOCK_HZ;
 }
 
