@@ -21,6 +21,7 @@ module TB_Acore();
     localparam DEV_BASE = 32'h0003_0000;
     localparam TOHOST   = DEV_BASE + 32'h00;   // 写任意值 → 结束仿真，写入值 = 退出码
     localparam PRINT    = DEV_BASE + 32'h04;   // 写任意值 → 打印到控制台，程序继续
+    localparam PUTCHAR = DEV_BASE + 32'h08;     // 终端文字打印
 
     // 看门狗：程序死循环时也要能收场（没它仿真会永远跑下去）
     localparam MAX_CYCLES = 500000;
@@ -93,6 +94,11 @@ module TB_Acore();
                 print_cnt = print_cnt + 1;
                 $display("  [print] %0d  (0x%08h)", dev_wdata, dev_wdata);
             end
+
+            else if (dev_addr_wr == PUTCHAR) begin
+                $write("%c", dev_wdata[7:0]);
+            end
+            
             else
                 $display("  [设备] 未识别的写: addr=%h data=%h", dev_addr_wr, dev_wdata);
         end

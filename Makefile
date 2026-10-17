@@ -13,6 +13,12 @@ IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即�
 												   # 也可以向这里用wildcard函数来解释通配符*
 PROG     ?= sum_1_10_c
 PROGFILE  = program/$(PROG).hex
+# 默认按程序名选择 C 源文件，也可用 C_SRCS="文件1.c 文件2.c" 覆盖。
+ifeq ($(PROG),sum_1_10_c)
+C_SRCS ?= csrc/software/main.c
+else
+C_SRCS ?= csrc/software/$(PROG).c
+endif
 IVDIR = ./obj_iv
 IVOUT = $(IVDIR)/TB_Acore_$(PROG).out      # ★ 加 _$(PROG)
 IVVCD = TB_Acore.vcd
@@ -86,12 +92,13 @@ clean:
 	rm -rf *.vcd
 	rm -rf $(IVDIR)
 	rm -f $(IVVCD)
+	rm -rf program
 
 # help
 .PHONY:help
 help:
-	@echo "iv-memory       build and run the memory wrapper self-check testbench"
-	@echo "iv-memory-core  build and run the memory_core self-check testbench"
+	@echo 'build           compile C via build.sh: make build PROG=hello_coremark'
+	@echo '                optional: C_SRCS="file1.c file2.c"; asm/start.s is included automatically'
 	@echo "CLASS  		verilator the circuit to cpp class"
 	@echo "verilator  	verilator the whole TestBench"
 	@echo "run		run the simulation"
@@ -110,23 +117,12 @@ help:
 # Iverilog部分：行为级仿真 + decoder 自检测试台
 # ==========================================================
 
-# memory 适配层自检。
-.PHONY:iv-memory
-iv-memory:$(IVDIR)/TB_mem_$(PROG).out
-	vvp $<
-
-$(IVDIR)/TB_mem_$(PROG).out: Iverilog/TB_mem.v vsrc/memory.v vsrc/memory_core.v program/$(PROG).data
-	mkdir -p $(IVDIR)
-	iverilog -Wall -g2012 -s TB_mem -DDATA_FILE='"program/$(PROG).data"' -o $@ $(filter %.v,$^)
-
-# memory_core 独立自检，不依赖处理器程序文件。
-.PHONY:iv-memory-core
-iv-memory-core:$(IVDIR)/TB_memory_core.out
-	vvp $<
-
-$(IVDIR)/TB_memory_core.out: Iverilog/TB_memory_core.v vsrc/memory_core.v
-	mkdir -p $(IVDIR)
-	iverilog -Wall -g2012 -s TB_memory_core -o $@ $^
+# 编译裸机程序，生成 program/$(PROG).hex 和 program/$(PROG).data。
+# 启动代码放在最前面，保证当前链接脚本下 _start 位于 ROM 起始地址。
+.PHONY:build
+build: build.sh link.ld asm/start.s $(C_SRCS)
+	mkdir -p program
+	bash build.sh "$(PROGFILE)" "program/$(PROG).data" asm/start.s $(C_SRCS)
 
 # 仿真：先编译，再运行
 .PHONY:iv
