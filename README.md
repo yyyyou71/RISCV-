@@ -1,4 +1,6 @@
 # 基于RV32I指令集的cpu设计
+
+
 ## 仿真环境：
 主要使用iverilog仿真工具进行仿真，全平台通用。后续工程变大可以考虑使用verilator，不过这样就只支持linux平台了。
 ## 项目目录
@@ -12,6 +14,38 @@
 结束仿真：0x00030000
 终端打印：0x00030004 0x00030008
 串口：00030100-0104
+
+## CoreMark：Icarus 与 Verilator
+
+```bash
+make coremark                       # Icarus，默认每组种子运行 1 次迭代
+make coremark-verilator             # Verilator，默认每组种子运行 100 次迭代
+make coremark-verilator ITERATIONS=1  # 与 Icarus 的单次结果对比
+make coremark-verilator ITERATIONS=600 MAX_CYCLES=1000000000
+```
+
+默认均运行 performance 和 validation 两组种子，可加 `COREMARK_MODE=performance`
+只运行性能组。`ITERATIONS` 是算法迭代次数，`MAX_CYCLES` 是整个程序的周期上限。
+32 位计数器要求周期上限小于 `2^32`。普通 C 程序的 `make build` / `make iv` 用法不变。
+
+Verilator 路径复用 `Iverilog/TB_Acore.v`，通过 `--binary --timing` 自动生成 C++ 驱动，
+保留时钟延迟、复位、MMIO 字符输出和周期计数。ROM/RAM 的 `initial` / `$readmemh`
+直接支持，不需要改成手动 C++ 加载。两种后端都关闭波形输出并检查原版算法 CRC。
+要求支持 `--binary --timing` 的 Verilator 5.x，以及支持 C++20 coroutine 的 C++ 编译器；
+本机验证版本为 Verilator 5.052。
+
+软件源文件列表在 `csrc/coremark_port/sources.mk`，构建和结果检查在 `scripts/coremark.py`。
+Verilator 的产物在 `build/coremark/verilator/<模式>-<迭代次数>/`；Icarus 产物仍在
+`build/coremark/<模式>-<迭代次数>/`。目录中包含 ELF、链接 map、反汇编、ROM/RAM 镜像、
+`run.log` 和 `result.json`；Verilator 另有 `verilator-build.log` 与生成的 `obj_dir/`。
+
+报告中的 `Total ticks` 是目标 CPU 计时周期；目标频率为 50 MHz，
+`simulation_wall_seconds` 则是电脑实际执行仿真的秒数（不含编译），二者不能混用。
+当前 `HAS_FLOAT=0`，原版报告的秒数和 `Iterations/Sec` 使用整数运算；
+精确的小数时间及性能请看脚本汇总和 `result.json`，它们直接用原始周期数计算。
+短于 10 秒的目标运行会保留原版 CoreMark 的时长错误，仅标为短运行估算。
+增加迭代次数后，脚本仍独立检查 CRC，并按原始周期计算性能。
+这属于当前 RTL/存储器模型的仿真结果，50 MHz 是设定的目标频率，未证明 FPGA 时序收敛。
 
 ## 进度
 10.1   

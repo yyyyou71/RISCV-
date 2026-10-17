@@ -1,4 +1,9 @@
-module TB_Acore();
+`timescale 1ns/1ps
+
+module TB_Acore #(
+    parameter [63:0] MAX_CYCLES = 500000,
+    parameter [31:0] EXPECT_EXIT = 1
+)();
     reg clk;
     reg rst_n;
     
@@ -19,12 +24,23 @@ module TB_Acore();
     // ===== 内存映射外设的地址 =====
     // 必须和 Acore.v 里 sel_dev 的窗口(0x0003_xxxx)、start.s 的 TOHOST 一致
     localparam DEV_BASE = 32'h0003_0000;
-    localparam TOHOST   = DEV_BASE + 32'h00;   // 写任意值 → 结束仿真，写入值 = 退出码
-    localparam PRINT    = DEV_BASE + 32'h04;   // 写任意值 → 打印到控制台，程序继续
-    localparam PUTCHAR = DEV_BASE + 32'h08;     // 终端文字打印
+    localparam TOHOST   = DEV_BASE + 32'h00;     // 写任意值 → 结束仿真，写入值 = 退出码
+    localparam PRINT    = DEV_BASE + 32'h04;     // 写任意值 → 打印到控制台，程序继续
+    localparam PUTCHAR = DEV_BASE + 32'h08;      // 终端文字打印
+    localparam CYCLE_COUNT = DEV_BASE + 32'h0C;  // 用于处理器读入时间
+
+
+    // 计时器，用于记录cpu运行多少个周期
+    reg [31:0] cycle_counter;
+    always @(posedge clk) begin
+        if (!rst_n)
+            cycle_counter <= 32'd0;
+        else
+            cycle_counter <= cycle_counter + 32'd1;
+    end
 
     // 看门狗：程序死循环时也要能收场（没它仿真会永远跑下去）
-    localparam MAX_CYCLES = 500000;
+    // MAX_CYCLES 可通过 iverilog -P 覆盖，CoreMark 需要更长的运行时间。
 
     always #10 clk = ~clk;
 
@@ -63,11 +79,16 @@ module TB_Acore();
     // 如果这里给组合值，等轮到 WB 拍地址早就变了 → 读回垃圾。
     always @(posedge clk) begin
         if      (!rst_n) dev_rdata <= 32'h0;
-        else if (dev_re) dev_rdata <= 32'hDEAD_BEEF;   // 目前还没有可读设备
+        else if (dev_re)begin
+            if(dev_addr_rd == CYCLE_COUNT)begin
+                dev_rdata <= cycle_counter;
+            end
+            else dev_rdata <= 32'd0;
+        end
     end
 
     // 统计量
-    integer cycles    = 0;
+    reg [63:0] cycles = 0;
     integer berr_cnt  = 0;
     integer print_cnt = 0;
     reg        done      = 0;
@@ -128,8 +149,8 @@ module TB_Acore();
                 $display("   pc=%h  gpr[1]=%0d gpr[2]=%0d gpr[10]=%0d",
                          u_Acore.pc, gpr[1], gpr[2], gpr[10]);
             end
-            else if (exit_code === 32'd1)
-                $display(" PASS   exit_code=1   (%0d 拍)", cycles);
+            else if (exit_code === EXPECT_EXIT)
+                $display(" PASS   exit_code=%0d   (%0d 拍)", exit_code, cycles);
             else
                 $display(" FAIL   exit_code=%0d   (%0d 拍)", exit_code, cycles);
 
@@ -167,8 +188,10 @@ module TB_Acore();
 
 //=====================唯一的时序 initial==========================
     initial begin
+`ifndef NO_WAVES
         $dumpfile("TB_Acore.vcd");   // 波形文件名
         $dumpvars(0, TB_Acore);      // 0 表示转储所有层次的所有变量
+`endif
 
         clk = 0;
         rst_n = 0;                
@@ -178,9 +201,12 @@ module TB_Acore();
         init;
 
         // 等 tohost，或者超时
-        while (!done && cycles < MAX_CYCLES) @(posedge clk);
+        // 在下降沿检查，避开上升沿统计/设备处理的调度竞争。
+        while (!done && cycles < MAX_CYCLES) @(negedge clk);
 
         exam_result;
+        if (!done || exit_code !== EXPECT_EXIT || berr_cnt != 0)
+            $fatal(1, "Simulation failed: timeout, exit status or bus error");
         $finish;
     end
 endmodule

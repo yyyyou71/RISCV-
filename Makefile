@@ -97,6 +97,10 @@ clean:
 # help
 .PHONY:help
 help:
+	@echo 'coremark-verilator  run CoreMark on Verilator (100 iterations per seed set by default)'
+	@echo 'coremark        build, simulate and check both CoreMark seed sets (ITERATIONS=1 by default)'
+	@echo 'coremark-build  build CoreMark images only; sources: csrc/coremark_port/sources.mk'
+	@echo '                options: ITERATIONS=10 COREMARK_MODE=performance MAX_CYCLES=20000000'
 	@echo 'build           compile C via build.sh: make build PROG=hello_coremark'
 	@echo '                optional: C_SRCS="file1.c file2.c"; asm/start.s is included automatically'
 	@echo "CLASS  		verilator the circuit to cpp class"
@@ -152,4 +156,25 @@ iv-wave:$(IVVCD)
 iv-clean:
 	rm -rf $(IVDIR)
 	rm -f $(IVVCD)
+
+# CoreMark 独立构建，保留上面普通 C 程序的 build/iv 用法。
+include csrc/coremark_port/sources.mk
+ITERATIONS ?= 1
+COREMARK_MODE ?= both
+MAX_CYCLES ?= 20000000
+SIMULATOR ?= iverilog
+COREMARK_ARGS = --iterations $(ITERATIONS) --mode $(COREMARK_MODE) --max-cycles $(MAX_CYCLES) --simulator $(SIMULATOR)
+
+.PHONY: coremark coremark-build
+coremark:
+	python3 scripts/coremark.py run $(COREMARK_ARGS) --sources $(COREMARK_SRCS)
+
+coremark-build:
+	python3 scripts/coremark.py build $(COREMARK_ARGS) --sources $(COREMARK_SRCS)
+
+.PHONY: coremark-verilator
+coremark-verilator: SIMULATOR = verilator
+coremark-verilator: ITERATIONS = 100
+coremark-verilator: MAX_CYCLES = 200000000
+coremark-verilator: coremark
 
