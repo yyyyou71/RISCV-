@@ -28,7 +28,7 @@ localparam [1:0]    IDLE = 2'd0,
 
 always @(posedge clk) begin
     if(!rst_n)begin
-        state = IDLE;
+        state <= IDLE;
         baud_cnt    <= 0;
         bit_idx     <= 0;
         data_buf    <= 0;
@@ -90,7 +90,8 @@ else begin
                 if (baud_cnt == CLKS_PER_BIT - 1) begin
                     baud_cnt <= 0;
                     state    <= IDLE;
-                    busy     <= 1'b0;
+                    // Keep busy high until IDLE executes on the next edge.
+                    // The registered TX output starts STOP one edge after entry.
                 end
                 else begin
                     baud_cnt <= baud_cnt + 1;
