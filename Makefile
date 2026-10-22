@@ -93,6 +93,7 @@ clean:
 	rm -rf $(IVDIR)
 	rm -f $(IVVCD)
 	rm -rf program
+	rm -rf build
 
 # help
 .PHONY:help
