@@ -2,7 +2,8 @@
 
 module TB_Acore #(
     parameter [63:0] MAX_CYCLES = 500000,
-    parameter [31:0] EXPECT_EXIT = 1
+    parameter [31:0] EXPECT_EXIT = 1,
+    parameter integer MUL_PIPE_STAGES = 3
 )();
     reg clk;
     reg rst_n;
@@ -44,7 +45,7 @@ module TB_Acore #(
 
     always #10 clk = ~clk;
 
-    Acore u_Acore(
+    Acore #(.MUL_PIPE_STAGES(MUL_PIPE_STAGES)) u_Acore(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
         .dev_we      (dev_we      ),

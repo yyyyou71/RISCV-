@@ -49,6 +49,79 @@ Verilator 的产物在 `build/coremark/verilator/<模式>-<迭代次数>/`；Ica
 增加迭代次数后，脚本仍独立检查 CRC，并按原始周期计算性能。
 这属于当前 RTL/存储器模型的仿真结果，50 MHz 是设定的目标频率，未证明 FPGA 时序收敛。
 
+## 乘法扩展：RV32I + Zmmul
+
+支持 `MUL`（低 32 位）、`MULH`（有符号×有符号的高 32 位）、
+`MULHSU`（有符号 rs1×无符号 rs2 的高 32 位）、`MULHU`（无符号×无符号的高 32 位）。
+这是 Zmmul 乘法扩展，尚未实现完整 M 扩展中的 `DIV/DIVU/REM/REMU`。
+当前未接入非法指令异常，不支持的除法编码不会写寄存器，但也不会计算除法结果。
+
+新增 `vsrc/multiplier_core.v` 根据本目录《简单乘法器.pdf》模拟紫光 Simple Multiplier
+的 `a/b/clk/rst/ce/p` 接口。使用固定有符号 33×33 位乘法器，输出 66 位；
+对原来的 32 位操作数选择符号扩展或补 0，让四条指令共用一个 IP。
+`rst` 高有效同步复位，`ce=0` 时所有寄存器保持。模型只复现周期行为，
+不模拟 APM 内部结构，也不能据此判断 FPGA 资源占用和最高频率。
+
+`vsrc/multiply_unit.v` 负责启动、等待和结果选择。默认使用手册表 2-17 的 3 级配置，
+对应 XYREG、MREG、PREG；模型支持 1～5 级。3 个使能上升沿后 IP 结果有效，
+第 4 个沿进入原有 EX/MEM 寄存器，因此乘法在 EX 中占用 4 拍、增加 3 拍停顿。
+此实现一次只处理一条乘法，即使 IP 内部有流水级，也不每拍发起新的乘法。
+
+`vsrc/decoder.v` 增加四条指令的译码；`vsrc/Acore.v` 增加乘法单元和结果选择。
+等待期间保持 PC、IF/ID、ID/EX，向 EX/MEM 注入空泡，年老指令继续完成访存和写回。
+load-use 解除后才启动 IP，以便正确采样前递数据；结果沿用已有 ALU 前递和写回通道。
+原有 `Iverilog/TB_Acore.v` 仅增加级数参数，仍负责 Acore 的系统仿真。
+
+编译时需要启用乘法，否则原有 RV32I 程序仍使用软件乘法：
+
+```bash
+make coremark-verilator ISA=rv32i_zmmul ITERATIONS=100
+make coremark ISA=rv32i_zmmul ITERATIONS=1
+make build PROG=sort ISA=rv32i_zmmul
+make iv PROG=sort
+make test-multiply
+```
+
+不传 `ISA` 时保留原来的 `rv32i` 默认值。本机 GCC 10 不识别 `-march=rv32i_zmmul`，
+所以 `build.sh` 和 CoreMark 脚本将此选项转换成 `-march=rv32im -mno-div`，
+并显式链接 RV32I 的 `libgcc`，让除法继续走软件实现。
+CoreMark 构建还会检查最终反汇编，确认已生成乘法且没有硬件除法/余数指令。
+Zmmul 的结果目录是 `build/coremark/rv32i_zmmul/`，与 RV32I 基线分开保存。
+
+`make test-multiply` 的 Python 脚本只负责生成数据、调用仿真和检查输出。
+它先运行 `TB_multiplier.v` 检查 IP 的延迟、使能、复位和算术边界，
+再复用 `TB_Acore.v` 运行乘法程序，核对宿主机 Python 整数计算的参考结果。
+覆盖连续乘法、源/目的寄存器重叠、load-use、乘法结果到算术/访存/分支的前递、
+错误路径冲刷和 x0。1～5 级配置均测试，日志和程序保存在 `build/multiply/`。
+仿真源文件只包含 Acore 及其依赖，不包含 SoC 和外设顶层。
+
+替换为真实紫光 IP 时，在 PDS 中生成名为 `pango_multiplier_ip` 的 Simple Multiplier：
+
+| 配置项 | 配置值 |
+| --- | --- |
+| Port A / Port B | Signed，Width=33 |
+| Port P | 66 位，完整乘积 |
+| Pipeline Stages | 3，与 `Acore.MUL_PIPE_STAGES` 一致 |
+| Async Reset | 不勾选，即高有效同步复位 |
+| Advanced Mode / Optimal Timing | 均关闭 |
+| ce | 高有效寄存器使能 |
+
+把生成的 IP 及其依赖加入 PDS 工程，并定义 `PANGO_MULTIPLIER_IP` 宏，
+`multiply_unit.v` 就会例化真实 IP；不定义时使用行为模型。
+真实 IP 的延迟必须与参数一致，上板前仍需用 PDS 的 IP 仿真和静态时序分析确认。
+
+本次 Verilator 回归使用每组 100 次迭代，结果如下，两种版本均通过两组 CRC：
+
+| 种子组 | RV32I 周期 | 3 级硬件乘法周期 | 加速比 |
+| --- | ---: | ---: | ---: |
+| performance | 89,781,321 | 37,832,677 | 2.37 倍 |
+| validation | 95,763,970 | 37,929,100 | 2.52 倍 |
+
+性能组短运行估算从 1.113817 提升到 2.643218 CoreMark/MHz。
+这些是 CoreMark 计时窗口内的目标 CPU 周期，两组均不足 10 秒，不是正式成绩。
+除法暂时保留软件实现；若后续需要完整 RV32IM 或应用频繁执行整数除法，
+再增加迭代除法器，并覆盖除零和有符号溢出等边界。
+
 ## 进度
 10.1   
 还差五级流水线的冒险检测和前递模块没有设计，顶层也没有完成连线。 

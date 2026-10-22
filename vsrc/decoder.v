@@ -42,6 +42,8 @@ module decoder(
     localparam OP_SLT  = 4'b1000;
     localparam OP_SLTU = 4'b1001;
     localparam OP_EQ   = 4'b1010;
+    // 1100..1111 送到独立的多周期乘法单元，普通 ALU 不处理这些编码。
+    localparam OP_MUL_BASE = 4'b1100;
 
     // 分支指令的 funct3 编码 (BranchType)
     localparam BR_BEQ  = 3'h0; // 3'b000, 相等则跳转
@@ -160,6 +162,20 @@ module decoder(
                     rs1_addr <= instruction[19:15];
                     rs2_addr <= instruction[24:20];
                     rd_addr <= instruction[11:7]; 
+                    if (funct7 == 7'h01) begin
+                        if (!funct3[2]) begin
+                            ALUOp <= OP_MUL_BASE | {2'b00, funct3[1:0]};
+                        end else begin
+                            // 尚未实现 DIV/DIVU/REM/REMU，沿用未支持指令
+                            // 不产生副作用的处理方式，避免误译码为逻辑指令。
+                            // 当前处理器尚未接入非法指令异常。
+                            RegWrite <= 0;
+                            ALUen <= 0;
+                            rd_addr <= 0;
+                            rs1_addr <= 0;
+                            rs2_addr <= 0;
+                        end
+                    end else begin
                     case (funct3)
                         3'h0: begin
                             if (funct7 == 7'h0)
@@ -181,6 +197,7 @@ module decoder(
                         3'h7: ALUOp <= OP_AND;     
                         default: ALUOp <= OP_ADD;  
                     endcase
+                    end
                 end  
                 10'b00_0000_0010: begin   // if_I_A
                     RegWrite <= 1;

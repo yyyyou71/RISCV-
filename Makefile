@@ -9,8 +9,12 @@ WAVE = waveform.vcd
 # --------------------- Icarus Verilog：行为级仿真 ----------------------
 
 # -----------Acore模块测试(之后会用来长期跑测试)------------------------
-IVSRC = ./Iverilog/TB_Acore.v $(wildcard vsrc/*.v) # 源文件只用指定TB即可，其他的在命令中用-y vsrc 指定iverilog去目录中自己找对应模块,
-												   # 也可以向这里用wildcard函数来解释通配符*
+# Acore 回归只编译处理器及其依赖，不包含 SoC 和外设顶层。
+ACORE_RTL = $(addprefix vsrc/,Acore.v PC.v ROM.v ROM_core.v decoder.v ALU.v \
+            multiply_unit.v multiplier_core.v memory.v memory_core.v \
+            GPR_matrix.v Reg.v hazard_detection_unit.v branch_predictor.v)
+IVSRC = ./Iverilog/TB_Acore.v $(ACORE_RTL)
+ISA ?= rv32i
 PROG     ?= sum_1_10_c
 PROGFILE  = program/$(PROG).hex
 # 默认按程序名选择 C 源文件，也可用 C_SRCS="文件1.c 文件2.c" 覆盖。
@@ -127,7 +131,7 @@ help:
 .PHONY:build
 build: build.sh link.ld asm/start.s $(C_SRCS)
 	mkdir -p program
-	bash build.sh "$(PROGFILE)" "program/$(PROG).data" asm/start.s $(C_SRCS)
+	ISA="$(ISA)" bash build.sh "$(PROGFILE)" "program/$(PROG).data" asm/start.s $(C_SRCS)
 
 # 仿真：先编译，再运行
 .PHONY:iv
@@ -136,7 +140,7 @@ iv:$(IVOUT)
 
 $(IVOUT):$(IVSRC) $(PROGFILE)
 	mkdir -p $(IVDIR)
-	iverilog $(IVFLAG) -o $(IVOUT) $(IVSRC)
+	iverilog $(IVFLAG) -s TB_Acore -o $(IVOUT) $(IVSRC)
 
 # 只编译不运行
 .PHONY:iv-build
@@ -164,7 +168,7 @@ ITERATIONS ?= 1
 COREMARK_MODE ?= both
 MAX_CYCLES ?= 20000000
 SIMULATOR ?= iverilog
-COREMARK_ARGS = --iterations $(ITERATIONS) --mode $(COREMARK_MODE) --max-cycles $(MAX_CYCLES) --simulator $(SIMULATOR)
+COREMARK_ARGS = --iterations $(ITERATIONS) --mode $(COREMARK_MODE) --max-cycles $(MAX_CYCLES) --simulator $(SIMULATOR) --isa $(ISA)
 
 .PHONY: coremark coremark-build
 coremark:
@@ -178,4 +182,9 @@ coremark-verilator: SIMULATOR = verilator
 coremark-verilator: ITERATIONS = 100
 coremark-verilator: MAX_CYCLES = 200000000
 coremark-verilator: coremark
+
+# 乘法 IP 接口、算术边界及 Acore 流水线回归，产物保存在 build/multiply。
+.PHONY: test-multiply
+test-multiply:
+	python3 scripts/test_multiply.py
 

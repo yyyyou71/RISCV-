@@ -1,4 +1,7 @@
-module Acore(
+module Acore #(
+    // 必须与真实乘法 IP 的 Pipeline Stages 配置一致，默认 3 级。
+    parameter integer MUL_PIPE_STAGES = 3
+)(
     input clk,
     input rst_n,
 
@@ -77,6 +80,7 @@ module Acore(
     wire valid_in_EX;
     wire stall_EX;
     wire [31:0]out_EX;
+    wire [31:0]alu_out_EX;
     wire valid_out_EX;
     wire [31:0]out_comb_EX;
 
@@ -137,6 +141,13 @@ module Acore(
     wire hazard_rs1;
     wire hazard_rs2;
     wire stall;
+    wire load_stall;
+    wire mul_instruction = valid_out_ID && ALUen_ID && (ALUOp_ID[3:2] == 2'b11);
+    wire mul_busy;
+    wire mul_ready;
+    wire [31:0]mul_result;
+    reg mul_select_EX;
+    reg [31:0]mul_result_EX;
     wire [31:0]rs1_data_hazard;
     wire [31:0]rs2_data_hazard;
 
@@ -402,7 +413,31 @@ module Acore(
     assign oprand2_EX = ~ALUSrc2_ID ? immediate_ID :
                         (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
 
-    assign en_EX = ALUen_ID;
+    // 乘法等待期间保持 PC、IF/ID 和 ID/EX，EX/MEM 每拍注入空泡，
+    // 年老指令仍可完成访存和写回。等待 load-use 冒险解除后才能启动，
+    // 保证 IP 第一次采样时拿到正确的前递数据。
+    wire mul_start = mul_instruction && !load_stall && !mul_busy;
+    assign stall = load_stall || (mul_instruction && !mul_ready);
+
+    multiply_unit #(.PIPE_STAGES(MUL_PIPE_STAGES)) u_multiply_unit (
+        .clk(clk), .rst_n(rst_n), .start(mul_start),
+        .operation(ALUOp_ID[1:0]), .rs1(oprand1_EX), .rs2(oprand2_EX),
+        .busy(mul_busy), .ready(mul_ready), .result(mul_result)
+    );
+
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            mul_select_EX <= 0;
+            mul_result_EX <= 0;
+        end else begin
+            mul_select_EX <= mul_instruction && !stall_ID;
+            if (mul_instruction && !stall_ID)
+                mul_result_EX <= mul_result;
+        end
+    end
+    // 乘法结果复用已有的 ALU 结果前递和 WB_ALU 写回通道。
+    assign out_EX = mul_select_EX ? mul_result_EX : alu_out_EX;
+    assign en_EX = ALUen_ID && !mul_instruction;
     assign opcode_EX = ALUOp_ID;
     assign valid_in_EX = valid_out_ID; 
     ALU u_ALU(
@@ -414,7 +449,7 @@ module Acore(
         .flush     (flush_EX     ),
         .valid_in  (valid_in_EX  ),
         .stall     (stall_EX     ),
-        .out       (out_EX       ),
+        .out       (alu_out_EX   ),
         .out_comb  (out_comb_EX  ),
         .valid_out (valid_out_EX )
     );
@@ -562,7 +597,7 @@ module Acore(
         .imm_EX          (imm_EX          ),
         .pc_4_EX         (pc_4_EX         ),
         .wr_data_WB_comb (wr_data_WB      ),
-        .stall           (stall           ),
+        .stall           (load_stall      ),
         .hazard_rs1      (hazard_rs1      ),
         .hazard_rs2      (hazard_rs2      ),
         .rs1_data        (rs1_data_hazard        ),

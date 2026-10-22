@@ -39,8 +39,11 @@ def check_sources():
             raise ValueError(f"Upstream source checksum mismatch: {name}")
 
 
-def build(mode, iterations, sources, simulator="iverilog"):
+def build(mode, iterations, sources, simulator="iverilog", isa="rv32i"):
     base = ROOT / "build/coremark"
+    # 按 ISA 隔离结果，保留原有 RV32I 基线目录。
+    if isa != "rv32i":
+        base /= isa
     if simulator == "verilator":
         base /= "verilator"
     out = base / f"{mode}-{iterations}"
@@ -48,20 +51,31 @@ def build(mode, iterations, sources, simulator="iverilog"):
     # A new binary must not retain the previous binary's success metadata.
     (out / "result.json").unlink(missing_ok=True)
     elf = out / "coremark.elf"
-    flags = ["-march=rv32i", "-mabi=ilp32", "-O2", "-msmall-data-limit=0",
+    # 兼容本机 GCC 10：允许硬件乘法，除法仍走 RV32I 软件库。
+    isa_flags = ["-march=rv32im", "-mno-div"] if isa == "rv32i_zmmul" else ["-march=rv32i"]
+    flags = [*isa_flags, "-mabi=ilp32", "-O2", "-msmall-data-limit=0",
              "-mno-relax", "-ffreestanding", "-fno-builtin", "-fno-common",
              "-fno-stack-protector", "-fno-pic", "-fno-pie",
              "-nostdlib", "-nostartfiles"]
     defines = [f"-DITERATIONS={iterations}", "-DTOTAL_DATA_SIZE=2000",
                f"-D{mode.upper()}_RUN=1", f"-DCPU_CLOCK_HZ={CLOCK_HZ}"]
     reported_flags = " ".join(flags + defines)
+    libgcc = subprocess.check_output(
+        [PREFIX + "gcc", "-march=rv32i", "-mabi=ilp32", "-print-libgcc-file-name"],
+        text=True).strip()
     command([PREFIX + "gcc", *flags, *defines,
              f'-DFLAGS_STR="{reported_flags}"', "-I", PORT, "-I", UPSTREAM,
              "-T", PORT / "link.ld", f"-Wl,-Map={out / 'coremark.map'}",
-             "-o", elf, *sources, "-lgcc"])
+             "-o", elf, *sources, libgcc])
     command([PREFIX + "size", elf])
     with (out / "coremark.dis").open("w") as stream:
         command([PREFIX + "objdump", "-d", elf], stdout=stream)
+    # 检查最终程序（包括库代码），避免只检查 C 编译参数而漏掉库中除法。
+    disassembly = (out / "coremark.dis").read_text()
+    if re.search(r"\t(?:divu?|remu?)\s", disassembly):
+        raise ValueError("程序包含当前处理器不支持的硬件除法/余数指令")
+    if isa == "rv32i_zmmul" and not re.search(r"\tmul(?:h(?:su|u)?)?\s", disassembly):
+        raise ValueError("启用乘法扩展后，程序中没有生成硬件乘法指令")
     for section, suffix, width in [(".text", "hex", 4), (".data", "data", 1)]:
         binary = out / f"{section[1:]}.bin"
         command([PREFIX + "objcopy", "-j", section, "-O", "binary", elf, binary])
@@ -129,10 +143,14 @@ def check_report(report, mode, iterations):
     return result
 
 
-def simulate(out, mode, iterations, max_cycles, simulator="iverilog"):
+def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i"):
     common = ["-DNO_WAVES", f'-DPROG_FILE="{out / "coremark.hex"}"',
               f'-DDATA_FILE="{out / "coremark.data"}"']
-    rtl = [ROOT / "Iverilog/TB_Acore.v", *sorted((ROOT / "vsrc").glob("*.v"))]
+    # 仅编译现有 Acore 测试台和处理器依赖，不解析无关的 SoC。
+    names = ["Acore", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
+             "multiplier_core", "memory", "memory_core", "GPR_matrix", "Reg",
+             "hazard_detection_unit", "branch_predictor"]
+    rtl = [ROOT / "Iverilog/TB_Acore.v", *[ROOT / f"vsrc/{name}.v" for name in names]]
     if simulator == "iverilog":
         sim = out / "TB_Acore.out"
         command(["iverilog", "-g2012", "-s", "TB_Acore", *common,
@@ -171,7 +189,7 @@ def simulate(out, mode, iterations, max_cycles, simulator="iverilog"):
                 raise ValueError(f"Simulation failed; see {out / 'run.log'}")
     elapsed = time.perf_counter() - started
     result = check_report("".join(report_lines), mode, iterations)
-    result.update(simulator=simulator, simulation_wall_seconds=elapsed)
+    result.update(simulator=simulator, isa=isa, simulation_wall_seconds=elapsed)
     print(f"Host simulation time (excluding build): {elapsed:.3f} s", flush=True)
     (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 
@@ -181,6 +199,7 @@ def main():
     parser.add_argument("action", choices=["build", "run"])
     parser.add_argument("--mode", choices=["both", "performance", "validation"], default="both")
     parser.add_argument("--simulator", choices=["iverilog", "verilator"], default="iverilog")
+    parser.add_argument("--isa", choices=["rv32i", "rv32i_zmmul"], default="rv32i")
     parser.add_argument("--iterations", type=int, default=1)
     parser.add_argument("--max-cycles", type=int, default=20_000_000)
     parser.add_argument("--sources", nargs="+", required=True)
@@ -192,9 +211,9 @@ def main():
     check_sources()
     modes = EXPECTED if args.mode == "both" else [args.mode]
     for mode in modes:
-        out = build(mode, args.iterations, args.sources, args.simulator)
+        out = build(mode, args.iterations, args.sources, args.simulator, args.isa)
         if args.action == "run":
-            simulate(out, mode, args.iterations, args.max_cycles, args.simulator)
+            simulate(out, mode, args.iterations, args.max_cycles, args.simulator, args.isa)
 
 
 if __name__ == "__main__":
