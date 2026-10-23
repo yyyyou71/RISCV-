@@ -42,7 +42,7 @@ Verilator 的产物在 `build/coremark/verilator/<模式>-<迭代次数>/`；Ica
 报告中的 `Total ticks` 是目标 CPU 计时周期；目标频率为 50 MHz，
 `simulation_wall_seconds` 则是电脑实际执行仿真的秒数（不含编译），二者不能混用。
 当前 `HAS_FLOAT=1`，原版报告的秒数和 `Iterations/Sec` 显示小数。
-处理器仍按 RV32I/ILP32 编译，浮点计算由 `libgcc` 用整数指令实现，不要求 F/D 扩展。
+通过 `ISA=rv32i` 可保留 RV32I/ILP32 编译；浮点计算由 `libgcc` 用整数指令实现，不要求 F/D 扩展。
 移植层的 `cvt.c` 负责浮点转字符串，并在本地实现小数/整数拆分，避免依赖 libc/libm。
 脚本会核对 CPU 打印的小数与原始周期计算结果是否一致；`result.json` 保存未按六位小数截断的结果。
 短于 10 秒的目标运行会保留原版 CoreMark 的时长错误，仅标为短运行估算。
@@ -53,8 +53,7 @@ Verilator 的产物在 `build/coremark/verilator/<模式>-<迭代次数>/`；Ica
 
 支持 `MUL`（低 32 位）、`MULH`（有符号×有符号的高 32 位）、
 `MULHSU`（有符号 rs1×无符号 rs2 的高 32 位）、`MULHU`（无符号×无符号的高 32 位）。
-这是 Zmmul 乘法扩展，尚未实现完整 M 扩展中的 `DIV/DIVU/REM/REMU`。
-当前未接入非法指令异常，不支持的除法编码不会写寄存器，但也不会计算除法结果。
+这是 Zmmul 乘法扩展。开启下文的 `ENABLE_DIV` 后，另支持 M 扩展中的四条除法/余数指令。
 
 新增 `vsrc/multiplier_core.v` 根据本目录《简单乘法器.pdf》模拟紫光 Simple Multiplier
 的 `a/b/clk/rst/ce/p` 接口。使用固定有符号 33×33 位乘法器，输出 66 位；
@@ -82,7 +81,8 @@ make iv PROG=sort
 make test-multiply
 ```
 
-不传 `ISA` 时保留原来的 `rv32i` 默认值。本机 GCC 10 不识别 `-march=rv32i_zmmul`，
+通过 Makefile 构建时，默认 `ISA` 由下文的 `ENABLE_DIV` 开关决定。
+仍可显式传入 `ISA=rv32i` 运行纯 RV32I 程序。本机 GCC 10 不识别 `-march=rv32i_zmmul`，
 所以 `build.sh` 和 CoreMark 脚本将此选项转换成 `-march=rv32im -mno-div`，
 并显式链接 RV32I 的 `libgcc`，让除法继续走软件实现。
 CoreMark 构建还会检查最终反汇编，确认已生成乘法且没有硬件除法/余数指令。
@@ -119,8 +119,76 @@ Zmmul 的结果目录是 `build/coremark/rv32i_zmmul/`，与 RV32I 基线分开�
 
 性能组短运行估算从 1.113817 提升到 2.643218 CoreMark/MHz。
 这些是 CoreMark 计时窗口内的目标 CPU 周期，两组均不足 10 秒，不是正式成绩。
-除法暂时保留软件实现；若后续需要完整 RV32IM 或应用频繁执行整数除法，
-再增加迭代除法器，并覆盖除零和有符号溢出等边界。
+以上为首次接入乘法器时的对比；可选除法器的独立结果见下一节。
+
+## 可选除法器：完整 RV32IM
+
+`vsrc/divider_core.v` 实现 32 位无符号恢复余数除法，每拍用减法器生成一位商，
+固定迭代 32 拍，不使用综合工具的 `/`、`%` 或厂商 IP。
+`vsrc/divide_unit.v` 完成输入绝对值、输出符号修正以及商/余数选择，支持
+`DIV`、`DIVU`、`REM`、`REMU`。有符号商向零截断，非零余数与被除数同号。
+除零返回全 1 的商和原被除数作为余数；`INT_MIN / -1` 返回 `INT_MIN` 和余数 0。
+
+一次启动占 1 拍，迭代占 32 拍，结果接收占 1 拍，因此除法指令占用 EX 共 34 拍，
+增加 33 拍停顿。期间前级保持、后级排空，数据从原有前递通道采样，结果复用 ALU 写回。
+当前一次处理一条除法，连续的 DIV 和 REM 分别计算，不进行商/余数指令合并。
+
+总开关在 `Acore` 的参数中，默认开启：
+
+```verilog
+parameter integer ENABLE_DIV = 1
+```
+
+在例化 Acore 时设置 `.ENABLE_DIV(0)` 即可关闭。
+该参数同时传给译码器，并用 `generate` 控制除法单元是否实例化。
+关闭后会移除除法运算硬件。当前尚无非法指令异常，关闭时的除法编码不写寄存器，
+也不产生除法等待；关闭模式下的软件需要重新按 Zmmul/RV32I 编译，使用软件除法。
+
+Makefile 提供同名参数，自动同时选择仿真硬件和默认软件 ISA：
+
+| 开关 | 默认 ISA | 软件库 | 除法实现 |
+| --- | --- | --- | --- |
+| `ENABLE_DIV=1`（默认） | `rv32im` | RV32IM libgcc | 硬件除法 |
+| `ENABLE_DIV=0` | `rv32i_zmmul` | RV32I libgcc | 软件除法 |
+
+只需切换一个 Makefile 参数，即可对比 CoreMark，每组只运行一次迭代：
+
+```bash
+make coremark-verilator ENABLE_DIV=0 ITERATIONS=1
+make coremark-verilator ENABLE_DIV=1 ITERATIONS=1
+make test-divide
+```
+
+普通程序切换配置后先重新构建，再仿真，例如：
+
+```bash
+make build PROG=sort ENABLE_DIV=1
+make iv PROG=sort ENABLE_DIV=1
+```
+
+RV32IM 的 CoreMark 结果保存在 `build/coremark/rv32im/`，Zmmul 结果仍在
+`build/coremark/rv32i_zmmul/`。生成的 `result.json` 记录实际的 `enable_div` 配置。
+
+专项验证使用 `TB_divider.v` 核对 2325 组请求和中途复位，再复用 `TB_Acore.v`
+验证前递、load-use、寄存器重叠、乘除交替、分支/JALR、错误路径冲刷及 x0。
+关闭时核对 576 个结果，开启时核对 586 个结果；关闭测试完全不编译两个除法器源文件，
+证明处理器不依赖除法实例。乘法 1～5 级回归仍通过。
+日志、定向程序和小型基准在 `build/divide/`，专项测试入口为 `make test-divide`。
+
+按 `sort` 后接 Verilator 单次 CoreMark 的顺序完成整机回归，均通过；
+CoreMark 两种开关下的 performance/validation CRC 都匹配。
+另使用 `csrc/software/div_benchmark.c` 执行 200 次变化分母的无符号除法，
+两种配置的校验和均为 `0xc672c720`。周期对比如下：
+
+| 程序 | 关闭除法器 | 开启除法器 |
+| --- | ---: | ---: |
+| CoreMark performance，1 次迭代 | 378,292 | 378,160 |
+| CoreMark validation，1 次迭代 | 379,209 | 379,113 |
+| 除法密集小程序 | 54,248 | 8,814 |
+
+CoreMark 性能组的提升约 0.035%，除法密集小程序约快 6.15 倍。
+这些是仿真中的目标 CPU 周期，CoreMark 单次运行不足 10 秒，不能作为正式成绩。
+尚未进行 FPGA 综合和静态时序分析，因此没有给出实际面积或最高频率结论。
 
 ## 进度
 10.1   

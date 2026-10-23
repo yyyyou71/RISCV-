@@ -11,10 +11,18 @@ WAVE = waveform.vcd
 # -----------Acore模块测试(之后会用来长期跑测试)------------------------
 # Acore 回归只编译处理器及其依赖，不包含 SoC 和外设顶层。
 ACORE_RTL = $(addprefix vsrc/,Acore.v PC.v ROM.v ROM_core.v decoder.v ALU.v \
-            multiply_unit.v multiplier_core.v memory.v memory_core.v \
+            multiply_unit.v multiplier_core.v divide_unit.v divider_core.v memory.v memory_core.v \
             GPR_matrix.v Reg.v hazard_detection_unit.v branch_predictor.v)
 IVSRC = ./Iverilog/TB_Acore.v $(ACORE_RTL)
-ISA ?= rv32i
+# 同一开关同时控制硬件实例和默认编译 ISA，避免关闭除法器后仍生成除法指令。
+ENABLE_DIV ?= 1
+ISA ?= $(if $(filter 1,$(ENABLE_DIV)),rv32im,rv32i_zmmul)
+ifeq ($(filter $(ENABLE_DIV),0 1),)
+$(error ENABLE_DIV 只能设为 0 或 1)
+endif
+ifeq ($(ENABLE_DIV):$(ISA),0:rv32im)
+$(error 关闭除法器时请使用 ISA=rv32i_zmmul 或 ISA=rv32i)
+endif
 PROG     ?= sum_1_10_c
 PROGFILE  = program/$(PROG).hex
 # 默认按程序名选择 C 源文件，也可用 C_SRCS="文件1.c 文件2.c" 覆盖。
@@ -24,7 +32,7 @@ else
 C_SRCS ?= csrc/software/$(PROG).c
 endif
 IVDIR = ./obj_iv
-IVOUT = $(IVDIR)/TB_Acore_$(PROG).out      # ★ 加 _$(PROG)
+IVOUT = $(IVDIR)/TB_Acore_$(PROG)_div$(ENABLE_DIV).out
 IVVCD = TB_Acore.vcd
 IVFLAG = -Wall -g2012 -DPROG_FILE='"$(PROGFILE)"' \
 			-DDATA_FILE='"program/$(PROG).data"'
@@ -102,6 +110,8 @@ clean:
 # help
 .PHONY:help
 help:
+	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'test-divide     check divider arithmetic, pipeline integration and hardware switch'
 	@echo 'coremark-verilator  run CoreMark on Verilator (100 iterations per seed set by default)'
 	@echo 'coremark        build, simulate and check both CoreMark seed sets (ITERATIONS=1 by default)'
 	@echo 'coremark-build  build CoreMark images only; sources: csrc/coremark_port/sources.mk'
@@ -140,7 +150,7 @@ iv:$(IVOUT)
 
 $(IVOUT):$(IVSRC) $(PROGFILE)
 	mkdir -p $(IVDIR)
-	iverilog $(IVFLAG) -s TB_Acore -o $(IVOUT) $(IVSRC)
+	iverilog $(IVFLAG) -s TB_Acore -PTB_Acore.ENABLE_DIV=$(ENABLE_DIV) -o $(IVOUT) $(IVSRC)
 
 # 只编译不运行
 .PHONY:iv-build
@@ -168,7 +178,7 @@ ITERATIONS ?= 1
 COREMARK_MODE ?= both
 MAX_CYCLES ?= 20000000
 SIMULATOR ?= iverilog
-COREMARK_ARGS = --iterations $(ITERATIONS) --mode $(COREMARK_MODE) --max-cycles $(MAX_CYCLES) --simulator $(SIMULATOR) --isa $(ISA)
+COREMARK_ARGS = --iterations $(ITERATIONS) --mode $(COREMARK_MODE) --max-cycles $(MAX_CYCLES) --simulator $(SIMULATOR) --isa $(ISA) --enable-div $(ENABLE_DIV)
 
 .PHONY: coremark coremark-build
 coremark:
@@ -187,4 +197,8 @@ coremark-verilator: coremark
 .PHONY: test-multiply
 test-multiply:
 	python3 scripts/test_multiply.py
+
+.PHONY: test-divide
+test-divide:
+	python3 scripts/test_divide.py
 

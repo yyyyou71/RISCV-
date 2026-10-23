@@ -1,4 +1,6 @@
-module decoder(
+module decoder #(
+    parameter integer ENABLE_DIV = 1
+)(
     input [31:0]instruction,
     input clk,
     input rst_n,
@@ -21,6 +23,7 @@ module decoder(
     output reg ALUSrc1, // 数据选择器信号，选择第一个操作数来源，选择1说明来自PC 
     output reg ALUSrc2, // 数据选择器信号，选择第二个操作数来源,选择1说明来自寄存器
     output reg [3:0]ALUOp, // alu控制信号
+    output reg [1:0]DivOp, // DIV/DIVU/REM/REMU 的 funct3 低两位
     output reg Branch,
     output reg [2:0]Branch_type, // 跳转种类
     output reg Jump,
@@ -42,6 +45,7 @@ module decoder(
     localparam OP_SLT  = 4'b1000;
     localparam OP_SLTU = 4'b1001;
     localparam OP_EQ   = 4'b1010;
+    localparam OP_DIV  = 4'b1011;
     // 1100..1111 送到独立的多周期乘法单元，普通 ALU 不处理这些编码。
     localparam OP_MUL_BASE = 4'b1100;
 
@@ -116,6 +120,7 @@ module decoder(
             Jump <= Jump;
             immediate <= immediate;
             ALUOp <= ALUOp;
+            DivOp <= DivOp;
             ALUen <= ALUen;
             wb_type <= wb_type;
             ALUSrc1 <= ALUSrc1;
@@ -135,6 +140,7 @@ module decoder(
             ALUSrc1     <= 1'b0;
             ALUSrc2     <= 1'b0;
             ALUOp       <= OP_ADD;
+            DivOp       <= 2'b00;
             MemSize     <= 2'b00;
             MemUnsigned <= 1'b0;
             Branch_type <= 3'd0;
@@ -165,9 +171,11 @@ module decoder(
                     if (funct7 == 7'h01) begin
                         if (!funct3[2]) begin
                             ALUOp <= OP_MUL_BASE | {2'b00, funct3[1:0]};
+                        end else if (ENABLE_DIV != 0) begin
+                            ALUOp <= OP_DIV;
+                            DivOp <= funct3[1:0];
                         end else begin
-                            // 尚未实现 DIV/DIVU/REM/REMU，沿用未支持指令
-                            // 不产生副作用的处理方式，避免误译码为逻辑指令。
+                            // 总开关关闭时，除法指令不产生副作用或停顿。
                             // 当前处理器尚未接入非法指令异常。
                             RegWrite <= 0;
                             ALUen <= 0;

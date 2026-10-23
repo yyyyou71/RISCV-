@@ -120,7 +120,8 @@ def main():
         run(["iverilog", "-g2012", "-s", "TB_Acore", "-y", ROOT / "vsrc", "-DNO_WAVES",
              f'-DPROG_FILE="{OUT / "multiply.hex"}"',
              f'-DDATA_FILE="{OUT / "multiply.data"}"',
-             f"-PTB_Acore.MUL_PIPE_STAGES={stages}", "-o", sim, ROOT / "Iverilog/TB_Acore.v"])
+             f"-PTB_Acore.MUL_PIPE_STAGES={stages}", "-PTB_Acore.ENABLE_DIV=0",
+             "-o", sim, ROOT / "Iverilog/TB_Acore.v"])
         report = run(["vvp", sim])
         (OUT / f"acore-{stages}.log").write_text(report)
         actual = [int(x, 16) for x in re.findall(r"\[print\]\s+\d+\s+\(0x([0-9a-fA-F]+)\)", report)]

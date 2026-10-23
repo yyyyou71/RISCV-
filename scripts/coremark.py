@@ -51,8 +51,10 @@ def build(mode, iterations, sources, simulator="iverilog", isa="rv32i"):
     # A new binary must not retain the previous binary's success metadata.
     (out / "result.json").unlink(missing_ok=True)
     elf = out / "coremark.elf"
-    # 兼容本机 GCC 10：允许硬件乘法，除法仍走 RV32I 软件库。
-    isa_flags = ["-march=rv32im", "-mno-div"] if isa == "rv32i_zmmul" else ["-march=rv32i"]
+    # 兼容本机 GCC 10；完整 M 扩展允许硬件除法，Zmmul 则保留软件除法。
+    isa_flags = {"rv32i": ["-march=rv32i"],
+                 "rv32i_zmmul": ["-march=rv32im", "-mno-div"],
+                 "rv32im": ["-march=rv32im"]}[isa]
     flags = [*isa_flags, "-mabi=ilp32", "-O2", "-msmall-data-limit=0",
              "-mno-relax", "-ffreestanding", "-fno-builtin", "-fno-common",
              "-fno-stack-protector", "-fno-pic", "-fno-pie",
@@ -60,8 +62,9 @@ def build(mode, iterations, sources, simulator="iverilog", isa="rv32i"):
     defines = [f"-DITERATIONS={iterations}", "-DTOTAL_DATA_SIZE=2000",
                f"-D{mode.upper()}_RUN=1", f"-DCPU_CLOCK_HZ={CLOCK_HZ}"]
     reported_flags = " ".join(flags + defines)
+    lib_isa = "rv32im" if isa == "rv32im" else "rv32i"
     libgcc = subprocess.check_output(
-        [PREFIX + "gcc", "-march=rv32i", "-mabi=ilp32", "-print-libgcc-file-name"],
+        [PREFIX + "gcc", f"-march={lib_isa}", "-mabi=ilp32", "-print-libgcc-file-name"],
         text=True).strip()
     command([PREFIX + "gcc", *flags, *defines,
              f'-DFLAGS_STR="{reported_flags}"', "-I", PORT, "-I", UPSTREAM,
@@ -72,9 +75,9 @@ def build(mode, iterations, sources, simulator="iverilog", isa="rv32i"):
         command([PREFIX + "objdump", "-d", elf], stdout=stream)
     # 检查最终程序（包括库代码），避免只检查 C 编译参数而漏掉库中除法。
     disassembly = (out / "coremark.dis").read_text()
-    if re.search(r"\t(?:divu?|remu?)\s", disassembly):
+    if isa != "rv32im" and re.search(r"\t(?:divu?|remu?)\s", disassembly):
         raise ValueError("程序包含当前处理器不支持的硬件除法/余数指令")
-    if isa == "rv32i_zmmul" and not re.search(r"\tmul(?:h(?:su|u)?)?\s", disassembly):
+    if isa != "rv32i" and not re.search(r"\tmul(?:h(?:su|u)?)?\s", disassembly):
         raise ValueError("启用乘法扩展后，程序中没有生成硬件乘法指令")
     for section, suffix, width in [(".text", "hex", 4), (".data", "data", 1)]:
         binary = out / f"{section[1:]}.bin"
@@ -143,18 +146,19 @@ def check_report(report, mode, iterations):
     return result
 
 
-def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i"):
+def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i", enable_div=1):
     common = ["-DNO_WAVES", f'-DPROG_FILE="{out / "coremark.hex"}"',
               f'-DDATA_FILE="{out / "coremark.data"}"']
     # 仅编译现有 Acore 测试台和处理器依赖，不解析无关的 SoC。
     names = ["Acore", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
-             "multiplier_core", "memory", "memory_core", "GPR_matrix", "Reg",
+             "multiplier_core", "divide_unit", "divider_core", "memory", "memory_core", "GPR_matrix", "Reg",
              "hazard_detection_unit", "branch_predictor"]
     rtl = [ROOT / "Iverilog/TB_Acore.v", *[ROOT / f"vsrc/{name}.v" for name in names]]
     if simulator == "iverilog":
         sim = out / "TB_Acore.out"
         command(["iverilog", "-g2012", "-s", "TB_Acore", *common,
                  "-PTB_Acore.EXPECT_EXIT=0", f"-PTB_Acore.MAX_CYCLES={max_cycles}",
+                 f"-PTB_Acore.ENABLE_DIV={enable_div}",
                  "-o", sim, *rtl])
         run_command = ["vvp", "-i", str(sim)]
     else:
@@ -167,6 +171,7 @@ def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i
                          "--top-module", "TB_Acore", "-j", "4",
                          "-O3", "-CFLAGS", "-O3", "--Mdir", model,
                          "-o", "coremark_sim", *common, "-GEXPECT_EXIT=0",
+                         f"-GENABLE_DIV={enable_div}",
                          f"-GMAX_CYCLES=64'd{max_cycles}", *rtl],
                         stdout=log, stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError:
@@ -189,7 +194,7 @@ def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i
                 raise ValueError(f"Simulation failed; see {out / 'run.log'}")
     elapsed = time.perf_counter() - started
     result = check_report("".join(report_lines), mode, iterations)
-    result.update(simulator=simulator, isa=isa, simulation_wall_seconds=elapsed)
+    result.update(simulator=simulator, isa=isa, enable_div=enable_div, simulation_wall_seconds=elapsed)
     print(f"Host simulation time (excluding build): {elapsed:.3f} s", flush=True)
     (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 
@@ -199,11 +204,14 @@ def main():
     parser.add_argument("action", choices=["build", "run"])
     parser.add_argument("--mode", choices=["both", "performance", "validation"], default="both")
     parser.add_argument("--simulator", choices=["iverilog", "verilator"], default="iverilog")
-    parser.add_argument("--isa", choices=["rv32i", "rv32i_zmmul"], default="rv32i")
+    parser.add_argument("--isa", choices=["rv32i", "rv32i_zmmul", "rv32im"], default="rv32i")
+    parser.add_argument("--enable-div", type=int, choices=[0, 1], default=1)
     parser.add_argument("--iterations", type=int, default=1)
     parser.add_argument("--max-cycles", type=int, default=20_000_000)
     parser.add_argument("--sources", nargs="+", required=True)
     args = parser.parse_args()
+    if args.isa == "rv32im" and not args.enable_div:
+        parser.error("ENABLE_DIV=0 时不能运行 RV32IM 程序，请使用 ISA=rv32i_zmmul 或 rv32i")
     if not 1 <= args.iterations <= 0x7fffffff:
         parser.error("iterations must be positive (automatic calibration is disabled)")
     if not 1 <= args.max_cycles < 2**32:
@@ -213,7 +221,7 @@ def main():
     for mode in modes:
         out = build(mode, args.iterations, args.sources, args.simulator, args.isa)
         if args.action == "run":
-            simulate(out, mode, args.iterations, args.max_cycles, args.simulator, args.isa)
+            simulate(out, mode, args.iterations, args.max_cycles, args.simulator, args.isa, args.enable_div)
 
 
 if __name__ == "__main__":

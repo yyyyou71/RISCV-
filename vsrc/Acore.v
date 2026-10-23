@@ -1,6 +1,8 @@
 module Acore #(
     // 必须与真实乘法 IP 的 Pipeline Stages 配置一致，默认 3 级。
-    parameter integer MUL_PIPE_STAGES = 3
+    parameter integer MUL_PIPE_STAGES = 3,
+    // 除法总开关：1=完整 RV32IM；0=裁掉除法硬件，保留 Zmmul 乘法。
+    parameter integer ENABLE_DIV = 1
 )(
     input clk,
     input rst_n,
@@ -62,6 +64,7 @@ module Acore #(
     wire ALUSrc1_ID;
     wire ALUSrc2_ID;
     wire [3:0]ALUOp_ID;
+    wire [1:0]DivOp_ID;
     wire Branch_ID;
     wire [2:0]Branch_type_ID;
     wire Jump_ID;
@@ -148,6 +151,12 @@ module Acore #(
     wire [31:0]mul_result;
     reg mul_select_EX;
     reg [31:0]mul_result_EX;
+    wire div_instruction = (ENABLE_DIV != 0) && valid_out_ID && ALUen_ID && (ALUOp_ID == 4'b1011);
+    wire div_busy;
+    wire div_ready;
+    wire [31:0]div_result;
+    reg div_select_EX;
+    reg [31:0]div_result_EX;
     wire [31:0]rs1_data_hazard;
     wire [31:0]rs2_data_hazard;
 
@@ -293,7 +302,7 @@ module Acore #(
         end
     end
 
-    decoder u_decoder(
+    decoder #(.ENABLE_DIV(ENABLE_DIV)) u_decoder(
         .instruction (instruction ),
         .clk         (clk         ),
         .rst_n       (rst_n       ),
@@ -314,6 +323,7 @@ module Acore #(
         .ALUSrc1     (ALUSrc1_ID     ),  
         .ALUSrc2     (ALUSrc2_ID     ),  
         .ALUOp       (ALUOp_ID       ),  
+        .DivOp       (DivOp_ID       ),
         .Branch      (Branch_ID      ),  
         .Branch_type (Branch_type_ID ),  
         .Jump        (Jump_ID        ),  
@@ -413,11 +423,12 @@ module Acore #(
     assign oprand2_EX = ~ALUSrc2_ID ? immediate_ID :
                         (hazard_rs2) ? rs2_data_hazard : rd_data2_GPR;
 
-    // 乘法等待期间保持 PC、IF/ID 和 ID/EX，EX/MEM 每拍注入空泡，
+    // 乘除法等待期间保持 PC、IF/ID 和 ID/EX，EX/MEM 每拍注入空泡，
     // 年老指令仍可完成访存和写回。等待 load-use 冒险解除后才能启动，
     // 保证 IP 第一次采样时拿到正确的前递数据。
     wire mul_start = mul_instruction && !load_stall && !mul_busy;
-    assign stall = load_stall || (mul_instruction && !mul_ready);
+    wire div_start = div_instruction && !load_stall && !div_busy;
+    assign stall = load_stall || (mul_instruction && !mul_ready) || (div_instruction && !div_ready);
 
     multiply_unit #(.PIPE_STAGES(MUL_PIPE_STAGES)) u_multiply_unit (
         .clk(clk), .rst_n(rst_n), .start(mul_start),
@@ -425,19 +436,39 @@ module Acore #(
         .busy(mul_busy), .ready(mul_ready), .result(mul_result)
     );
 
+    // 使用生成条件而非运行时屏蔽，关闭后不会保留除法器寄存器和减法数据通路。
+    generate
+        if (ENABLE_DIV != 0) begin : g_divider
+            divide_unit u_divide_unit (
+                .clk(clk), .rst_n(rst_n), .start(div_start),
+                .operation(DivOp_ID), .rs1(oprand1_EX), .rs2(oprand2_EX),
+                .busy(div_busy), .ready(div_ready), .result(div_result)
+            );
+        end else begin : g_no_divider
+            assign div_busy = 1'b0;
+            assign div_ready = 1'b0;
+            assign div_result = 32'b0;
+        end
+    endgenerate
+
     always @(posedge clk) begin
         if (!rst_n) begin
             mul_select_EX <= 0;
             mul_result_EX <= 0;
+            div_select_EX <= 0;
+            div_result_EX <= 0;
         end else begin
             mul_select_EX <= mul_instruction && !stall_ID;
+            div_select_EX <= div_instruction && !stall_ID;
             if (mul_instruction && !stall_ID)
                 mul_result_EX <= mul_result;
+            if (div_instruction && !stall_ID)
+                div_result_EX <= div_result;
         end
     end
-    // 乘法结果复用已有的 ALU 结果前递和 WB_ALU 写回通道。
-    assign out_EX = mul_select_EX ? mul_result_EX : alu_out_EX;
-    assign en_EX = ALUen_ID && !mul_instruction;
+    // 乘除法结果复用已有的 ALU 结果前递和 WB_ALU 写回通道。
+    assign out_EX = div_select_EX ? div_result_EX : mul_select_EX ? mul_result_EX : alu_out_EX;
+    assign en_EX = ALUen_ID && !mul_instruction && !div_instruction;
     assign opcode_EX = ALUOp_ID;
     assign valid_in_EX = valid_out_ID; 
     ALU u_ALU(

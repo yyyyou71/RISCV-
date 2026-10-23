@@ -41,16 +41,18 @@ BIN_DATA="${OUT_DATA%.hex}.bin"
 #   访问它们需要两条指令：先 lui 取高 20 位，再 addi/lw/sw 取低 12 位
 echo "[1/4]编译+链接, ${SRC} ->  ${ELF}"
 # GCC 10 尚不识别 Zmmul；用 M 扩展加 -mno-div 只生成硬件乘法。
-# 始终显式链接 RV32I 的 libgcc，防止 RV32IM 库内部带入除法指令。
+# 关闭除法时显式链接 RV32I 的 libgcc，完整 M 扩展则使用 RV32IM 库。
+LIB_ISA=rv32i
 case "${ISA:-rv32i}" in
         rv32i) ISA_FLAGS=(-march=rv32i) ;;
         rv32i_zmmul) ISA_FLAGS=(-march=rv32im -mno-div) ;;
-        *) echo "不支持的 ISA：${ISA}，可选 rv32i / rv32i_zmmul" >&2; exit 1 ;;
+        rv32im) ISA_FLAGS=(-march=rv32im); LIB_ISA=rv32im ;;
+        *) echo "不支持的 ISA：${ISA}，可选 rv32i / rv32i_zmmul / rv32im" >&2; exit 1 ;;
 esac
-LIBGCC_RV32I=$(riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -print-libgcc-file-name)
+LIBGCC_PATH=$(riscv64-unknown-elf-gcc "-march=${LIB_ISA}" -mabi=ilp32 -print-libgcc-file-name)
 riscv64-unknown-elf-gcc "${ISA_FLAGS[@]}" -mabi=ilp32 -msmall-data-limit=0 \
         -ffreestanding -nostdlib -nostartfiles -T link.ld \
-        -e _start -O1 -o "${ELF}" "$@" "${LIBGCC_RV32I}"
+        -e _start -O1 -o "${ELF}" "$@" "${LIBGCC_PATH}"
 
 echo "[2/4]提取裸字节, ${ELF}  ->  ${BIN}"
 riscv64-unknown-elf-objcopy -j .text -O binary "${ELF}" "${BIN}" # -j .text的意思是只粘代码段
