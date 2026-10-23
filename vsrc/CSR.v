@@ -14,6 +14,12 @@ module CSR(
 
     input irq_accept,
     input [31:0] irq_resume_pc,
+
+    // 中断地址和返回地址
+    output [31:0] irq_entry_pc,
+    output [31:0] mret_target_pc,
+
+    // 中断请求和中断寄存器堆输出
     output reg irq_request,
     output [31:0] CSR_out   // 当前选中寄存器的值，组合读取
 );
@@ -23,6 +29,7 @@ module CSR(
     localparam [11:0] ADDR_MIE      = 12'h304;
     localparam [11:0] ADDR_MIP      = 12'h344;
     localparam [11:0] ADDR_MEPC     = 12'h341;
+    localparam [11:0] ADDR_MCAUSE   = 12'h342;
 
     // 掩码
     localparam [31:0] MIE_WRITE_MASK     = 32'h0000_0080;
@@ -38,6 +45,7 @@ module CSR(
     reg [31:0] mie;         // 中断分类开关；本步只使用 bit7
     wire [31:0] mip;         // 各种中断请求
     reg [31:0] mepc;        // 恢复流水线的地址
+    reg [31:0] mcause;      // 进入中断原因
 
 
     // 软件配置中断相关
@@ -64,7 +72,7 @@ module CSR(
         end
     end
 
-    // mstatus相关
+    // mstatus:处理器中断总状态
     always @(posedge clk) begin
         if(!rst_n)begin
             mstatus <= 32'b0; 
@@ -88,7 +96,7 @@ module CSR(
         end      
     end
 
-    // mepc相关
+    // mepc:本次处理完返回的pc
     always @(posedge clk) begin
         if(!rst_n)begin
             mepc <= 32'b0;
@@ -106,6 +114,24 @@ module CSR(
         end
     end
 
+    // mcause:记录进入中断原因
+    always @(posedge clk) begin
+        if(!rst_n)begin
+            mcause <= 0;
+        end
+
+        else if(timer_irq & irq_accept & irq_request)begin
+            mcause <= {1'b1,31'h7};
+        end
+
+        else if(stall)begin            
+        end
+
+        else if(CSR_we && CSR_addr == ADDR_MCAUSE)begin
+            mcause <= CSR_in;
+        end
+    end
+
 
 
     // 硬件触发中断(组合逻辑)
@@ -116,7 +142,12 @@ module CSR(
                      (CSR_addr == ADDR_MIE)     ? mie   : 
                      (CSR_addr == ADDR_MIP)     ? mip   :
                      (CSR_addr == ADDR_MSTATUS) ? mstatus :
-                     (CSR_addr == ADDR_MEPC)    ? mepc : 32'b0;
+                     (CSR_addr == ADDR_MEPC)    ? mepc : 
+                     (CSR_addr == ADDR_MCAUSE)  ? mcause : 32'b0;
+
+
+    assign irq_entry_pc = mtvec;
+    assign mret_target_pc = mepc;
 
     // 对流水线中断请求
     always @(*) begin
