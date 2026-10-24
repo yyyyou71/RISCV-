@@ -25,3 +25,8 @@ digital_sim
 
 
 !README.md
+!docs/ai_accelerator_plan.md
+!docs/ai_accelerator_10day_tradeoffs.md
+!docs/ddr3_usage_report.md
+!docs/ai_accelerator_implementation_plan.md
+!docs/ddr_block_transfer.md

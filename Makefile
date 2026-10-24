@@ -111,6 +111,7 @@ clean:
 .PHONY:help
 help:
 	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'test-ddr-block-transfer  验证指定地址/长度的 DDR 块搬运、跨列拆分及异常恢复'
 	@echo 'test-divide     check divider arithmetic, pipeline integration and hardware switch'
 	@echo 'coremark-verilator  run CoreMark on Verilator (100 iterations per seed set by default)'
 	@echo 'coremark        build, simulate and check both CoreMark seed sets (ITERATIONS=1 by default)'
@@ -201,4 +202,9 @@ test-multiply:
 .PHONY: test-divide
 test-divide:
 	python3 scripts/test_divide.py
+
+# 独立 DDR 搬运回归：使用 ddr3.sv 行为模型，不包含 CPU 或 SoC。
+.PHONY: test-ddr-block-transfer
+test-ddr-block-transfer:
+	python3 scripts/test_ddr_block_transfer.py
 

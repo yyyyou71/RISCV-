@@ -15,6 +15,20 @@
 终端打印：0x00030004 0x00030008
 串口：00030100-0104
 
+## DDR 指定地址块搬运
+
+新增独立模块 `vsrc/ddr_block_transfer.v`：通过命令指定字节地址、长度和读写方向，
+支持 16～256 字节、16 字节对齐，内部处理紫光 x16 原生地址换算和跨列拆分。
+写入前缓存整块数据，读取后通过可暂停的数据流输出；目前尚未接入 CPU/SoC。
+接口、完成状态和错误恢复见 [DDR 块搬运说明](docs/ddr_block_transfer.md)。
+
+```bash
+make test-ddr-block-transfer
+```
+
+回归使用 `vsrc/ddr3.sv` 行为模型，覆盖不连续地址、部分覆盖、跨列、停顿、复位和协议异常，
+日志与向量保存在 `build/ddr_block_transfer/`。本模块尚未完成 PDS 综合及实板验证。
+
 ## CoreMark：Icarus 与 Verilator
 
 ```bash
