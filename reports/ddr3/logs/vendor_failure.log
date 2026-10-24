@@ -1,0 +1,643 @@
+Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# ** Warning: (vsim-53) Cannot suppress or change severity level of message number 1.
+# 
+# vsim -c -quiet -suppress 3486,3680,3781 "+nowarn1" -onfinish exit -l transcript.log -wlf oracle.wlf work.tb_ddr3 -do "onerror {quit -code 1}; run -all; quit -code 1" 
+# Start time: 23:03:23 on Oct 23,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: nofile(25): in protected region
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(393): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(394): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(395): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(397): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(739): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(740): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(393): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(394): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(395): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(397): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(739): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(740): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(393): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(394): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(395): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(397): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(739): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(740): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(393): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(394): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(395): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(397): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(739): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(740): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(393): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(394): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(395): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(397): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(739): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_DDC_E2.v(740): (vopt-2241) Connection width does not match width of port 'ldo_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1\arch\vendor\pango\verilog\simulation/GTP_OSERDES_E2.v(692): (vopt-2241) Connection width does not match width of port 'ts_ctrl'. The port definition is at: nofile(25).
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(929): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_ck'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(929): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(929): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(964): (vopt-2685) [TFMPC] - Too few port connections for 'u_iodelay_dq'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(964): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1001): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_odt'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1001): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1001): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1025): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_odt'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1025): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1060): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_rasn'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1060): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1060): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1084): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_rasn'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1084): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1120): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_casn'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1120): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1120): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1144): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_casn'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1144): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1179): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_wen'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1179): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1179): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1203): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_wen'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1203): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1239): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_cke'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1239): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1239): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1263): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_cke'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1263): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca0'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca1'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca0'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca1'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca0'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(842): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2685) [TFMPC] - Too few port connections for 'u_tserdes_ca1'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(884): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_addr'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1305): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_addr'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1329): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_ba'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_ba'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_ba'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_ba'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2685) [TFMPC] - Too few port connections for 'u_oserdes_ba'.  Expected 20, found 18.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TERM_FB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1370): (vopt-2718) [TFMPC] - Missing connection for port 'TFB'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2685) [TFMPC] - Too few port connections for 'u_odelay_ba'.  Expected 5, found 4.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/sim_lib/ddrphy/ddr3_slice_top_v1_10.v(1394): (vopt-2718) [TFMPC] - Missing connection for port 'EN_N'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/ddr3.v(321): (vopt-2685) [TFMPC] - Too few port connections for 'u_ips_ddrc_top'.  Expected 51, found 49.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/ddr3.v(321): (vopt-2718) [TFMPC] - Missing connection for port 'ddr_zqcs_ack'.
+# 
+# ** Warning: C:/Users/yyyyou71/Desktop/ziguang-fpga2/ipcore/ddr3/ddr3.v(321): (vopt-2718) [TFMPC] - Missing connection for port 'ddr_zqcs_req'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2685) [TFMPC] - Too few port connections for 'dut'.  Expected 85, found 65.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_cpd_state'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_rst_state'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'align_error'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'ck_dly_set_bin'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_dps_cnt_dir1'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_dps_cnt_dir0'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_ddrphy_init_fail'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_tran_err_rst_cnt'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_rst_dps_state'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_gpll_dps_phase'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_dll_upd_state'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_data'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_slice_state'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'dbg_slice_status'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'debug_calib_ctrl'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'ddrphy_cpd_lock'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'rst_gpll_lock'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'gpll_lock'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'phy_pll_lock'.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv(32): (vopt-2718) [TFMPC] - Missing connection for port 'pll_lock'.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(393): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain0 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(394): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain1 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(395): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain2 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(397): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain3 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(739): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain4 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(740): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0]/ddrphy_data_slice/<protected>/dly_chain5 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(393): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain0 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(394): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain1 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(395): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain2 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(397): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain3 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(739): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain4 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(740): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1]/ddrphy_data_slice/<protected>/dly_chain5 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(393): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain0 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(394): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain1 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(395): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain2 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(397): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain3 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(739): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain4 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(740): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[0]/u_ddc_ca/dly_chain5 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(393): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain0 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(394): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain1 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(395): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain2 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(397): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain3 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(739): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain4 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(740): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[1]/u_ddc_ca/dly_chain5 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(393): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain0 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(394): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain1 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(395): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain2 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(397): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain3 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(739): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain4 File: nofile
+# ** Warning: (vsim-3015) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DDC_E2.v(740): [PCDPC] - Port size (2) does not match connection size (1) for port 'ldo_ctrl'. The port definition is at: nofile(25).
+#    Time: 0 fs  Iteration: 0  Instance: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_ca_group[2]/u_ddc_ca/dly_chain5 File: nofile
+# onerror {quit -code 1}
+#  Warning: onerror command for use within macro
+#  run -all
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8604) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(1071): NaN (not a number) resulted from a division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(1143): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8604) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(1071): NaN (not a number) resulted from a division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(1143): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(635): Infinity results from division operation.
+# 
+# ** Error (suppressible): (vsim-8630) C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v(636): Infinity results from division operation.
+# 
+# ** Fatal: (vsim-8890) Attempt to schedule an event at time that exceeds the maximum simulation timestep - 9223372045794775807.
+#    Time: 8940 ns  Iteration: 3  Protected: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0]/ddrphy_ppll/<protected>/<anonymous> File: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv
+# ** Fatal: (SIGFPE) Floating point exception.
+#    Time: 8940 ns  Iteration: 3  Protected: /tb_ddr3/dut/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0]/ddrphy_ppll/<protected>/<anonymous> File: C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_PPLL.v
+** Fatal: Exiting due to SIGFPE signal.
+
+** Fatal: Trouble with Simulation Kernel.

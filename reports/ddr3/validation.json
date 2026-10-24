@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-23",
+  "environment": "WSL Ubuntu-22.04; Windows ModelSim for vendor oracle",
+  "iverilog": "12.0",
+  "verilator": "4.038-1, downloaded and unpacked locally; no system installation",
+  "full_vendor_equivalence_verified": false,
+  "results": {
+    "iverilog/default": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/stalls": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/random": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/zero_latency": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/slow": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/zero_init": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 checks=456"
+    },
+    "iverilog/sparse": {
+      "status": "pass",
+      "result": "PASS tb_ddr3 sparse checks=11"
+    },
+    "verilator/default": {
+      "status": "pass",
+      "result": "PASS verilator_ddr3 checks=441 cycles=1501"
+    },
+    "verilator/stalls": {
+      "status": "pass",
+      "result": "PASS verilator_ddr3 checks=441 cycles=1939"
+    },
+    "verilator/random": {
+      "status": "pass",
+      "result": "PASS verilator_ddr3 checks=441 cycles=1593"
+    },
+    "verilator/zero_latency": {
+      "status": "pass",
+      "result": "PASS verilator_ddr3 checks=441 cycles=790"
+    },
+    "reject/unaligned": {
+      "status": "expected_rejection",
+      "diagnostic": "BL8 aligned"
+    },
+    "reject/unstable_aw": {
+      "status": "expected_rejection",
+      "diagnostic": "AW changed/withdrawn"
+    },
+    "reject/full": {
+      "status": "expected_rejection",
+      "diagnostic": "sparse table full"
+    },
+    "vendor_oracle": {
+      "status": "not_passed",
+      "reason": "Vendor GTP_PPLL division by zero / NaN / SIGFPE before DDR initialization at 8940 ns",
+      "ip_generator": "2022.2-SP6.4",
+      "available_pds": "2022.2-SP6.1",
+      "cause_confirmed": false
+    }
+  }
+}

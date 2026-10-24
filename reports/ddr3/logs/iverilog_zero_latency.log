@@ -1,0 +1,2 @@
+PASS tb_ddr3 checks=456
+/mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv:294: $finish called at 7643810 (1ps)

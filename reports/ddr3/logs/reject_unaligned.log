@@ -1,0 +1,2 @@
+FATAL: /mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/ddr3.sv:345: DDR3: AW must be known and BL8 aligned (native low 3 bits zero)
+       Time: 359090  Scope: tb_ddr3.dut

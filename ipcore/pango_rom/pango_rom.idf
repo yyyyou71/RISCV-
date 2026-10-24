@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ip_inst>
+    <header>
+        <vendor>Pango</vendor>
+        <id>04100204</id>
+        <display_name>DRM Based ROM</display_name>
+        <name>28nm DRM Based ROM</name>
+        <version>1.8</version>
+        <instance>pango_rom</instance>
+        <family>Logos2</family>
+        <device>PG2L100H</device>
+        <package>FBG484</package>
+        <speedgrade>-6</speedgrade>
+        <generator version="2022.2-SP6.1" build="138931">IP Compiler</generator>
+    </header>
+    <param_list>
+        <param>
+            <name>CAS_MODE_SEL</name>
+            <value>DRM36K</value>
+        </param>
+        <param>
+            <name>CAS_MODE</name>
+            <value>36K</value>
+        </param>
+        <param>
+            <name>POWER_OPT</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>ADDR_WIDTH</name>
+            <value>13</value>
+        </param>
+        <param>
+            <name>DATA_WIDTH</name>
+            <value>32</value>
+        </param>
+        <param>
+            <name>CLK_EN</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>ADDR_STROBE_EN</name>
+            <value>1</value>
+        </param>
+        <param>
+            <name>RD_OCE_EN</name>
+            <value>false</value>
+        </param>
+        <param>
+            <name>OUTPUT_REG</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>FAB_REG</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>CLK_OR_POL_INV</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>RESET_TYPE</name>
+            <value>SYNC</value>
+        </param>
+        <param>
+            <name>INIT_EN</name>
+            <value>1</value>
+        </param>
+        <param>
+            <name>INIT_FILE</name>
+            <value>C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/firmware/rom.hex</value>
+        </param>
+        <param>
+            <name>INIT_FORMAT</name>
+            <value>HEX</value>
+        </param>
+        <param>
+            <name>RST_VAL_EN</name>
+            <value>0</value>
+        </param>
+        <param>
+            <name>RST_VAL</name>
+            <value>0</value>
+        </param>
+    </param_list>
+    <pin_list/>
+    <file_list>
+        <output>
+            <file pathname="generate.log" format="log" description="Generate Log"/>
+            <file pathname="pango_rom_tb.v" format="verilog" description="Compiled File"/>
+            <file pathname="pango_rom_tmpl.v" format="verilog" description="Instantiation Template"/>
+            <file pathname="pango_rom_tmpl.vhdl" format="vhdl" description="Instantiation Template"/>
+        </output>
+        <source>
+            <file pathname="rtl/ipm2l_rom_v1_8_pango_rom.v"/>
+            <file pathname="rtl/ipm2l_spram_v1_8_pango_rom.v"/>
+            <file pathname="pango_rom.v"/>
+        </source>
+    </file_list>
+</ip_inst>

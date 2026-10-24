@@ -1,0 +1,4 @@
+FATAL: /mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/ddr3.sv:204: DDR3: sparse table full; increase DDR3_MODEL_SLOTS
+       Time: 884870  Scope: tb_ddr3.dut.store_word
+FATAL: /mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/tb_ddr3.sv:184: UNREACHED table full check
+       Time: 884870  Scope: tb_ddr3

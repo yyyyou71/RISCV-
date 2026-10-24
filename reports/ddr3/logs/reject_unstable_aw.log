@@ -1,0 +1,2 @@
+FATAL: /mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/ddr3/ddr3.sv:337: DDR3: AW changed/withdrawn before handshake
+       Time: 366710  Scope: tb_ddr3.dut

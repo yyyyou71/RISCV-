@@ -1,0 +1,4 @@
+create_clock -name {sys_clk} -period {40.000} -waveform {0.000 20.000} [get_ports {sys_clk}]
+set_clock_uncertainty {0.200} [get_clocks {sys_clk}]
+set_false_path -from [get_ports {key0_n}]
+set_false_path -to [get_ports {led0 led1 uart_tx}]

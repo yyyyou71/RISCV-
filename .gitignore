@@ -1,0 +1,69 @@
+# PDS implementation outputs and exported programming files
+/build/
+/compile/
+/synthesize/
+/device_map/
+/place_route/
+/report_timing/
+/report_power/
+/generate_bitstream/
+/constraint_check/
+/temp_projects/
+/download/
+/bak/
+logbackup/
+
+# PDS command history, reports, logs and project locks
+# The maintained build script is scripts/implement.tcl.
+/impl.tcl
+/multiseed_summary.csv
+*.log
+!/reports/**/*.log
+*.pds.lock
+*.pds.bak
+
+# IP Compiler working files; retain .idf, HDL and *_init_param.v
+/ipcore/*/rev_*/
+/ipcore/*/simu/
+/ipcore/*/compile/
+/ipcore/*/synthesize/
+/ipcore/*/.settings
+/ipcore/*/.last_generated
+
+# Simulator outputs and local library mappings
+/work/
+/obj_dir/
+/obj_iv/
+/modelsim.ini
+transcript
+*.vvp
+*.vcd
+*.fst
+*.wlf
+*.ucdb
+
+# Compiled firmware and FPGA programming files
+# Retain firmware/*.hex and IP initialization .dat files.
+*.o
+*.obj
+*.elf
+*.sbit
+*.smsk
+*.bit
+
+# Python runtime caches and virtual environments
+__pycache__/
+*.py[cod]
+/.venv/
+/venv/
+
+# Editor and operating-system temporary files
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+
+*.pdf
