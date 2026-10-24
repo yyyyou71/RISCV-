@@ -1,7 +1,7 @@
 # DDR 指定地址、指定长度块搬运模块
 
 文件：`vsrc/ddr_block_transfer.v`。所有接口均在 DDR 的 `core_clk` 域。
-状态：已完成独立 RTL、行为模型回归和静态检查，尚未接入 CPU MMIO 或进行本模块的实板验证。
+状态：已完成独立 RTL、行为模型回归和静态检查，已通过上层窗口接入 CPU MMIO，尚未进行本模块的实板验证；见 [CPU DDR 窗口](ddr_cpu_window.md)。
 
 ## 功能与限制
 

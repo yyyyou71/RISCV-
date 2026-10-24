@@ -19,7 +19,7 @@
 
 新增独立模块 `vsrc/ddr_block_transfer.v`：通过命令指定字节地址、长度和读写方向，
 支持 16～256 字节、16 字节对齐，内部处理紫光 x16 原生地址换算和跨列拆分。
-写入前缓存整块数据，读取后通过可暂停的数据流输出；目前尚未接入 CPU/SoC。
+写入前缓存整块数据，读取后通过可暂停的数据流输出；现已通过可选的 MMIO 窗口接入 CPU/SoC。
 接口、完成状态和错误恢复见 [DDR 块搬运说明](docs/ddr_block_transfer.md)。
 
 ```bash
@@ -28,6 +28,21 @@ make test-ddr-block-transfer
 
 回归使用 `vsrc/ddr3.sv` 行为模型，覆盖不连续地址、部分覆盖、跨列、停顿、复位和协议异常，
 日志与向量保存在 `build/ddr_block_transfer/`。本模块尚未完成 PDS 综合及实板验证。
+
+## CPU 访问 DDR 的外设窗口
+
+`vsrc/ddr_cpu_window.v` 提供地址、长度、启动/状态寄存器和 256 字节窗口，
+寄存器位于 `0x00031000`，数据窗口位于 `0x00031100`。
+CPU 的默认频率参数为 25 MHz，与 DDR 用户时钟通过邮箱握手跨域。
+使用时设置 `soc.ENABLE_DDR=1`，连接真实 DDR IP 的用户接口；默认关闭以保留原 UART 配置。
+
+```bash
+make test-ddr-cpu-window
+```
+
+CPU 裸机样例：`csrc/software/ddr_window_test.c`。
+寄存器、接线、跨域约束和验证范围见 [CPU DDR 窗口说明](docs/ddr_cpu_window.md)。
+目前完成行为仿真，尚未完成 PDS 综合、跨域物理时序检查和实板验证。
 
 ## CoreMark：Icarus 与 Verilator
 

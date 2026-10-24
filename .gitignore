@@ -30,3 +30,4 @@ digital_sim
 !docs/ddr3_usage_report.md
 !docs/ai_accelerator_implementation_plan.md
 !docs/ddr_block_transfer.md
+!docs/ddr_cpu_window.md

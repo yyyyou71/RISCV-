@@ -111,6 +111,7 @@ clean:
 .PHONY:help
 help:
 	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
 	@echo 'test-ddr-block-transfer  验证指定地址/长度的 DDR 块搬运、跨列拆分及异常恢复'
 	@echo 'test-divide     check divider arithmetic, pipeline integration and hardware switch'
 	@echo 'coremark-verilator  run CoreMark on Verilator (100 iterations per seed set by default)'
@@ -208,3 +209,8 @@ test-divide:
 test-ddr-block-transfer:
 	python3 scripts/test_ddr_block_transfer.py
 
+
+# CPU DDR 窗口：跨时钟 MMIO、SoC 裸机及行为 DDR 联合回归。
+.PHONY: test-ddr-cpu-window
+test-ddr-cpu-window:
+	python3 scripts/test_ddr_cpu_window.py
