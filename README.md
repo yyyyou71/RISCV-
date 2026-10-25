@@ -44,6 +44,32 @@ CPU 裸机样例：`csrc/software/ddr_window_test.c`。
 寄存器、接线、跨域约束和验证范围见 [CPU DDR 窗口说明](docs/ddr_cpu_window.md)。
 目前完成行为仿真，尚未完成 PDS 综合、跨域物理时序检查和实板验证。
 
+## 可配置单层整数卷积
+
+`vsrc/conv2d_core.v` 支持运行时配置高宽、输入/输出通道、1×1/3×3 核、
+步长与 padding。默认 W8A8，另验证 W8A16 和 W9A16 综合配置。
+当前输出完整的卷积累加值，尚未接入模型量化、CPU 调度寄存器或 DDR 缓存。
+
+```bash
+make test-conv2d-core
+```
+
+[计算接口、数值范围及 DDR 数据流](docs/conv2d_core.md)说明了模型数据和运行时配置的区别。
+本阶段完成独立数学对拍，不代表已运行完整检测模型或完成实板加速。
+
+## Multiply-Adder 行为模型
+
+`vsrc/multiply_adder.v` 按本地《简单乘法器.pdf》模拟 `a0*b0 ± a1*b1`，
+支持静态加/减、0～5 级流水线和同步/异步复位。默认有符号 8×8、17 位输出、3 级、同步复位。
+它没有反馈累加，也尚未接入卷积核心。
+
+```bash
+make test-multiply-adder
+```
+
+[IP 配置、替换步骤及下一阶段安排](docs/multiply_adder.md)说明支持范围及验证限制。
+下一步以单层 DDR 闭环为目标，采用小块缓存、连续供数和小规模多 MAC 并行。
+
 ## CoreMark：Icarus 与 Verilator
 
 ```bash

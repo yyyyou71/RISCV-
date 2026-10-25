@@ -31,3 +31,5 @@ digital_sim
 !docs/ai_accelerator_implementation_plan.md
 !docs/ddr_block_transfer.md
 !docs/ddr_cpu_window.md
+!docs/conv2d_core.md
+!docs/multiply_adder.md

@@ -111,6 +111,8 @@ clean:
 .PHONY:help
 help:
 	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
+	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
 	@echo 'test-ddr-block-transfer  验证指定地址/长度的 DDR 块搬运、跨列拆分及异常恢复'
 	@echo 'test-divide     check divider arithmetic, pipeline integration and hardware switch'
@@ -214,3 +216,13 @@ test-ddr-block-transfer:
 .PHONY: test-ddr-cpu-window
 test-ddr-cpu-window:
 	python3 scripts/test_ddr_cpu_window.py
+
+# 模型无关的原始卷积：不含 DDR 和模型量化语义。
+.PHONY: test-conv2d-core
+test-conv2d-core:
+	python3 scripts/test_conv2d_core.py
+
+# 紫光 Multiply-Adder：两项乘积的静态加/减，不含反馈累加。
+.PHONY: test-multiply-adder
+test-multiply-adder:
+	python3 scripts/test_multiply_adder.py
