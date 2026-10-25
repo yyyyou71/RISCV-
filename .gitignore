@@ -33,3 +33,4 @@ digital_sim
 !docs/ddr_cpu_window.md
 !docs/conv2d_core.md
 !docs/multiply_adder.md
+!docs/conv2d_ddr_engine.md

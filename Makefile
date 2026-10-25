@@ -111,6 +111,7 @@ clean:
 .PHONY:help
 help:
 	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'test-ai-accelerator  验证 4x2 缓存/IP 通路、DDR 单层闭环及 CPU 调度'
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
@@ -226,3 +227,16 @@ test-conv2d-core:
 .PHONY: test-multiply-adder
 test-multiply-adder:
 	python3 scripts/test_multiply_adder.py
+
+# 并行卷积逐层验收：实际实例化 multiply_adder，使用未修改的 DDR 行为模型。
+.PHONY: test-conv-mac-tile test-conv2d-ddr test-ai-cpu test-ai-accelerator
+test-conv-mac-tile:
+	python3 scripts/test_conv_mac_tile.py
+
+test-conv2d-ddr:
+	python3 scripts/test_conv2d_ddr.py
+
+test-ai-cpu:
+	python3 scripts/test_ai_cpu.py
+
+test-ai-accelerator: test-conv-mac-tile test-conv2d-ddr test-ai-cpu

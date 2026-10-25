@@ -147,6 +147,7 @@ make test-conv2d-core
 覆盖多通道、非对称权重核、极值/负数、宽部分和、padding、输出反压、请求/响应停顿、忙时配置保护和最大尺寸的输出形状。
 每种配置均通过严格 Verilator lint。日志、向量及结果在 `build/conv2d_core/`。
 
-下一步以单层 DDR 闭环为目标，实现小块缓存、连续供数与小规模多 MAC；同步确认模型的整数格式并补量化/激活。
+已另行实现小块缓存、连续供数、4×2 Multiply-Adder 与 CPU→DDR 闭环，见 [新引擎说明](conv2d_ddr_engine.md)。本文件的串行核心保持不变作为对照。
+下一步确认模型的整数格式并补量化/激活，推进 PDS 和实板验证。
 Multiply-Adder 的模型与具体顺序见 [下一阶段安排](multiply_adder.md)。
 这条单乘法器通路是计算正确性的基线；尚未做 DSP 映射、并行化、吞吐优化、PDS 综合或实板验证。

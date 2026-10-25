@@ -70,6 +70,20 @@ make test-multiply-adder
 [IP 配置、替换步骤及下一阶段安排](docs/multiply_adder.md)说明支持范围及验证限制。
 下一步以单层 DDR 闭环为目标，采用小块缓存、连续供数和小规模多 MAC 并行。
 
+## 并行卷积与 DDR 单层闭环
+
+`conv_mac_tile` 实际例化 4 个 `multiply_adder`，以 W8A8 的 4 输出通道×2 项归约连续计算。
+`conv2d_ddr_engine` 使用小块输入/权重缓存和跨通道块部分和，通过现有搬运器完成整层读入、计算、写回。
+SoC 设置 `ENABLE_DDR=1, ENABLE_AI=1` 后，CPU 可通过 `0x30200` 起的控制寄存器提交任务，
+通过原 DDR 窗口装载和读回数据。默认关闭 AI，CPU 默认频率参数仍为 25 MHz。
+
+```bash
+make test-ai-accelerator
+```
+
+[数据布局、寄存器和验证说明](docs/conv2d_ddr_engine.md)。裸机样例为 `csrc/software/conv2d_ddr_test.c`。
+已完成 CPU/DDR 行为仿真闭环，输出是原始 INT64；模型量化/激活、完整 YOLO、PDS 和实板验证尚未完成。
+
 ## CoreMark：Icarus 与 Verilator
 
 ```bash

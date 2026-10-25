@@ -3,6 +3,7 @@
 module TB_ddr_cpu_window;
     parameter integer CPU_TEST = 0;
     parameter integer WINDOW_ENABLE = 1;
+    parameter integer AI_ENABLE = 0;
     reg ref_clk = 0, clk = 0, rst_n = 0;
     integer cpu_half_ns = 20;
     initial if ($value$plusargs("cpu_half_ns=%d", cpu_half_ns)) begin end
@@ -26,9 +27,12 @@ module TB_ddr_cpu_window;
 
 
     integer aw_count = 0, ar_count = 0;
+`ifdef AI_PROGRAM
+    integer ai_completed=0;
+`endif
     generate if (CPU_TEST != 0) begin : g_cpu
         wire bus_err;
-        soc #(.ENABLE_DDR(1)) u_soc (
+        soc #(.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE)) u_soc (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd), .bus_err(bus_err),
             .core_clk(core_clk), .ddr_init_done(ddr_init_done),
             .axi_awaddr(axi_awaddr),
@@ -60,12 +64,21 @@ module TB_ddr_cpu_window;
         assign dev_wdata = u_soc.dev_wdata;
         assign dev_rdata = u_soc.dev_rdata;
         assign dev_size = u_soc.dev_size;
+`ifdef AI_PROGRAM
+        always @(posedge core_clk) if(rst_n && u_soc.u_peripheral_bus.g_ddr.u_window.core_state==4 &&
+            u_soc.u_peripheral_bus.g_ddr.u_window.ai_done) ai_completed=ai_completed+1;
+`endif
         always @(posedge clk) if (rst_n) begin
             if (bus_err) $fatal(1, "CPU bus error");
             if (dev_we && dev_addr_wr == 32'h30000) begin
                 if (dev_wdata !== 1) $fatal(1, "CPU test failed code=%h", dev_wdata);
                 if (aw_count < 16 || ar_count < 16) $fatal(1, "CPU did not exercise DDR");
+`ifdef AI_PROGRAM
+                if(ai_completed!=2) $fatal(1,"AI engine not executed twice: %0d",ai_completed);
+                $display("PASS ai_cpu layers=%0d aw=%0d ar=%0d",ai_completed,aw_count,ar_count);
+`else
                 $display("PASS cpu_mmio aw=%0d ar=%0d", aw_count, ar_count);
+`endif
                 $finish;
             end
         end
@@ -73,7 +86,7 @@ module TB_ddr_cpu_window;
         assign dev_we = host_we; assign dev_re = host_re;
         assign dev_addr_wr = host_wr; assign dev_addr_rd = host_rd;
         assign dev_wdata = host_data; assign dev_size = host_size;
-        peripheral_bus #(.ENABLE_DDR(WINDOW_ENABLE), .DDR_TIMEOUT_CYCLES(128)) u_bus (
+        peripheral_bus #(.ENABLE_DDR(WINDOW_ENABLE),.ENABLE_AI(AI_ENABLE), .DDR_TIMEOUT_CYCLES(128)) u_bus (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd),
             .dev_we(dev_we), .dev_re(dev_re), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .dev_size(dev_size),

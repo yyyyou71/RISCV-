@@ -9,7 +9,8 @@
 module ddr_cpu_window #(
     parameter integer AXI_ADDR_WIDTH = 28,
     parameter integer COLUMN_WIDTH = 10,
-    parameter integer TIMEOUT_CYCLES = 4096
+    parameter integer TIMEOUT_CYCLES = 4096,
+    parameter integer ENABLE_AI = 0
 )(
     input wire clk,
     input wire core_clk,
@@ -46,6 +47,16 @@ module ddr_cpu_window #(
     localparam [31:0] CTRL = 32'h0003_1000, STATUS = 32'h0003_1004,
                      ADDRESS = 32'h0003_1008, LENGTH = 32'h0003_100c,
                      ERROR_CODE = 32'h0003_1010;
+    // AI 与 CPU 窗口共用一个命令邮箱及 DDR 所有权，忙时冻结全部配置。
+    localparam [31:0] AI_CTRL=32'h30200, AI_STATUS=32'h30204, AI_INPUT=32'h30208,
+        AI_WEIGHT=32'h3020c, AI_BIAS=32'h30210, AI_OUTPUT=32'h30214,
+        AI_HW=32'h30218, AI_CHANNELS=32'h3021c, AI_CONV=32'h30220, AI_ERROR=32'h30224,
+        AI_CYCLES=32'h30228, AI_ISSUES=32'h3022c, AI_OH=32'h30230, AI_OW=32'h30234;
+    reg [31:0] ai_input,ai_weight,ai_bias,ai_output,ai_hw,ai_channels;
+    reg [6:0] ai_conv;
+    reg request_ai;
+    reg [31:0] cpu_cycles,cpu_issues,cpu_oh,cpu_ow;
+    reg [31:0] response_cycles,response_issues,response_oh,response_ow;
     // 四条 32 位通道组成一个 128 位拍。邮箱用寄存器实现，不依赖双时钟 RAM IP。
     reg [31:0] cpu_buf [0:63];
     reg [63:0] valid_words;
@@ -96,13 +107,19 @@ module ddr_cpu_window #(
             address_reg <= 0; length_reg <= 0; direction_reg <= 0; request_toggle <= 0;
             cpu_busy <= 0; cpu_done <= 0; cpu_error <= 0; cpu_fault <= 0; cpu_code <= 0;
             valid_words <= 0;
+            ai_input<=0;ai_weight<=0;ai_bias<=0;ai_output<=0;ai_hw<=0;ai_channels<=0;ai_conv<=7'b0000101;
+            request_ai<=0;cpu_cycles<=0;cpu_issues<=0;cpu_oh<=0;cpu_ow<=0;
         end else begin
             // 完成位跨域稳定后，结果邮箱也已稳定至少两个 CPU 周期。
             if (cpu_busy && ack_sync == request_toggle) begin
                 cpu_busy <= 0; cpu_done <= !response_error;
                 cpu_error <= response_error; cpu_fault <= response_fault;
                 cpu_code <= response_code;
-                if (!direction_reg && !response_error) begin
+                if(request_ai) begin
+                    cpu_cycles<=response_cycles;cpu_issues<=response_issues;
+                    cpu_oh<=response_oh;cpu_ow<=response_ow;
+                end
+                if (!request_ai && !direction_reg && !response_error) begin
                     for (cpu_i = 0; cpu_i < 64; cpu_i = cpu_i + 1)
                         if (cpu_i < (length_reg >> 2)) begin
                             cpu_buf[cpu_i] <= core_buf[cpu_i / 4][(cpu_i % 4)*32 +: 32];
@@ -119,7 +136,14 @@ module ddr_cpu_window #(
                 case (dev_addr_wr)
                     ADDRESS: address_reg <= dev_wdata;
                     LENGTH: length_reg <= dev_wdata;
-                    CTRL: begin
+                    AI_INPUT: if(ENABLE_AI!=0) ai_input<=dev_wdata;
+                    AI_WEIGHT: if(ENABLE_AI!=0) ai_weight<=dev_wdata;
+                    AI_BIAS: if(ENABLE_AI!=0) ai_bias<=dev_wdata;
+                    AI_OUTPUT: if(ENABLE_AI!=0) ai_output<=dev_wdata;
+                    AI_HW: if(ENABLE_AI!=0) ai_hw<=dev_wdata;
+                    AI_CHANNELS: if(ENABLE_AI!=0) ai_channels<=dev_wdata;
+                    AI_CONV: if(ENABLE_AI!=0) ai_conv<=dev_wdata[6:0];
+                    CTRL,AI_CTRL: if(dev_addr_wr==CTRL || ENABLE_AI!=0) begin
                         if (dev_wdata[2]) begin
                             cpu_done <= 0; cpu_error <= 0; cpu_code <= 0;
                         end
@@ -127,6 +151,8 @@ module ddr_cpu_window #(
                             cpu_done <= 0;
                             if (ready) begin
                                 direction_reg <= dev_wdata[1];
+                                request_ai <= dev_addr_wr==AI_CTRL;
+                                if(dev_addr_wr==AI_CTRL) begin cpu_cycles<=0;cpu_issues<=0;cpu_oh<=0;cpu_ow<=0;end
                                 request_toggle <= !request_toggle;
                                 cpu_busy <= 1; cpu_error <= 0; cpu_code <= 0;
                             end else begin cpu_error <= 1; cpu_code <= 8; end
@@ -145,13 +171,26 @@ module ddr_cpu_window #(
             ADDRESS: read_data = address_reg;
             LENGTH: read_data = length_reg;
             ERROR_CODE: read_data = {28'd0, cpu_code};
+            AI_STATUS: if(ENABLE_AI!=0) read_data={26'd0,init_sync,ready,cpu_fault,cpu_error,cpu_done,cpu_busy};
+            AI_INPUT: if(ENABLE_AI!=0) read_data=ai_input;
+            AI_WEIGHT: if(ENABLE_AI!=0) read_data=ai_weight;
+            AI_BIAS: if(ENABLE_AI!=0) read_data=ai_bias;
+            AI_OUTPUT: if(ENABLE_AI!=0) read_data=ai_output;
+            AI_HW: if(ENABLE_AI!=0) read_data=ai_hw;
+            AI_CHANNELS: if(ENABLE_AI!=0) read_data=ai_channels;
+            AI_CONV: if(ENABLE_AI!=0) read_data={25'd0,ai_conv};
+            AI_ERROR: if(ENABLE_AI!=0) read_data={28'd0,cpu_code};
+            AI_CYCLES: if(ENABLE_AI!=0) read_data=cpu_cycles;
+            AI_ISSUES: if(ENABLE_AI!=0) read_data=cpu_issues;
+            AI_OH: if(ENABLE_AI!=0) read_data=cpu_oh;
+            AI_OW: if(ENABLE_AI!=0) read_data=cpu_ow;
             default: if (window_rd && !cpu_busy && valid_words[dev_addr_rd[7:2]])
                 read_data = cpu_buf[dev_addr_rd[7:2]];
         endcase
     end
 
-    localparam [1:0] C_IDLE = 0, C_COMMAND = 1, C_ACTIVE = 2;
-    reg [1:0] core_state;
+    localparam [2:0] C_IDLE=0, C_COMMAND=1, C_ACTIVE=2, C_AI_COMMAND=3, C_AI_ACTIVE=4;
+    reg [2:0] core_state;
     reg core_direction;
     reg [31:0] core_address, core_length;
     reg [4:0] stream_index;
@@ -162,12 +201,42 @@ module ddr_cpu_window #(
     wire [127:0] rd_data;
     wire wr_valid = core_state == C_ACTIVE && core_direction && stream_index < core_length[8:4];
     wire rd_ready = core_state == C_ACTIVE && !core_direction;
+    // 所有权只在共同邮箱任务之间切换；不会在原生命令或数据拍中间抢占。
+    wire owner_ai=core_state==C_AI_COMMAND || core_state==C_AI_ACTIVE;
+    wire ai_ready,ai_done,ai_error,ai_busy;
+    wire [3:0] ai_code;
+    wire [31:0] ai_oh,ai_ow,ai_cycles,ai_issues;
+    wire ai_dma_cmd_valid,ai_dma_cmd_write,ai_dma_wr_valid,ai_dma_rd_ready;
+    wire [31:0] ai_dma_cmd_addr,ai_dma_cmd_len;
+    wire [127:0] ai_dma_wr_data;
+    wire unused_ai_busy=ai_busy;
+    generate if(ENABLE_AI!=0) begin : g_ai
+        conv2d_ddr_engine u_engine (
+            .clk(core_clk),.rst_n(core_reset_n),.cmd_valid(core_state==C_AI_COMMAND && ddr_init_done),.cmd_ready(ai_ready),
+            .cfg_input_addr(ai_input),.cfg_weight_addr(ai_weight),.cfg_bias_addr(ai_bias),.cfg_output_addr(ai_output),
+            .cfg_in_h(ai_hw[15:0]),.cfg_in_w(ai_hw[31:16]),.cfg_in_ch(ai_channels[15:0]),.cfg_out_ch(ai_channels[31:16]),
+            .cfg_kernel(ai_conv[1:0]),.cfg_stride(ai_conv[3:2]),.cfg_padding(ai_conv[5:4]),.cfg_bias_enable(ai_conv[6]),
+            .clear_status(1'b0),.busy(ai_busy),.done(ai_done),.error(ai_error),.error_code(ai_code),
+            .out_h(ai_oh),.out_w(ai_ow),.total_cycles(ai_cycles),.mac_issues(ai_issues),
+            .dma_cmd_valid(ai_dma_cmd_valid),.dma_cmd_ready(cmd_ready && owner_ai),
+            .dma_cmd_write(ai_dma_cmd_write),.dma_cmd_addr(ai_dma_cmd_addr),.dma_cmd_len(ai_dma_cmd_len),
+            .dma_done(transfer_done),.dma_error(transfer_error),.dma_fault(transfer_fault),.dma_initialized(ddr_init_done),
+            .dma_error_code(transfer_code),.dma_wr_valid(ai_dma_wr_valid),.dma_wr_ready(wr_ready && owner_ai),
+            .dma_wr_data(ai_dma_wr_data),.dma_rd_valid(rd_valid && owner_ai),.dma_rd_ready(ai_dma_rd_ready),.dma_rd_data(rd_data)
+        );
+    end else begin : g_no_ai
+        assign ai_ready=0;assign ai_done=0;assign ai_error=0;assign ai_code=0;assign ai_busy=0;
+        assign ai_oh=0;assign ai_ow=0;assign ai_cycles=0;assign ai_issues=0;
+        assign ai_dma_cmd_valid=0;assign ai_dma_cmd_write=0;assign ai_dma_cmd_addr=0;assign ai_dma_cmd_len=0;
+        assign ai_dma_wr_valid=0;assign ai_dma_wr_data=0;assign ai_dma_rd_ready=0;
+    end endgenerate
     integer core_i, lane;
     always @(posedge core_clk or negedge core_reset_n) begin
         if (!core_reset_n) begin
             core_state <= C_IDLE; core_direction <= 0; core_address <= 0; core_length <= 0;
             stream_index <= 0; ack_toggle <= 0;
             response_error <= 0; response_fault <= 0; response_code <= 0;
+            response_cycles<=0;response_issues<=0;response_oh<=0;response_ow<=0;
         end else begin
             case (core_state)
                 C_IDLE: if (req_sync != ack_toggle) begin
@@ -178,7 +247,7 @@ module ddr_cpu_window #(
                         for (lane = 0; lane < 4; lane = lane + 1)
                             core_buf[core_i][lane*32 +: 32] <= valid_words[core_i*4+lane]
                                 ? cpu_buf[core_i*4+lane] : 32'd0;
-                    core_state <= C_COMMAND;
+                    core_state <= request_ai ? C_AI_COMMAND : C_COMMAND;
                 end
                 C_COMMAND: begin
                     if (!ddr_init_done) begin
@@ -199,6 +268,18 @@ module ddr_cpu_window #(
                         ack_toggle <= req_sync; core_state <= C_IDLE;
                     end
                 end
+                C_AI_COMMAND: begin
+                    if(!ddr_init_done) begin
+                        response_error<=1;response_fault<=0;response_code<=8;
+                        response_cycles<=0;response_issues<=0;response_oh<=0;response_ow<=0;
+                        ack_toggle<=req_sync;core_state<=C_IDLE;
+                    end else if(ai_ready) core_state<=C_AI_ACTIVE;
+                end
+                C_AI_ACTIVE: if(ai_done || ai_error) begin
+                    response_error<=ai_error;response_fault<=transfer_fault;response_code<=ai_code;
+                    response_cycles<=ai_cycles;response_issues<=ai_issues;response_oh<=ai_oh;response_ow<=ai_ow;
+                    ack_toggle<=req_sync;core_state<=C_IDLE;
+                end
                 default: core_state <= C_IDLE;
             endcase
         end
@@ -208,12 +289,14 @@ module ddr_cpu_window #(
         .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH), .COLUMN_WIDTH(COLUMN_WIDTH), .TIMEOUT_CYCLES(TIMEOUT_CYCLES)
     ) u_transfer (
         .core_clk(core_clk), .rst_n(core_reset_n), .ddr_init_done(ddr_init_done),
-        .cmd_valid(core_state == C_COMMAND && ddr_init_done), .cmd_ready(cmd_ready),
-        .cmd_write(core_direction), .cmd_addr(core_address), .cmd_len(core_length),
+        .cmd_valid(owner_ai ? ai_dma_cmd_valid : (core_state == C_COMMAND && ddr_init_done)), .cmd_ready(cmd_ready),
+        .cmd_write(owner_ai ? ai_dma_cmd_write : core_direction),
+        .cmd_addr(owner_ai ? ai_dma_cmd_addr : core_address), .cmd_len(owner_ai ? ai_dma_cmd_len : core_length),
         .clear_status(1'b0), .busy(unused_transfer_busy), .done(transfer_done), .error(transfer_error),
         .error_code(transfer_code), .fault(transfer_fault),
-        .wr_valid(wr_valid), .wr_ready(wr_ready), .wr_data(core_buf[stream_index[3:0]]),
-        .rd_valid(rd_valid), .rd_ready(rd_ready), .rd_data(rd_data), .rd_last(unused_rd_last),
+        .wr_valid(owner_ai ? ai_dma_wr_valid : wr_valid), .wr_ready(wr_ready),
+        .wr_data(owner_ai ? ai_dma_wr_data : core_buf[stream_index[3:0]]),
+        .rd_valid(rd_valid), .rd_ready(owner_ai ? ai_dma_rd_ready : rd_ready), .rd_data(rd_data), .rd_last(unused_rd_last),
         .axi_awaddr(axi_awaddr),
         .axi_awuser_ap(axi_awuser_ap),
         .axi_awuser_id(axi_awuser_id),
