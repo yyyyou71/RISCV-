@@ -1,0 +1,8 @@
+{
+  "source": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v15.2.0-1/xpack-riscv-none-elf-gcc-15.2.0-1-win32-x64.zip",
+  "official_checksum_url": "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v15.2.0-1/xpack-riscv-none-elf-gcc-15.2.0-1-win32-x64.zip.sha",
+  "sha256": "85ef714dacd273b1dadf4af4892774520ac01915bfa6da816a56e7e41591e09e",
+  "bytes": 465438733,
+  "installed_under": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15",
+  "system_path_changed": false
+}

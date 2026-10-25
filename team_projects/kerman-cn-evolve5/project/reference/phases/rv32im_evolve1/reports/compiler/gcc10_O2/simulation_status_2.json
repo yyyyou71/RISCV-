@@ -1,0 +1,8 @@
+{
+  "config": "gcc10_O2",
+  "compiler": "D:\\riscv\\riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-w64-mingw32\\bin\\riscv64-unknown-elf-gcc.exe",
+  "optimization": "O2",
+  "extra_flags": [],
+  "status": "passed",
+  "evidence": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\outputs\\rv32im_evolve1\\reports\\compiler\\gcc10_O2\\run2"
+}

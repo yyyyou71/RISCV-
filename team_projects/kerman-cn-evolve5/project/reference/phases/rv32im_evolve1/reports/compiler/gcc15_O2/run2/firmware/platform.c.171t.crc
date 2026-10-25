@@ -1,0 +1,73 @@
+
+;; Function platform_stats (platform_stats, funcdef_no=3, decl_uid=1466, cgraph_uid=4, symbol_order=3)
+
+
+Examining platform_stats function.
+Analyzing # of iterations of loop 1
+  exit condition [9, + , 4294967295] != 0
+  bounds on difference of bases: -9 ... -9
+  result:
+    # of iterations 9, bounded by 9
+Loop iteration number is 9.
+Loop iteration number isn't a constant.
+void platform_stats ()
+{
+  unsigned int i;
+  static const char * const names[10] = {" ih=", " im=", " dh=", " dm=", " wh=", " wm=", " read_cmd=", " burst_cmd=", " read_beat=", " write_rsp="};
+  long unsigned int _1;
+  const char * _2;
+  unsigned int _3;
+  unsigned int _4;
+  volatile uint32_t * _5;
+  long unsigned int _6;
+  unsigned int ivtmp_7;
+  unsigned int ivtmp_8;
+
+  <bb 2> [local count: 97603128]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073754148B] ={v} 1;
+  # DEBUG BEGIN_STMT
+  uart_puts ("CACHE_STATS scope=cumulative32 seq=");
+  # DEBUG BEGIN_STMT
+  _1 ={v} MEM[(volatile uint32_t *)1073754144B];
+  uart_put_u32 (_1);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 3> [local count: 976138696]:
+  # i_19 = PHI <i_16(5), 0(2)>
+  # ivtmp_8 = PHI <ivtmp_7(5), 10(2)>
+  # DEBUG i => i_19
+  # DEBUG BEGIN_STMT
+  _2 = names[i_19];
+  uart_puts (_2);
+  # DEBUG BEGIN_STMT
+  _3 = i_19 + 268438560;
+  _4 = _3 * 4;
+  _5 = (volatile uint32_t *) _4;
+  _6 ={v} *_5;
+  uart_put_u32 (_6);
+  # DEBUG BEGIN_STMT
+  i_16 = i_19 + 1;
+  # DEBUG i => i_16
+  # DEBUG BEGIN_STMT
+  ivtmp_7 = ivtmp_8 - 1;
+  if (ivtmp_7 != 0)
+    goto <bb 5>; [90.00%]
+  else
+    goto <bb 4>; [10.00%]
+
+  <bb 5> [local count: 878535567]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 97603128]:
+  # DEBUG BEGIN_STMT
+  uart_putc (10);
+  return;
+
+}
+
+

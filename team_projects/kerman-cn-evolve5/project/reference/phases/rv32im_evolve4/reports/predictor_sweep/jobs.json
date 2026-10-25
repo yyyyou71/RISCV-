@@ -1,0 +1,30 @@
+{
+  "fast_btb128": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_both": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_btb64": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_btb256": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_combo": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_ras8": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "fast_gshare": {
+    "exit_code": 0,
+    "passed": true
+  }
+}

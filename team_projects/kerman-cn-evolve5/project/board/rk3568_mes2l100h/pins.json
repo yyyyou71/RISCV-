@@ -1,0 +1,9 @@
+{
+  "sys_clk": {"ball":"V4","direction":"INPUT","source":"hardware manual PDF p9; official 100h key_led FDC"},
+  "key0_n": {"ball":"M15","direction":"INPUT","source":"hardware manual PDF p17-18; official FDC"},
+  "key1_n": {"ball":"M16","direction":"INPUT","source":"hardware manual PDF p17-18; official FDC"},
+  "led0": {"ball":"J16","direction":"OUTPUT","source":"hardware manual PDF p19; official FDC"},
+  "led1": {"ball":"M17","direction":"OUTPUT","source":"hardware manual PDF p19; official FDC"},
+  "uart_tx": {"ball":"AB21","direction":"OUTPUT","header_pin":3,"source":"hardware manual PDF p24 expansion ordinary IO; project UART assignment"},
+  "uart_rx": {"ball":"AB22","direction":"INPUT","header_pin":5,"source":"hardware manual PDF p24 expansion ordinary IO; project UART assignment"}
+}

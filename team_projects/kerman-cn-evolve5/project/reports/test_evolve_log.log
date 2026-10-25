@@ -1,0 +1,7 @@
+test_positive_is_simulation (__main__.EvolveLogTests.test_positive_is_simulation) ... ok
+test_rejections (__main__.EvolveLogTests.test_rejections) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+OK

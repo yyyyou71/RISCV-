@@ -1,0 +1,10 @@
+# 25 MHz board oscillator. These constraints do not certify the physical board.
+create_clock -name {sys_clk} -period {40.000} -waveform {0.000 20.000} [get_ports {sys_clk}]
+# Project timing budget, not a measured oscillator jitter specification.
+set_clock_uncertainty {0.200} [get_clocks {sys_clk}]
+# These ports ONLY reach first-stage synchronizers / reset-release flops.
+# This does not exclude the synchronous stage-to-stage or CPU datapaths.
+set_false_path -from [get_ports {key0_n key1_n uart_rx}]
+# LEDs and asynchronous UART have no synchronous external receiver clock.
+# All UART divider/serializer registers and internal GPIO logic remain timed.
+set_false_path -to [get_ports {led0 led1 uart_tx}]

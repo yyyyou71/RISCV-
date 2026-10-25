@@ -1,0 +1,10 @@
+{
+  "speed_cluster_s1": {
+    "exit_code": 0,
+    "status": "passed"
+  },
+  "speed_s6": {
+    "exit_code": 1,
+    "status": "failed"
+  }
+}

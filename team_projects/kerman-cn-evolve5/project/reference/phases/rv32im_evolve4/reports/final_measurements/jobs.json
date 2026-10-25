@@ -1,0 +1,17 @@
+{
+  "balanced_lto": {
+    "status": "passed",
+    "config": "fast_both",
+    "compiler": "gcc15_O2_lto"
+  },
+  "tuned_unroll": {
+    "status": "passed",
+    "config": "fast_combo",
+    "compiler": "gcc15_O3_unroll_small"
+  },
+  "tuned_lto": {
+    "status": "passed",
+    "config": "fast_combo",
+    "compiler": "gcc15_O2_lto"
+  }
+}

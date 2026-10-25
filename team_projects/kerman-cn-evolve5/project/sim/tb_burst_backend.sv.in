@@ -1,0 +1,145 @@
+`timescale 1ns/1ps
+module tb_burst_backend;
+    localparam FIRST_WAIT=@FIRST_WAIT@,BEAT_GAP=@BEAT_GAP@;
+    reg clk=0; always #5 clk=~clk;
+    reg rst=1,cv=0,cw=0,ci=0,rr=0;
+    reg [31:0] ca=0,cd=0; reg [3:0] cs=0; reg [7:0] cl=0;
+    wire cr,rv,re,rl; wire [31:0] rd; wire [7:0] gpio,oe;
+    rv32_soc_fabric #(.BURST_INTERFACE(1),.FIRST_WAIT(FIRST_WAIT),.BEAT_GAP(BEAT_GAP),.ROM_FILE("unit_rom.hex")) dut (
+        .clk(clk),.rst(rst),.iv(1'b0),.ia(32'b0),.ir(),.idata(),.ie(),
+        .dv(1'b0),.dw(1'b0),.da(32'b0),.wd(32'b0),.ws(4'b0),.dr(),.de(),.rdata(),
+        .uart_rx(1'b1),.uart_tx(),.gpio_in(8'h5a),.gpio_out(gpio),.gpio_oe(oe),.timer_pending(),
+        .b_cmd_valid(cv),.b_cmd_ready(cr),.b_cmd_write(cw),.b_cmd_instr(ci),.b_cmd_addr(ca),.b_cmd_wdata(cd),.b_cmd_wstrb(cs),.b_cmd_len(cl),
+        .b_rsp_valid(rv),.b_rsp_ready(rr),.b_rsp_data(rd),.b_rsp_error(re),.b_rsp_last(rl));
+    reg [31:0] reference_ram[0:8191];
+    reg [7:0] reference_gpio=0,reference_oe=0;
+    integer cycles=0,commands=0,responses=0,mmio_ops=0,checks=0;
+    reg previous_wait=0; reg [33:0] previous;
+    always @(posedge clk) begin
+        cycles=cycles+1;
+        if(cycles>100000) $fatal(1,"Backend test timeout");
+        if(rst) previous_wait=0;
+        else begin
+            if(previous_wait && (!rv || {rd,re,rl}!==previous)) $fatal(1,"Response changed under backpressure");
+            previous_wait=rv&&!rr; previous={rd,re,rl};
+            if(cv&&cr) commands=commands+1;
+            if(rv&&rr) responses=responses+1;
+            if(dut.pv&&dut.p_ready) mmio_ops=mmio_ops+1;
+            if(dut.active && cr) $fatal(1,"Accepted another command while active");
+        end
+    end
+    task automatic reset_bus;
+        begin
+            @(negedge clk); rst=1; cv=0; rr=0;
+            repeat(3) begin @(posedge clk); #1; if(cr||rv) $fatal(1,"Traffic during reset"); end
+            @(negedge clk); rst=0; reference_gpio=0; reference_oe=0;
+        end
+    endtask
+    task automatic start_cmd(input bit inst,input bit wr,input [31:0] addr,input [7:0] len,input [31:0] data,input [3:0] strobe);
+        begin
+            @(negedge clk); cv=1; ci=inst; cw=wr; ca=addr; cl=len; cd=data; cs=strobe; rr=0;
+            @(posedge clk); while(!cr) @(posedge clk);
+            @(negedge clk); cv=0;
+        end
+    endtask
+    task automatic transaction(input bit inst,input bit wr,input [31:0] addr,input integer len,input [31:0] data,input [3:0] strobe,input bit stalls);
+        integer b,lane,index,guard,before_mmio;
+        reg [31:0] a,expected,old;
+        reg err,rom,ram,mmio,invalid;
+        reg [32:0] limit;
+        begin
+            before_mmio=mmio_ops; start_cmd(inst,wr,addr,len,data,strobe);
+            if(stalls) repeat(8) begin
+                @(posedge clk); #1;
+                if(wr && addr>=32'h20000000 && addr<32'h20008000 && dut.memory.ram[(addr-32'h20000000)>>2]!==reference_ram[(addr-32'h20000000)>>2])
+                    $fatal(1,"RAM store committed before its response acceptance");
+            end
+            limit={1'b0,addr}+(len*4);
+            invalid=(wr && len!=0) || (len!=0 && addr[1:0]!=0) || limit[32];
+            for(b=0;b<=len;b=b+1) begin
+                a=(addr+b*4)&32'hfffffffc;
+                rom=a<32'h8000; ram=a>=32'h20000000 && a<32'h20008000;
+                mmio=!inst && len==0 && a>=32'h40000000 && a<32'h40003000;
+                err=invalid || (inst ? (!rom || wr || addr[1:0]!=0) : ((!rom || wr) && !ram && !mmio));
+                expected=rom?(a^32'ha5c35a7e):ram?reference_ram[(a-32'h20000000)>>2]:0;
+                if(mmio) begin
+                    case(a)
+                        32'h40001000: expected=reference_gpio;
+                        32'h40001004: expected=reference_oe;
+                        32'h40001014: err=!wr;
+                        32'h40002000: err=wr;
+                        default: err=1;
+                    endcase
+                end
+                guard=0;
+                begin: await_response
+                    forever begin
+                        @(negedge clk); rr=!stalls || (guard%3!=0);
+                        @(posedge clk); guard=guard+1;
+                        if(rv&&rr) begin
+                            if(rl!==(b==len) || re!==err) $fatal(1,"Backend error/last mismatch addr=%08x beat=%0d error=%0d/%0d",addr,b,re,err);
+                            if(!wr && !err && a!=32'h40002000 && rd!==expected) $fatal(1,"Backend data mismatch addr=%08x got=%08x expected=%08x",a,rd,expected);
+                            if(wr&&!err) begin
+                                if(ram) begin
+                                    index=(a-32'h20000000)>>2; old=reference_ram[index];
+                                    for(lane=0;lane<4;lane=lane+1) if(strobe[lane]) old[8*lane+:8]=data[8*lane+:8];
+                                    reference_ram[index]=old;
+                                end else if(strobe[0]) begin
+                                    if(a==32'h40001000) reference_gpio=data[7:0];
+                                    if(a==32'h40001004) reference_oe=data[7:0];
+                                    if(a==32'h40001014) reference_gpio=reference_gpio^data[7:0];
+                                end
+                            end
+                            #1; disable await_response;
+                        end
+                        if(guard>1000) $fatal(1,"No backend response");
+                        #1;
+                    end
+                end
+            end
+            @(negedge clk); rr=0;
+            if(gpio!==reference_gpio || oe!==reference_oe) $fatal(1,"MMIO side effect duplicated or missing");
+            if(mmio_ops-before_mmio!=((!inst && len==0 && !(addr<32'h8000 || (addr>=32'h20000000 && addr<32'h20008000)))?1:0))
+                $fatal(1,"MMIO command was executed more than once");
+            checks=checks+1;
+        end
+    endtask
+    integer k,n,fd,start_cycle,start_commands,start_responses;
+    initial begin
+        #1; for(k=0;k<8192;k=k+1) begin reference_ram[k]=(32'h20000000+k*4)^32'ha5c35a7e; dut.memory.ram[k]=reference_ram[k]; end
+        reset_bus();
+        for(n=0;n<5;n=n+1) begin transaction(1,0,0,(1<<n)-1,0,0,1); transaction(0,0,32'h20000000,(1<<n)-1,0,0,1); end
+        for(n=0;n<16;n=n+1) begin
+            transaction(0,1,32'h20000001,0,32'h98765432^(n*32'h01010101),n,1);
+            transaction(0,0,32'h20000000,0,0,0,0);
+        end
+        transaction(0,1,0,0,0,15,1);
+        transaction(1,0,32'h20000000,3,0,0,1);
+        transaction(0,0,32'h7ffc,3,0,0,1);
+        transaction(0,0,32'hfffffffc,3,0,0,1);
+        transaction(0,1,32'h20000000,3,0,15,1);
+        transaction(0,0,32'h20000002,3,0,0,1);
+        transaction(0,1,32'h40001004,0,255,15,1);
+        transaction(0,1,32'h40001000,0,0,15,1);
+        transaction(0,1,32'h40001014,0,1,15,1);
+        transaction(0,0,32'h40001000,0,0,0,1);
+        transaction(0,0,32'h40002000,0,0,0,1);
+        transaction(0,1,32'h40001014,3,255,15,1); // no speculative MMIO bursts
+        transaction(1,0,32'h40001000,0,0,0,1);
+        transaction(0,0,32'h50000000,0,0,0,1);
+        // Reset a partially consumed burst and an unacknowledged RAM write.
+        start_cmd(0,0,32'h20000000,15,0,0);
+        @(negedge clk); rr=1; @(posedge clk); while(!rv) @(posedge clk); #1; reset_bus();
+        transaction(0,0,32'h20000000,3,0,0,0);
+        start_cmd(0,1,32'h20000000,0,32'hdeadbeef,15);
+        wait(rv); reset_bus(); transaction(0,0,32'h20000000,0,0,0,0);
+        fd=$fopen("transport_metrics.csv","w"); $fdisplay(fd,"mode,cycles,commands,beats,first_wait,beat_gap");
+        for(n=0;n<2;n=n+1) begin
+            start_cycle=cycles; start_commands=commands; start_responses=responses;
+            for(k=0;k<128;k=k+(n?4:1)) transaction(0,0,32'h20000400+k*4,n?3:0,0,0,0);
+            if(responses-start_responses!=128 || commands-start_commands!=(n?32:128)) $fatal(1,"Measurement count mismatch");
+            $fdisplay(fd,"%s,%0d,%0d,%0d,%0d,%0d",n?"burst4":"word",cycles-start_cycle,commands-start_commands,responses-start_responses,FIRST_WAIT,BEAT_GAP);
+        end
+        $fclose(fd); $display("BURST_BACKEND_PASS checks=%0d first_wait=%0d beat_gap=%0d",checks,FIRST_WAIT,BEAT_GAP); $finish;
+    end
+endmodule

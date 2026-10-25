@@ -1,0 +1,93 @@
+{
+  "stage": "EVOLVE1",
+  "base": "DUAL1 dual",
+  "protected": {
+    "rv32i_cache_board": {
+      "files": 939,
+      "manifest_sha256": "91056af6308de0dc14d67035164b1cdd8cfc0161321ac1aca6bb1fa504e50fa3"
+    },
+    "rv32i_debug": {
+      "files": 423,
+      "manifest_sha256": "351c2594d6ba7c7b20560747585febbb1d0d02044b6d0260047aa711203be9f8"
+    },
+    "rv32i_stress": {
+      "files": 298,
+      "manifest_sha256": "34746a29dc396b910e5c57dbba1b1c23bd4f00c381bd7dc63ef9ecd7240e5f56"
+    },
+    "rv32i_acceptance": {
+      "files": 55,
+      "manifest_sha256": "4cd55347bb248bc9f9a196ce2bf49f752693643c46c1be20e902c8e2ee3a1091"
+    },
+    "rv32i_profile": {
+      "files": 468,
+      "manifest_sha256": "dc2fb30c04cb849ac171f8e11eede1256889411c2b93bb836e12ee37312febc7"
+    },
+    "rv32im_mext1": {
+      "files": 952,
+      "manifest_sha256": "1661d95bebe036eff3f4ee8b6d1016597d49e6640775ebe29d171158602e3886"
+    },
+    "rv32im_front1": {
+      "files": 2289,
+      "manifest_sha256": "0398985da766b6cd11d7b04ffe40c91700c6668aebdbff0c5eef1c4987483df1"
+    },
+    "rv32im_dual1": {
+      "files": 1401,
+      "manifest_sha256": "73bf1d1e94e0c3cb9c680fa4c9171461a7a3eb40ded2e53615ef04d25d369556"
+    }
+  },
+  "original_sources": {
+    "rtl/rv32_alu.v": "67f9cd95b22c36a87f5bec1745fbc7df4fd26b9025873423ea984062bd561f28",
+    "rtl/rv32_core.v": "4245e7270187262b03202c2fb19f40ec6eb095e66a371e57939da5fdabbdfaa0",
+    "rtl/rv32_csr.v": "eee229d6a1f5476a1423e8239d88cef32d2e5f5fc277919327dc1a2d72e23828",
+    "rtl/rv32_decode.v": "334f8ee7d72f1c9a8b7522c0ccc702bc5a66b062d00308ee0e14a6642948f358",
+    "rtl/rv32_defs.vh": "f7c3c5656df9450b14d38eeef92768226d2fac1380e9acc2e617d5ffe9b37bdf",
+    "rtl/rv32_fetch.v": "04b2237e3c0f7681699c74600af7fbe1394979711c5fa6522b9283aba1073e26",
+    "rtl/rv32_muldiv.v": "e5ce73d51d01cb10f6c946227598ae05823f6a861d46fd3e74e6ab24439e5e27",
+    "rtl/rv32_predictor.v": "36d0783d167f5d22cb713ac6462a9c0e135fe2ffd910b78ed1cc25efcb8c7118",
+    "rtl/rv32_regfile.v": "81eb13ad018308f7378bd087450c26e2470f64b50863359ca6e74141d0339573",
+    "rtl/cache/rv32_burst_arbiter.v": "13bc6efa41ee024d1eb9cd3bc739991644d2c4cea1e0dd11db789a97cdeb859b",
+    "rtl/cache/rv32_burst_cache_2way.v": "838896d81a524db5e2e7315b1c5d855959f150321b849ee48b0d7adb03fa276d",
+    "rtl/cache/rv32_cache_2way.v": "9a0151209b16522f2c2fd34a2be4d81e0b42b0371f0fe847fcd733f5a4e1fda4",
+    "rtl/cache/rv32_dcache.v": "4f2c6660ea20b5a10365d8496633e57a6c9abdfe1553fad80ee5b3e61d7364a0",
+    "rtl/cache/rv32_icache.v": "185a8f204d9ebcf767c19484697195c1022423def4b4a0bbab177ffc2d60390e",
+    "rtl/cache/rv32_word_to_burst.v": "33f5aaca2640614383bfaeb8b3a35d2decc0ad7d6bafecc8d8ee053b6876c55f",
+    "rtl/soc/rv32_gpio.v": "c556542875d5ce943c4af420ccdbc40d96ce2fbb452b9f3e90c609ea03ade161",
+    "rtl/soc/rv32_monitor.v": "4d573c49996ef12ca407ab58534561df1d3dd62018578c442cbb80229b4f81ff",
+    "rtl/soc/rv32_soc.v": "439a8addf7a27cfd3cabf638e96ef8796e50156369b84694b80b3a4ff4cbf39a",
+    "rtl/soc/rv32_soc_fabric.v": "aabab05a98574e254ab91bdf3a83991f6cd28b0be01262081782c371375f9361",
+    "rtl/soc/rv32_soc_memory.v": "8a130357c29e581ab870fd36deab1a3d3b3ea4108e03b0621ffe911135423ca7",
+    "rtl/soc/rv32_timer.v": "14332dc37e0cb5b6d955c6f47710402eeb0ce3ef5f84296c588f42f430ed1a53",
+    "rtl/soc/rv32_uart.v": "49295d75ca468b13181dc70a6fb7077b79d95805191d6ef0a00fac6583260797",
+    "board/rk3568_mes2l100h/board_button.v": "ccace9cbc65b590b699fa2a4a2c26f728849f3c3dd6e9861c92c13f339f417dd",
+    "board/rk3568_mes2l100h/board_reset.v": "af340e2f6b6f08cdd26d84637b220068e26a8b437ea939fcfeccc60ad3428380",
+    "board/rk3568_mes2l100h/board_top.v": "3a79f132d885bba214594bf7bb12b08aaa928bf7f5f755df0ca72ea569807ef9",
+    "board/rk3568_mes2l100h/electrical_review.json": "6299bcd5dd5c195d8d61c42fa2588c14f684186bf6c92104259543a3641e5099",
+    "board/rk3568_mes2l100h/pins.json": "a888172e1c14c8fb4da4744274fc26aedf70b9f3fa465390289fa21fd5f89929",
+    "board/rk3568_mes2l100h/README.md": "1ea27cc19c03bbee975af835f74b5c36b0cfb4ca2235b8939bf0c29e77d5d566",
+    "board/rk3568_mes2l100h/timing.fdc": "5261ecf5345f25132deab4066a79dfa287d864a6da4a38a8450372b6e1ffb34b",
+    "firmware/crt0.S": "1c20f55a1ed0d3fb85b0bf5e20ff3509632d8727c935f250136955f44883178f",
+    "firmware/drivers.c": "7242f1c5402f0cc1595ddbdad90eead27c3388695c74ee2d53c26a40d11621f1",
+    "firmware/link.ld": "92c44c4cc5176f6d662bfda8078775cf9522449defecc035281b2edbc04b62e6",
+    "firmware/platform.c": "ac58da8a2ce46fac2f8138d7304d761ceed71dae315534b90113d53a5c487d25",
+    "firmware/README.md": "23c26c92317a751827b27947830d87e5a85cd0ea21c96d8e1bce78aefc71f317",
+    "firmware/runtime.c": "2de9abf691ff80ff1e9c5d782557e2a3c73a339ba52aaad3f72d3d8bfac29591",
+    "firmware/apps/board_demo.c": "9d2dd2aaf29902b2c23e82c7734f6073de7aec9d8eefad8682e711d0c00f95ff",
+    "firmware/apps/echo.c": "9d5600eaf783409ea6fde0052410ec83ff272c1c265738dd8ae62611ed0e05a1",
+    "firmware/apps/fault_rom.c": "a4df5add95d7e57eec801304560c4678d3f099626b618eeb0c712a506fe91e17",
+    "firmware/apps/machine_demo.c": "bbf6bb4a07be8c634dc3ba8a46f9c21e9091e930e09354cc39a0c545a2456484",
+    "firmware/apps/selftest.c": "591a9a6f35923d64daeb24a4b65e7674594f6736b056d3a70ddce8f81050cef8",
+    "firmware/coremark_port/core_portme.c": "5e9e0aa2db3f0cd939756b0b54b22758b323d6ff03d43e33a2a906d174d5f135",
+    "firmware/coremark_port/core_portme.h": "a6ed223d5d730812bc27b3231bd69bc6865bc51e2aaebaa589cd8587a6efc58b",
+    "firmware/coremark_port/m_boot_vectors.h": "f17f0fecd92bbc573abece521e6e573de1eae988f38fb256296306662f5bd44b",
+    "firmware/coremark_port/m_selfcheck.c": "a989f17776b832ee1882dd0e35790e2c44586e824f48f962a6572a84e5007a8d",
+    "firmware/generated/arithmetic_vectors.h": "2f2a3d1cd7d200ea7dabde385a0b17abae0e159f9256ce70854b98a378cf6bef",
+    "firmware/include/platform.h": "54aa7769d7d05122ebea9ede4b478667a10fffbdcc0db7fc5567ff8c72fcf4cf",
+    "firmware/include/soc.h": "3c43022074c7cbd7295d0eadc00cbd6fbd7e0d95617d8490eee49792a006d048",
+    "firmware/machine/cache_probe.S": "65129705a92ce334ee83538c09f1740724d3fb1c63de222c48aaffea831e13a2",
+    "firmware/machine/machine.c": "558790cad6026ff07fb451926e545f7dc7de448ee8d33e0551ba022b1cd7f627",
+    "firmware/machine/machine.h": "f49d6816d30efc73ce9ccd4dbc3f52103b00749eb0155ddf428f556fee056bb7",
+    "firmware/machine/probes.S": "d4bdffac332ebea0b23327f5ed1076a8c5c2d8ba47c2c8c787b4472c0371ef60",
+    "firmware/machine/trap_entry.S": "98ecc687e9250c3f54b65913d24c179aed87ef142c1b5f6f07a63b44e06ff61e"
+  },
+  "user_authorized": "Sequential software/compiler, profiling, wider pairing, memory, multiply and targeted branch/ISA evaluation; no full OoO"
+}

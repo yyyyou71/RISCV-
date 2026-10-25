@@ -1,0 +1,30 @@
+
+****** xsim v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 23 18:12:52 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/coremark_sim/xsim_script.tcl
+# xsim {coremark_sim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+CM_RESULT mode=performance iterations=1 cycles=327703 clock_hz=25000000 tick_unit=us seed1=0 seed2=0 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e714 matrix=1fd7 state=8e3a final=e714
+CM_RESULT mode=validation iterations=1 cycles=329105 clock_hz=25000000 tick_unit=us seed1=13333 seed2=13333 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e3c1 matrix=0747 state=8d84 final=e3c1
+CM_RESULT mode=performance iterations=2 cycles=655245 clock_hz=25000000 tick_unit=us seed1=0 seed2=0 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e714 matrix=1fd7 state=8e3a final=72be
+COREMARK_TIMER_ROLLOVER_PASS
+FRONT_PROFILE_PASS runs=4
+DUAL_PROFILE_PASS runs=4
+EVOLVE_PROFILE_PASS runs=4
+BP_STATS_PASS runs=4
+BURST_PROFILE_PASS runs=4
+CM_RESULT mode=validation iterations=2 cycles=658230 clock_hz=25000000 tick_unit=us seed1=13333 seed2=13333 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e3c1 matrix=0747 state=8d84 final=fe8c
+COREMARK_SIM_PASS runs=4 cycles=17278701
+CACHE_ACTIVITY ih=1391787 im=25819 dh=341445 dm=4290 wh=122886 wm=7138
+$finish called at time : 691148060 ns : File "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_compiler_gcc15_O3_unroll_small_2/tb_coremark.sv" Line 101
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:01:43 . Memory (MB): peak = 219.848 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 13888 KB (Peak: 13888 KB), Simulation CPU Usage: 101249 ms
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 18:14:37 2026...

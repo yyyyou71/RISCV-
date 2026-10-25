@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/rv32_muldiv.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_muldiv
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_unit/tb_muldiv.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_muldiv

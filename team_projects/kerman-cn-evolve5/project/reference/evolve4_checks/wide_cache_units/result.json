@@ -1,0 +1,305 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "name": "d_default",
+      "vectors": 1325,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "write_no_allocate_and_byte_masks",
+        "rom_write_protection",
+        "failed_write_invalidates_hit",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_cancels_uncompleted_write",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 0,
+        "enable": 1,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "e17c3cc9a66fac9d19d27487d9be586b1b0eae234be24af0eb0fda945c2381fd"
+    },
+    {
+      "name": "i_default",
+      "vectors": 1277,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 1,
+        "enable": 1,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "a83d43672f78e1594c2f2eda4413b7873621aaf6fcc68b6a8d10b2aaafddde5c"
+    },
+    {
+      "name": "d_small",
+      "vectors": 1325,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "write_no_allocate_and_byte_masks",
+        "rom_write_protection",
+        "failed_write_invalidates_hit",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_cancels_uncompleted_write",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 0,
+        "enable": 1,
+        "set_bits": 1,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "ff08e57873fdd4aa3afbdbd8d9fcabf20c066054ef76e4ad1a1606380c274136"
+    },
+    {
+      "name": "i_small",
+      "vectors": 1277,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 1,
+        "enable": 1,
+        "set_bits": 1,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "75d1a818d4610f98a7f1176d11e6d896166e93c97535660f4ac632d906e85a30"
+    },
+    {
+      "name": "d_disabled",
+      "vectors": 1321,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "write_no_allocate_and_byte_masks",
+        "rom_write_protection",
+        "failed_write_invalidates_hit",
+        "demand_and_neighbour_fill_errors",
+        "reset_cancels_uncompleted_write",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 0,
+        "enable": 0,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "0b1b12edbb81139fc9eed688f749f72d280949cf5f3a1918cffa89a2f059cd0f"
+    },
+    {
+      "name": "i_disabled",
+      "vectors": 1273,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "demand_and_neighbour_fill_errors",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 1,
+        "enable": 0,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "2c2518f0c75b3f5a371b3c57af639b3a9b61cf4100ccf14c7f4e80e6b8f6931e"
+    },
+    {
+      "name": "d_word_fill",
+      "vectors": 1325,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "write_no_allocate_and_byte_masks",
+        "rom_write_protection",
+        "failed_write_invalidates_hit",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_cancels_uncompleted_write",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 0,
+        "enable": 1,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 0,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "c19115048a00fbb64b956e9c6f90d704bb19857c3268b3db17e0940554fa0267"
+    },
+    {
+      "name": "i_word_fill",
+      "vectors": 1277,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 1,
+        "enable": 1,
+        "set_bits": 5,
+        "line_word_bits": 2,
+        "rom_bytes": 32768,
+        "ram_bytes": 32768,
+        "burst_transport": true,
+        "burst_fill": 0,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "7ffd2afbc6fcd5b380c1e71e91e5998c4dd86ebb4dff572563cdcad767d27347"
+    },
+    {
+      "name": "d_line8",
+      "vectors": 1361,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "write_no_allocate_and_byte_masks",
+        "rom_write_protection",
+        "failed_write_invalidates_hit",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_cancels_uncompleted_write",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 0,
+        "enable": 1,
+        "set_bits": 2,
+        "line_word_bits": 3,
+        "rom_bytes": 32764,
+        "ram_bytes": 32760,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "1724a4340d93896afbee2f7c0c1a0c11fa7300f7e781b32ed56f2230b765faf3"
+    },
+    {
+      "name": "i_line2",
+      "vectors": 1259,
+      "groups": [
+        "cold_line_and_all_word_hits",
+        "two_ways_and_lru",
+        "line_and_region_boundaries",
+        "uncached_mmio_exactly_once",
+        "demand_and_neighbour_fill_errors",
+        "reset_during_partial_fill",
+        "reset_invalidates_cached_lines",
+        "deterministic_random_reference_memory"
+      ],
+      "reference": "Independent Python LRU transaction model and byte-mask backing memory",
+      "configuration": {
+        "instruction": 1,
+        "enable": 1,
+        "set_bits": 2,
+        "line_word_bits": 1,
+        "rom_bytes": 32764,
+        "ram_bytes": 32760,
+        "burst_transport": true,
+        "burst_fill": 1,
+        "wide_fetch": true,
+        "fast_store": true
+      },
+      "vectors_sha256": "a7e1dad1175df513f13f8bdb872914af91423fdd702129eb779e01de7ca410fa"
+    }
+  ],
+  "checked_utc": "2026-10-23T10:48:35.289584+00:00",
+  "hardware_tested": false
+}

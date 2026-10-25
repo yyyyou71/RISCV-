@@ -1,0 +1,2607 @@
+
+;; Function ee_printf (ee_printf, funcdef_no=2, decl_uid=1427, cgraph_uid=13, symbol_order=12)
+
+
+Examining ee_printf function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number is 63.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number is 63.
+int ee_printf (const char * format)
+{
+  void * D.2077;
+  void * D.2078;
+  void * D.2075;
+  void * D.2076;
+  void * D.2073;
+  void * D.2074;
+  void * D.2071;
+  void * D.2072;
+  void * D.2069;
+  void * D.2070;
+  void * D.2067;
+  void * D.2068;
+  char buffer[32];
+  unsigned int count;
+  int written;
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  unsigned int width;
+  uint64_t value;
+  char buffer[32];
+  unsigned int count;
+  int written;
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  unsigned int width;
+  uint64_t value;
+  uint32_t v;
+  uint32_t magnitude;
+  int32_t v;
+  const char * s;
+  char type;
+  int is_long;
+  unsigned int width;
+  char pad;
+  int written;
+  void * ap;
+  char _2;
+  unsigned int _3;
+  unsigned int _4;
+  unsigned int _5;
+  char _6;
+  char _7;
+  char _9;
+  long long unsigned int _10;
+  long long unsigned int _11;
+  int _12;
+  char _13;
+  char _14;
+  unsigned int iftmp.4_27;
+  long unsigned int _83;
+  long long unsigned int _85;
+  long unsigned int _86;
+  _Bool _91;
+  _Bool _92;
+  _Bool _93;
+  char _100;
+  char _107;
+  long unsigned int _115;
+  long long unsigned int _117;
+  long unsigned int _118;
+  _Bool _123;
+  _Bool _124;
+  _Bool _125;
+  char _132;
+  unsigned int ivtmp_136;
+  char _139;
+  unsigned int ivtmp_141;
+  void * _160;
+  void * _161;
+  void * _163;
+  void * _167;
+  char _169;
+  void * _171;
+  void * _173;
+  void * _179;
+  void * _180;
+  void * _182;
+  void * _183;
+  void * _185;
+  void * _186;
+  char _200;
+  char _201;
+  char _202;
+  char _203;
+  char _204;
+  unsigned int ivtmp_236;
+  unsigned int ivtmp_239;
+  char pretmp_263;
+  char prephitmp_264;
+  char prephitmp_271;
+  unsigned int _272;
+  unsigned int _273;
+  unsigned int _274;
+  unsigned int _275;
+  unsigned int _276;
+  unsigned int _277;
+  char _303;
+  char pretmp_311;
+  char prephitmp_312;
+  const char * _313;
+
+  <bb 2> [local count: 33184959]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __builtin_va_start (&ap, 0);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG written => 0
+  # DEBUG format => format_35(D)
+  # DEBUG BEGIN_STMT
+  _169 = *format_35(D);
+  if (_169 != 0)
+    goto <bb 51>; [89.00%]
+  else
+    goto <bb 49>; [11.00%]
+
+  <bb 51> [local count: 29534614]:
+
+  <bb 3> [local count: 268496475]:
+  # _204 = PHI <_14(56), _169(51)>
+  # format_207 = PHI <format_162(56), format_35(D)(51)>
+  # written_209 = PHI <written_79(56), 0(51)>
+  # DEBUG written => written_209
+  # DEBUG format => format_207
+  # DEBUG BEGIN_STMT
+  _313 = format_207 + 1;
+  if (_204 != 37)
+    goto <bb 4>; [56.01%]
+  else
+    goto <bb 5>; [43.99%]
+
+  <bb 4> [local count: 150384875]:
+  # DEBUG BEGIN_STMT
+  # DEBUG format => format_207 + 1
+  uart_putc (_204);
+  # DEBUG BEGIN_STMT
+  written_76 = written_209 + 1;
+  # DEBUG written => written_76
+  # DEBUG BEGIN_STMT
+  goto <bb 48>; [100.00%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG format => format_207 + 1
+  # DEBUG BEGIN_STMT
+  # DEBUG pad => 32
+  # DEBUG BEGIN_STMT
+  # DEBUG width => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG is_long => 0
+  # DEBUG BEGIN_STMT
+  _2 = MEM[(const char *)format_207 + 1B];
+  if (_2 == 48)
+    goto <bb 6>; [34.00%]
+  else
+    goto <bb 8>; [66.00%]
+
+  <bb 6> [local count: 40157944]:
+  # DEBUG BEGIN_STMT
+  # DEBUG pad => 48
+  # DEBUG BEGIN_STMT
+  format_39 = format_207 + 2;
+  # DEBUG format => format_39
+  pretmp_263 = MEM[(const char *)format_207 + 2B];
+  goto <bb 8>; [100.00%]
+
+  <bb 55> [local count: 105119324]:
+
+  <bb 7> [local count: 955630224]:
+  # _201 = PHI <_6(66), prephitmp_264(55)>
+  # format_205 = PHI <format_72(66), format_77(55)>
+  # width_211 = PHI <width_73(66), 0(55)>
+  # DEBUG width => width_211
+  # DEBUG pad => pad_78
+  # DEBUG format => format_205
+  # DEBUG BEGIN_STMT
+  _3 = width_211 * 10;
+  format_72 = format_205 + 1;
+  # DEBUG format => format_72
+  _4 = (unsigned int) _201;
+  _5 = _3 + _4;
+  width_73 = _5 + 4294967248;
+  # DEBUG width => width_73
+  # DEBUG pad => pad_78
+  # DEBUG format => format_72
+  # DEBUG BEGIN_STMT
+  _6 = *format_72;
+  _7 = _6 + 208;
+  if (_7 <= 9)
+    goto <bb 66>; [89.00%]
+  else
+    goto <bb 69>; [11.00%]
+
+  <bb 69> [local count: 105119324]:
+  # _303 = PHI <_6(7)>
+  # format_302 = PHI <format_72(7)>
+  # width_301 = PHI <width_73(7)>
+  goto <bb 9>; [100.00%]
+
+  <bb 66> [local count: 850510900]:
+  goto <bb 7>; [100.00%]
+
+  <bb 8> [local count: 118111600]:
+  # format_77 = PHI <format_39(6), _313(5)>
+  # pad_78 = PHI <48(6), 32(5)>
+  # prephitmp_264 = PHI <pretmp_263(6), _2(5)>
+  # DEBUG width => 0
+  # DEBUG pad => pad_78
+  # DEBUG format => format_77
+  # DEBUG BEGIN_STMT
+  _200 = prephitmp_264 + 208;
+  if (_200 <= 9)
+    goto <bb 55>; [89.00%]
+  else
+    goto <bb 9>; [11.00%]
+
+  <bb 9> [local count: 118111600]:
+  # _202 = PHI <_303(69), prephitmp_264(8)>
+  # format_206 = PHI <format_302(69), format_77(8)>
+  # width_212 = PHI <width_301(69), 0(8)>
+  # prephitmp_271 = PHI <_303(69), prephitmp_264(8)>
+  # DEBUG BEGIN_STMT
+  if (_202 == 108)
+    goto <bb 10>; [34.00%]
+  else
+    goto <bb 50>; [66.00%]
+
+  <bb 10> [local count: 40157944]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG is_long => 1
+  # DEBUG format => format_206 + 1
+  # DEBUG BEGIN_STMT
+  format_32 = format_206 + 2;
+  # DEBUG format => format_32
+  type_20 = MEM[(const char *)format_206 + 1B];
+  # DEBUG type => type_20
+  # DEBUG BEGIN_STMT
+  switch (type_20) <default: <L51> [16.98%], case 37: <L50> [16.98%], case 88: <L58> [16.98%], case 99: <L53> [16.98%], case 100: <L56> [15.10%], case 105: <L56> [15.10%], case 115: <L52> [16.98%], case 117: <L58> [16.98%], case 120: <L58> [16.98%]>
+
+  <bb 11> [local count: 19685266]:
+  # format_149 = PHI <format_140(50), format_32(10)>
+<L52>:
+  # DEBUG BEGIN_STMT
+  _160 = ap;
+  _161 = _160 + 4;
+  ap = _161;
+  s_68 = MEM[(const char * *)_160];
+  # DEBUG s => NULL
+  # DEBUG BEGIN_STMT
+  if (s_68 == 0B)
+    goto <bb 13>; [30.00%]
+  else
+    goto <bb 12>; [70.00%]
+
+  <bb 12> [local count: 13779686]:
+  pretmp_311 = *s_68;
+
+  <bb 13> [local count: 19685266]:
+  # s_177 = PHI <s_68(12), "(null)"(11)>
+  # prephitmp_312 = PHI <pretmp_311(12), 40(11)>
+  # DEBUG s => s_177
+  # DEBUG written => written_209
+  # DEBUG BEGIN_STMT
+  if (prephitmp_312 != 0)
+    goto <bb 52>; [89.00%]
+  else
+    goto <bb 48>; [11.00%]
+
+  <bb 52> [local count: 17519887]:
+
+  <bb 14> [local count: 159271702]:
+  # _203 = PHI <_9(57), prephitmp_312(52)>
+  # written_208 = PHI <written_71(57), written_209(52)>
+  # s_213 = PHI <s_69(57), s_177(52)>
+  # DEBUG s => s_213
+  # DEBUG written => written_208
+  # DEBUG BEGIN_STMT
+  s_69 = s_213 + 1;
+  # DEBUG s => s_69
+  uart_putc (_203);
+  # DEBUG BEGIN_STMT
+  written_71 = written_208 + 1;
+  # DEBUG s => s_69
+  # DEBUG written => written_71
+  # DEBUG BEGIN_STMT
+  _9 = *s_69;
+  if (_9 != 0)
+    goto <bb 57>; [89.00%]
+  else
+    goto <bb 77>; [11.00%]
+
+  <bb 77> [local count: 17519887]:
+  # written_299 = PHI <written_71(14)>
+  goto <bb 48>; [100.00%]
+
+  <bb 57> [local count: 141751815]:
+  goto <bb 14>; [100.00%]
+
+  <bb 15> [local count: 9842633]:
+<L56>:
+  _167 = ap;
+  _173 = _167 + 4;
+  ap = _173;
+  v_59 = MEM[(long int *)_167];
+  # DEBUG v => NULL
+  goto <bb 17>; [100.00%]
+
+  <bb 16> [local count: 9842633]:
+<L59>:
+  # DEBUG BEGIN_STMT
+  _171 = ap;
+  _163 = _171 + 4;
+  ap = _163;
+  v_57 = MEM[(int *)_171];
+  # DEBUG v => NULL
+
+  <bb 17> [local count: 19685266]:
+  # v_24 = PHI <v_59(15), v_57(16)>
+  # format_133 = PHI <format_32(15), format_140(16)>
+  # DEBUG v => v_24
+  # DEBUG BEGIN_STMT
+  magnitude_60 = (uint32_t) v_24;
+  # DEBUG magnitude => magnitude_60
+  # DEBUG BEGIN_STMT
+  if (v_24 < 0)
+    goto <bb 18>; [25.50%]
+  else
+    goto <bb 19>; [74.50%]
+
+  <bb 18> [local count: 5019743]:
+  # DEBUG BEGIN_STMT
+  uart_putc (45);
+  # DEBUG BEGIN_STMT
+  written_62 = written_209 + 1;
+  # DEBUG written => written_62
+  # DEBUG BEGIN_STMT
+  magnitude_63 = -magnitude_60;
+  # DEBUG magnitude => magnitude_63
+
+  <bb 19> [local count: 19685266]:
+  # written_19 = PHI <written_209(17), written_62(18)>
+  # magnitude_25 = PHI <magnitude_60(17), magnitude_63(18)>
+  # DEBUG magnitude => magnitude_25
+  # DEBUG written => written_19
+  # DEBUG BEGIN_STMT
+  _10 = (long long unsigned int) magnitude_25;
+  # DEBUG value => _10
+  # DEBUG base => 10
+  # DEBUG width => width_212
+  # DEBUG pad => pad_78
+  # DEBUG INLINE_ENTRY put_unsigned
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG count => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG written => 0
+
+  <bb 20> [local count: 178956928]:
+  # value_110 = PHI <_10(19), q_292(60)>
+  # count_98 = PHI <0(19), count_99(60)>
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG digit => NULL
+  # DEBUG count => count_98
+  # DEBUG value => value_110
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG n => value_110
+  # DEBUG d => 10
+  # DEBUG remainder => &digit
+  # DEBUG INLINE_ENTRY div64by32
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG bit => 0
+  # DEBUG r => 0
+  # DEBUG q => 0
+  # DEBUG n => value_110
+  # DEBUG BEGIN_STMT
+
+  <bb 21> [local count: 11441622889]:
+  # r_217 = PHI <r_112(61), 0(20)>
+  # n_219 = PHI <n_88(61), value_110(20)>
+  # q_220 = PHI <q_111(61), 0(20)>
+  # bit_222 = PHI <bit_97(61), 0(20)>
+  # ivtmp_236 = PHI <ivtmp_136(61), 64(20)>
+  # DEBUG bit => bit_222
+  # DEBUG r => r_217
+  # DEBUG q => q_220
+  # DEBUG n => n_219
+  # DEBUG BEGIN_STMT
+  carry_82 = r_217 >> 31;
+  # DEBUG carry => carry_82
+  # DEBUG BEGIN_STMT
+  _83 = r_217 << 1;
+  _85 = n_219 >> 63;
+  _86 = (long unsigned int) _85;
+  r_87 = _83 | _86;
+  # DEBUG r => r_87
+  # DEBUG BEGIN_STMT
+  n_88 = n_219 << 1;
+  # DEBUG n => n_88
+  # DEBUG BEGIN_STMT
+  q_90 = q_220 << 1;
+  # DEBUG q => q_90
+  # DEBUG BEGIN_STMT
+  _91 = (_Bool) carry_82;
+  _92 = r_87 > 9;
+  _93 = _91 | _92;
+  if (_93 != 0)
+    goto <bb 22>; [50.00%]
+  else
+    goto <bb 23>; [50.00%]
+
+  <bb 22> [local count: 5720811445]:
+  # DEBUG BEGIN_STMT
+  r_94 = r_87 + 4294967286;
+  # DEBUG r => r_94
+  # DEBUG BEGIN_STMT
+  q_95 = q_90 | 1;
+  # DEBUG q => q_95
+
+  <bb 23> [local count: 11441622889]:
+  # q_111 = PHI <q_90(21), q_95(22)>
+  # r_112 = PHI <r_87(21), r_94(22)>
+  # DEBUG r => r_112
+  # DEBUG q => q_111
+  # DEBUG BEGIN_STMT
+  bit_97 = bit_222 + 1;
+  # DEBUG bit => bit_97
+  # DEBUG r => r_112
+  # DEBUG q => q_111
+  # DEBUG n => n_88
+  # DEBUG BEGIN_STMT
+  ivtmp_136 = ivtmp_236 - 1;
+  if (ivtmp_136 != 0)
+    goto <bb 61>; [98.44%]
+  else
+    goto <bb 24>; [1.56%]
+
+  <bb 61> [local count: 11262665956]:
+  goto <bb 21>; [100.00%]
+
+  <bb 24> [local count: 178956928]:
+  # q_292 = PHI <q_111(23)>
+  # r_291 = PHI <r_112(23)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG digit => r_291
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG d => NULL
+  # DEBUG remainder => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG value => q_292
+  # DEBUG BEGIN_STMT
+  count_99 = count_98 + 1;
+  # DEBUG count => count_99
+  _100 = "0123456789abcdef"[r_291];
+  buffer[count_98] = _100;
+  # DEBUG digit => NULL
+  # DEBUG BEGIN_STMT
+  if (q_292 != 0)
+    goto <bb 60>; [89.00%]
+  else
+    goto <bb 25>; [11.00%]
+
+  <bb 60> [local count: 159271666]:
+  goto <bb 20>; [100.00%]
+
+  <bb 25> [local count: 19685262]:
+  # count_294 = PHI <count_99(24)>
+  # DEBUG written => 0
+  # DEBUG width => width_212
+  # DEBUG BEGIN_STMT
+  if (count_294 < width_212)
+    goto <bb 53>; [89.00%]
+  else
+    goto <bb 27>; [11.00%]
+
+  <bb 53> [local count: 17519883]:
+
+  <bb 26> [local count: 159271666]:
+  # width_223 = PHI <width_102(59), width_212(53)>
+  # DEBUG written => NULL
+  # DEBUG width => width_223
+  # DEBUG BEGIN_STMT
+  uart_putc (pad_78);
+  # DEBUG BEGIN_STMT
+  width_102 = width_223 + 4294967295;
+  # DEBUG BEGIN_STMT
+  # DEBUG written => NULL
+  # DEBUG width => width_102
+  # DEBUG BEGIN_STMT
+  if (count_294 < width_102)
+    goto <bb 59>; [89.00%]
+  else
+    goto <bb 81>; [11.00%]
+
+  <bb 81> [local count: 17519883]:
+  _275 = width_212 - count_294;
+  written_296 = (int) _275;
+  goto <bb 27>; [100.00%]
+
+  <bb 59> [local count: 141751783]:
+  goto <bb 26>; [100.00%]
+
+  <bb 27> [local count: 19685262]:
+  # written_225 = PHI <written_296(81), 0(25)>
+  # DEBUG written => written_225
+  # DEBUG count => count_294
+  # DEBUG BEGIN_STMT
+
+  <bb 28> [local count: 159271666]:
+  # count_226 = PHI <count_106(58), count_294(27)>
+  # DEBUG written => NULL
+  # DEBUG count => count_226
+  # DEBUG BEGIN_STMT
+  count_106 = count_226 + 4294967295;
+  # DEBUG count => count_106
+  _107 = buffer[count_106];
+  uart_putc (_107);
+  # DEBUG BEGIN_STMT
+  # DEBUG written => NULL
+  # DEBUG count => count_106
+  # DEBUG BEGIN_STMT
+  if (count_106 != 0)
+    goto <bb 58>; [87.64%]
+  else
+    goto <bb 29>; [12.36%]
+
+  <bb 58> [local count: 139586404]:
+  goto <bb 28>; [100.00%]
+
+  <bb 29> [local count: 19685266]:
+  _277 = (unsigned int) written_225;
+  _276 = _277 + count_294;
+  written_298 = (int) _276;
+  # DEBUG BEGIN_STMT
+  buffer ={v} {CLOBBER(eos)};
+  # DEBUG value => NULL
+  # DEBUG base => NULL
+  # DEBUG width => NULL
+  # DEBUG pad => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG written => NULL
+  # DEBUG count => NULL
+  written_66 = written_19 + written_298;
+  # DEBUG written => written_66
+  goto <bb 48>; [100.00%]
+
+  <bb 30> [local count: 9842633]:
+<L58>:
+  # DEBUG BEGIN_STMT
+  _179 = ap;
+  _180 = _179 + 4;
+  ap = _180;
+  v_52 = MEM[(long unsigned int *)_179];
+  # DEBUG v => NULL
+  goto <bb 32>; [100.00%]
+
+  <bb 31> [local count: 9842633]:
+<L57>:
+  _182 = ap;
+  _183 = _182 + 4;
+  ap = _183;
+  v_50 = MEM[(unsigned int *)_182];
+  # DEBUG v => NULL
+
+  <bb 32> [local count: 19685266]:
+  # v_26 = PHI <v_52(30), v_50(31)>
+  # format_113 = PHI <format_32(30), format_140(31)>
+  # type_105 = PHI <type_20(30), prephitmp_271(31)>
+  # DEBUG v => v_26
+  # DEBUG BEGIN_STMT
+  _11 = (long long unsigned int) v_26;
+  if (type_105 == 117)
+    goto <bb 82>; [34.00%]
+  else
+    goto <bb 34>; [66.00%]
+
+  <bb 82> [local count: 6692991]:
+
+  <bb 34> [local count: 19685266]:
+  # iftmp.4_27 = PHI <10(82), 16(32)>
+  # DEBUG value => _11
+  # DEBUG base => iftmp.4_27
+  # DEBUG width => width_212
+  # DEBUG pad => pad_78
+  # DEBUG INLINE_ENTRY put_unsigned
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG count => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG written => 0
+
+  <bb 35> [local count: 178956928]:
+  # value_142 = PHI <_11(34), q_279(64)>
+  # count_130 = PHI <0(34), count_131(64)>
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG digit => NULL
+  # DEBUG count => count_130
+  # DEBUG value => value_142
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG n => value_142
+  # DEBUG d => iftmp.4_27
+  # DEBUG remainder => &digit
+  # DEBUG INLINE_ENTRY div64by32
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG bit => 0
+  # DEBUG r => 0
+  # DEBUG q => 0
+  # DEBUG n => value_142
+  # DEBUG BEGIN_STMT
+
+  <bb 36> [local count: 11441622889]:
+  # r_229 = PHI <r_144(65), 0(35)>
+  # n_231 = PHI <n_120(65), value_142(35)>
+  # q_232 = PHI <q_143(65), 0(35)>
+  # bit_234 = PHI <bit_129(65), 0(35)>
+  # ivtmp_239 = PHI <ivtmp_141(65), 64(35)>
+  # DEBUG bit => bit_234
+  # DEBUG r => r_229
+  # DEBUG q => q_232
+  # DEBUG n => n_231
+  # DEBUG BEGIN_STMT
+  carry_114 = r_229 >> 31;
+  # DEBUG carry => carry_114
+  # DEBUG BEGIN_STMT
+  _115 = r_229 << 1;
+  _117 = n_231 >> 63;
+  _118 = (long unsigned int) _117;
+  r_119 = _115 | _118;
+  # DEBUG r => r_119
+  # DEBUG BEGIN_STMT
+  n_120 = n_231 << 1;
+  # DEBUG n => n_120
+  # DEBUG BEGIN_STMT
+  q_122 = q_232 << 1;
+  # DEBUG q => q_122
+  # DEBUG BEGIN_STMT
+  _123 = (_Bool) carry_114;
+  _124 = iftmp.4_27 <= r_119;
+  _125 = _123 | _124;
+  if (_125 != 0)
+    goto <bb 37>; [50.00%]
+  else
+    goto <bb 38>; [50.00%]
+
+  <bb 37> [local count: 5720811445]:
+  # DEBUG BEGIN_STMT
+  r_126 = r_119 - iftmp.4_27;
+  # DEBUG r => r_126
+  # DEBUG BEGIN_STMT
+  q_127 = q_122 | 1;
+  # DEBUG q => q_127
+
+  <bb 38> [local count: 11441622889]:
+  # q_143 = PHI <q_122(36), q_127(37)>
+  # r_144 = PHI <r_119(36), r_126(37)>
+  # DEBUG r => r_144
+  # DEBUG q => q_143
+  # DEBUG BEGIN_STMT
+  bit_129 = bit_234 + 1;
+  # DEBUG bit => bit_129
+  # DEBUG r => r_144
+  # DEBUG q => q_143
+  # DEBUG n => n_120
+  # DEBUG BEGIN_STMT
+  ivtmp_141 = ivtmp_239 - 1;
+  if (ivtmp_141 != 0)
+    goto <bb 65>; [98.44%]
+  else
+    goto <bb 39>; [1.56%]
+
+  <bb 65> [local count: 11262665956]:
+  goto <bb 36>; [100.00%]
+
+  <bb 39> [local count: 178956928]:
+  # q_279 = PHI <q_143(38)>
+  # r_278 = PHI <r_144(38)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG digit => r_278
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG d => NULL
+  # DEBUG remainder => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG value => q_279
+  # DEBUG BEGIN_STMT
+  count_131 = count_130 + 1;
+  # DEBUG count => count_131
+  _132 = "0123456789abcdef"[r_278];
+  buffer[count_130] = _132;
+  # DEBUG digit => NULL
+  # DEBUG BEGIN_STMT
+  if (q_279 != 0)
+    goto <bb 64>; [89.00%]
+  else
+    goto <bb 40>; [11.00%]
+
+  <bb 64> [local count: 159271666]:
+  goto <bb 35>; [100.00%]
+
+  <bb 40> [local count: 19685262]:
+  # count_281 = PHI <count_131(39)>
+  # DEBUG written => 0
+  # DEBUG width => width_212
+  # DEBUG BEGIN_STMT
+  if (count_281 < width_212)
+    goto <bb 54>; [89.00%]
+  else
+    goto <bb 42>; [11.00%]
+
+  <bb 54> [local count: 17519883]:
+
+  <bb 41> [local count: 159271666]:
+  # width_235 = PHI <width_134(63), width_212(54)>
+  # DEBUG written => NULL
+  # DEBUG width => width_235
+  # DEBUG BEGIN_STMT
+  uart_putc (pad_78);
+  # DEBUG BEGIN_STMT
+  width_134 = width_235 + 4294967295;
+  # DEBUG BEGIN_STMT
+  # DEBUG written => NULL
+  # DEBUG width => width_134
+  # DEBUG BEGIN_STMT
+  if (count_281 < width_134)
+    goto <bb 63>; [89.00%]
+  else
+    goto <bb 85>; [11.00%]
+
+  <bb 85> [local count: 17519883]:
+  _272 = width_212 - count_281;
+  written_288 = (int) _272;
+  goto <bb 42>; [100.00%]
+
+  <bb 63> [local count: 141751783]:
+  goto <bb 41>; [100.00%]
+
+  <bb 42> [local count: 19685262]:
+  # written_237 = PHI <written_288(85), 0(40)>
+  # DEBUG written => written_237
+  # DEBUG count => count_281
+  # DEBUG BEGIN_STMT
+
+  <bb 43> [local count: 159271666]:
+  # count_238 = PHI <count_138(62), count_281(42)>
+  # DEBUG written => NULL
+  # DEBUG count => count_238
+  # DEBUG BEGIN_STMT
+  count_138 = count_238 + 4294967295;
+  # DEBUG count => count_138
+  _139 = buffer[count_138];
+  uart_putc (_139);
+  # DEBUG BEGIN_STMT
+  # DEBUG written => NULL
+  # DEBUG count => count_138
+  # DEBUG BEGIN_STMT
+  if (count_138 != 0)
+    goto <bb 62>; [87.64%]
+  else
+    goto <bb 44>; [12.36%]
+
+  <bb 62> [local count: 139586404]:
+  goto <bb 43>; [100.00%]
+
+  <bb 44> [local count: 19685266]:
+  _274 = (unsigned int) written_237;
+  _273 = _274 + count_281;
+  written_290 = (int) _273;
+  # DEBUG BEGIN_STMT
+  buffer ={v} {CLOBBER(eos)};
+  # DEBUG value => NULL
+  # DEBUG base => NULL
+  # DEBUG width => NULL
+  # DEBUG pad => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG written => NULL
+  # DEBUG count => NULL
+  written_55 = written_209 + written_290;
+  # DEBUG written => written_55
+  goto <bb 48>; [100.00%]
+
+  <bb 45> [local count: 19685266]:
+  # format_121 = PHI <format_140(50), format_32(10)>
+<L53>:
+  # DEBUG BEGIN_STMT
+  _185 = ap;
+  _186 = _185 + 4;
+  ap = _186;
+  _12 = MEM[(int *)_185];
+  _13 = (char) _12;
+  uart_putc (_13);
+  # DEBUG BEGIN_STMT
+  written_48 = written_209 + 1;
+  # DEBUG written => written_48
+  goto <bb 48>; [100.00%]
+
+  <bb 46> [local count: 19685266]:
+  # format_116 = PHI <format_140(50), format_32(10)>
+<L50>:
+  # DEBUG BEGIN_STMT
+  uart_putc (37);
+  # DEBUG BEGIN_STMT
+  written_45 = written_209 + 1;
+  # DEBUG written => written_45
+  goto <bb 48>; [100.00%]
+
+  <bb 47> [local count: 19685266]:
+  # format_147 = PHI <format_140(50), format_32(10)>
+<L51>:
+  # DEBUG BEGIN_STMT
+  uart_puts ("[FORMAT ERROR]");
+
+  <bb 48> [local count: 268496474]:
+  # format_162 = PHI <format_147(47), _313(4), format_149(77), format_116(46), format_121(45), format_113(44), format_133(29), format_149(13)>
+  # written_79 = PHI <written_209(47), written_76(4), written_299(77), written_45(46), written_48(45), written_55(44), written_66(29), written_209(13)>
+  # DEBUG written => written_79
+  # DEBUG format => format_162
+  # DEBUG BEGIN_STMT
+  _14 = *format_162;
+  if (_14 != 0)
+    goto <bb 56>; [89.00%]
+  else
+    goto <bb 86>; [11.00%]
+
+  <bb 86> [local count: 29534612]:
+  # written_304 = PHI <written_79(48)>
+  goto <bb 49>; [100.00%]
+
+  <bb 56> [local count: 238961862]:
+  goto <bb 3>; [100.00%]
+
+  <bb 49> [local count: 33184957]:
+  # written_210 = PHI <written_304(86), 0(2)>
+  # DEBUG BEGIN_STMT
+  __builtin_va_end (&ap);
+  # DEBUG BEGIN_STMT
+  ap ={v} {CLOBBER(eos)};
+  return written_210;
+
+  <bb 50> [local count: 77953656]:
+  # DEBUG is_long => 0
+  # DEBUG format => format_206
+  # DEBUG BEGIN_STMT
+  format_140 = format_206 + 1;
+  # DEBUG format => format_140
+  # DEBUG type => *format_206
+  # DEBUG BEGIN_STMT
+  switch (prephitmp_271) <default: <L51> [17.47%], case 37: <L50> [17.47%], case 88: <L57> [12.63%], case 99: <L53> [17.47%], case 100: <L59> [17.47%], case 105: <L59> [17.47%], case 115: <L52> [17.47%], case 117: <L57> [12.63%], case 120: <L57> [12.63%]>
+
+}
+
+
+
+;; Function get_time (get_time, funcdef_no=5, decl_uid=1436, cgraph_uid=16, symbol_order=15)
+
+
+Examining get_time function.
+Loop iteration number is 63.
+CORE_TICKS get_time ()
+{
+  uint64_t q;
+  uint32_t r;
+  unsigned int bit;
+  uint32_t carry;
+  uint64_t n;
+  long long unsigned int stop_cycles.7_1;
+  long long unsigned int start_cycles.8_2;
+  long long unsigned int _3;
+  CORE_TICKS _4;
+  CORE_TICKS _7;
+  long unsigned int _11;
+  long long unsigned int _13;
+  long unsigned int _14;
+  _Bool _19;
+  _Bool _20;
+  _Bool _21;
+  unsigned int ivtmp_64;
+  unsigned int ivtmp_65;
+
+  <bb 2> [local count: 16535624]:
+  # DEBUG BEGIN_STMT
+  stop_cycles.7_1 = stop_cycles;
+  start_cycles.8_2 = start_cycles;
+  _3 = stop_cycles.7_1 - start_cycles.8_2;
+  # DEBUG n => _3
+  # DEBUG d => 25
+  # DEBUG remainder => 0B
+  # DEBUG INLINE_ENTRY div64by32
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG bit => 0
+  # DEBUG r => 0
+  # DEBUG q => 0
+  # DEBUG n => _3
+  # DEBUG BEGIN_STMT
+
+  <bb 3> [local count: 1057206200]:
+  # r_32 = PHI <r_27(10), 0(2)>
+  # n_33 = PHI <n_16(10), _3(2)>
+  # q_34 = PHI <q_26(10), 0(2)>
+  # bit_36 = PHI <bit_25(10), 0(2)>
+  # ivtmp_65 = PHI <ivtmp_64(10), 64(2)>
+  # DEBUG bit => bit_36
+  # DEBUG r => r_32
+  # DEBUG q => q_34
+  # DEBUG n => n_33
+  # DEBUG BEGIN_STMT
+  carry_10 = r_32 >> 31;
+  # DEBUG carry => carry_10
+  # DEBUG BEGIN_STMT
+  _11 = r_32 << 1;
+  _13 = n_33 >> 63;
+  _14 = (long unsigned int) _13;
+  r_15 = _11 | _14;
+  # DEBUG r => r_15
+  # DEBUG BEGIN_STMT
+  n_16 = n_33 << 1;
+  # DEBUG n => n_16
+  # DEBUG BEGIN_STMT
+  q_18 = q_34 << 1;
+  # DEBUG q => q_18
+  # DEBUG BEGIN_STMT
+  _19 = (_Bool) carry_10;
+  _20 = r_15 > 24;
+  _21 = _19 | _20;
+  if (_21 != 0)
+    goto <bb 4>; [50.00%]
+  else
+    goto <bb 11>; [50.00%]
+
+  <bb 11> [local count: 528603100]:
+  goto <bb 5>; [100.00%]
+
+  <bb 4> [local count: 528603100]:
+  # DEBUG BEGIN_STMT
+  r_22 = r_15 + 4294967271;
+  # DEBUG r => r_22
+  # DEBUG BEGIN_STMT
+  q_23 = q_18 | 1;
+  # DEBUG q => q_23
+
+  <bb 5> [local count: 1057206200]:
+  # q_26 = PHI <q_18(11), q_23(4)>
+  # r_27 = PHI <r_15(11), r_22(4)>
+  # DEBUG r => r_27
+  # DEBUG q => q_26
+  # DEBUG BEGIN_STMT
+  bit_25 = bit_36 + 1;
+  # DEBUG bit => bit_25
+  # DEBUG r => r_27
+  # DEBUG q => q_26
+  # DEBUG n => n_16
+  # DEBUG BEGIN_STMT
+  ivtmp_64 = ivtmp_65 - 1;
+  if (ivtmp_64 != 0)
+    goto <bb 10>; [98.44%]
+  else
+    goto <bb 6>; [1.56%]
+
+  <bb 10> [local count: 1040670576]:
+  goto <bb 3>; [100.00%]
+
+  <bb 6> [local count: 16535624]:
+  # q_66 = PHI <q_26(5)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG d => NULL
+  # DEBUG remainder => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG us => q_66
+  # DEBUG BEGIN_STMT
+  if (q_66 > 4294967295)
+    goto <bb 7>; [21.72%]
+  else
+    goto <bb 8>; [78.28%]
+
+  <bb 7> [local count: 3591538]:
+  # DEBUG BEGIN_STMT
+  tick_overflow = 1;
+  # DEBUG BEGIN_STMT
+  goto <bb 9>; [100.00%]
+
+  <bb 8> [local count: 12944086]:
+  # DEBUG BEGIN_STMT
+  _7 = (CORE_TICKS) q_66;
+
+  <bb 9> [local count: 16535624]:
+  # _4 = PHI <4294967295(7), _7(8)>
+  return _4;
+
+}
+
+
+
+;; Function portable_fini (portable_fini, funcdef_no=8, decl_uid=1425, cgraph_uid=19, symbol_order=18)
+
+
+Examining portable_fini function.
+Loop iteration number isn't a constant.
+Loop iteration number is 63.
+void portable_fini (struct core_portable * p)
+{
+  char buffer[32];
+  unsigned int count;
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  uint64_t value;
+  unsigned int score_valid;
+  unsigned int time_ok;
+  unsigned int crc_ok;
+  ee_s16 expected_seed;
+  uint64_t cycles;
+  long long unsigned int stop_cycles.13_1;
+  long long unsigned int start_cycles.14_2;
+  unsigned int mode_validation.15_3;
+  short int _5;
+  short int _6;
+  short int _7;
+  long unsigned int _8;
+  long unsigned int _9;
+  short unsigned int _10;
+  int _11;
+  long unsigned int _18;
+  short int _19;
+  short unsigned int _20;
+  unsigned int _21;
+  short int _22;
+  short unsigned int _23;
+  unsigned int _24;
+  short int _25;
+  short unsigned int _26;
+  unsigned int _27;
+  short unsigned int _28;
+  int _29;
+  short unsigned int _30;
+  int _31;
+  short unsigned int _32;
+  int _33;
+  short unsigned int _34;
+  int _35;
+  int _40;
+  int iftmp.23_41;
+  char * iftmp.25_42;
+  uint32_t iftmp.27_43;
+  long unsigned int _44;
+  long unsigned int _63;
+  long long unsigned int _65;
+  long unsigned int _66;
+  short unsigned int _69;
+  _Bool _71;
+  _Bool _72;
+  _Bool _73;
+  char _80;
+  _Bool _82;
+  char _87;
+  short unsigned int _95;
+  unsigned int pretmp_100;
+  short int pretmp_101;
+  long unsigned int _117;
+  int iftmp.16_120;
+  int iftmp.16_122;
+  int iftmp.16_124;
+  int iftmp.23_126;
+  long unsigned int prephitmp_144;
+  long unsigned int prephitmp_145;
+  unsigned int prephitmp_146;
+  unsigned int prephitmp_147;
+  unsigned int _148;
+  unsigned int prephitmp_152;
+  unsigned int _153;
+  int _155;
+  _Bool _157;
+  _Bool _180;
+  int _181;
+  short unsigned int _188;
+  unsigned int ivtmp_189;
+  unsigned int ivtmp_190;
+  short unsigned int _192;
+  int iftmp.23_196;
+  int iftmp.16_199;
+
+  <bb 2> [local count: 1818919]:
+  # DEBUG BEGIN_STMT
+  # DEBUG r => p_45(D) + 4294967230
+  # DEBUG BEGIN_STMT
+  stop_cycles.13_1 = stop_cycles;
+  start_cycles.14_2 = start_cycles;
+  cycles_47 = stop_cycles.13_1 - start_cycles.14_2;
+  # DEBUG cycles => cycles_47
+  # DEBUG BEGIN_STMT
+  mode_validation.15_3 = mode_validation;
+  pretmp_101 = MEM[(struct core_results *)p_45(D) + 4294967230B].err;
+  pretmp_100 = tick_overflow;
+  if (mode_validation.15_3 != 0)
+    goto <bb 3>; [50.00%]
+  else
+    goto <bb 5>; [50.00%]
+
+  <bb 3> [local count: 909460]:
+  # DEBUG expected_seed => 13333
+  # DEBUG BEGIN_STMT
+  if (pretmp_101 == 0)
+    goto <bb 7>; [50.00%]
+  else
+    goto <bb 4>; [50.00%]
+
+  <bb 4> [local count: 454730]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 30>; [50.00%]
+
+  <bb 5> [local count: 909459]:
+  # DEBUG expected_seed => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_101 == 0)
+    goto <bb 7>; [50.00%]
+  else
+    goto <bb 6>; [50.00%]
+
+  <bb 6> [local count: 454730]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 29>; [50.00%]
+
+  <bb 7> [local count: 909459]:
+  # expected_seed_195 = PHI <13333(3), 0(5)>
+  _5 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed1;
+  if (_5 == expected_seed_195)
+    goto <bb 8>; [34.00%]
+  else
+    goto <bb 26>; [66.00%]
+
+  <bb 8> [local count: 309216]:
+  _6 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed2;
+  if (_6 == expected_seed_195)
+    goto <bb 9>; [34.00%]
+  else
+    goto <bb 26>; [66.00%]
+
+  <bb 9> [local count: 105133]:
+  _7 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed3;
+  if (_7 == 102)
+    goto <bb 10>; [34.00%]
+  else
+    goto <bb 26>; [66.00%]
+
+  <bb 10> [local count: 35745]:
+  _8 = MEM[(struct core_results *)p_45(D) + 4294967230B].size;
+  if (_8 == 666)
+    goto <bb 11>; [34.00%]
+  else
+    goto <bb 26>; [66.00%]
+
+  <bb 11> [local count: 12153]:
+  _9 = MEM[(struct core_results *)p_45(D) + 4294967230B].execs;
+  if (_9 == 7)
+    goto <bb 12>; [34.00%]
+  else
+    goto <bb 26>; [66.00%]
+
+  <bb 12> [local count: 4132]:
+  _10 = MEM[(struct core_results *)p_45(D) + 4294967230B].crclist;
+  _11 = (int) _10;
+  if (mode_validation.15_3 != 0)
+    goto <bb 13>; [50.00%]
+  else
+    goto <bb 16>; [50.00%]
+
+  <bb 13> [local count: 2066]:
+  if (_11 == 58305)
+    goto <bb 14>; [34.00%]
+  else
+    goto <bb 25>; [66.00%]
+
+  <bb 14> [local count: 702]:
+  _95 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcmatrix;
+  if (_95 == 1863)
+    goto <bb 15>; [34.00%]
+  else
+    goto <bb 44>; [66.00%]
+
+  <bb 15> [local count: 239]:
+  _69 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcstate;
+  if (_69 == 36228)
+    goto <bb 23>; [34.00%]
+  else
+    goto <bb 44>; [66.00%]
+
+  <bb 16> [local count: 2066]:
+  if (_11 == 59156)
+    goto <bb 17>; [34.00%]
+  else
+    goto <bb 19>; [66.00%]
+
+  <bb 17> [local count: 702]:
+  _188 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcmatrix;
+  if (_188 == 8151)
+    goto <bb 18>; [34.00%]
+  else
+    goto <bb 43>; [66.00%]
+
+  <bb 18> [local count: 239]:
+  _192 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcstate;
+  if (_192 == 36410)
+    goto <bb 20>; [34.00%]
+  else
+    goto <bb 22>; [66.00%]
+
+  <bb 19> [local count: 1364]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 29>; [50.00%]
+
+  <bb 20> [local count: 81]:
+  # DEBUG crc_ok => 1
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 21>; [50.00%]
+  else
+    goto <bb 30>; [50.00%]
+
+  <bb 21> [local count: 41]:
+  _180 = cycles_47 > 249999999;
+  _181 = (int) _180;
+  time_ok_185 = (unsigned int) _180;
+  # DEBUG time_ok => time_ok_185
+  # DEBUG BEGIN_STMT
+  # DEBUG score_valid => time_ok_185
+  # DEBUG BEGIN_STMT
+  goto <bb 29>; [100.00%]
+
+  <bb 22> [local count: 158]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 29>; [50.00%]
+
+  <bb 23> [local count: 81]:
+  # DEBUG crc_ok => 1
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 24>; [50.00%]
+  else
+    goto <bb 30>; [50.00%]
+
+  <bb 24> [local count: 41]:
+  _157 = cycles_47 > 249999999;
+  _155 = (int) _157;
+  _153 = (unsigned int) _155;
+  goto <bb 27>; [100.00%]
+
+  <bb 25> [local count: 1364]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 30>; [50.00%]
+
+  <bb 26> [local count: 905327]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 28>; [50.00%]
+
+  <bb 27> [local count: 909418]:
+  # iftmp.16_120 = PHI <1(24), 0(4), 0(6), 0(19), 0(22), 0(25), 0(26), 0(43), 0(44)>
+  # crc_ok_129 = PHI <1(24), 0(4), 0(6), 0(19), 0(22), 0(25), 0(26), 0(43), 0(44)>
+  # prephitmp_152 = PHI <_153(24), 0(4), 0(6), 0(19), 0(22), 0(25), 0(26), 0(43), 0(44)>
+  _82 = cycles_47 > 249999999;
+  _40 = (int) _82;
+  _148 = (unsigned int) _82;
+
+  <bb 28> [local count: 1362082]:
+  # iftmp.23_41 = PHI <_40(27), 0(26)>
+  # iftmp.16_122 = PHI <iftmp.16_120(27), 0(26)>
+  # crc_ok_131 = PHI <crc_ok_129(27), 0(26)>
+  # prephitmp_147 = PHI <_148(27), 0(26)>
+  # prephitmp_146 = PHI <prephitmp_152(27), 0(26)>
+  # DEBUG time_ok => (unsigned int) iftmp.23_41
+  # DEBUG BEGIN_STMT
+  # DEBUG D#34 => iftmp.23_41 & iftmp.16_122
+  # DEBUG score_valid => (unsigned int) D#34
+  # DEBUG BEGIN_STMT
+  if (mode_validation.15_3 != 0)
+    goto <bb 30>; [50.00%]
+  else
+    goto <bb 29>; [50.00%]
+
+  <bb 29> [local count: 909418]:
+  # iftmp.23_196 = PHI <iftmp.23_41(28), 0(19), _181(21), 0(43), 0(22), 0(6)>
+  # time_ok_197 = PHI <prephitmp_147(28), 0(19), time_ok_185(21), 0(43), 0(22), 0(6)>
+  # score_valid_198 = PHI <prephitmp_146(28), 0(19), time_ok_185(21), 0(43), 0(22), 0(6)>
+  # iftmp.16_199 = PHI <iftmp.16_122(28), 0(19), 1(21), 0(43), 0(22), 0(6)>
+  # crc_ok_200 = PHI <crc_ok_131(28), 0(19), 1(21), 0(43), 0(22), 0(6)>
+  # prephitmp_145 = PHI <prephitmp_146(28), 0(19), time_ok_185(21), 0(43), 0(22), 0(6)>
+  # DEBUG time_ok => NULL
+  # DEBUG score_valid => NULL
+
+  <bb 30> [local count: 1818919]:
+  # iftmp.25_42 = PHI <"validation"(28), "performance"(20), "validation"(23), "performance"(29), "validation"(44), "validation"(25), "validation"(4)>
+  # iftmp.16_124 = PHI <iftmp.16_122(28), 1(20), 1(23), iftmp.16_199(29), 0(44), 0(25), 0(4)>
+  # iftmp.23_126 = PHI <iftmp.23_41(28), 0(20), 0(23), iftmp.23_196(29), 0(44), 0(25), 0(4)>
+  # crc_ok_133 = PHI <crc_ok_131(28), 1(20), 1(23), crc_ok_200(29), 0(44), 0(25), 0(4)>
+  # time_ok_135 = PHI <prephitmp_147(28), 0(20), 0(23), time_ok_197(29), 0(44), 0(25), 0(4)>
+  # score_valid_137 = PHI <prephitmp_146(28), 0(20), 0(23), score_valid_198(29), 0(44), 0(25), 0(4)>
+  # prephitmp_144 = PHI <prephitmp_146(28), 0(20), 0(23), prephitmp_145(29), 0(44), 0(25), 0(4)>
+  # DEBUG time_ok => NULL
+  # DEBUG score_valid => NULL
+  _18 = MEM[(struct core_results *)p_45(D) + 4294967230B].iterations;
+  ee_printf ("CM_RESULT mode=%s iterations=%u cycles=", iftmp.25_42, _18);
+  # DEBUG BEGIN_STMT
+  # DEBUG value => cycles_47
+  # DEBUG base => 10
+  # DEBUG width => 0
+  # DEBUG pad => 32
+  # DEBUG INLINE_ENTRY put_unsigned
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG count => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG written => 0
+
+  <bb 31> [local count: 16535624]:
+  # value_90 = PHI <cycles_47(30), q_118(47)>
+  # count_78 = PHI <0(30), count_79(47)>
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG digit => NULL
+  # DEBUG count => count_78
+  # DEBUG value => value_90
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG n => value_90
+  # DEBUG d => 10
+  # DEBUG remainder => &digit
+  # DEBUG INLINE_ENTRY div64by32
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG bit => 0
+  # DEBUG r => 0
+  # DEBUG q => 0
+  # DEBUG n => value_90
+  # DEBUG BEGIN_STMT
+
+  <bb 32> [local count: 1057206200]:
+  # r_89 = PHI <r_92(48), 0(31)>
+  # n_114 = PHI <n_68(48), value_90(31)>
+  # q_110 = PHI <q_91(48), 0(31)>
+  # bit_112 = PHI <bit_77(48), 0(31)>
+  # ivtmp_190 = PHI <ivtmp_189(48), 64(31)>
+  # DEBUG bit => bit_112
+  # DEBUG r => r_89
+  # DEBUG q => q_110
+  # DEBUG n => n_114
+  # DEBUG BEGIN_STMT
+  carry_62 = r_89 >> 31;
+  # DEBUG carry => carry_62
+  # DEBUG BEGIN_STMT
+  _63 = r_89 << 1;
+  _65 = n_114 >> 63;
+  _66 = (long unsigned int) _65;
+  r_67 = _63 | _66;
+  # DEBUG r => r_67
+  # DEBUG BEGIN_STMT
+  n_68 = n_114 << 1;
+  # DEBUG n => n_68
+  # DEBUG BEGIN_STMT
+  q_70 = q_110 << 1;
+  # DEBUG q => q_70
+  # DEBUG BEGIN_STMT
+  _71 = (_Bool) carry_62;
+  _72 = r_67 > 9;
+  _73 = _71 | _72;
+  if (_73 != 0)
+    goto <bb 33>; [50.00%]
+  else
+    goto <bb 34>; [50.00%]
+
+  <bb 33> [local count: 528603100]:
+  # DEBUG BEGIN_STMT
+  r_74 = r_67 + 4294967286;
+  # DEBUG r => r_74
+  # DEBUG BEGIN_STMT
+  q_75 = q_70 | 1;
+  # DEBUG q => q_75
+
+  <bb 34> [local count: 1057206200]:
+  # q_91 = PHI <q_70(32), q_75(33)>
+  # r_92 = PHI <r_67(32), r_74(33)>
+  # DEBUG r => r_92
+  # DEBUG q => q_91
+  # DEBUG BEGIN_STMT
+  bit_77 = bit_112 + 1;
+  # DEBUG bit => bit_77
+  # DEBUG r => r_92
+  # DEBUG q => q_91
+  # DEBUG n => n_68
+  # DEBUG BEGIN_STMT
+  ivtmp_189 = ivtmp_190 - 1;
+  if (ivtmp_189 != 0)
+    goto <bb 48>; [98.44%]
+  else
+    goto <bb 35>; [1.56%]
+
+  <bb 48> [local count: 1040670576]:
+  goto <bb 32>; [100.00%]
+
+  <bb 35> [local count: 16535624]:
+  # q_118 = PHI <q_91(34)>
+  # r_193 = PHI <r_92(34)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG digit => r_193
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG d => NULL
+  # DEBUG remainder => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG value => q_118
+  # DEBUG BEGIN_STMT
+  count_79 = count_78 + 1;
+  # DEBUG count => count_79
+  _80 = "0123456789abcdef"[r_193];
+  buffer[count_78] = _80;
+  # DEBUG digit => NULL
+  # DEBUG BEGIN_STMT
+  if (q_118 != 0)
+    goto <bb 47>; [89.00%]
+  else
+    goto <bb 45>; [11.00%]
+
+  <bb 47> [local count: 14716705]:
+  goto <bb 31>; [100.00%]
+
+  <bb 45> [local count: 1818919]:
+  # count_194 = PHI <count_79(35)>
+
+  <bb 36> [local count: 14716705]:
+  # count_113 = PHI <count_86(46), count_194(45)>
+  # DEBUG width => NULL
+  # DEBUG written => NULL
+  # DEBUG count => count_113
+  # DEBUG BEGIN_STMT
+  count_86 = count_113 + 4294967295;
+  # DEBUG count => count_86
+  _87 = buffer[count_86];
+  uart_putc (_87);
+  # DEBUG BEGIN_STMT
+  # DEBUG width => NULL
+  # DEBUG written => NULL
+  # DEBUG count => count_86
+  # DEBUG BEGIN_STMT
+  if (count_86 != 0)
+    goto <bb 46>; [87.64%]
+  else
+    goto <bb 37>; [12.36%]
+
+  <bb 46> [local count: 12897786]:
+  goto <bb 36>; [100.00%]
+
+  <bb 37> [local count: 1818919]:
+  # DEBUG BEGIN_STMT
+  buffer ={v} {CLOBBER(eos)};
+  # DEBUG value => NULL
+  # DEBUG base => NULL
+  # DEBUG width => NULL
+  # DEBUG pad => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG written => NULL
+  # DEBUG count => NULL
+  # DEBUG BEGIN_STMT
+  _19 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed1;
+  _20 = (short unsigned int) _19;
+  _21 = (unsigned int) _20;
+  _22 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed2;
+  _23 = (short unsigned int) _22;
+  _24 = (unsigned int) _23;
+  _25 = MEM[(struct core_results *)p_45(D) + 4294967230B].seed3;
+  _26 = (short unsigned int) _25;
+  _27 = (unsigned int) _26;
+  _28 = MEM[(struct core_results *)p_45(D) + 4294967230B].crclist;
+  _29 = (int) _28;
+  _30 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcmatrix;
+  _31 = (int) _30;
+  _32 = MEM[(struct core_results *)p_45(D) + 4294967230B].crcstate;
+  _33 = (int) _32;
+  _34 = MEM[(struct core_results *)p_45(D) + 4294967230B].crc;
+  _35 = (int) _34;
+  ee_printf (" clock_hz=%u tick_unit=us seed1=%u seed2=%u seed3=%u data_size=2000 contexts=1 crc_ok=%u time_ok=%u score_valid=%u list=%04x matrix=%04x state=%04x final=%04x\n", 25000000, _21, _24, _27, crc_ok_133, time_ok_135, score_valid_137, _29, _31, _33, _35);
+  # DEBUG BEGIN_STMT
+  if (iftmp.16_124 == 0)
+    goto <bb 38>; [33.00%]
+  else
+    goto <bb 39>; [67.00%]
+
+  <bb 38> [local count: 600243]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_FAIL: CRC/data mismatch\n");
+  # DEBUG BEGIN_STMT
+  _117 = 3 - prephitmp_144;
+  goto <bb 42>; [100.00%]
+
+  <bb 39> [local count: 1218675]:
+  # DEBUG BEGIN_STMT
+  _44 = prephitmp_144 << 1;
+  if (iftmp.23_126 == 0)
+    goto <bb 40>; [50.00%]
+  else
+    goto <bb 41>; [50.00%]
+
+  <bb 40> [local count: 609338]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_SHORT_RUN: functional check only; not a reportable score\n");
+  # DEBUG BEGIN_STMT
+
+  <bb 82> [local count: 609338]:
+  goto <bb 42>; [100.00%]
+
+  <bb 41> [local count: 609338]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_VALID: compute precise score from cycles and iterations\n");
+  # DEBUG BEGIN_STMT
+  goto <bb 82>; [100.00%]
+
+  <bb 42> [local count: 1818919]:
+  # iftmp.27_43 = PHI <_44(82), _117(38)>
+  MEM[(volatile uint32_t *)1073745920B] ={v} iftmp.27_43;
+  # DEBUG BEGIN_STMT
+  platform_stats ();
+  # DEBUG BEGIN_STMT
+  p_45(D)->portable_id = 0;
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+  return;
+
+  <bb 43> [local count: 463]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.11%]
+  else
+    goto <bb 29>; [49.89%]
+
+  <bb 44> [local count: 621]:
+  # DEBUG crc_ok => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_100 == 0)
+    goto <bb 27>; [50.08%]
+  else
+    goto <bb 30>; [49.92%]
+
+}
+
+
+
+;; Function coremark_entry (coremark_entry, funcdef_no=12, decl_uid=1723, cgraph_uid=23, symbol_order=22) (executed once)
+
+
+Examining coremark_entry function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is 63.
+Loop iteration number is 63.
+Loop iteration number is 63.
+Loop iteration number is chrec_dont_know.
+void coremark_entry ()
+{
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  uint64_t n;
+  uint32_t carry;
+  unsigned int bit;
+  uint32_t r;
+  uint64_t q;
+  char * value;
+  unsigned int invalid;
+  uint32_t iterations;
+  char op;
+  char c;
+  uint32_t value;
+  uint32_t value;
+  uint32_t value;
+  unsigned int too_long;
+  unsigned int used;
+  char command[24];
+  uint32_t issue;
+  uint32_t front;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  unsigned int _4;
+  long unsigned int _5;
+  long unsigned int _6;
+  long unsigned int _7;
+  long unsigned int _8;
+  long unsigned int _9;
+  long unsigned int _10;
+  long unsigned int _11;
+  long unsigned int _12;
+  long unsigned int _13;
+  long unsigned int _14;
+  long unsigned int _15;
+  long unsigned int _16;
+  long unsigned int _17;
+  long unsigned int _18;
+  long unsigned int _19;
+  long unsigned int _20;
+  int _21;
+  int _23;
+  int _24;
+  long unsigned int _25;
+  long unsigned int _26;
+  long unsigned int _27;
+  _Bool _28;
+  _Bool _29;
+  _Bool _30;
+  unsigned int _31;
+  char _32;
+  char _35;
+  long unsigned int _36;
+  long unsigned int _38;
+  long unsigned int _39;
+  char _40;
+  _Bool _41;
+  _Bool _43;
+  long int iterations.35_100;
+  long int iterations.35_101;
+  long int iterations.35_102;
+  long unsigned int _148;
+  long long unsigned int _150;
+  long unsigned int _151;
+  _Bool _156;
+  _Bool _157;
+  _Bool _158;
+  long unsigned int _165;
+  long long unsigned int _167;
+  long unsigned int _168;
+  _Bool _173;
+  _Bool _174;
+  _Bool _175;
+  long unsigned int _182;
+  long long unsigned int _184;
+  long unsigned int _185;
+  _Bool _190;
+  _Bool _191;
+  _Bool _192;
+  char _197;
+  _Bool _204;
+  _Bool _205;
+  _Bool _206;
+  char _210;
+  _Bool _212;
+  _Bool _213;
+  _Bool _214;
+  _Bool _215;
+  _Bool _216;
+  _Bool _217;
+  _Bool _218;
+  char _228;
+  char _229;
+  unsigned int ivtmp_283;
+  unsigned int ivtmp_284;
+  unsigned int ivtmp_285;
+  unsigned int ivtmp_286;
+  unsigned int ivtmp_287;
+  unsigned int ivtmp_288;
+  char _299;
+
+  <bb 2> [local count: 31734651]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  uart_init ();
+  # DEBUG BEGIN_STMT
+  timer_start ();
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745920B] ={v} 0;
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745924B] ={v} 131;
+  # DEBUG BEGIN_STMT
+  uart_puts ("RISC-V COREMARK 1.0\n");
+  # DEBUG BEGIN_STMT
+  uart_puts ("BUILD=EVOLVE1_BOARD\n");
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0, mimpid" : "=r" value_61);
+  # DEBUG value => value_61
+  # DEBUG BEGIN_STMT
+  # DEBUG implementation => value_61
+  # DEBUG BEGIN_STMT
+  _1 = value_61 & 1;
+  _2 = value_61 >> 8;
+  _3 = _2 & 31;
+  _4 = 1 << _3;
+  ee_printf ("BP_ENABLE=%u BP_ENTRIES=%u IMPL_ID=%08x\n", _1, _4, value_61);
+  # DEBUG BEGIN_STMT
+  ee_printf ("CLK=%u BAUD=%u ISA=%s ABI=ILP32\n", 25000000, 115200, "RV32IM_Zicsr");
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0, misa" : "=r" value_64);
+  # DEBUG value => value_64
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0, misa" : "=r" value_65);
+  # DEBUG value => value_65
+  # DEBUG BEGIN_STMT
+  _5 = value_65 >> 12;
+  _6 = _5 & 1;
+  ee_printf ("MISA=%08x HW_M=%u\n", value_64, _6);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0,0xfc0" : "=r" front_67);
+  # DEBUG front => front_67
+  # DEBUG BEGIN_STMT
+  _7 = front_67 & 1;
+  _8 = front_67 >> 4;
+  _9 = _8 & 15;
+  _10 = front_67 >> 8;
+  _11 = _10 & 31;
+  _12 = front_67 >> 16;
+  _13 = _12 & 15;
+  _14 = front_67 >> 1;
+  _15 = _14 & 1;
+  ee_printf ("FRONT_CFG=%08x GSHARE=%u PHT_BITS=%u RAS=%u FETCH=%u LOAD_FWD=%u\n", front_67, _7, _9, _11, _13, _15);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0,0xfc1" : "=r" issue_69);
+  # DEBUG issue => issue_69
+  # DEBUG BEGIN_STMT
+  _16 = issue_69 & 1;
+  _17 = _16 + 1;
+  _18 = issue_69 >> 1;
+  _19 = _18 & 1;
+  _20 = _19 + 1;
+  ee_printf ("ISSUE_CFG=%08x ISSUE_WIDTH=%u FETCH_WORDS=%u\n", issue_69, _17, _20);
+  # DEBUG BEGIN_STMT
+  platform_identity ();
+  # DEBUG BEGIN_STMT
+  _21 = platform_valid ();
+  if (_21 == 0)
+    goto <bb 3>; [33.00%]
+  else
+    goto <bb 58>; [67.00%]
+
+  <bb 3> [local count: 10472435]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("PORT_CHECK FAIL\n");
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+
+  <bb 4> [local count: 1057715820]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 59> [local count: 1057715820]:
+  goto <bb 4>; [100.00%]
+
+  <bb 58> [local count: 21262216]:
+
+  <bb 5> [local count: 1359401168]:
+  # r_235 = PHI <r_199(69), 0(58)>
+  # n_237 = PHI <n_153(69), 18446744073709551615(58)>
+  # q_238 = PHI <q_198(69), 0(58)>
+  # bit_240 = PHI <bit_162(69), 0(58)>
+  # ivtmp_284 = PHI <ivtmp_283(69), 64(58)>
+  # DEBUG bit => bit_240
+  # DEBUG r => r_235
+  # DEBUG q => q_238
+  # DEBUG n => n_237
+  # DEBUG BEGIN_STMT
+  carry_147 = r_235 >> 31;
+  # DEBUG carry => carry_147
+  # DEBUG BEGIN_STMT
+  _148 = r_235 << 1;
+  _150 = n_237 >> 63;
+  _151 = (long unsigned int) _150;
+  r_152 = _148 | _151;
+  # DEBUG r => r_152
+  # DEBUG BEGIN_STMT
+  n_153 = n_237 << 1;
+  # DEBUG n => n_153
+  # DEBUG BEGIN_STMT
+  q_155 = q_238 << 1;
+  # DEBUG q => q_155
+  # DEBUG BEGIN_STMT
+  _156 = (_Bool) carry_147;
+  _157 = r_152 > 24;
+  _158 = _156 | _157;
+  if (_158 != 0)
+    goto <bb 6>; [50.00%]
+  else
+    goto <bb 7>; [50.00%]
+
+  <bb 6> [local count: 679700584]:
+  # DEBUG BEGIN_STMT
+  r_159 = r_152 + 4294967271;
+  # DEBUG r => r_159
+  # DEBUG BEGIN_STMT
+  q_160 = q_155 | 1;
+  # DEBUG q => q_160
+
+  <bb 7> [local count: 1359401168]:
+  # q_198 = PHI <q_155(5), q_160(6)>
+  # r_199 = PHI <r_152(5), r_159(6)>
+  # DEBUG r => r_199
+  # DEBUG q => q_198
+  # DEBUG BEGIN_STMT
+  bit_162 = bit_240 + 1;
+  # DEBUG bit => bit_162
+  # DEBUG r => r_199
+  # DEBUG q => q_198
+  # DEBUG n => n_153
+  # DEBUG BEGIN_STMT
+  ivtmp_283 = ivtmp_284 - 1;
+  if (ivtmp_283 != 0)
+    goto <bb 69>; [98.44%]
+  else
+    goto <bb 8>; [1.56%]
+
+  <bb 69> [local count: 1338138951]:
+  goto <bb 5>; [100.00%]
+
+  <bb 8> [local count: 21262216]:
+  # q_291 = PHI <q_198(7)>
+  # r_290 = PHI <r_199(7)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG remainder => r_290
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG q => q_291
+  # DEBUG BEGIN_STMT
+  _43 = r_290 != 15;
+  _218 = q_291 != 737869762948382064;
+  _41 = _43 | _218;
+  if (_41 != 0)
+    goto <bb 18>; [75.00%]
+  else
+    goto <bb 57>; [25.00%]
+
+  <bb 57> [local count: 5315554]:
+
+  <bb 9> [local count: 339850292]:
+  # r_241 = PHI <r_201(68), 0(57)>
+  # n_243 = PHI <n_170(68), 18446744073709551615(57)>
+  # q_244 = PHI <q_200(68), 0(57)>
+  # bit_246 = PHI <bit_179(68), 0(57)>
+  # ivtmp_286 = PHI <ivtmp_285(68), 64(57)>
+  # DEBUG bit => bit_246
+  # DEBUG r => r_241
+  # DEBUG q => q_244
+  # DEBUG n => n_243
+  # DEBUG BEGIN_STMT
+  carry_164 = r_241 >> 31;
+  # DEBUG carry => carry_164
+  # DEBUG BEGIN_STMT
+  _165 = r_241 << 1;
+  _167 = n_243 >> 63;
+  _168 = (long unsigned int) _167;
+  r_169 = _165 | _168;
+  # DEBUG r => r_169
+  # DEBUG BEGIN_STMT
+  n_170 = n_243 << 1;
+  # DEBUG n => n_170
+  # DEBUG BEGIN_STMT
+  q_172 = q_244 << 1;
+  # DEBUG q => q_172
+  # DEBUG BEGIN_STMT
+  _173 = (_Bool) carry_164;
+  _174 = r_169 == 4294967295;
+  _175 = _173 | _174;
+  if (_175 != 0)
+    goto <bb 10>; [50.00%]
+  else
+    goto <bb 11>; [50.00%]
+
+  <bb 10> [local count: 169925146]:
+  # DEBUG BEGIN_STMT
+  r_176 = r_169 + 1;
+  # DEBUG r => r_176
+  # DEBUG BEGIN_STMT
+  q_177 = q_172 | 1;
+  # DEBUG q => q_177
+
+  <bb 11> [local count: 339850292]:
+  # q_200 = PHI <q_172(9), q_177(10)>
+  # r_201 = PHI <r_169(9), r_176(10)>
+  # DEBUG r => r_201
+  # DEBUG q => q_200
+  # DEBUG BEGIN_STMT
+  bit_179 = bit_246 + 1;
+  # DEBUG bit => bit_179
+  # DEBUG r => r_201
+  # DEBUG q => q_200
+  # DEBUG n => n_170
+  # DEBUG BEGIN_STMT
+  ivtmp_285 = ivtmp_286 - 1;
+  if (ivtmp_285 != 0)
+    goto <bb 68>; [98.44%]
+  else
+    goto <bb 12>; [1.56%]
+
+  <bb 68> [local count: 334534738]:
+  goto <bb 9>; [100.00%]
+
+  <bb 12> [local count: 5315554]:
+  # q_293 = PHI <q_200(11)>
+  # r_292 = PHI <r_201(11)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG remainder => r_292
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG q => q_293
+  # DEBUG BEGIN_STMT
+  _217 = r_292 != 0;
+  _216 = q_293 != 4294967297;
+  _215 = _216 | _217;
+  if (_215 != 0)
+    goto <bb 18>; [67.00%]
+  else
+    goto <bb 56>; [33.00%]
+
+  <bb 56> [local count: 1754133]:
+
+  <bb 13> [local count: 112150596]:
+  # r_247 = PHI <r_203(67), 0(56)>
+  # n_249 = PHI <n_187(67), 4294967301(56)>
+  # q_250 = PHI <q_202(67), 0(56)>
+  # bit_252 = PHI <bit_196(67), 0(56)>
+  # ivtmp_288 = PHI <ivtmp_287(67), 64(56)>
+  # DEBUG bit => bit_252
+  # DEBUG r => r_247
+  # DEBUG q => q_250
+  # DEBUG n => n_249
+  # DEBUG BEGIN_STMT
+  carry_181 = r_247 >> 31;
+  # DEBUG carry => carry_181
+  # DEBUG BEGIN_STMT
+  _182 = r_247 << 1;
+  _184 = n_249 >> 63;
+  _185 = (long unsigned int) _184;
+  r_186 = _182 | _185;
+  # DEBUG r => r_186
+  # DEBUG BEGIN_STMT
+  n_187 = n_249 << 1;
+  # DEBUG n => n_187
+  # DEBUG BEGIN_STMT
+  q_189 = q_250 << 1;
+  # DEBUG q => q_189
+  # DEBUG BEGIN_STMT
+  _190 = (_Bool) carry_181;
+  _191 = r_186 > 24;
+  _192 = _190 | _191;
+  if (_192 != 0)
+    goto <bb 14>; [50.00%]
+  else
+    goto <bb 15>; [50.00%]
+
+  <bb 14> [local count: 56075299]:
+  # DEBUG BEGIN_STMT
+  r_193 = r_186 + 4294967271;
+  # DEBUG r => r_193
+  # DEBUG BEGIN_STMT
+  q_194 = q_189 | 1;
+  # DEBUG q => q_194
+
+  <bb 15> [local count: 112150596]:
+  # q_202 = PHI <q_189(13), q_194(14)>
+  # r_203 = PHI <r_186(13), r_193(14)>
+  # DEBUG r => r_203
+  # DEBUG q => q_202
+  # DEBUG BEGIN_STMT
+  bit_196 = bit_252 + 1;
+  # DEBUG bit => bit_196
+  # DEBUG r => r_203
+  # DEBUG q => q_202
+  # DEBUG n => n_187
+  # DEBUG BEGIN_STMT
+  ivtmp_287 = ivtmp_288 - 1;
+  if (ivtmp_287 != 0)
+    goto <bb 67>; [98.44%]
+  else
+    goto <bb 16>; [1.56%]
+
+  <bb 67> [local count: 110396463]:
+  goto <bb 13>; [100.00%]
+
+  <bb 16> [local count: 1754133]:
+  # q_295 = PHI <q_202(15)>
+  # r_294 = PHI <r_203(15)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG remainder => r_294
+  # DEBUG BEGIN_STMT
+  # DEBUG n => NULL
+  # DEBUG carry => NULL
+  # DEBUG bit => NULL
+  # DEBUG r => NULL
+  # DEBUG q => NULL
+  # DEBUG q => q_295
+  # DEBUG BEGIN_STMT
+  _214 = r_294 != 1;
+  _213 = q_295 != 171798692;
+  _212 = _213 | _214;
+  if (_212 != 0)
+    goto <bb 18>; [75.00%]
+  else
+    goto <bb 17>; [25.00%]
+
+  <bb 17> [local count: 10631108]:
+  # DEBUG remainder => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG BEGIN_STMT
+  _23 = m_selfcheck ();
+  if (_23 == 0)
+    goto <bb 20>; [50.00%]
+  else
+    goto <bb 22>; [50.00%]
+
+  <bb 18> [local count: 10631108]:
+  # DEBUG remainder => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG q => NULL
+  # DEBUG r => NULL
+  # DEBUG bit => NULL
+  # DEBUG carry => NULL
+  # DEBUG n => NULL
+  # DEBUG BEGIN_STMT
+  uart_puts ("PORT_CHECK FAIL\n");
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+
+  <bb 19> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 60> [local count: 1073741824]:
+  goto <bb 19>; [100.00%]
+
+  <bb 20> [local count: 5315554]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("PORT_CHECK FAIL\n");
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+
+  <bb 21> [local count: 536870912]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 61> [local count: 536870912]:
+  goto <bb 21>; [100.00%]
+
+  <bb 22> [local count: 5315554]:
+  # DEBUG BEGIN_STMT
+  _24 = dual_selfcheck ();
+  if (_24 == 0)
+    goto <bb 23>; [50.00%]
+  else
+    goto <bb 25>; [50.00%]
+
+  <bb 23> [local count: 2657777]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("DUAL_CHECK FAIL\nPORT_CHECK FAIL\n");
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+
+  <bb 24> [local count: 268435456]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 62> [local count: 268435456]:
+  goto <bb 24>; [100.00%]
+
+  <bb 25> [local count: 2657777]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("PORT_CHECK PASS\n");
+  # DEBUG BEGIN_STMT
+  menu ();
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG used => 0
+  # DEBUG too_long => 0
+  goto <bb 27>; [100.00%]
+
+  <bb 26> [local count: 168419239]:
+  # used_44 = PHI <0(91), used_103(30), used_90(31)>
+  # too_long_52 = PHI <0(91), 1(30), too_long_33(31)>
+
+  <bb 27> [local count: 171077016]:
+  # used_103 = PHI <used_44(26), 0(25)>
+  # too_long_33 = PHI <too_long_52(26), 0(25)>
+
+  <bb 28> [local count: 255338828]:
+  # DEBUG too_long => too_long_33
+  # DEBUG used => used_103
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _25 ={v} MEM[(volatile uint32_t *)1073741828B];
+  _26 = _25 & 2;
+  if (_26 == 0)
+    goto <bb 66>; [33.00%]
+  else
+    goto <bb 29>; [67.00%]
+
+  <bb 66> [local count: 84261813]:
+  goto <bb 28>; [100.00%]
+
+  <bb 29> [local count: 171077016]:
+  # DEBUG BEGIN_STMT
+  _27 ={v} MEM[(volatile uint32_t *)1073741824B];
+  c_77 = (char) _27;
+  # DEBUG c => c_77
+  # DEBUG BEGIN_STMT
+  _28 = c_77 != 13;
+  _29 = c_77 != 10;
+  _30 = _28 & _29;
+  if (_30 != 0)
+    goto <bb 30>; [33.00%]
+  else
+    goto <bb 32>; [67.00%]
+
+  <bb 30> [local count: 56455415]:
+  # DEBUG BEGIN_STMT
+  if (used_103 <= 22)
+    goto <bb 31>; [50.00%]
+  else
+    goto <bb 26>; [50.00%]
+
+  <bb 31> [local count: 28227707]:
+  # DEBUG BEGIN_STMT
+  used_90 = used_103 + 1;
+  # DEBUG used => used_90
+  command[used_103] = c_77;
+  goto <bb 26>; [100.00%]
+
+  <bb 32> [local count: 114621601]:
+  # DEBUG BEGIN_STMT
+  _31 = too_long_33 | used_103;
+  if (_31 == 0)
+    goto <bb 91>; [57.11%]
+  else
+    goto <bb 33>; [42.89%]
+
+  <bb 91> [local count: 46503428]:
+  goto <bb 26>; [100.00%]
+
+  <bb 33> [local count: 49161205]:
+  # DEBUG BEGIN_STMT
+  command[used_103] = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG op => command[0]
+  # DEBUG BEGIN_STMT
+  # DEBUG iterations => 2048
+  # DEBUG BEGIN_STMT
+  # DEBUG invalid => too_long_33
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG value => &MEM <char[24]> [(void *)&command + 1B]
+  # DEBUG BEGIN_STMT
+  _210 = MEM[(char *)&command + 1B];
+  if (_210 == 32)
+    goto <bb 55>; [89.00%]
+  else
+    goto <bb 35>; [11.00%]
+
+  <bb 55> [local count: 43753472]:
+
+  <bb 34> [local count: 397758842]:
+  # value_232 = PHI <value_89(65), &MEM <char[24]> [(void *)&command + 1B](55)>
+  # DEBUG value => value_232
+  # DEBUG BEGIN_STMT
+  value_89 = value_232 + 1;
+  # DEBUG value => value_89
+  # DEBUG BEGIN_STMT
+  _32 = *value_89;
+  if (_32 == 32)
+    goto <bb 65>; [89.00%]
+  else
+    goto <bb 79>; [11.00%]
+
+  <bb 79> [local count: 43753472]:
+  # _299 = PHI <_32(34)>
+  # value_298 = PHI <value_89(34)>
+  goto <bb 35>; [100.00%]
+
+  <bb 65> [local count: 354005370]:
+  goto <bb 34>; [100.00%]
+
+  <bb 35> [local count: 49161205]:
+  # _228 = PHI <_299(79), _210(33)>
+  # value_233 = PHI <value_298(79), &MEM <char[24]> [(void *)&command + 1B](33)>
+  # DEBUG BEGIN_STMT
+  if (_228 != 0)
+    goto <bb 36>; [27.00%]
+  else
+    goto <bb 41>; [73.00%]
+
+  <bb 36> [local count: 13273526]:
+  # DEBUG value => value_233
+  # DEBUG iterations => 0
+  # DEBUG BEGIN_STMT
+  _197 = *value_233;
+  if (_197 != 0)
+    goto <bb 54>; [96.34%]
+  else
+    goto <bb 41>; [3.66%]
+
+  <bb 54> [local count: 12787715]:
+
+  <bb 37> [local count: 120832203]:
+  # _229 = PHI <_40(64), _197(54)>
+  # iterations_230 = PHI <iterations_81(64), 0(54)>
+  # value_234 = PHI <value_80(64), value_233(54)>
+  # DEBUG value => value_234
+  # DEBUG iterations => iterations_230
+  # DEBUG BEGIN_STMT
+  _35 = _229 + 208;
+  _206 = iterations_230 > 100000;
+  _205 = _35 > 9;
+  _204 = _205 | _206;
+  if (_204 != 0)
+    goto <bb 81>; [7.19%]
+  else
+    goto <bb 38>; [92.81%]
+
+  <bb 38> [local count: 112149148]:
+  # DEBUG BEGIN_STMT
+  _36 = iterations_230 * 10;
+  value_80 = value_234 + 1;
+  # DEBUG value => value_80
+  _38 = (long unsigned int) _229;
+  _39 = _36 + _38;
+  iterations_81 = _39 + 4294967248;
+  # DEBUG value => value_80
+  # DEBUG iterations => iterations_81
+  # DEBUG BEGIN_STMT
+  _40 = *value_80;
+  if (_40 != 0)
+    goto <bb 64>; [96.34%]
+  else
+    goto <bb 82>; [3.66%]
+
+  <bb 82> [local count: 4104659]:
+  # iterations_297 = PHI <iterations_81(38)>
+  goto <bb 40>; [100.00%]
+
+  <bb 64> [local count: 108044489]:
+  goto <bb 37>; [100.00%]
+
+  <bb 81> [local count: 8683055]:
+  # iterations_296 = PHI <iterations_230(37)>
+
+  <bb 40> [local count: 12787715]:
+  # invalid_47 = PHI <1(81), too_long_33(82)>
+  # iterations_231 = PHI <iterations_296(81), iterations_297(82)>
+  # DEBUG invalid => invalid_47
+  # DEBUG BEGIN_STMT
+  if (iterations_231 > 1000000)
+    goto <bb 42>; [51.90%]
+  else
+    goto <bb 41>; [48.10%]
+
+  <bb 41> [local count: 42524442]:
+  # iterations_46 = PHI <2048(35), iterations_231(40), 0(36)>
+  # invalid_48 = PHI <too_long_33(35), invalid_47(40), too_long_33(36)>
+  # DEBUG invalid => NULL
+  # DEBUG invalid => invalid_48
+  # DEBUG iterations => iterations_46
+  # DEBUG BEGIN_STMT
+  # DEBUG used => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG too_long => 0
+  # DEBUG BEGIN_STMT
+  if (invalid_48 != 0)
+    goto <bb 42>; [50.00%]
+  else
+    goto <bb 43>; [50.00%]
+
+  <bb 42> [local count: 27898984]:
+  # DEBUG invalid => NULL
+  # DEBUG iterations => NULL
+  # DEBUG used => NULL
+  # DEBUG too_long => NULL
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_COMMAND_ERROR\n");
+  goto <bb 53>; [100.00%]
+
+  <bb 43> [local count: 21262221]:
+  op_79 = command[0];
+  # DEBUG BEGIN_STMT
+  switch (op_79) <default: <L66> [12.50%], case 98: <L61> [12.50%], case 104: <L65> [12.50%], case 112: <L59> [12.50%], case 113: <L62> [12.50%], case 114: <L64> [12.50%], case 118: <L60> [12.50%], case 119: <L63> [12.50%]>
+
+  <bb 44> [local count: 2657778]:
+<L59>:
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 0
+  # DEBUG iterations => iterations_46
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 0;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  iterations.35_100 = (long int) iterations_46;
+  seed4_volatile ={v} iterations.35_100;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  goto <bb 53>; [100.00%]
+
+  <bb 45> [local count: 2657778]:
+<L60>:
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 1
+  # DEBUG iterations => iterations_46
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 1;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  iterations.35_101 = (long int) iterations_46;
+  seed4_volatile ={v} iterations.35_101;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  goto <bb 53>; [100.00%]
+
+  <bb 46> [local count: 2657778]:
+<L61>:
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 0
+  # DEBUG iterations => iterations_46
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 0;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  iterations.35_102 = (long int) iterations_46;
+  seed4_volatile ={v} iterations.35_102;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 1
+  # DEBUG iterations => iterations_46
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 1;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  seed4_volatile ={v} iterations.35_102;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  goto <bb 53>; [100.00%]
+
+  <bb 47> [local count: 2657778]:
+<L62>:
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 0
+  # DEBUG iterations => 1
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 0;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  seed4_volatile ={v} 1;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  goto <bb 53>; [100.00%]
+
+  <bb 48> [local count: 2657778]:
+<L63>:
+  # DEBUG BEGIN_STMT
+  # DEBUG validation => 1
+  # DEBUG iterations => 1
+  # DEBUG INLINE_ENTRY run_case
+  # DEBUG BEGIN_STMT
+  mode_validation = 1;
+  # DEBUG BEGIN_STMT
+  seed1_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed2_volatile ={v} 13333;
+  # DEBUG BEGIN_STMT
+  seed3_volatile ={v} 102;
+  # DEBUG BEGIN_STMT
+  seed4_volatile ={v} 1;
+  # DEBUG BEGIN_STMT
+  seed5_volatile ={v} 0;
+  # DEBUG BEGIN_STMT
+  coremark_main ();
+  # DEBUG validation => NULL
+  # DEBUG iterations => NULL
+  goto <bb 53>; [100.00%]
+
+  <bb 49> [local count: 2657778]:
+<L64>:
+  # DEBUG BEGIN_STMT
+  uart_puts ("RESET\n");
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745932B] ={v} 128;
+
+  <bb 50> [local count: 268435521]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 63> [local count: 268435521]:
+  goto <bb 50>; [100.00%]
+
+  <bb 51> [local count: 2657778]:
+<L65>:
+  # DEBUG BEGIN_STMT
+  menu ();
+  # DEBUG BEGIN_STMT
+  goto <bb 91>; [100.00%]
+
+  <bb 52> [local count: 2657778]:
+<L66>:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_COMMAND_ERROR\n");
+
+  <bb 53> [local count: 43845650]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CM_READY\n");
+  goto <bb 91>; [100.00%]
+
+}
+
+

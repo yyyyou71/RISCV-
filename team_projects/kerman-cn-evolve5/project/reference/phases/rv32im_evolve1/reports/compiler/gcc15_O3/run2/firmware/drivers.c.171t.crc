@@ -1,0 +1,480 @@
+
+;; Function uart_puts (uart_puts, funcdef_no=2, decl_uid=1412, cgraph_uid=3, symbol_order=2)
+
+
+Examining uart_puts function.
+Loop iteration number is chrec_dont_know.
+void uart_puts (const char * text)
+{
+  char _1;
+  long unsigned int _7;
+  char _11;
+  char _12;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG text => text_4(D)
+  # DEBUG BEGIN_STMT
+  _11 = *text_4(D);
+  if (_11 != 0)
+    goto <bb 5>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 5> [local count: 105119324]:
+
+  <bb 3> [local count: 955630224]:
+  # _12 = PHI <_1(6), _11(5)>
+  # text_13 = PHI <text_6(6), text_4(D)(5)>
+  # DEBUG text => text_13
+  # DEBUG BEGIN_STMT
+  text_6 = text_13 + 1;
+  # DEBUG text => text_6
+  # DEBUG c => _12
+  # DEBUG INLINE_ENTRY uart_putc
+  # DEBUG BEGIN_STMT
+  _7 = (long unsigned int) _12;
+  MEM[(volatile uint32_t *)1073741824B] ={v} _7;
+  # DEBUG c => NULL
+  # DEBUG text => text_6
+  # DEBUG BEGIN_STMT
+  _1 = *text_6;
+  if (_1 != 0)
+    goto <bb 6>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 6> [local count: 850510900]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 118111600]:
+  return;
+
+}
+
+
+
+;; Function uart_flush (uart_flush, funcdef_no=3, decl_uid=1418, cgraph_uid=4, symbol_order=3)
+
+
+Examining uart_flush function.
+Loop iteration number is chrec_dont_know.
+void uart_flush ()
+{
+  long unsigned int _1;
+  long unsigned int _2;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+
+  <bb 3> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _1 ={v} MEM[(volatile uint32_t *)1073741828B];
+  _2 = _1 & 1;
+  if (_2 == 0)
+    goto <bb 5>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 5> [local count: 955630224]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 118111600]:
+  return;
+
+}
+
+
+
+;; Function uart_put_u32 (uart_put_u32, funcdef_no=5, decl_uid=1416, cgraph_uid=6, symbol_order=5)
+
+
+Examining uart_put_u32 function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number isn't a constant.
+void uart_put_u32 (uint32_t value)
+{
+  unsigned int count;
+  char digits[10];
+  long unsigned int _1;
+  char _2;
+  char _3;
+  char _4;
+  long unsigned int _17;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG count => 0
+
+  <bb 3> [local count: 1073741824]:
+  # value_5 = PHI <value_10(D)(2), value_14(8)>
+  # count_6 = PHI <0(2), count_12(8)>
+  # DEBUG count => count_6
+  # DEBUG value => value_5
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _1 = value_5 % 10;
+  _2 = (char) _1;
+  count_12 = count_6 + 1;
+  # DEBUG count => count_12
+  _3 = _2 + 48;
+  digits[count_6] = _3;
+  # DEBUG BEGIN_STMT
+  value_14 = value_5 / 10;
+  # DEBUG value => value_14
+  # DEBUG BEGIN_STMT
+  if (value_5 > 9)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 8> [local count: 955630224]:
+  goto <bb 3>; [100.00%]
+
+  <bb 6> [local count: 118111600]:
+  # count_29 = PHI <count_12(3)>
+
+  <bb 4> [local count: 955630224]:
+  # count_21 = PHI <count_16(7), count_29(6)>
+  # DEBUG count => count_21
+  # DEBUG BEGIN_STMT
+  count_16 = count_21 + 4294967295;
+  # DEBUG count => count_16
+  _4 = digits[count_16];
+  # DEBUG c => _4
+  # DEBUG INLINE_ENTRY uart_putc
+  # DEBUG BEGIN_STMT
+  _17 = (long unsigned int) _4;
+  MEM[(volatile uint32_t *)1073741824B] ={v} _17;
+  # DEBUG c => NULL
+  # DEBUG count => count_16
+  # DEBUG BEGIN_STMT
+  if (count_16 != 0)
+    goto <bb 7>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 7> [local count: 837518623]:
+  goto <bb 4>; [100.00%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG c => NULL
+  # DEBUG count => count_16
+  digits ={v} {CLOBBER(eos)};
+  return;
+
+}
+
+
+
+;; Function timer_ticks (timer_ticks, funcdef_no=6, decl_uid=1425, cgraph_uid=7, symbol_order=6)
+
+
+Examining timer_ticks function.
+Loop iteration number is chrec_dont_know.
+uint64_t timer_ticks ()
+{
+  uint32_t hi2;
+  uint32_t lo;
+  uint32_t hi1;
+  long long unsigned int _1;
+  long long unsigned int _2;
+  long long unsigned int _3;
+  uint64_t _8;
+
+  <bb 2> [local count: 118111600]:
+
+  <bb 3> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  hi1_5 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi1 => hi1_5
+  # DEBUG BEGIN_STMT
+  lo_6 ={v} MEM[(volatile uint32_t *)1073750016B];
+  # DEBUG lo => lo_6
+  # DEBUG BEGIN_STMT
+  hi2_7 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi2 => hi2_7
+  # DEBUG BEGIN_STMT
+  if (hi1_5 != hi2_7)
+    goto <bb 5>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 5> [local count: 955630224]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 118111600]:
+  # hi1_10 = PHI <hi1_5(3)>
+  # lo_9 = PHI <lo_6(3)>
+  # DEBUG BEGIN_STMT
+  _1 = (long long unsigned int) hi1_10;
+  _2 = _1 << 32;
+  _3 = (long long unsigned int) lo_9;
+  _8 = _2 | _3;
+  return _8;
+
+}
+
+
+
+;; Function timer_delay (timer_delay, funcdef_no=8, decl_uid=1427, cgraph_uid=9, symbol_order=8)
+
+
+Examining timer_delay function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+void timer_delay (uint32_t ticks)
+{
+  uint32_t hi1;
+  uint32_t lo;
+  uint32_t hi2;
+  uint32_t hi1;
+  uint32_t lo;
+  uint32_t hi2;
+  long long unsigned int _1;
+  long long unsigned int _8;
+  long long unsigned int _9;
+  long long unsigned int _10;
+  long long unsigned int _11;
+  long long unsigned int _15;
+  long long unsigned int _16;
+  long long unsigned int _17;
+  long long unsigned int _18;
+  long long unsigned int _20;
+
+  <bb 2> [local count: 12992276]:
+  # DEBUG BEGIN_STMT
+  # DEBUG INLINE_ENTRY timer_ticks
+
+  <bb 3> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  hi1_5 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi1 => hi1_5
+  # DEBUG BEGIN_STMT
+  lo_6 ={v} MEM[(volatile uint32_t *)1073750016B];
+  # DEBUG lo => lo_6
+  # DEBUG BEGIN_STMT
+  hi2_7 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi2 => hi2_7
+  # DEBUG BEGIN_STMT
+  if (hi1_5 != hi2_7)
+    goto <bb 11>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 11> [local count: 105119324]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 12992276]:
+  # hi1_22 = PHI <hi1_5(3)>
+  # lo_21 = PHI <lo_6(3)>
+  # DEBUG BEGIN_STMT
+  _8 = (long long unsigned int) hi1_22;
+  _9 = _8 << 32;
+  _10 = (long long unsigned int) lo_21;
+  _11 = _9 | _10;
+  # DEBUG hi2 => NULL
+  # DEBUG lo => NULL
+  # DEBUG hi1 => NULL
+  # DEBUG begin => _11
+  # DEBUG BEGIN_STMT
+  _20 = (long long unsigned int) ticks_4(D);
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG INLINE_ENTRY timer_ticks
+
+  <bb 6> [local count: 1073741823]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  hi1_12 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi1 => hi1_12
+  # DEBUG BEGIN_STMT
+  lo_13 ={v} MEM[(volatile uint32_t *)1073750016B];
+  # DEBUG lo => lo_13
+  # DEBUG BEGIN_STMT
+  hi2_14 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi2 => hi2_14
+  # DEBUG BEGIN_STMT
+  if (hi1_12 != hi2_14)
+    goto <bb 10>; [89.00%]
+  else
+    goto <bb 7>; [11.00%]
+
+  <bb 10> [local count: 955630223]:
+  goto <bb 6>; [100.00%]
+
+  <bb 7> [local count: 118111600]:
+  # hi1_2 = PHI <hi1_12(6)>
+  # lo_19 = PHI <lo_13(6)>
+  # DEBUG BEGIN_STMT
+  _15 = (long long unsigned int) hi1_2;
+  _16 = _15 << 32;
+  _17 = (long long unsigned int) lo_19;
+  _18 = _16 | _17;
+  # DEBUG hi2 => NULL
+  # DEBUG lo => NULL
+  # DEBUG hi1 => NULL
+  _1 = _18 - _11;
+  if (_1 < _20)
+    goto <bb 9>; [89.00%]
+  else
+    goto <bb 8>; [11.00%]
+
+  <bb 9> [local count: 105119324]:
+  goto <bb 5>; [100.00%]
+
+  <bb 8> [local count: 12992276]:
+  return;
+
+}
+
+
+
+;; Function uart_getc_timeout (uart_getc_timeout, funcdef_no=11, decl_uid=1421, cgraph_uid=12, symbol_order=11)
+
+
+Examining uart_getc_timeout function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+int uart_getc_timeout (uint8_t * value, uint32_t ticks)
+{
+  uint32_t hi1;
+  uint32_t lo;
+  uint32_t hi2;
+  uint32_t hi1;
+  uint32_t lo;
+  uint32_t hi2;
+  long long unsigned int _1;
+  long long unsigned int _2;
+  long unsigned int _3;
+  long unsigned int _4;
+  long unsigned int _5;
+  unsigned char _6;
+  int _7;
+  long long unsigned int _16;
+  long long unsigned int _17;
+  long long unsigned int _18;
+  long long unsigned int _19;
+  long long unsigned int _23;
+  long long unsigned int _24;
+  long long unsigned int _25;
+  long long unsigned int _26;
+
+  <bb 2> [local count: 13370358]:
+  # DEBUG BEGIN_STMT
+  # DEBUG INLINE_ENTRY timer_ticks
+
+  <bb 3> [local count: 121548709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  hi1_13 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi1 => hi1_13
+  # DEBUG BEGIN_STMT
+  lo_14 ={v} MEM[(volatile uint32_t *)1073750016B];
+  # DEBUG lo => lo_14
+  # DEBUG BEGIN_STMT
+  hi2_15 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi2 => hi2_15
+  # DEBUG BEGIN_STMT
+  if (hi1_13 != hi2_15)
+    goto <bb 13>; [89.00%]
+  else
+    goto <bb 4>; [11.00%]
+
+  <bb 13> [local count: 108178351]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 13370358]:
+  # hi1_30 = PHI <hi1_13(3)>
+  # lo_29 = PHI <lo_14(3)>
+  # DEBUG BEGIN_STMT
+  _16 = (long long unsigned int) hi1_30;
+  _17 = _16 << 32;
+  _18 = (long long unsigned int) lo_29;
+  _19 = _17 | _18;
+  # DEBUG hi2 => NULL
+  # DEBUG lo => NULL
+  # DEBUG hi1 => NULL
+  # DEBUG begin => _19
+  # DEBUG BEGIN_STMT
+  goto <bb 7>; [100.00%]
+
+  <bb 10> [local count: 118111600]:
+
+  <bb 5> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  hi1_20 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi1 => hi1_20
+  # DEBUG BEGIN_STMT
+  lo_21 ={v} MEM[(volatile uint32_t *)1073750016B];
+  # DEBUG lo => lo_21
+  # DEBUG BEGIN_STMT
+  hi2_22 ={v} MEM[(volatile uint32_t *)1073750020B];
+  # DEBUG hi2 => hi2_22
+  # DEBUG BEGIN_STMT
+  if (hi1_20 != hi2_22)
+    goto <bb 12>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 12> [local count: 955630224]:
+  goto <bb 5>; [100.00%]
+
+  <bb 6> [local count: 118111600]:
+  # hi1_28 = PHI <hi1_20(5)>
+  # lo_27 = PHI <lo_21(5)>
+  # DEBUG BEGIN_STMT
+  _23 = (long long unsigned int) hi1_28;
+  _24 = _23 << 32;
+  _25 = (long long unsigned int) lo_27;
+  _26 = _24 | _25;
+  # DEBUG hi2 => NULL
+  # DEBUG lo => NULL
+  # DEBUG hi1 => NULL
+  _1 = _26 - _19;
+  _2 = (long long unsigned int) ticks_12(D);
+  if (_1 >= _2)
+    goto <bb 14>; [5.50%]
+  else
+    goto <bb 11>; [94.50%]
+
+  <bb 14> [local count: 6496138]:
+  goto <bb 9>; [100.00%]
+
+  <bb 11> [local count: 111615462]:
+
+  <bb 7> [local count: 124985820]:
+  # DEBUG BEGIN_STMT
+  _3 ={v} MEM[(volatile uint32_t *)1073741828B];
+  _4 = _3 & 2;
+  if (_4 == 0)
+    goto <bb 10>; [94.50%]
+  else
+    goto <bb 8>; [5.50%]
+
+  <bb 8> [local count: 6874220]:
+  # DEBUG BEGIN_STMT
+  _5 ={v} MEM[(volatile uint32_t *)1073741824B];
+  _6 = (unsigned char) _5;
+  *value_10(D) = _6;
+  # DEBUG BEGIN_STMT
+
+  <bb 9> [local count: 13370358]:
+  # _7 = PHI <0(14), 1(8)>
+  return _7;
+
+}
+
+

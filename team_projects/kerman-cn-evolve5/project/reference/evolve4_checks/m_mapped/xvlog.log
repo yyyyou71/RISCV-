@@ -1,0 +1,40 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_APM_E2.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_APM_E2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DFF_RE.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_DFF_RE
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_DFF_SE.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_DFF_SE
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_GRS.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_GRS
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_I2C.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_I2C
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_INBUF.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_INBUF
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT2.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT4.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT5.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT5
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT6.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT6CARRY.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT6CARRY
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_LUT6D.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_LUT6D
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_MUX2LUT6.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_MUX2LUT6
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_OUTBUF.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_OUTBUF
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_POWERCTL.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_POWERCTL
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_SPI.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_SPI
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/GTP_TIMER.v" into library work
+INFO: [VRFC 10-311] analyzing module GTP_TIMER
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/pango/PDS_2022.2-SP6.1/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/synthesize/rv32_muldiv_syn.vm" into library work
+INFO: [VRFC 10-311] analyzing module rv32_muldiv
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/tb_muldiv.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_muldiv

@@ -1,0 +1,391 @@
+License checkout: fabric_shell from C:\pango\license\pds_1893418FAC4B.lic
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/mdu.pds'.
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG484
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG484 successfully.
+Executing : add_design -verilog rv32_muldiv.v
+Executing : add_design -verilog rv32_muldiv.v successfully.
+
+
+Executing : compile -top_module rv32_muldiv
+
+
+Process "Compile" started.
+Current time: Fri Oct 23 23:25:46 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/mdu.pds'.
+License checkout: fabric_ads from C:\pango\license\pds_1893418FAC4B.lic
+Compiling verification operator library.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+I: Enable Verilog2k features and keywords
+Start rtl-analyze.
+Executing : .rtl_analyze -work work -include_path {C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit} C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/rv32_muldiv.v
+I: Verilog-0001: Analyzing file C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/rv32_muldiv.v
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/rv32_muldiv.v(line number: 6)] Analyzing module rv32_muldiv (library work)
+Parsing done.
+Executing : .rtl_analyze -work work -include_path {C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit} C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/rv32_muldiv.v successfully.
+I: Module "rv32_muldiv" is set as top module.
+Executing : rtl-analyze successfully. Time elapsed: 1.799s wall, 0.016s user + 0.000s system = 0.016s CPU (0.9%)
+
+Start rtl-elaborate.
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/rv32_muldiv.v(line number: 6)] Elaborating module rv32_muldiv
+I: Module instance {rv32_muldiv} parameter value:
+    FAST_MUL = 32'b00000000000000000000000000000001
+Executing : rtl-elaborate successfully. Time elapsed: 0.004s wall, 0.016s user + 0.000s system = 0.016s CPU (376.6%)
+
+Start rtl-prep.
+Executing : rtl-prep successfully. Time elapsed: 0.004s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+Start rtl-infer.
+Start DFF-inference.
+Executing : DFF-inference successfully.
+Executing : rtl-infer successfully. Time elapsed: 0.081s wall, 0.016s user + 0.062s system = 0.078s CPU (96.8%)
+
+Start rtl-control-opt.
+Executing : rtl-control-opt successfully. Time elapsed: 0.001s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+Start rtl-data-opt.
+Executing : rtl-data-opt successfully. Time elapsed: 0.004s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+Start FSM inference.
+I: FSM state_fsm[2:0] inferred.
+FSM state_fsm[2:0] STG:
+Number of reachable states: 4
+Input nets: N210 N302 N617 req_op[2:1] req_valid rsp_ready 
+S0(000)-->S2(011): xx01x1x
+S0(000)-->S1(010): 0xx0x1x
+S0(000)-->S1(010): xxx011x
+S1(010)-->S3(100): xxxxxxx
+S1(010)-->S3(100): x1xxxxx
+S2(011)-->S3(100): x1xxxxx
+S0(000)-->S3(100): xx11x1x
+S1(010)-->S3(100): xx11x1x
+S0(000)-->S3(100): 1xx001x
+S1(010)-->S3(100): 1xx001x
+S3(100)-->S0(000): xxxxxx1
+
+Executing : FSM inference successfully. Time elapsed: 0.018s wall, 0.016s user + 0.016s system = 0.031s CPU (170.8%)
+
+Start sdm2adm.
+W: Loop was found during constant probe.
+Executing : sdm2adm successfully. Time elapsed: 0.021s wall, 0.000s user + 0.016s system = 0.016s CPU (72.7%)
+
+Saving design to DB.
+Action compile: Real time elapsed is 0h:0m:4s
+Action compile: CPU time elapsed is 0h:0m:0s
+Action compile: Process CPU time elapsed is 0h:0m:1s
+Current time: Fri Oct 23 23:25:49 2026
+Action compile: Peak memory pool usage is 142 MB
+Action from compile to compile: Total Real Time elapsed is 0h:0m:4s
+Action from compile to compile: Total CPU time elapsed is 0h:0m:0s
+Action from compile to compile: Total Process CPU Time elapsed is 0h:0m:1s
+Process "Compile" done.
+Executing : compile -top_module rv32_muldiv successfully.
+
+
+Executing : synthesize -ads -frequency 25
+
+
+Process "Synthesize" started.
+Current time: Fri Oct 23 23:25:49 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_mapped_unit/mdu.pds'.
+License checkout: fabric_ads from C:\pango\license\pds_1893418FAC4B.lic
+Compiling verification operator library.
+Compiling common defs.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+Reading design from compile DB
+Reading design from compile DB successfully.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 148538
+
+Constraint check start.
+W: ConstraintEditor-4019: Port Bus 'req_a' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port Bus 'req_b' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port Bus 'req_op' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port Bus 'result' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'clk' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'kill' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'req_ready' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'req_valid' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'rsp_ready' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'rsp_valid' unspecified I/O constraint.
+W: ConstraintEditor-4019: Port 'rst' unspecified I/O constraint.
+Constraint check end.
+
+C: SDC-2025: Clock source 'n:clk' need a clock constraint, please use 'create_clock' or 'create_generate_clock' to generate.
+Executing : get_ports clk
+Executing : get_ports clk successfully.
+Executing : create_clock -name rv32_muldiv|clk [get_ports clk] -period 40.000 -waveform {0.000 20.000} -add
+Executing : create_clock -name rv32_muldiv|clk [get_ports clk] -period 40.000 -waveform {0.000 20.000} -add successfully.
+Executing : set_clock_groups -name Inferred_clock_group_0 -asynchronous -group rv32_muldiv|clk
+Executing : set_clock_groups -name Inferred_clock_group_0 -asynchronous -group rv32_muldiv|clk successfully.
+Start pre-mapping.
+I: Encoding type of FSM 'state_fsm[2:0]' is: onehot.
+I: Encoding table of FSM 'state_fsm[2:0]':
+I: from  state[2] state[1] state[0]
+I: to  state_reg[3] state_reg[2] state_reg[1] state_reg[0]
+I: 000 => 0001
+I: 010 => 0010
+I: 011 => 0100
+I: 100 => 1000
+I: Constant propagation done on N433 (bmsREDOR).
+I: Constant propagation done on state_fsm[2:0]_8 (bmsREDOR).
+I: Constant propagation done on state_fsm[2:0]_10 (bmsREDOR).
+I: Constant propagation done on N19_1 (bmsWIDEMUX).
+Executing : pre-mapping successfully. Time elapsed: 0.073s wall, 0.062s user + 0.031s system = 0.094s CPU (128.7%)
+
+Start mod-gen.
+I: Constant propagation done on out_xor_31 (bmsREDXOR).
+I: Constant propagation done on out_xor_31 (bmsREDXOR).
+I: Constant propagation done on out_xor (bmsREDXOR).
+I: Constant propagation done on out_xor_1 (bmsREDXOR).
+I: Constant propagation done on out_xor_2 (bmsREDXOR).
+I: Constant propagation done on out_xor_3 (bmsREDXOR).
+Executing : mod-gen successfully. Time elapsed: 0.185s wall, 0.203s user + 0.172s system = 0.375s CPU (202.3%)
+
+Start logic-optimization.
+Executing : logic-optimization successfully. Time elapsed: 0.356s wall, 0.312s user + 0.000s system = 0.312s CPU (87.8%)
+
+Start tech-mapping phase 1.
+W: Public-4008: Instance 'product[41]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[42]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[43]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[44]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[45]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[46]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[47]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[48]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[49]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[50]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[51]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[52]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[53]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[54]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[55]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[56]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[57]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[58]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[59]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[60]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[61]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[62]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'product[63]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+Executing : tech-mapping phase 1 successfully. Time elapsed: 0.026s wall, 0.031s user + 0.000s system = 0.031s CPU (121.6%)
+
+Start tech-mapping phase 2.
+Executing : tech-mapping phase 2 successfully. Time elapsed: 0.344s wall, 0.328s user + 0.094s system = 0.422s CPU (122.5%)
+
+Start tech-optimization.
+Executing : tech-optimization successfully. Time elapsed: 0.101s wall, 0.141s user + 0.062s system = 0.203s CPU (201.3%)
+
+Start phys-optimization.
+Executing : phys-optimization successfully. Time elapsed: 0.000s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+Start restore-hierarchy.
+Executing : restore-hierarchy successfully. Time elapsed: 0.000s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+
+Cell Usage:
+GTP_APM_E2                    4 uses
+GTP_DFF_RE                  249 uses
+GTP_DFF_SE                    1 use
+GTP_GRS                       1 use
+GTP_LUT2                      1 use
+GTP_LUT4                      1 use
+GTP_LUT5                     67 uses
+GTP_LUT6                     22 uses
+GTP_LUT6CARRY               240 uses
+GTP_LUT6D                    30 uses
+
+I/O ports: 106
+GTP_INBUF                  72 uses
+GTP_OUTBUF                 34 uses
+
+Mapping Summary:
+Total LUTs: 361 of 66600 (0.54%)
+	LUTs as dram: 0 of 19900 (0.00%)
+	LUTs as logic: 361
+Total Registers: 250 of 133200 (0.19%)
+Total Latches: 0
+
+DRM36K/FIFO:
+Total DRM = 0.0 of 155 (0.00%)
+
+APMs:
+Total APMs = 4.00 of 240 (1.67%)
+
+Total I/O ports = 106 of 285 (37.19%)
+
+
+Overview of Control Sets:
+
+Number of unique control sets : 7
+
+Histogram:
+**************************************************************
+  Fanout      | Count    | Sync Set/Reset    Async Set/Reset
+--------------------------------------------------------------
+  [0, 2)      | 1        | 1                 0
+  [2, 4)      | 0        | 0                 0
+  [4, 6)      | 1        | 1                 0
+  [6, 8)      | 0        | 0                 0
+  [8, 10)     | 0        | 0                 0
+  [10, 12)    | 0        | 0                 0
+  [12, 14)    | 0        | 0                 0
+  [14, 16)    | 0        | 0                 0
+  [16, Inf)   | 5        | 5                 0
+--------------------------------------------------------------
+  The maximum fanout: 70
+==============================================================
+
+Flip-Flop Distribution:
+************************************************************************
+  Clock Enable    Sync Set/Reset    Async Set/Reset    Total Registers
+------------------------------------------------------------------------
+  NO              NO                NO                 0
+  NO              NO                YES                0
+  NO              YES               NO                 0
+  YES             NO                NO                 0
+  YES             NO                YES                0
+  YES             YES               NO                 250
+========================================================================
+
+Latch Distribution:
+************************************************
+  Gate Enable    Preset/Clear    Total Latches
+************************************************
+  NO             NO              0
+  NO             YES             0
+  YES            NO              0
+  YES            YES             0
+************************************************
+
+Design 'rv32_muldiv' has been successfully synthesized to architecture-specific objects.
+Saving design to DB.
+Saving design to rv32_muldiv_syn.vm
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'req_ready' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[8]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[9]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[10]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[11]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[12]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[13]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[14]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[15]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[16]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[17]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[18]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[19]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[20]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[21]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[22]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[23]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[24]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[25]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[26]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[27]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[28]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[29]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[30]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'result[31]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'rsp_valid' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'kill' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[3]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[4]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[5]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[6]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[7]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[8]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[9]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[10]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[11]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[12]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[13]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[14]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[15]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[16]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[17]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[18]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[19]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[20]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[21]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[22]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[23]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[24]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[25]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[26]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[27]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[28]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[29]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[30]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_a[31]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[3]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[4]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[5]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[6]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[7]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[8]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[9]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[10]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[11]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[12]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[13]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[14]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[15]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[16]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[17]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[18]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[19]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[20]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[21]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[22]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[23]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[24]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[25]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[26]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[27]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[28]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[29]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[30]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_b[31]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_op[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_op[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_op[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'req_valid' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'rsp_ready' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'rst' is not constrained, it is treated as combinational input.
+Action synthesize: Real time elapsed is 0h:0m:4s
+Action synthesize: CPU time elapsed is 0h:0m:2s
+Action synthesize: Process CPU time elapsed is 0h:0m:2s
+Current time: Fri Oct 23 23:25:52 2026
+Action synthesize: Peak memory pool usage is 202 MB
+Action from compile to synthesize: Total Real Time elapsed is 0h:0m:8s
+Action from compile to synthesize: Total CPU time elapsed is 0h:0m:2s
+Action from compile to synthesize: Total Process CPU Time elapsed is 0h:0m:3s
+Process "Synthesize" done.
+Executing : synthesize -ads -frequency 25 successfully.

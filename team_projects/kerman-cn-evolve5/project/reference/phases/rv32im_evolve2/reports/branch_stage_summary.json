@@ -1,0 +1,21 @@
+{
+  "stage": "EVOLVE2_direct_branch",
+  "status": "functional_and_short_simulation_passed_pds_pending",
+  "hardware_tested": false,
+  "runs": [
+    {
+      "mode": "performance",
+      "cycles": 2512474,
+      "retired": 2451118,
+      "ipc": 0.9755794487823556,
+      "same_binary_speedup": 1.050639728013106
+    },
+    {
+      "mode": "validation",
+      "cycles": 2516811,
+      "retired": 2450167,
+      "ipc": 0.97352045902533,
+      "same_binary_speedup": 1.0501332837467732
+    }
+  ]
+}

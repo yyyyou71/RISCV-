@@ -1,0 +1,1173 @@
+
+;; Function iterate (iterate, funcdef_no=0, decl_uid=1429, cgraph_uid=4, symbol_order=3)
+
+
+Examining iterate function.
+Analyzing # of iterations of loop 1
+  exit condition [1, + , 1] < iterations_10
+  bounds on difference of bases: 0 ... 4294967294
+  result:
+    # of iterations iterations_10 + 4294967295, bounded by 4294967294
+Loop iteration number isn't a constant.
+void * iterate (void * pres)
+{
+  ee_u32 iterations;
+  ee_u16 crc;
+  ee_u32 i;
+  short unsigned int _1;
+  short unsigned int _2;
+  short unsigned int _3;
+  short unsigned int _4;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG res => pres_8(D)
+  # DEBUG BEGIN_STMT
+  iterations_10 = MEM[(struct core_results *)pres_8(D)].iterations;
+  # DEBUG iterations => iterations_10
+  # DEBUG BEGIN_STMT
+  MEM[(struct core_results *)pres_8(D)].crc = 0;
+  # DEBUG BEGIN_STMT
+  MEM[(struct core_results *)pres_8(D)].crclist = 0;
+  # DEBUG BEGIN_STMT
+  MEM[(struct core_results *)pres_8(D)].crcmatrix = 0;
+  # DEBUG BEGIN_STMT
+  MEM[(struct core_results *)pres_8(D)].crcstate = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (iterations_10 != 0)
+    goto <bb 7>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 7> [local count: 105119324]:
+
+  <bb 3> [local count: 955630224]:
+  # i_27 = PHI <i_24(8), 0(7)>
+  # DEBUG i => i_27
+  # DEBUG BEGIN_STMT
+  crc_16 = core_bench_list (pres_8(D), 1);
+  # DEBUG crc => crc_16
+  # DEBUG BEGIN_STMT
+  _1 = MEM[(struct core_results *)pres_8(D)].crc;
+  _2 = crcu16 (crc_16, _1);
+  MEM[(struct core_results *)pres_8(D)].crc = _2;
+  # DEBUG BEGIN_STMT
+  crc_20 = core_bench_list (pres_8(D), -1);
+  # DEBUG crc => crc_20
+  # DEBUG BEGIN_STMT
+  _3 = MEM[(struct core_results *)pres_8(D)].crc;
+  _4 = crcu16 (crc_20, _3);
+  MEM[(struct core_results *)pres_8(D)].crc = _4;
+  # DEBUG BEGIN_STMT
+  if (i_27 == 0)
+    goto <bb 4>; [36.00%]
+  else
+    goto <bb 5>; [64.00%]
+
+  <bb 4> [local count: 344026880]:
+  # DEBUG i => i_27
+  # DEBUG crc => crc_20
+  # DEBUG BEGIN_STMT
+  MEM[(struct core_results *)pres_8(D)].crclist = _4;
+
+  <bb 5> [local count: 955630226]:
+  # DEBUG BEGIN_STMT
+  i_24 = i_27 + 1;
+  # DEBUG i => i_24
+  # DEBUG BEGIN_STMT
+  if (iterations_10 > i_24)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 9>; [11.00%]
+
+  <bb 8> [local count: 850510902]:
+  goto <bb 3>; [100.00%]
+
+  <bb 9> [local count: 105119324]:
+
+  <bb 6> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  return 0B;
+
+}
+
+
+
+;; Function coremark_main (coremark_main, funcdef_no=1, decl_uid=1549, cgraph_uid=7, symbol_order=6)
+
+
+Examining coremark_main function.
+Analyzing # of iterations of loop 1
+  exit condition [2, + , 65535] != 0
+  bounds on difference of bases: -2 ... -2
+  result:
+    # of iterations 2, bounded by 2
+Loop iteration number is 2.
+Loop iteration number isn't a constant.
+Analyzing # of iterations of loop 3
+  exit condition [2, + , 65535] != 0
+  bounds on difference of bases: -2 ... -2
+  result:
+    # of iterations 2, bounded by 2
+Loop iteration number is 2.
+Loop iteration number isn't a constant.
+Loop iteration number is chrec_dont_know.
+Estimating # of iterations of loop 6
+Loop iteration number is chrec_dont_know.
+Estimating # of iterations of loop 7
+Loop iteration number is chrec_dont_know.
+Estimating # of iterations of loop 8
+Loop iteration number is chrec_dont_know.
+Estimating # of iterations of loop 9
+Loop iteration number is chrec_dont_know.
+Estimating # of iterations of loop 10
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+int coremark_main ()
+{
+  secs_ret secs_passed;
+  struct core_results results[1];
+  CORE_TICKS total_time;
+  ee_u16 seedcrc;
+  ee_s16 total_errors;
+  ee_s16 known_id;
+  ee_u16 num_algorithms;
+  ee_u16 j;
+  ee_u16 i;
+  char * argv[1];
+  int argc;
+  long int _1;
+  short int _2;
+  long int _3;
+  short int _4;
+  long int _5;
+  short int _6;
+  long int _7;
+  long unsigned int _8;
+  long int _9;
+  long unsigned int _10;
+  short int _13;
+  short int _16;
+  long unsigned int _17;
+  int _18;
+  long unsigned int _19;
+  long unsigned int _21;
+  long unsigned int pretmp_23;
+  long unsigned int _25;
+  int _26;
+  long unsigned int _27;
+  long unsigned int _29;
+  short int pretmp_30;
+  long unsigned int prephitmp_33;
+  long unsigned int pretmp_34;
+  long unsigned int _36;
+  long unsigned int _37;
+  long unsigned int _38;
+  void * _39;
+  short int _40;
+  struct list_head * _41;
+  long unsigned int _43;
+  long unsigned int _44;
+  void * _45;
+  short int _46;
+  long int _47;
+  short int _48;
+  long int _49;
+  long int _50;
+  long int _51;
+  long unsigned int _54;
+  long unsigned int _55;
+  short int _56;
+  void * _57;
+  long unsigned int _58;
+  long unsigned int _60;
+  long unsigned int _61;
+  long unsigned int _63;
+  long unsigned int _64;
+  long unsigned int _65;
+  short int _66;
+  short int _67;
+  short int _68;
+  long unsigned int _69;
+  short int _70;
+  int _72;
+  long unsigned int _73;
+  long unsigned int _74;
+  short unsigned int _75;
+  int _76;
+  short unsigned int _77;
+  int _78;
+  int _80;
+  short int _81;
+  unsigned short _82;
+  unsigned short _83;
+  short int _84;
+  long unsigned int _86;
+  short unsigned int _87;
+  int _88;
+  short unsigned int _89;
+  int _90;
+  int _91;
+  short int _92;
+  unsigned short _93;
+  unsigned short _94;
+  short int _95;
+  long unsigned int _97;
+  short unsigned int _98;
+  int _99;
+  short unsigned int _100;
+  int _101;
+  int _102;
+  short int _103;
+  unsigned short _104;
+  unsigned short _105;
+  short int _106;
+  unsigned short total_errors.6_109;
+  unsigned short _110;
+  long unsigned int _111;
+  long unsigned int default_num_contexts.8_112;
+  unsigned short _113;
+  unsigned short _115;
+  long unsigned int _116;
+  long unsigned int _117;
+  long unsigned int _118;
+  long unsigned int _119;
+  long unsigned int default_num_contexts.10_120;
+  long unsigned int _121;
+  long unsigned int _122;
+  long unsigned int _123;
+  long unsigned int _124;
+  unsigned short _125;
+  long unsigned int _126;
+  long unsigned int default_num_contexts.13_127;
+  long unsigned int _128;
+  int _129;
+  long unsigned int _130;
+  long unsigned int _131;
+  int _132;
+  short unsigned int _133;
+  int _134;
+  long unsigned int _135;
+  long unsigned int default_num_contexts.15_136;
+  long unsigned int _138;
+  int _139;
+  short unsigned int _140;
+  int _141;
+  long unsigned int _142;
+  long unsigned int default_num_contexts.17_143;
+  long unsigned int _145;
+  int _146;
+  short unsigned int _147;
+  int _148;
+  long unsigned int _149;
+  long unsigned int default_num_contexts.19_150;
+  int _151;
+  short unsigned int _152;
+  int _153;
+  long unsigned int _154;
+  long unsigned int default_num_contexts.21_155;
+  short int pretmp_175;
+  short unsigned int ivtmp_182;
+  short unsigned int ivtmp_186;
+  short unsigned int ivtmp_192;
+  short unsigned int ivtmp_196;
+  long unsigned int prephitmp_226;
+  unsigned char _265;
+  long unsigned int prephitmp_302;
+  signed int _309;
+  long unsigned int cstore_310;
+  long unsigned int _311;
+  long unsigned int _312;
+  int _314;
+  void * _315;
+  long unsigned int _320;
+  long unsigned int _321;
+  long unsigned int default_num_contexts.8_324;
+  long unsigned int default_num_contexts.19_327;
+  long unsigned int default_num_contexts.17_330;
+  long unsigned int default_num_contexts.15_341;
+  unsigned short _345;
+  long unsigned int pretmp_347;
+  unsigned short _355;
+  unsigned short _356;
+  unsigned short prephitmp_357;
+  unsigned short prephitmp_358;
+  long unsigned int prephitmp_360;
+  long unsigned int pretmp_361;
+  long unsigned int prephitmp_362;
+  long unsigned int prephitmp_363;
+  long unsigned int pretmp_364;
+  long unsigned int prephitmp_365;
+  long unsigned int prephitmp_366;
+  long unsigned int pretmp_367;
+  long unsigned int prephitmp_368;
+  long unsigned int pretmp_369;
+  long unsigned int prephitmp_370;
+  long unsigned int pretmp_371;
+  long unsigned int pretmp_372;
+  short unsigned int _373;
+
+  <bb 2> [local count: 59055800]:
+  # DEBUG BEGIN_STMT
+  argc = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG j => 0
+  # DEBUG num_algorithms => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => -1
+  # DEBUG total_errors => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG seedcrc => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  portable_init (&results[0].port, &argc, &argv);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _1 = get_seed_32 (1);
+  _2 = (short int) _1;
+  results[0].seed1 = _2;
+  # DEBUG BEGIN_STMT
+  _3 = get_seed_32 (2);
+  _4 = (short int) _3;
+  results[0].seed2 = _4;
+  # DEBUG BEGIN_STMT
+  _5 = get_seed_32 (3);
+  _6 = (short int) _5;
+  results[0].seed3 = _6;
+  # DEBUG BEGIN_STMT
+  _7 = get_seed_32 (4);
+  _8 = (long unsigned int) _7;
+  results[0].iterations = _8;
+  # DEBUG BEGIN_STMT
+  _9 = get_seed_32 (5);
+  _10 = (long unsigned int) _9;
+  # DEBUG BEGIN_STMT
+  if (_10 == 0)
+    goto <bb 4>; [50.00%]
+  else
+    goto <bb 87>; [50.00%]
+
+  <bb 87> [local count: 29527900]:
+
+  <bb 4> [local count: 59055800]:
+  # cstore_310 = PHI <_10(87), 7(2)>
+  MEM <struct core_results[1]> [(void *)&results][0].execs = cstore_310;
+  # DEBUG BEGIN_STMT
+  _309 = BIT_FIELD_REF <results[0], 32, 0>;
+  if (_309 == 0)
+    goto <bb 5>; [25.00%]
+  else
+    goto <bb 7>; [75.00%]
+
+  <bb 5> [local count: 14763950]:
+  _13 = results[0].seed3;
+  if (_13 == 0)
+    goto <bb 6>; [50.00%]
+  else
+    goto <bb 10>; [50.00%]
+
+  <bb 6> [local count: 7381975]:
+  # DEBUG BEGIN_STMT
+  results[0].seed1 = 0;
+  # DEBUG BEGIN_STMT
+  results[0].seed2 = 0;
+  # DEBUG BEGIN_STMT
+  results[0].seed3 = 102;
+  # DEBUG BEGIN_STMT
+  goto <bb 10>; [100.00%]
+
+  <bb 7> [local count: 44291850]:
+  # DEBUG BEGIN_STMT
+  if (_309 == 1)
+    goto <bb 8>; [19.43%]
+  else
+    goto <bb 10>; [80.57%]
+
+  <bb 8> [local count: 8605274]:
+  _16 = results[0].seed3;
+  if (_16 == 0)
+    goto <bb 9>; [58.33%]
+  else
+    goto <bb 10>; [41.67%]
+
+  <bb 9> [local count: 5019743]:
+  # DEBUG BEGIN_STMT
+  results[0].seed1 = 13333;
+  # DEBUG BEGIN_STMT
+  results[0].seed2 = 13333;
+  # DEBUG BEGIN_STMT
+  results[0].seed3 = 102;
+
+  <bb 10> [local count: 59055800]:
+  # DEBUG BEGIN_STMT
+  results[0].memblock[0] = &static_memblk;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  results[0].err = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG num_algorithms => 0
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 11> [local count: 177167400]:
+  # i_332 = PHI <i_306(86), 0(10)>
+  # num_algorithms_340 = PHI <num_algorithms_167(86), 0(10)>
+  # ivtmp_186 = PHI <ivtmp_182(86), 3(10)>
+  # DEBUG num_algorithms => num_algorithms_340
+  # DEBUG i => i_332
+  # DEBUG BEGIN_STMT
+  _17 = (long unsigned int) i_332;
+  _18 = 1 << _17;
+  _19 = (long unsigned int) _18;
+  _21 = _19 & cstore_310;
+  if (_21 != 0)
+    goto <bb 12>; [50.00%]
+  else
+    goto <bb 13>; [50.00%]
+
+  <bb 12> [local count: 88583700]:
+  # DEBUG BEGIN_STMT
+  num_algorithms_305 = num_algorithms_340 + 1;
+  # DEBUG num_algorithms => num_algorithms_305
+
+  <bb 13> [local count: 177167400]:
+  # num_algorithms_167 = PHI <num_algorithms_340(11), num_algorithms_305(12)>
+  # DEBUG num_algorithms => num_algorithms_167
+  # DEBUG BEGIN_STMT
+  i_306 = i_332 + 1;
+  # DEBUG num_algorithms => num_algorithms_167
+  # DEBUG i => i_306
+  # DEBUG BEGIN_STMT
+  ivtmp_182 = ivtmp_186 - 1;
+  if (ivtmp_182 != 0)
+    goto <bb 86>; [66.67%]
+  else
+    goto <bb 14>; [33.33%]
+
+  <bb 86> [local count: 118111600]:
+  goto <bb 11>; [100.00%]
+
+  <bb 14> [local count: 59055800]:
+  # num_algorithms_217 = PHI <num_algorithms_167(13)>
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _320 = (long unsigned int) num_algorithms_217;
+  _321 = 2000 / _320;
+  results[0].size = _321;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG j => 0
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 15> [local count: 177167400]:
+  # i_333 = PHI <_373(85), 0(14)>
+  # j_339 = PHI <j_165(85), 0(14)>
+  # ivtmp_196 = PHI <ivtmp_192(85), 3(14)>
+  # DEBUG j => j_339
+  # DEBUG i => i_333
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _25 = (long unsigned int) i_333;
+  _26 = 1 << _25;
+  _27 = (long unsigned int) _26;
+  _29 = _27 & cstore_310;
+  _373 = i_333 + 1;
+  if (_29 != 0)
+    goto <bb 16>; [27.00%]
+  else
+    goto <bb 17>; [73.00%]
+
+  <bb 16> [local count: 47835200]:
+  # DEBUG ctx => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _311 = (long unsigned int) j_339;
+  _312 = _311 * _321;
+  _314 = (int) _373;
+  _315 = &static_memblk + _312;
+  results[0].memblock[_314] = _315;
+  # DEBUG BEGIN_STMT
+  # DEBUG ctx => 1
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  j_301 = j_339 + 1;
+  # DEBUG j => j_301
+
+  <bb 17> [local count: 177167400]:
+  # j_165 = PHI <j_339(15), j_301(16)>
+  # DEBUG BEGIN_STMT
+  # DEBUG j => j_165
+  # DEBUG i => i_333 + 1
+  # DEBUG BEGIN_STMT
+  ivtmp_192 = ivtmp_196 - 1;
+  if (ivtmp_192 != 0)
+    goto <bb 85>; [66.67%]
+  else
+    goto <bb 77>; [33.33%]
+
+  <bb 85> [local count: 118111600]:
+  goto <bb 15>; [100.00%]
+
+  <bb 77> [local count: 59055800]:
+  goto <bb 24>; [100.00%]
+
+  <bb 18> [local count: 1014686024]:
+  # DEBUG i => i_159
+  # DEBUG BEGIN_STMT
+  _36 = results[0].execs;
+  _37 = _36 & 1;
+  if (_37 != 0)
+    goto <bb 19>; [33.00%]
+  else
+    goto <bb 20>; [67.00%]
+
+  <bb 19> [local count: 334846386]:
+  # DEBUG BEGIN_STMT
+  _38 = results[0].size;
+  _39 = results[0].memblock[1];
+  _40 = results[0].seed1;
+  _41 = core_list_init (_38, _39, _40);
+  results[0].list = _41;
+  pretmp_367 = results[0].execs;
+
+  <bb 20> [local count: 1014686024]:
+  # prephitmp_368 = PHI <_36(18), pretmp_367(19)>
+  # DEBUG BEGIN_STMT
+  _43 = prephitmp_368 & 2;
+  if (_43 != 0)
+    goto <bb 21>; [33.00%]
+  else
+    goto <bb 22>; [67.00%]
+
+  <bb 21> [local count: 334846386]:
+  # DEBUG BEGIN_STMT
+  _44 = results[0].size;
+  _45 = results[0].memblock[2];
+  _46 = results[0].seed1;
+  _47 = (long int) _46;
+  _48 = results[0].seed2;
+  _49 = (long int) _48;
+  _50 = _49 << 16;
+  _51 = _47 | _50;
+  core_init_matrix (_44, _45, _51, &MEM <struct mat_params> [(void *)&results + 40B]);
+  pretmp_369 = results[0].execs;
+
+  <bb 22> [local count: 1014686024]:
+  # prephitmp_370 = PHI <prephitmp_368(20), pretmp_369(21)>
+  # DEBUG BEGIN_STMT
+  _54 = prephitmp_370 & 4;
+  if (_54 != 0)
+    goto <bb 23>; [67.00%]
+  else
+    goto <bb 84>; [33.00%]
+
+  <bb 84> [local count: 334846386]:
+  goto <bb 25>; [100.00%]
+
+  <bb 23> [local count: 679839638]:
+  # DEBUG BEGIN_STMT
+  _55 = results[0].size;
+  _56 = results[0].seed1;
+  _57 = results[0].memblock[3];
+  core_init_state (_55, _56, _57);
+
+  <bb 24> [local count: 738895438]:
+  # i_71 = PHI <0(77), 1(23)>
+
+  <bb 25> [local count: 1073741824]:
+  # i_159 = PHI <i_71(24), 1(84)>
+  # DEBUG i => i_159
+  # DEBUG BEGIN_STMT
+  if (i_159 == 0)
+    goto <bb 18>; [94.50%]
+  else
+    goto <bb 26>; [5.50%]
+
+  <bb 26> [local count: 59055800]:
+  # DEBUG BEGIN_STMT
+  _58 = results[0].iterations;
+  if (_58 == 0)
+    goto <bb 27>; [50.00%]
+  else
+    goto <bb 30>; [50.00%]
+
+  <bb 27> [local count: 29527900]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG secs_passed => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 28> [local count: 238907556]:
+  # prephitmp_302 = PHI <pretmp_372(83), 1(27)>
+  # DEBUG secs_passed => 0
+  # DEBUG BEGIN_STMT
+  _60 = prephitmp_302 * 10;
+  results[0].iterations = _60;
+  # DEBUG BEGIN_STMT
+  start_time ();
+  # DEBUG BEGIN_STMT
+  iterate (&results[0]);
+  # DEBUG BEGIN_STMT
+  stop_time ();
+  # DEBUG BEGIN_STMT
+  _61 = get_time ();
+  secs_passed_236 = time_in_secs (_61);
+  # DEBUG secs_passed => secs_passed_236
+  # DEBUG BEGIN_STMT
+  pretmp_372 = results[0].iterations;
+  if (secs_passed_236 == 0)
+    goto <bb 83>; [87.64%]
+  else
+    goto <bb 29>; [12.36%]
+
+  <bb 83> [local count: 209379656]:
+  goto <bb 28>; [100.00%]
+
+  <bb 29> [local count: 29527900]:
+  # secs_passed_353 = PHI <secs_passed_236(28)>
+  # pretmp_347 = PHI <pretmp_372(28)>
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG divisor => secs_passed_353
+  # DEBUG BEGIN_STMT
+  _63 = 10 / secs_passed_353;
+  _64 = _63 + 1;
+  _65 = _64 * pretmp_347;
+  results[0].iterations = _65;
+
+  <bb 30> [local count: 59055800]:
+  # DEBUG BEGIN_STMT
+  start_time ();
+  # DEBUG BEGIN_STMT
+  iterate (&results[0]);
+  # DEBUG BEGIN_STMT
+  stop_time ();
+  # DEBUG BEGIN_STMT
+  total_time_241 = get_time ();
+  # DEBUG total_time => total_time_241
+  # DEBUG BEGIN_STMT
+  _66 = results[0].seed1;
+  seedcrc_243 = crc16 (_66, 0);
+  # DEBUG seedcrc => seedcrc_243
+  # DEBUG BEGIN_STMT
+  _67 = results[0].seed2;
+  seedcrc_245 = crc16 (_67, seedcrc_243);
+  # DEBUG seedcrc => seedcrc_245
+  # DEBUG BEGIN_STMT
+  _68 = results[0].seed3;
+  seedcrc_247 = crc16 (_68, seedcrc_245);
+  # DEBUG seedcrc => seedcrc_247
+  # DEBUG BEGIN_STMT
+  _69 = results[0].size;
+  _70 = (short int) _69;
+  seedcrc_249 = crc16 (_70, seedcrc_247);
+  # DEBUG seedcrc => seedcrc_249
+  # DEBUG BEGIN_STMT
+  switch (seedcrc_249) <default: <L104> [16.67%], case 6386: <L52> [16.67%], case 20143: <L50> [16.67%], case 31493: <L49> [16.67%], case 35330: <L48> [16.67%], case 59893: <L51> [16.67%]>
+
+  <bb 31> [local count: 9842633]:
+<L48>:
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => 0
+  # DEBUG BEGIN_STMT
+  ee_printf ("6k performance run parameters for coremark.\n");
+  # DEBUG BEGIN_STMT
+  goto <bb 36>; [100.00%]
+
+  <bb 32> [local count: 9842633]:
+<L49>:
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => 1
+  # DEBUG BEGIN_STMT
+  ee_printf ("6k validation run parameters for coremark.\n");
+  # DEBUG BEGIN_STMT
+  goto <bb 36>; [100.00%]
+
+  <bb 33> [local count: 9842633]:
+<L50>:
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => 2
+  # DEBUG BEGIN_STMT
+  ee_printf ("Profile generation run parameters for coremark.\n");
+  # DEBUG BEGIN_STMT
+  goto <bb 36>; [100.00%]
+
+  <bb 34> [local count: 9842633]:
+<L51>:
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => 3
+  # DEBUG BEGIN_STMT
+  ee_printf ("2K performance run parameters for coremark.\n");
+  # DEBUG BEGIN_STMT
+  goto <bb 36>; [100.00%]
+
+  <bb 35> [local count: 9842633]:
+<L52>:
+  # DEBUG BEGIN_STMT
+  # DEBUG known_id => 4
+  # DEBUG BEGIN_STMT
+  ee_printf ("2K validation run parameters for coremark.\n");
+  # DEBUG BEGIN_STMT
+
+  <bb 36> [local count: 49213166]:
+  # known_id_169 = PHI <0(31), 1(32), 2(33), 3(34), 4(35)>
+<L102>:
+  # DEBUG known_id => known_id_169
+  # DEBUG BEGIN_STMT
+  # DEBUG total_errors => 0
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  default_num_contexts.8_324 = default_num_contexts;
+  if (default_num_contexts.8_324 != 0)
+    goto <bb 76>; [89.00%]
+  else
+    goto <bb 49>; [11.00%]
+
+  <bb 76> [local count: 43799718]:
+
+  <bb 37> [local count: 398179255]:
+  # i_334 = PHI <i_263(82), 0(76)>
+  # total_errors_342 = PHI <total_errors_262(82), 0(76)>
+  # DEBUG total_errors => total_errors_342
+  # DEBUG i => i_334
+  # DEBUG BEGIN_STMT
+  _72 = (int) i_334;
+  results[_72].err = 0;
+  # DEBUG BEGIN_STMT
+  _73 = results[_72].execs;
+  _74 = _73 & 1;
+  if (_74 != 0)
+    goto <bb 38>; [50.00%]
+  else
+    goto <bb 114>; [50.00%]
+
+  <bb 114> [local count: 101774618]:
+  goto <bb 40>; [100.00%]
+
+  <bb 38> [local count: 199089627]:
+  _75 = results[_72].crclist;
+  _76 = (int) known_id_169;
+  _77 = list_known_crc[_76];
+  if (_75 != _77)
+    goto <bb 39>; [48.88%]
+  else
+    goto <bb 114>; [51.12%]
+
+  <bb 39> [local count: 97315009]:
+  # DEBUG BEGIN_STMT
+  _78 = (int) _75;
+  _80 = (int) _77;
+  ee_printf ("[%u]ERROR! list crc 0x%04x - should be 0x%04x\n", _72, _78, _80);
+  # DEBUG BEGIN_STMT
+  _81 = results[_72].err;
+  _82 = (unsigned short) _81;
+  _83 = _82 + 1;
+  _84 = (short int) _83;
+  results[_72].err = _84;
+  pretmp_23 = results[_72].execs;
+
+  <bb 40> [local count: 398179255]:
+  # prephitmp_33 = PHI <pretmp_23(39), _73(114)>
+  # DEBUG BEGIN_STMT
+  _86 = prephitmp_33 & 2;
+  if (_86 != 0)
+    goto <bb 41>; [50.00%]
+  else
+    goto <bb 115>; [50.00%]
+
+  <bb 115> [local count: 101774618]:
+  goto <bb 43>; [100.00%]
+
+  <bb 41> [local count: 199089628]:
+  _87 = results[_72].crcmatrix;
+  _88 = (int) known_id_169;
+  _89 = matrix_known_crc[_88];
+  if (_87 != _89)
+    goto <bb 42>; [48.88%]
+  else
+    goto <bb 115>; [51.12%]
+
+  <bb 42> [local count: 97315009]:
+  # DEBUG BEGIN_STMT
+  _90 = (int) _87;
+  _91 = (int) _89;
+  ee_printf ("[%u]ERROR! matrix crc 0x%04x - should be 0x%04x\n", _72, _90, _91);
+  # DEBUG BEGIN_STMT
+  _92 = results[_72].err;
+  _93 = (unsigned short) _92;
+  _94 = _93 + 1;
+  _95 = (short int) _94;
+  results[_72].err = _95;
+  pretmp_34 = results[_72].execs;
+
+  <bb 43> [local count: 398179255]:
+  # prephitmp_226 = PHI <pretmp_34(42), prephitmp_33(115)>
+  # DEBUG BEGIN_STMT
+  _97 = prephitmp_226 & 4;
+  if (_97 != 0)
+    goto <bb 45>; [50.00%]
+  else
+    goto <bb 44>; [50.00%]
+
+  <bb 44> [local count: 199089628]:
+  pretmp_175 = results[_72].err;
+  _355 = (unsigned short) pretmp_175;
+  goto <bb 48>; [100.00%]
+
+  <bb 45> [local count: 199089628]:
+  _98 = results[_72].crcstate;
+  _99 = (int) known_id_169;
+  _100 = state_known_crc[_99];
+  if (_98 != _100)
+    goto <bb 47>; [48.88%]
+  else
+    goto <bb 46>; [51.12%]
+
+  <bb 46> [local count: 101774618]:
+  pretmp_30 = results[_72].err;
+  _356 = (unsigned short) pretmp_30;
+  goto <bb 48>; [100.00%]
+
+  <bb 47> [local count: 97315009]:
+  # DEBUG BEGIN_STMT
+  _101 = (int) _98;
+  _102 = (int) _100;
+  ee_printf ("[%u]ERROR! state crc 0x%04x - should be 0x%04x\n", _72, _101, _102);
+  # DEBUG BEGIN_STMT
+  _103 = results[_72].err;
+  _104 = (unsigned short) _103;
+  _105 = _104 + 1;
+  _106 = (short int) _105;
+  results[_72].err = _106;
+
+  <bb 48> [local count: 398179255]:
+  # prephitmp_357 = PHI <_355(44), _356(46), _105(47)>
+  # DEBUG BEGIN_STMT
+  total_errors.6_109 = (unsigned short) total_errors_342;
+  _110 = total_errors.6_109 + prephitmp_357;
+  total_errors_262 = (ee_s16) _110;
+  # DEBUG total_errors => total_errors_262
+  # DEBUG BEGIN_STMT
+  i_263 = i_334 + 1;
+  # DEBUG total_errors => total_errors_262
+  # DEBUG i => i_263
+  # DEBUG BEGIN_STMT
+  _111 = (long unsigned int) i_263;
+  default_num_contexts.8_112 = default_num_contexts;
+  if (_111 < default_num_contexts.8_112)
+    goto <bb 82>; [89.00%]
+  else
+    goto <bb 102>; [11.00%]
+
+  <bb 102> [local count: 43799718]:
+  # _345 = PHI <_110(48)>
+  goto <bb 49>; [100.00%]
+
+  <bb 82> [local count: 354379537]:
+  goto <bb 37>; [100.00%]
+
+  <bb 49> [local count: 59055799]:
+  # prephitmp_358 = PHI <65535(30), _345(102), 0(36)>
+<L104>:
+  # DEBUG known_id => NULL
+  # DEBUG total_errors => NULL
+  # DEBUG BEGIN_STMT
+  _265 = check_data_types ();
+  _113 = (unsigned short) _265;
+  _115 = _113 + prephitmp_358;
+  # DEBUG total_errors => (ee_s16) _115
+  # DEBUG BEGIN_STMT
+  _116 = results[0].size;
+  ee_printf ("CoreMark Size    : %lu\n", _116);
+  # DEBUG BEGIN_STMT
+  ee_printf ("Total ticks      : %lu\n", total_time_241);
+  # DEBUG BEGIN_STMT
+  _117 = time_in_secs (total_time_241);
+  ee_printf ("Total time (secs): %d\n", _117);
+  # DEBUG BEGIN_STMT
+  _118 = time_in_secs (total_time_241);
+  if (_118 != 0)
+    goto <bb 50>; [33.00%]
+  else
+    goto <bb 51>; [67.00%]
+
+  <bb 50> [local count: 19488414]:
+  # DEBUG BEGIN_STMT
+  _119 = results[0].iterations;
+  default_num_contexts.10_120 = default_num_contexts;
+  _121 = _119 * default_num_contexts.10_120;
+  _122 = time_in_secs (total_time_241);
+  _123 = _121 / _122;
+  ee_printf ("Iterations/Sec   : %d\n", _123);
+
+  <bb 51> [local count: 59055799]:
+  # DEBUG BEGIN_STMT
+  _124 = time_in_secs (total_time_241);
+  if (_124 <= 9)
+    goto <bb 52>; [33.00%]
+  else
+    goto <bb 104>; [67.00%]
+
+  <bb 104> [local count: 39567385]:
+  total_errors_266 = (ee_s16) _115;
+  goto <bb 53>; [100.00%]
+
+  <bb 52> [local count: 19488414]:
+  # DEBUG BEGIN_STMT
+  ee_printf ("ERROR! Must execute for at least 10 secs for a valid result!\n");
+  # DEBUG BEGIN_STMT
+  _125 = _115 + 1;
+  total_errors_276 = (ee_s16) _125;
+  # DEBUG total_errors => total_errors_276
+
+  <bb 53> [local count: 59055799]:
+  # total_errors_172 = PHI <total_errors_266(104), total_errors_276(52)>
+  # DEBUG total_errors => total_errors_172
+  # DEBUG BEGIN_STMT
+  _126 = results[0].iterations;
+  default_num_contexts.13_127 = default_num_contexts;
+  _128 = _126 * default_num_contexts.13_127;
+  ee_printf ("Iterations       : %lu\n", _128);
+  # DEBUG BEGIN_STMT
+  ee_printf ("Compiler version : %s\n", "GCC 15.2.0");
+  # DEBUG BEGIN_STMT
+  ee_printf ("Compiler flags   : %s\n", "-march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O2 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -fdump-tree-crc-details; link: -nostdlib --gc-sections --no-relax");
+  # DEBUG BEGIN_STMT
+  ee_printf ("Memory location  : %s\n", "Code=ROM32KiB Data=RAM32KiB Static2000B; cache/backend/latency: see matching simulation manifest");
+  # DEBUG BEGIN_STMT
+  _129 = (int) seedcrc_249;
+  ee_printf ("seedcrc          : 0x%04x\n", _129);
+  # DEBUG BEGIN_STMT
+  _130 = results[0].execs;
+  _131 = _130 & 1;
+  pretmp_371 = default_num_contexts;
+  if (_131 != 0)
+    goto <bb 54>; [50.00%]
+  else
+    goto <bb 116>; [50.00%]
+
+  <bb 116> [local count: 3248069]:
+  goto <bb 57>; [100.00%]
+
+  <bb 54> [local count: 29527900]:
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (pretmp_371 != 0)
+    goto <bb 75>; [89.00%]
+  else
+    goto <bb 116>; [11.00%]
+
+  <bb 75> [local count: 26279831]:
+
+  <bb 55> [local count: 238907553]:
+  # i_335 = PHI <i_283(81), 0(75)>
+  # DEBUG i => i_335
+  # DEBUG BEGIN_STMT
+  _132 = (int) i_335;
+  _133 = results[_132].crclist;
+  _134 = (int) _133;
+  ee_printf ("[%d]crclist       : 0x%04x\n", _132, _134);
+  # DEBUG BEGIN_STMT
+  i_283 = i_335 + 1;
+  # DEBUG i => i_283
+  # DEBUG BEGIN_STMT
+  _135 = (long unsigned int) i_283;
+  default_num_contexts.15_136 = default_num_contexts;
+  if (_135 < default_num_contexts.15_136)
+    goto <bb 81>; [89.00%]
+  else
+    goto <bb 56>; [11.00%]
+
+  <bb 81> [local count: 212627722]:
+  goto <bb 55>; [100.00%]
+
+  <bb 56> [local count: 26279831]:
+  # default_num_contexts.15_341 = PHI <default_num_contexts.15_136(55)>
+  pretmp_361 = results[0].execs;
+
+  <bb 57> [local count: 59055799]:
+  # prephitmp_360 = PHI <pretmp_371(116), default_num_contexts.15_341(56)>
+  # prephitmp_362 = PHI <_130(116), pretmp_361(56)>
+  # DEBUG BEGIN_STMT
+  _138 = prephitmp_362 & 2;
+  if (_138 != 0)
+    goto <bb 58>; [50.00%]
+  else
+    goto <bb 117>; [50.00%]
+
+  <bb 117> [local count: 3248069]:
+  goto <bb 61>; [100.00%]
+
+  <bb 58> [local count: 29527900]:
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (prephitmp_360 != 0)
+    goto <bb 74>; [89.00%]
+  else
+    goto <bb 117>; [11.00%]
+
+  <bb 74> [local count: 26279831]:
+
+  <bb 59> [local count: 238907553]:
+  # i_336 = PHI <i_285(80), 0(74)>
+  # DEBUG i => i_336
+  # DEBUG BEGIN_STMT
+  _139 = (int) i_336;
+  _140 = results[_139].crcmatrix;
+  _141 = (int) _140;
+  ee_printf ("[%d]crcmatrix     : 0x%04x\n", _139, _141);
+  # DEBUG BEGIN_STMT
+  i_285 = i_336 + 1;
+  # DEBUG i => i_285
+  # DEBUG BEGIN_STMT
+  _142 = (long unsigned int) i_285;
+  default_num_contexts.17_143 = default_num_contexts;
+  if (_142 < default_num_contexts.17_143)
+    goto <bb 80>; [89.00%]
+  else
+    goto <bb 60>; [11.00%]
+
+  <bb 80> [local count: 212627722]:
+  goto <bb 59>; [100.00%]
+
+  <bb 60> [local count: 26279831]:
+  # default_num_contexts.17_330 = PHI <default_num_contexts.17_143(59)>
+  pretmp_364 = results[0].execs;
+
+  <bb 61> [local count: 59055799]:
+  # prephitmp_363 = PHI <prephitmp_360(117), default_num_contexts.17_330(60)>
+  # prephitmp_365 = PHI <prephitmp_362(117), pretmp_364(60)>
+  # DEBUG BEGIN_STMT
+  _145 = prephitmp_365 & 4;
+  if (_145 != 0)
+    goto <bb 62>; [50.00%]
+  else
+    goto <bb 65>; [50.00%]
+
+  <bb 62> [local count: 29527900]:
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (prephitmp_363 != 0)
+    goto <bb 73>; [89.00%]
+  else
+    goto <bb 63>; [11.00%]
+
+  <bb 63> [local count: 59055799]:
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  if (total_errors_172 == 0)
+    goto <bb 67>; [33.00%]
+  else
+    goto <bb 68>; [67.00%]
+
+  <bb 73> [local count: 26279831]:
+
+  <bb 64> [local count: 238907553]:
+  # i_337 = PHI <i_287(79), 0(73)>
+  # DEBUG i => i_337
+  # DEBUG BEGIN_STMT
+  _146 = (int) i_337;
+  _147 = results[_146].crcstate;
+  _148 = (int) _147;
+  ee_printf ("[%d]crcstate      : 0x%04x\n", _146, _148);
+  # DEBUG BEGIN_STMT
+  i_287 = i_337 + 1;
+  # DEBUG i => i_287
+  # DEBUG BEGIN_STMT
+  _149 = (long unsigned int) i_287;
+  default_num_contexts.19_150 = default_num_contexts;
+  if (_149 < default_num_contexts.19_150)
+    goto <bb 79>; [89.00%]
+  else
+    goto <bb 111>; [11.00%]
+
+  <bb 111> [local count: 26279831]:
+  # default_num_contexts.19_327 = PHI <default_num_contexts.19_150(64)>
+  goto <bb 65>; [100.00%]
+
+  <bb 79> [local count: 212627722]:
+  goto <bb 64>; [100.00%]
+
+  <bb 65> [local count: 55807731]:
+  # prephitmp_366 = PHI <default_num_contexts.19_327(111), prephitmp_363(61)>
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (prephitmp_366 != 0)
+    goto <bb 72>; [94.18%]
+  else
+    goto <bb 63>; [5.82%]
+
+  <bb 72> [local count: 52559662]:
+
+  <bb 66> [local count: 477815106]:
+  # i_338 = PHI <i_296(78), 0(72)>
+  # DEBUG i => i_338
+  # DEBUG BEGIN_STMT
+  _151 = (int) i_338;
+  _152 = results[_151].crc;
+  _153 = (int) _152;
+  ee_printf ("[%d]crcfinal      : 0x%04x\n", _151, _153);
+  # DEBUG BEGIN_STMT
+  i_296 = i_338 + 1;
+  # DEBUG i => i_296
+  # DEBUG BEGIN_STMT
+  _154 = (long unsigned int) i_296;
+  default_num_contexts.21_155 = default_num_contexts;
+  if (_154 < default_num_contexts.21_155)
+    goto <bb 78>; [89.00%]
+  else
+    goto <bb 113>; [11.00%]
+
+  <bb 113> [local count: 52559661]:
+  goto <bb 63>; [100.00%]
+
+  <bb 78> [local count: 425255445]:
+  goto <bb 66>; [100.00%]
+
+  <bb 67> [local count: 19488414]:
+  # DEBUG BEGIN_STMT
+  ee_printf ("Correct operation validated. See README.md for run and reporting rules.\n");
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  goto <bb 71>; [100.00%]
+
+  <bb 68> [local count: 39567385]:
+  # DEBUG BEGIN_STMT
+  if (total_errors_172 > 0)
+    goto <bb 70>; [61.91%]
+  else
+    goto <bb 69>; [38.09%]
+
+  <bb 69> [local count: 15071039]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  ee_printf ("Cannot validate operation for these seed values, please compare with results on a known platform.\n");
+  goto <bb 71>; [100.00%]
+
+  <bb 70> [local count: 24496346]:
+  # DEBUG BEGIN_STMT
+  ee_printf ("Errors detected\n");
+  # DEBUG BEGIN_STMT
+
+  <bb 71> [local count: 59055799]:
+  # DEBUG BEGIN_STMT
+  portable_fini (&results[0].port);
+  # DEBUG BEGIN_STMT
+  argc ={v} {CLOBBER(eos)};
+  argv ={v} {CLOBBER(eos)};
+  results ={v} {CLOBBER(eos)};
+  return 0;
+
+}
+
+

@@ -1,0 +1,95 @@
+RISC-V COREMARK 1.0
+BUILD=EVOLVE1_BOARD
+BP_ENABLE=1 BP_ENTRIES=32 IMPL_ID=0003050d
+CLK=25000000 BAUD=115200 ISA=RV32IM_Zicsr ABI=ILP32
+MISA=40001100 HW_M=1
+FRONT_CFG=f1540086 GSHARE=0 PHT_BITS=8 RAS=0 FETCH=4 LOAD_FWD=1
+ISSUE_CFG=d1000003 ISSUE_WIDTH=2 FETCH_WORDS=2
+HW_ID=43414333 HW_CFG=0000003F CLOCK=25000000 CACHE_BYTES=1024 LINE_BYTES=16 SETS=32 BP_ENTRIES=32 WAIT=0 GAP=0
+M_CHECK PASS vectors=128 instructions=8
+DUAL_CHECK PASS iterations=1024 cycles=18503 instret=34818 pairs=16377
+PORT_CHECK PASS
+p/v/b [iterations] + Enter: performance/validation/both
+q/w + Enter: 1-iteration function check; h: help; r: reset
+Default iterations=2048; 0 selects upstream auto calibration
+CM_READY
+CM_BEGIN mode=performance requested_iterations=1 clock_hz=25000000 data_size=2000
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 13108
+Total time (secs): 0
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 1
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O3 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -funroll-loops --param max-unrolled-insns=40 --param max-average-unrolled-insns=20; link: -nostdlib --gc-sections --no-relax
+Memory location  : Code=ROM32KiB Data=RAM32KiB Static2000B; cache/backend/latency: see matching simulation manifest
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xe714
+Errors detected
+CM_RESULT mode=performance iterations=1 cycles=327703 clock_hz=25000000 tick_unit=us seed1=0 seed2=0 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e714 matrix=1fd7 state=8e3a final=e714
+CM_SHORT_RUN: functional check only; not a reportable score
+CACHE_STATS scope=cumulative32 seq=1 ih=308798 im=4802 dh=58625 dm=837 wh=21077 wm=1943 read_cmd=5639 burst_cmd=5639 read_beat=22556 write_rsp=23020
+CM_READY
+CM_BEGIN mode=validation requested_iterations=1 clock_hz=25000000 data_size=2000
+2K validation run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 13164
+Total time (secs): 0
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 1
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O3 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -funroll-loops --param max-unrolled-insns=40 --param max-average-unrolled-insns=20; link: -nostdlib --gc-sections --no-relax
+Memory location  : Code=ROM32KiB Data=RAM32KiB Static2000B; cache/backend/latency: see matching simulation manifest
+seedcrc          : 0x18f2
+[0]crclist       : 0xe3c1
+[0]crcmatrix     : 0x0747
+[0]crcstate      : 0x8d84
+[0]crcfinal      : 0xe3c1
+Errors detected
+CM_RESULT mode=validation iterations=1 cycles=329105 clock_hz=25000000 tick_unit=us seed1=13333 seed2=13333 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e3c1 matrix=0747 state=8d84 final=e3c1
+CM_SHORT_RUN: functional check only; not a reportable score
+CACHE_STATS scope=cumulative32 seq=2 ih=554567 im=9358 dh=116788 dm=1621 wh=41732 wm=3445 read_cmd=10979 burst_cmd=10979 read_beat=43916 write_rsp=45177
+CM_READY
+CM_BEGIN mode=performance requested_iterations=8 clock_hz=25000000 data_size=2000
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 104833
+Total time (secs): 0
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 8
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O3 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -funroll-loops --param max-unrolled-insns=40 --param max-average-unrolled-insns=20; link: -nostdlib --gc-sections --no-relax
+Memory location  : Code=ROM32KiB Data=RAM32KiB Static2000B; cache/backend/latency: see matching simulation manifest
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xccd1
+Errors detected
+CM_RESULT mode=performance iterations=8 cycles=2620836 clock_hz=25000000 tick_unit=us seed1=0 seed2=0 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e714 matrix=1fd7 state=8e3a final=ccd1
+CM_SHORT_RUN: functional check only; not a reportable score
+CACHE_STATS scope=cumulative32 seq=3 ih=2002758 im=39124 dh=553018 dm=6160 wh=201936 wm=7142 read_cmd=45284 burst_cmd=45284 read_beat=181136 write_rsp=209078
+CM_READY
+CM_BEGIN mode=validation requested_iterations=8 clock_hz=25000000 data_size=2000
+2K validation run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 105316
+Total time (secs): 0
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 8
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O3 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -funroll-loops --param max-unrolled-insns=40 --param max-average-unrolled-insns=20; link: -nostdlib --gc-sections --no-relax
+Memory location  : Code=ROM32KiB Data=RAM32KiB Static2000B; cache/backend/latency: see matching simulation manifest
+seedcrc          : 0x18f2
+[0]crclist       : 0xe3c1
+[0]crcmatrix     : 0x0747
+[0]crcstate      : 0x8d84
+[0]crcfinal      : 0x5950
+Errors detected
+CM_RESULT mode=validation iterations=8 cycles=2632910 clock_hz=25000000 tick_unit=us seed1=13333 seed2=13333 seed3=102 data_size=2000 contexts=1 crc_ok=1 time_ok=0 score_valid=0 list=e3c1 matrix=0747 state=8d84 final=5950
+CM_SHORT_RUN: functional check only; not a reportable score
+CACHE_STATS scope=cumulative32 seq=4 ih=3457230 im=69543 dh=992413 dm=11153 wh=359834 wm=12365 read_cmd=80696 burst_cmd=80696 read_beat=322784 write_rsp=372199
+CM_READY

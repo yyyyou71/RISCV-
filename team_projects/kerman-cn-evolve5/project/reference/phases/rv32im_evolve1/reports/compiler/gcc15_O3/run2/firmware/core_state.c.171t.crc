@@ -1,0 +1,1041 @@
+
+;; Function core_init_state (core_init_state, funcdef_no=1, decl_uid=1513, cgraph_uid=6, symbol_order=5)
+
+
+Examining core_init_state function.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+void core_init_state (ee_u32 size, ee_s16 seed, ee_u8 * p)
+{
+  ee_u8 * buf;
+  ee_u32 i;
+  ee_u32 next;
+  ee_u32 total;
+  ee_u8 * _1;
+  sizetype _2;
+  ee_u8 * _3;
+  unsigned char _4;
+  sizetype _5;
+  ee_u8 * _6;
+  unsigned short seed.13_7;
+  unsigned short _8;
+  long unsigned int _18;
+  ee_u8 * _19;
+  unsigned short _52;
+  long unsigned int _67;
+  long unsigned int _74;
+  short int _82;
+  short int _83;
+  int _84;
+
+  <bb 2> [local count: 54066899]:
+  # DEBUG BEGIN_STMT
+  # DEBUG total => 0
+  # DEBUG next => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG buf => 0B
+  # DEBUG BEGIN_STMT
+  size_34 = size_33(D) + 4294967295;
+  # DEBUG size => size_34
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG buf => 0B
+  # DEBUG next => 0
+  # DEBUG total => 0
+  # DEBUG seed => seed_36(D)
+  # DEBUG BEGIN_STMT
+  if (size_34 > 1)
+    goto <bb 16>; [89.00%]
+  else
+    goto <bb 14>; [11.00%]
+
+  <bb 16> [local count: 48119540]:
+
+  <bb 3> [local count: 437450365]:
+  # _67 = PHI <_18(19), 1(16)>
+  # seed_68 = PHI <seed_45(19), seed_36(D)(16)>
+  # total_69 = PHI <total_21(19), 0(16)>
+  # next_72 = PHI <next_59(19), 0(16)>
+  # buf_75 = PHI <buf_56(19), 0B(16)>
+  # DEBUG buf => buf_75
+  # DEBUG next => next_72
+  # DEBUG total => total_69
+  # DEBUG seed => seed_68
+  # DEBUG BEGIN_STMT
+  if (next_72 != 0)
+    goto <bb 17>; [27.00%]
+  else
+    goto <bb 6>; [73.00%]
+
+  <bb 17> [local count: 118111600]:
+
+  <bb 4> [local count: 955630224]:
+  # i_73 = PHI <i_44(20), 0(17)>
+  # DEBUG i => i_73
+  # DEBUG BEGIN_STMT
+  _1 = buf_75 + i_73;
+  _2 = total_69 + i_73;
+  _3 = p_39(D) + _2;
+  _4 = *_1;
+  *_3 = _4;
+  # DEBUG BEGIN_STMT
+  i_44 = i_73 + 1;
+  # DEBUG i => i_44
+  # DEBUG BEGIN_STMT
+  if (i_44 < next_72)
+    goto <bb 20>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 20> [local count: 837518623]:
+  goto <bb 4>; [100.00%]
+
+  <bb 5> [local count: 118111600]:
+  i_66 = next_72;
+  # DEBUG BEGIN_STMT
+  _5 = i_66 + total_69;
+  _6 = p_39(D) + _5;
+  *_6 = 44;
+  # DEBUG BEGIN_STMT
+  # DEBUG total => _67
+
+  <bb 6> [local count: 437450365]:
+  # total_21 = PHI <total_69(3), _67(5)>
+  # DEBUG total => total_21
+  # DEBUG BEGIN_STMT
+  seed.13_7 = (unsigned short) seed_68;
+  _8 = seed.13_7 + 1;
+  seed_45 = (ee_s16) _8;
+  # DEBUG seed => seed_45
+  # DEBUG BEGIN_STMT
+  _52 = _8 & 7;
+  _82 = seed_45 >> 3;
+  _83 = _82 & 3;
+  _84 = (int) _83;
+  switch (_52) <default: <L6> [25.00%], case 3 ... 4: <L9> [25.00%], case 5 ... 6: <L11> [25.00%], case 7: <L13> [25.00%]>
+
+  <bb 7> [local count: 109362591]:
+<L6>:
+  # DEBUG BEGIN_STMT
+  buf_51 = intpat[_84];
+  # DEBUG buf => buf_51
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 4
+  # DEBUG BEGIN_STMT
+  goto <bb 11>; [100.00%]
+
+  <bb 8> [local count: 109362591]:
+<L9>:
+  # DEBUG BEGIN_STMT
+  buf_49 = floatpat[_84];
+  # DEBUG buf => buf_49
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 8
+  # DEBUG BEGIN_STMT
+  goto <bb 11>; [100.00%]
+
+  <bb 9> [local count: 109362591]:
+<L11>:
+  # DEBUG BEGIN_STMT
+  buf_48 = scipat[_84];
+  # DEBUG buf => buf_48
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 8
+  # DEBUG BEGIN_STMT
+  goto <bb 11>; [100.00%]
+
+  <bb 10> [local count: 109362591]:
+<L13>:
+  # DEBUG BEGIN_STMT
+  buf_46 = errpat[_84];
+  # DEBUG buf => buf_46
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 8
+  # DEBUG BEGIN_STMT
+
+  <bb 11> [local count: 437450365]:
+  # next_59 = PHI <8(10), 4(7), 8(8), 8(9)>
+  # buf_56 = PHI <buf_46(10), buf_51(7), buf_49(8), buf_48(9)>
+  # DEBUG buf => buf_56
+  # DEBUG next => next_59
+  # DEBUG total => total_21
+  # DEBUG seed => seed_45
+  # DEBUG BEGIN_STMT
+  _74 = total_21 + 1;
+  _18 = next_59 + _74;
+  if (_18 < size_34)
+    goto <bb 19>; [89.00%]
+  else
+    goto <bb 12>; [11.00%]
+
+  <bb 19> [local count: 389330825]:
+  goto <bb 3>; [100.00%]
+
+  <bb 12> [local count: 48119540]:
+  # total_81 = PHI <total_21(11)>
+  # DEBUG size => NULL
+  # DEBUG total => total_81
+  # DEBUG BEGIN_STMT
+  if (total_81 < size_33(D))
+    goto <bb 14>; [87.64%]
+  else
+    goto <bb 13>; [12.36%]
+
+  <bb 13> [local count: 54066899]:
+  return;
+
+  <bb 14> [local count: 48119540]:
+  # total_23 = PHI <total_81(12), 0(2)>
+  # DEBUG size => NULL
+  # DEBUG total => NULL
+
+  <bb 15> [local count: 437450365]:
+  # total_71 = PHI <total_41(18), total_23(14)>
+  # DEBUG size => NULL
+  # DEBUG total => total_71
+  # DEBUG BEGIN_STMT
+  _19 = p_39(D) + total_71;
+  *_19 = 0;
+  # DEBUG BEGIN_STMT
+  total_41 = total_71 + 1;
+  # DEBUG size => NULL
+  # DEBUG total => total_41
+  # DEBUG BEGIN_STMT
+  if (size_33(D) > total_41)
+    goto <bb 18>; [89.00%]
+  else
+    goto <bb 25>; [11.00%]
+
+  <bb 25> [local count: 48119540]:
+  goto <bb 13>; [100.00%]
+
+  <bb 18> [local count: 389330825]:
+  goto <bb 15>; [100.00%]
+
+}
+
+
+
+;; Function core_state_transition (core_state_transition, funcdef_no=3, decl_uid=1532, cgraph_uid=8, symbol_order=7)
+
+
+Examining core_state_transition function.
+Loop iteration number is chrec_dont_know.
+CORE_STATE core_state_transition (ee_u8 * * instr, ee_u32 * transition_count)
+{
+  CORE_STATE state;
+  ee_u8 * str;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  long unsigned int _4;
+  long unsigned int _11;
+  long unsigned int _12;
+  long unsigned int _13;
+  long unsigned int _14;
+  long unsigned int _15;
+  long unsigned int pretmp_16;
+  long unsigned int pretmp_17;
+  long unsigned int _18;
+  long unsigned int _19;
+  unsigned char _20;
+  long unsigned int _21;
+  long unsigned int _22;
+  long unsigned int _23;
+  long unsigned int pretmp_24;
+  unsigned char _30;
+  long unsigned int _34;
+  long unsigned int _37;
+  long unsigned int _38;
+  unsigned char _39;
+  unsigned char _44;
+  unsigned char _47;
+  unsigned char _51;
+  unsigned char _56;
+  unsigned char _63;
+  unsigned char _72;
+  unsigned char _73;
+  unsigned char _74;
+  long unsigned int _81;
+  long unsigned int _94;
+  long unsigned int _95;
+
+  <bb 2> [local count: 113634472]:
+  # DEBUG BEGIN_STMT
+  str_50 = *instr_49(D);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 0
+  # DEBUG str => str_50
+  # DEBUG BEGIN_STMT
+  _20 = *str_50;
+  if (_20 != 0)
+    goto <bb 35>; [96.34%]
+  else
+    goto <bb 34>; [3.66%]
+
+  <bb 35> [local count: 109475450]:
+
+  <bb 3> [local count: 996582260]:
+  # _51 = PHI <_39(36), _20(35)>
+  # str_76 = PHI <str_69(36), str_50(35)>
+  # state_77 = PHI <state_43(36), 0(35)>
+  # DEBUG state => state_77
+  # DEBUG str => str_76
+  # DEBUG BEGIN_STMT
+  # DEBUG NEXT_SYMBOL => _51
+  # DEBUG BEGIN_STMT
+  if (_51 == 44)
+    goto <bb 4>; [3.66%]
+  else
+    goto <bb 5>; [96.34%]
+
+  <bb 4> [local count: 36474912]:
+  # str_26 = PHI <str_76(3)>
+  # state_8 = PHI <state_77(3)>
+  # DEBUG BEGIN_STMT
+  str_70 = str_26 + 1;
+  # DEBUG str => str_70
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 5> [local count: 960107348]:
+  # DEBUG BEGIN_STMT
+  switch (state_77) <default: <L49> [12.50%], case 0: <L50> [12.50%], case 2: <L51> [12.50%], case 3: <L32> [12.50%], case 4: <L20> [12.50%], case 5: <L26> [12.50%], case 6: <L52> [12.50%], case 7: <L53> [12.50%]>
+
+  <bb 6> [local count: 120013419]:
+<L50>:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  switch (_51) <default: <L57> [25.00%], case 43: <L58> [25.00%], case 45: <L58> [25.00%], case 46: <L56> [25.00%], case 48 ... 57: <L64> [25.00%]>
+
+  <bb 39> [local count: 30003355]:
+<L64>:
+  goto <bb 10>; [100.00%]
+
+  <bb 8> [local count: 30003355]:
+<L56>:
+  goto <bb 10>; [100.00%]
+
+  <bb 9> [local count: 30003355]:
+<L57>:
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  _1 = MEM[(ee_u32 *)transition_count_52(D) + 4B];
+  _2 = _1 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 4B] = _2;
+
+  <bb 10> [local count: 120013419]:
+  # state_42 = PHI <4(39), 2(6), 5(8), 1(9)>
+<L58>:
+  # DEBUG c => NULL
+  # DEBUG state => state_42
+  # DEBUG BEGIN_STMT
+  _3 = *transition_count_52(D);
+  _4 = _3 + 1;
+  *transition_count_52(D) = _4;
+  # DEBUG BEGIN_STMT
+  goto <bb 32>; [100.00%]
+
+  <bb 11> [local count: 120013419]:
+<L51>:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  # DEBUG INLINE_ENTRY ee_isdigit
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _56 = _51 + 208;
+  pretmp_17 = MEM[(ee_u32 *)transition_count_52(D) + 8B];
+  _23 = pretmp_17 + 1;
+  if (_56 <= 9)
+    goto <bb 13>; [50.00%]
+  else
+    goto <bb 12>; [50.00%]
+
+  <bb 12> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  if (_51 == 46)
+    goto <bb 14>; [34.00%]
+  else
+    goto <bb 15>; [66.00%]
+
+  <bb 13> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 4
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 8B] = _23;
+
+  <bb 46> [local count: 39604428]:
+  goto <bb 32>; [100.00%]
+
+  <bb 14> [local count: 20402281]:
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 5
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 8B] = _23;
+  goto <bb 47>; [100.00%]
+
+  <bb 15> [local count: 39604428]:
+  # _34 = PHI <_23(12)>
+  # str_27 = PHI <str_76(12)>
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 8B] = _34;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_84 = str_27 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_84
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 16> [local count: 120013419]:
+<L20>:
+  # DEBUG BEGIN_STMT
+  if (_51 == 46)
+    goto <bb 17>; [34.00%]
+  else
+    goto <bb 18>; [66.00%]
+
+  <bb 17> [local count: 40804563]:
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 5
+  # DEBUG BEGIN_STMT
+  _11 = MEM[(ee_u32 *)transition_count_52(D) + 16B];
+  _12 = _11 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 16B] = _12;
+  goto <bb 47>; [100.00%]
+
+  <bb 18> [local count: 79208856]:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  # DEBUG INLINE_ENTRY ee_isdigit
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _63 = _51 + 208;
+  if (_63 <= 9)
+    goto <bb 46>; [50.00%]
+  else
+    goto <bb 19>; [50.00%]
+
+  <bb 19> [local count: 39604428]:
+  # str_33 = PHI <str_76(18)>
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  _13 = MEM[(ee_u32 *)transition_count_52(D) + 16B];
+  _14 = _13 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 16B] = _14;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_88 = str_33 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_88
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 20> [local count: 120013419]:
+<L26>:
+  # DEBUG BEGIN_STMT
+  _30 = _51 & 223;
+  if (_30 == 69)
+    goto <bb 21>; [50.00%]
+  else
+    goto <bb 22>; [50.00%]
+
+  <bb 21> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 3
+  # DEBUG BEGIN_STMT
+  _18 = MEM[(ee_u32 *)transition_count_52(D) + 20B];
+  _19 = _18 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 20B] = _19;
+  goto <bb 32>; [100.00%]
+
+  <bb 22> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  # DEBUG INLINE_ENTRY ee_isdigit
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _72 = _51 + 208;
+  if (_72 <= 9)
+    goto <bb 47>; [50.00%]
+  else
+    goto <bb 23>; [50.00%]
+
+  <bb 47> [local count: 61206844]:
+  goto <bb 32>; [100.00%]
+
+  <bb 23> [local count: 30003355]:
+  # str_25 = PHI <str_76(22)>
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  _21 = MEM[(ee_u32 *)transition_count_52(D) + 20B];
+  _22 = _21 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 20B] = _22;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_92 = str_25 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_92
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 24> [local count: 120013419]:
+<L32>:
+  # DEBUG BEGIN_STMT
+  _44 = _51 + 213;
+  _47 = _44 & 253;
+  pretmp_24 = MEM[(ee_u32 *)transition_count_52(D) + 12B];
+  _15 = pretmp_24 + 1;
+  if (_47 == 0)
+    goto <bb 25>; [50.00%]
+  else
+    goto <bb 26>; [50.00%]
+
+  <bb 25> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 6
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 12B] = _15;
+  goto <bb 32>; [100.00%]
+
+  <bb 26> [local count: 60006709]:
+  # _95 = PHI <_15(24)>
+  # str_9 = PHI <str_76(24)>
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 12B] = _95;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_96 = str_9 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_96
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 27> [local count: 120013419]:
+<L52>:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  # DEBUG INLINE_ENTRY ee_isdigit
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _73 = _51 + 208;
+  pretmp_16 = MEM[(ee_u32 *)transition_count_52(D) + 24B];
+  _81 = pretmp_16 + 1;
+  if (_73 <= 9)
+    goto <bb 29>; [50.00%]
+  else
+    goto <bb 28>; [50.00%]
+
+  <bb 28> [local count: 60006709]:
+  # str_10 = PHI <str_76(27)>
+  # _94 = PHI <_81(27)>
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 24B] = _94;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_40 = str_10 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_40
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 29> [local count: 60006709]:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 7
+  # DEBUG BEGIN_STMT
+  MEM[(ee_u32 *)transition_count_52(D) + 24B] = _81;
+  goto <bb 45>; [100.00%]
+
+  <bb 30> [local count: 120013419]:
+<L53>:
+  # DEBUG BEGIN_STMT
+  # DEBUG c => _51
+  # DEBUG INLINE_ENTRY ee_isdigit
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _74 = _51 + 208;
+  if (_74 <= 9)
+    goto <bb 45>; [50.00%]
+  else
+    goto <bb 31>; [50.00%]
+
+  <bb 45> [local count: 60006709]:
+  goto <bb 32>; [100.00%]
+
+  <bb 31> [local count: 60006709]:
+  # str_7 = PHI <str_76(30)>
+  # DEBUG BEGIN_STMT
+  # DEBUG c => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  _37 = MEM[(ee_u32 *)transition_count_52(D) + 4B];
+  _38 = _37 + 1;
+  MEM[(ee_u32 *)transition_count_52(D) + 4B] = _38;
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => 1
+  # DEBUG BEGIN_STMT
+  str_80 = str_7 + 1;
+  # DEBUG state => 1
+  # DEBUG str => str_80
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 32> [local count: 670875013]:
+  # state_43 = PHI <state_42(10), 5(47), 4(46), 6(25), state_77(5), 3(21), 7(45)>
+<L49>:
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG c => NULL
+  # DEBUG state => state_43
+  # DEBUG BEGIN_STMT
+  str_69 = str_76 + 1;
+  # DEBUG state => state_43
+  # DEBUG str => str_69
+  # DEBUG BEGIN_STMT
+  _39 = *str_69;
+  if (_39 != 0)
+    goto <bb 33>; [96.34%]
+  else
+    goto <bb 43>; [3.66%]
+
+  <bb 43> [local count: 24554026]:
+  # state_35 = PHI <state_43(32)>
+  # str_28 = PHI <str_69(32)>
+  goto <bb 34>; [100.00%]
+
+  <bb 33> [local count: 646320988]:
+  if (state_43 != 1)
+    goto <bb 36>; [100.00%]
+  else
+    goto <bb 44>; [0.00%]
+
+  <bb 44> [local count: 6732]:
+  # str_29 = PHI <str_69(33)>
+  goto <bb 34>; [100.00%]
+
+  <bb 36> [local count: 646314256]:
+  goto <bb 3>; [100.00%]
+
+  <bb 34> [local count: 113634474]:
+  # str_41 = PHI <str_70(4), str_28(43), str_29(44), str_50(2), str_40(28), str_88(19), str_80(31), str_96(26), str_84(15), str_92(23)>
+  # state_75 = PHI <state_8(4), state_35(43), 1(44), 0(2), 1(28), 1(19), 1(31), 1(26), 1(15), 1(23)>
+  # DEBUG str => str_41
+  # DEBUG BEGIN_STMT
+  *instr_49(D) = str_41;
+  # DEBUG BEGIN_STMT
+  return state_75;
+
+}
+
+
+
+;; Function core_bench_state (core_bench_state, funcdef_no=0, decl_uid=1520, cgraph_uid=1, symbol_order=0)
+
+
+Examining core_bench_state function.
+Loop iteration number is 7.
+The number of conditional branches in the loop isn't 2.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is 7.
+The number of conditional branches in the loop isn't 2.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+ee_u16 core_bench_state (ee_u32 blksize, ee_u8 * memblock, ee_s16 seed1, ee_s16 seed2, ee_s16 step, ee_u16 crc)
+{
+  ee_u8 * D.1778;
+  ee_u8 * p_lsm.72;
+  ee_u8 * D.1776;
+  ee_u8 * p_lsm.71;
+  CORE_STATE fstate;
+  CORE_STATE fstate;
+  ee_u32 i;
+  ee_u8 * p;
+  ee_u32 track_counts[8];
+  ee_u32 final_counts[8];
+  long unsigned int _1;
+  long unsigned int _2;
+  ee_u8 * p.0_3;
+  unsigned char _4;
+  unsigned char _5;
+  unsigned char _6;
+  unsigned char _7;
+  long unsigned int ivtmp_8;
+  ee_u8 * _9;
+  long unsigned int _12;
+  long unsigned int _13;
+  ee_u8 * p.6_14;
+  unsigned char _15;
+  unsigned char _16;
+  unsigned char _17;
+  unsigned char _18;
+  ee_u8 * _20;
+  long unsigned int _22;
+  long unsigned int _23;
+  ee_u8 * _24(D);
+  unsigned char _25;
+  unsigned char _27;
+  sizetype _28;
+  ee_u8 * _31;
+  unsigned char _54;
+  ee_u8 * p.5_60;
+  long unsigned int ivtmp_67;
+  unsigned char _71;
+  ee_u8 * p.11_72;
+  unsigned char _74;
+  ee_u8 * _75;
+  ee_u8 * _76;
+  long unsigned int ivtmp_77;
+  long unsigned int ivtmp_79;
+  unsigned char _80;
+  ee_u8 * _83(D);
+  ee_u8 * p.5_84;
+  ee_u8 * p.11_85;
+  unsigned char _87;
+  sizetype _91;
+  unsigned char _97;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  p = memblock_36(D);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 3> [local count: 944999081]:
+  # i_88 = PHI <i_66(30), 0(2)>
+  # ivtmp_8 = PHI <ivtmp_77(30), 8(2)>
+  # DEBUG i => i_88
+  # DEBUG BEGIN_STMT
+  track_counts[i_88] = 0;
+  final_counts[i_88] = 0;
+  # DEBUG BEGIN_STMT
+  i_66 = i_88 + 1;
+  # DEBUG i => i_66
+  # DEBUG BEGIN_STMT
+  ivtmp_77 = ivtmp_8 - 1;
+  if (ivtmp_77 != 0)
+    goto <bb 30>; [87.50%]
+  else
+    goto <bb 4>; [12.50%]
+
+  <bb 30> [local count: 826887482]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  _80 = *memblock_36(D);
+  if (_80 != 0)
+    goto <bb 24>; [89.00%]
+  else
+    goto <bb 5>; [11.00%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  p = memblock_36(D);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _76 = memblock_36(D) + blksize_39(D);
+  if (memblock_36(D) < _76)
+    goto <bb 7>; [89.00%]
+  else
+    goto <bb 23>; [11.00%]
+
+  <bb 24> [local count: 105119324]:
+
+  <bb 6> [local count: 955630224]:
+  # DEBUG BEGIN_STMT
+  fstate_62 = core_state_transition (&p, &track_counts);
+  # DEBUG fstate => fstate_62
+  # DEBUG BEGIN_STMT
+  _1 = final_counts[fstate_62];
+  _2 = _1 + 1;
+  final_counts[fstate_62] = _2;
+  # DEBUG BEGIN_STMT
+  p.0_3 = p;
+  _4 = *p.0_3;
+  if (_4 != 0)
+    goto <bb 29>; [89.00%]
+  else
+    goto <bb 5>; [11.00%]
+
+  <bb 29> [local count: 850510900]:
+  goto <bb 6>; [100.00%]
+
+  <bb 7> [local count: 105119324]:
+  _91 = (sizetype) step_53(D);
+
+  <bb 42> [local count: 105119324]:
+  if (step_53(D) != 1)
+    goto <bb 43>; [20.00%]
+  else
+    goto <bb 44>; [80.00%]
+
+  <bb 43> [local count: 21023864]:
+
+  <bb 8> [local count: 191126041]:
+  # p.5_84 = PHI <_9(28), memblock_36(D)(43)>
+  # DEBUG BEGIN_STMT
+  _5 = *p.5_84;
+  if (_5 != 44)
+    goto <bb 9>; [66.00%]
+  else
+    goto <bb 10>; [34.00%]
+
+  <bb 9> [local count: 126143186]:
+  # DEBUG BEGIN_STMT
+  _6 = (unsigned char) seed1_58(D);
+  _7 = _5 ^ _6;
+  *p.5_84 = _7;
+
+  <bb 10> [local count: 191126041]:
+  # DEBUG BEGIN_STMT
+  _9 = p.5_84 + _91;
+  # DEBUG BEGIN_STMT
+  if (_9 < _76)
+    goto <bb 28>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 28> [local count: 170102176]:
+  goto <bb 8>; [100.00%]
+
+  <bb 44> [local count: 84095460]:
+
+  <bb 38> [local count: 764504183]:
+  # p.5_60 = PHI <memblock_36(D)(44), _31(41)>
+  # DEBUG BEGIN_STMT
+  _27 = *p.5_60;
+  if (_27 != 44)
+    goto <bb 39>; [66.00%]
+  else
+    goto <bb 40>; [34.00%]
+
+  <bb 39> [local count: 504572758]:
+  # DEBUG BEGIN_STMT
+  _25 = (unsigned char) seed1_58(D);
+  _54 = _27 ^ _25;
+  *p.5_60 = _54;
+
+  <bb 40> [local count: 764504183]:
+  # DEBUG BEGIN_STMT
+  _31 = p.5_60 + _91;
+  # DEBUG BEGIN_STMT
+  if (_31 < _76)
+    goto <bb 41>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 41> [local count: 680408724]:
+  goto <bb 38>; [100.00%]
+
+  <bb 11> [local count: 105119324]:
+  # DEBUG BEGIN_STMT
+  p = memblock_36(D);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _74 = *memblock_36(D);
+  if (_74 != 0)
+    goto <bb 13>; [89.00%]
+  else
+    goto <bb 12>; [11.00%]
+
+  <bb 12> [local count: 116682450]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  if (memblock_36(D) < _76)
+    goto <bb 16>; [90.09%]
+  else
+    goto <bb 15>; [9.91%]
+
+  <bb 13> [local count: 105119324]:
+
+  <bb 14> [local count: 955630224]:
+  # DEBUG BEGIN_STMT
+  fstate_56 = core_state_transition (&p, &track_counts);
+  # DEBUG fstate => fstate_56
+  # DEBUG BEGIN_STMT
+  _12 = final_counts[fstate_56];
+  _13 = _12 + 1;
+  final_counts[fstate_56] = _13;
+  # DEBUG BEGIN_STMT
+  p.6_14 = p;
+  _15 = *p.6_14;
+  if (_15 != 0)
+    goto <bb 27>; [89.00%]
+  else
+    goto <bb 12>; [11.00%]
+
+  <bb 27> [local count: 850510900]:
+  goto <bb 14>; [100.00%]
+
+  <bb 15> [local count: 12992276]:
+  goto <bb 20>; [100.00%]
+
+  <bb 16> [local count: 105119324]:
+  _28 = (sizetype) step_53(D);
+
+  <bb 35> [local count: 105119324]:
+  if (step_53(D) != 1)
+    goto <bb 36>; [20.00%]
+  else
+    goto <bb 37>; [80.00%]
+
+  <bb 36> [local count: 21023864]:
+
+  <bb 17> [local count: 191126041]:
+  # p.11_85 = PHI <_20(26), memblock_36(D)(36)>
+  # DEBUG BEGIN_STMT
+  _16 = *p.11_85;
+  if (_16 != 44)
+    goto <bb 18>; [66.00%]
+  else
+    goto <bb 19>; [34.00%]
+
+  <bb 18> [local count: 126143186]:
+  # DEBUG BEGIN_STMT
+  _17 = (unsigned char) seed2_51(D);
+  _18 = _16 ^ _17;
+  *p.11_85 = _18;
+
+  <bb 19> [local count: 191126041]:
+  # DEBUG BEGIN_STMT
+  _20 = p.11_85 + _28;
+  # DEBUG BEGIN_STMT
+  if (_20 < _76)
+    goto <bb 26>; [89.00%]
+  else
+    goto <bb 20>; [11.00%]
+
+  <bb 26> [local count: 170102176]:
+  goto <bb 17>; [100.00%]
+
+  <bb 37> [local count: 84095460]:
+
+  <bb 31> [local count: 764504183]:
+  # p.11_72 = PHI <memblock_36(D)(37), _75(34)>
+  # DEBUG BEGIN_STMT
+  _87 = *p.11_72;
+  if (_87 != 44)
+    goto <bb 32>; [66.00%]
+  else
+    goto <bb 33>; [34.00%]
+
+  <bb 32> [local count: 504572758]:
+  # DEBUG BEGIN_STMT
+  _97 = (unsigned char) seed2_51(D);
+  _71 = _87 ^ _97;
+  *p.11_72 = _71;
+
+  <bb 33> [local count: 764504183]:
+  # DEBUG BEGIN_STMT
+  _75 = p.11_72 + _28;
+  # DEBUG BEGIN_STMT
+  if (_75 < _76)
+    goto <bb 34>; [89.00%]
+  else
+    goto <bb 20>; [11.00%]
+
+  <bb 34> [local count: 680408724]:
+  goto <bb 31>; [100.00%]
+
+  <bb 20> [local count: 118111600]:
+  # DEBUG i => 0
+  # DEBUG crc => crc_42(D)
+  # DEBUG BEGIN_STMT
+
+  <bb 21> [local count: 944999081]:
+  # crc_86 = PHI <crc_49(25), crc_42(D)(20)>
+  # i_89 = PHI <i_50(25), 0(20)>
+  # ivtmp_67 = PHI <ivtmp_79(25), 8(20)>
+  # DEBUG i => i_89
+  # DEBUG crc => crc_86
+  # DEBUG BEGIN_STMT
+  _22 = final_counts[i_89];
+  crc_47 = crcu32 (_22, crc_86);
+  # DEBUG crc => crc_47
+  # DEBUG BEGIN_STMT
+  _23 = track_counts[i_89];
+  crc_49 = crcu32 (_23, crc_47);
+  # DEBUG crc => crc_49
+  # DEBUG BEGIN_STMT
+  i_50 = i_89 + 1;
+  # DEBUG i => i_50
+  # DEBUG crc => crc_49
+  # DEBUG BEGIN_STMT
+  ivtmp_79 = ivtmp_67 - 1;
+  if (ivtmp_79 != 0)
+    goto <bb 25>; [87.50%]
+  else
+    goto <bb 22>; [12.50%]
+
+  <bb 25> [local count: 826887482]:
+  goto <bb 21>; [100.00%]
+
+  <bb 22> [local count: 118111600]:
+  # crc_26 = PHI <crc_49(21)>
+  # DEBUG BEGIN_STMT
+  final_counts ={v} {CLOBBER(eos)};
+  track_counts ={v} {CLOBBER(eos)};
+  p ={v} {CLOBBER(eos)};
+  return crc_26;
+
+  <bb 23> [local count: 12992276]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  if (_80 != 0)
+    goto <bb 13>; [89.00%]
+  else
+    goto <bb 15>; [11.00%]
+
+}
+
+

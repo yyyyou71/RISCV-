@@ -1,0 +1,1204 @@
+{
+  "status": "passed",
+  "suite": "all",
+  "started_utc": "2026-10-23T15:36:24.436904+00:00",
+  "completed_utc": "2026-10-23T15:37:03.206645+00:00",
+  "elapsed_seconds": 38.78,
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "gcc": "riscv64-unknown-elf-gcc.exe (SiFive GCC-Metal 10.2.0-2020.12.8) 10.2.0",
+  "simulator": "D:\\Vivado_2025\\2025.2\\Vivado",
+  "build_directory": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve5_i_fast",
+  "cases": 469,
+  "totals": {
+    "packets": 233261,
+    "cycles": 414414,
+    "instret": 232792,
+    "load_stalls": 8420,
+    "data_waits": 133284,
+    "fetch_waits": 154830,
+    "redirects": 26545,
+    "mem_forward": 14620,
+    "wb_forward": 6154,
+    "held_wb": 552,
+    "drained_fetch": 1037,
+    "full_pipeline": 45506,
+    "reads": 16417,
+    "writes": 15917,
+    "pairs": 82578
+  },
+  "generation": {
+    "suite": "all",
+    "programs": [
+      {
+        "name": "smoke",
+        "packets": 4,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "forward_priority",
+        "packets": 6,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 24
+      },
+      {
+        "name": "x0_immutable",
+        "packets": 6,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 24
+      },
+      {
+        "name": "load_use_and_store",
+        "packets": 8,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32
+      },
+      {
+        "name": "held_wb_operand",
+        "packets": 5,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32772
+      },
+      {
+        "name": "load_store_address",
+        "packets": 6,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32772
+      },
+      {
+        "name": "load_branch",
+        "packets": 5,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32772
+      },
+      {
+        "name": "load_jalr",
+        "packets": 5,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32772
+      },
+      {
+        "name": "jalr_lowbit_rd_rs1",
+        "packets": 4,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 24
+      },
+      {
+        "name": "wrong_path_store_illegal",
+        "packets": 5,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 32
+      },
+      {
+        "name": "backward_loop",
+        "packets": 96,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 24
+      },
+      {
+        "name": "byte_half_lanes",
+        "packets": 13,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 52
+      },
+      {
+        "name": "fence_order",
+        "packets": 7,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 28
+      },
+      {
+        "name": "not_taken_misaligned_target",
+        "packets": 4,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "jal_misaligned",
+        "packets": 2,
+        "cause": 0,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "jalr_misaligned",
+        "packets": 2,
+        "cause": 0,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "branch_misaligned",
+        "packets": 1,
+        "cause": 0,
+        "upstream": false,
+        "image_bytes": 8
+      },
+      {
+        "name": "fetch_fault_after_jump",
+        "packets": 3,
+        "cause": 1,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "misaligned_lh",
+        "packets": 2,
+        "cause": 4,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "misaligned_lw",
+        "packets": 2,
+        "cause": 4,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "misaligned_lhu",
+        "packets": 2,
+        "cause": 4,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "misaligned_sh",
+        "packets": 3,
+        "cause": 6,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "misaligned_sw",
+        "packets": 3,
+        "cause": 6,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "access_fault_lb",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "access_fault_lh",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "access_fault_lw",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "access_fault_lbu",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "access_fault_lhu",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "access_fault_sb",
+        "packets": 3,
+        "cause": 7,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "access_fault_sh",
+        "packets": 3,
+        "cause": 7,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "access_fault_sw",
+        "packets": 3,
+        "cause": 7,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "load_x0_still_faults",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "address_wrap",
+        "packets": 3,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 12
+      },
+      {
+        "name": "older_load_fault_beats_younger_ecall",
+        "packets": 2,
+        "cause": 5,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "older_store_before_trap",
+        "packets": 4,
+        "cause": 3,
+        "upstream": false,
+        "image_bytes": 20
+      },
+      {
+        "name": "ecall_precise",
+        "packets": 2,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "ebreak_precise",
+        "packets": 2,
+        "cause": 3,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_all_ones",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_zero",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_compressed",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_mul",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_add_f7",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_sll_f7",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_slli_reserved",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_srli_reserved",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_load",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_store",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_branch",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_invalid_jalr",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_fence_i",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_unknown_csr",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_malformed_mret",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "illegal_malformed_ecall",
+        "packets": 2,
+        "cause": 2,
+        "upstream": false,
+        "image_bytes": 16
+      },
+      {
+        "name": "reset_inflight",
+        "packets": 5,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 20
+      },
+      {
+        "name": "upstream_add",
+        "packets": 426,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1268
+      },
+      {
+        "name": "upstream_addi",
+        "packets": 203,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 668
+      },
+      {
+        "name": "upstream_and",
+        "packets": 446,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1228
+      },
+      {
+        "name": "upstream_andi",
+        "packets": 159,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 468
+      },
+      {
+        "name": "upstream_auipc",
+        "packets": 20,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 92
+      },
+      {
+        "name": "upstream_beq",
+        "packets": 252,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 724
+      },
+      {
+        "name": "upstream_bge",
+        "packets": 270,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 820
+      },
+      {
+        "name": "upstream_bgeu",
+        "packets": 295,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 872
+      },
+      {
+        "name": "upstream_blt",
+        "packets": 252,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 724
+      },
+      {
+        "name": "upstream_bltu",
+        "packets": 277,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 776
+      },
+      {
+        "name": "upstream_bne",
+        "packets": 252,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 728
+      },
+      {
+        "name": "upstream_jal",
+        "packets": 16,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 104
+      },
+      {
+        "name": "upstream_jalr",
+        "packets": 76,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 264
+      },
+      {
+        "name": "upstream_lb",
+        "packets": 214,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_lbu",
+        "packets": 214,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_ld_st",
+        "packets": 924,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16464
+      },
+      {
+        "name": "upstream_lh",
+        "packets": 230,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_lhu",
+        "packets": 239,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_lui",
+        "packets": 26,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 116
+      },
+      {
+        "name": "upstream_lw",
+        "packets": 244,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_or",
+        "packets": 449,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1240
+      },
+      {
+        "name": "upstream_ori",
+        "packets": 166,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 496
+      },
+      {
+        "name": "upstream_sb",
+        "packets": 415,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16400
+      },
+      {
+        "name": "upstream_sh",
+        "packets": 468,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16416
+      },
+      {
+        "name": "upstream_simple",
+        "packets": 2,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 8
+      },
+      {
+        "name": "upstream_sll",
+        "packets": 454,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1380
+      },
+      {
+        "name": "upstream_slli",
+        "packets": 202,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 664
+      },
+      {
+        "name": "upstream_slt",
+        "packets": 420,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1244
+      },
+      {
+        "name": "upstream_slti",
+        "packets": 198,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 648
+      },
+      {
+        "name": "upstream_sltiu",
+        "packets": 198,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 648
+      },
+      {
+        "name": "upstream_sltu",
+        "packets": 420,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1244
+      },
+      {
+        "name": "upstream_sra",
+        "packets": 473,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1456
+      },
+      {
+        "name": "upstream_srai",
+        "packets": 217,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 716
+      },
+      {
+        "name": "upstream_srl",
+        "packets": 467,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1432
+      },
+      {
+        "name": "upstream_srli",
+        "packets": 211,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 692
+      },
+      {
+        "name": "upstream_st_ld",
+        "packets": 444,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16464
+      },
+      {
+        "name": "upstream_sub",
+        "packets": 418,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1236
+      },
+      {
+        "name": "upstream_sw",
+        "packets": 475,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 16432
+      },
+      {
+        "name": "upstream_xor",
+        "packets": 448,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 1236
+      },
+      {
+        "name": "upstream_xori",
+        "packets": 168,
+        "cause": 11,
+        "upstream": true,
+        "image_bytes": 504
+      },
+      {
+        "name": "random_000",
+        "packets": 1946,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_001",
+        "packets": 1938,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_002",
+        "packets": 1934,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_003",
+        "packets": 1918,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_004",
+        "packets": 1917,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_005",
+        "packets": 1921,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_006",
+        "packets": 1926,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_007",
+        "packets": 1932,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_008",
+        "packets": 1922,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_009",
+        "packets": 1940,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_010",
+        "packets": 1909,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_011",
+        "packets": 1922,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_012",
+        "packets": 1932,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_013",
+        "packets": 1930,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_014",
+        "packets": 1931,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_015",
+        "packets": 1926,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_016",
+        "packets": 1938,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_017",
+        "packets": 1940,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_018",
+        "packets": 1933,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_019",
+        "packets": 1924,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_020",
+        "packets": 1931,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_021",
+        "packets": 1932,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_022",
+        "packets": 1938,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      },
+      {
+        "name": "random_023",
+        "packets": 1926,
+        "cause": 11,
+        "upstream": false,
+        "image_bytes": 33280
+      }
+    ],
+    "simulation_cases": 469,
+    "instruction_coverage": {
+      "add": 984,
+      "addi": 10455,
+      "and": 1816,
+      "andi": 1323,
+      "auipc": 411,
+      "beq": 629,
+      "bge": 673,
+      "bgeu": 622,
+      "blt": 607,
+      "bltu": 659,
+      "bne": 2386,
+      "branch_not_taken": 3264,
+      "branch_taken": 2313,
+      "ebreak": 2,
+      "ecall": 81,
+      "fence": 1555,
+      "illegal": 16,
+      "instruction_access_fault": 1,
+      "instruction_misaligned": 3,
+      "jal": 3668,
+      "jalr": 12,
+      "lb": 864,
+      "lbu": 760,
+      "lh": 820,
+      "lhu": 758,
+      "load_access_fault": 7,
+      "load_misaligned": 3,
+      "lui": 3869,
+      "lw": 896,
+      "or": 1831,
+      "ori": 1401,
+      "sb": 1356,
+      "sh": 1325,
+      "sll": 1858,
+      "slli": 1396,
+      "slt": 1928,
+      "slti": 1369,
+      "sltiu": 1317,
+      "sltu": 1824,
+      "sra": 977,
+      "srai": 740,
+      "srl": 957,
+      "srli": 706,
+      "store_access_fault": 3,
+      "store_misaligned": 2,
+      "sub": 906,
+      "sw": 1296,
+      "xor": 1889,
+      "xori": 1358
+    },
+    "excluded_upstream": {
+      "fence_i": "Zifencei is outside this core configuration",
+      "ma_data": "This EEI traps misaligned data accesses; directed trap tests cover that contract"
+    },
+    "random_seeds": 24,
+    "rv32i_instruction_kinds": 40
+  },
+  "source_sha256": {
+    "rtl/cache/rv32_burst_arbiter.v": "13bc6efa41ee024d1eb9cd3bc739991644d2c4cea1e0dd11db789a97cdeb859b",
+    "rtl/cache/rv32_burst_cache_2way.v": "3470d3387bcc89a5f36788488e8f77ae3df17fbe46c2335cd041e2445b451c6c",
+    "rtl/cache/rv32_cache_2way.v": "9a0151209b16522f2c2fd34a2be4d81e0b42b0371f0fe847fcd733f5a4e1fda4",
+    "rtl/cache/rv32_dcache.v": "cc81e6b4341d64376ca9606d666d1530a69315cb85a74c4f5ca801bd5d72330b",
+    "rtl/cache/rv32_icache.v": "f8757bda3d77be113a45fbc2c6c3c960d4d05db75396b4a24547cc3c11e29478",
+    "rtl/cache/rv32_word_to_burst.v": "33f5aaca2640614383bfaeb8b3a35d2decc0ad7d6bafecc8d8ee053b6876c55f",
+    "rtl/rv32_alu.v": "67f9cd95b22c36a87f5bec1745fbc7df4fd26b9025873423ea984062bd561f28",
+    "rtl/rv32_core.v": "c3faca20b11de907eec4486e697765ee6e8bedc78a3280cfca07fa2d54ad5987",
+    "rtl/rv32_csr.v": "87a6270394f6ef23d1867b7be4dc68fc1815d0ce413bcf4ea11b6022fc7e9eba",
+    "rtl/rv32_decode.v": "334f8ee7d72f1c9a8b7522c0ccc702bc5a66b062d00308ee0e14a6642948f358",
+    "rtl/rv32_defs.vh": "f7c3c5656df9450b14d38eeef92768226d2fac1380e9acc2e617d5ffe9b37bdf",
+    "rtl/rv32_fetch.v": "9bba7aaaab65947c3daf5eb1fd7c12ba5e8ce8cdf95be98063c4927b5acd9eb0",
+    "rtl/rv32_muldiv.v": "628ca2028de990a8503dffc116bdebb696b8f66a898d394133b16a91eeeeb595",
+    "rtl/rv32_predictor.v": "36d0783d167f5d22cb713ac6462a9c0e135fe2ffd910b78ed1cc25efcb8c7118",
+    "rtl/rv32_regfile.v": "9be568e8782b36687d5372e113e7e801827e0f0c13bcb9bf5dfbf8af7f1c2fe1",
+    "rtl/soc/rv32_gpio.v": "c556542875d5ce943c4af420ccdbc40d96ce2fbb452b9f3e90c609ea03ade161",
+    "rtl/soc/rv32_monitor.v": "4d573c49996ef12ca407ab58534561df1d3dd62018578c442cbb80229b4f81ff",
+    "rtl/soc/rv32_soc.v": "2b09bfa086a2022520aec44691cdc296d528758e31d9738d43f2ed1deb4b4d03",
+    "rtl/soc/rv32_soc_fabric.v": "aabab05a98574e254ab91bdf3a83991f6cd28b0be01262081782c371375f9361",
+    "rtl/soc/rv32_soc_memory.v": "8a130357c29e581ab870fd36deab1a3d3b3ea4108e03b0621ffe911135423ca7",
+    "rtl/soc/rv32_timer.v": "14332dc37e0cb5b6d955c6f47710402eeb0ce3ef5f84296c588f42f430ed1a53",
+    "rtl/soc/rv32_uart.v": "49295d75ca468b13181dc70a6fb7077b79d95805191d6ef0a00fac6583260797",
+    "sim/bp_profile_monitor.sv": "644bbbd008964a5017d9904f1946b388f623b7015b4db89762ed7a5fcb5c28fc",
+    "sim/burst_profile_monitor.sv": "d705c2a9decfba6b79053a9099630d3e2b47dd323f31c0d33dc41bd68c9a2f06",
+    "sim/burst_word_test_adapter.sv": "4fc6f12789a872646763bc5adb614a9cf08c173a25ae11192a9751c989476b99",
+    "sim/coremark_profile_monitor.sv": "d94bb1c3c539efe969a398c68b017aa4bbfcd759aa02092f749f14067a847982",
+    "sim/dual_profile_monitor.sv": "e7a0476fc2348e56b18f30ae1c42980f14a7eebe9bbfba46af2ed403a4363ce0",
+    "sim/evolve_profile_monitor.sv": "8ccbdbe8ffbab5432ca484a2cd26986eaf8a41a05a568bac80ff73ec12063835",
+    "sim/front_profile_monitor.sv": "88f1c78c4d3d49d366a3c29024cf76068e69ef40d0c76c3e4dda25812d9c38bc",
+    "sim/tb_board.sv": "ba16572ff8197dd1707f821cebafd34a55ccaa435b8a35cc684cb36f8111ed5e",
+    "sim/tb_burst_arbiter.sv": "4331ae7bb7fad571d0649fa5b5c63054a8b9ce7fbf53842c3b50837185e4c592",
+    "sim/tb_burst_backend.sv.in": "58cf9284e1e7ec1488c0766418f2b807a7dbd58d35e2d9195e22797d48bc0e5d",
+    "sim/tb_cache_unit.sv.in": "eddf6ac93dc78a8d8ba8aaa5e17bd7899765d347f81232ebcc86b147a7f74ce0",
+    "sim/tb_core.sv": "200c53c492318f370fab6029fab5dd8a5816e148153268b07cea889777bff555",
+    "sim/tb_coremark.sv": "317208e21e869a8e35e44c83009c545934151e79cc0310d330d862a2895d8460",
+    "sim/tb_dual_fetch_fault.sv": "0fede845251861baaf6c7634b40d67186d879175aad30d3975eafe1248f79f73",
+    "sim/tb_dual_fifo.sv": "73390792169d50b87669ebc72e81894a1b4574a02afd969aa2f5a86c22a44c5c",
+    "sim/tb_dual_prediction.sv": "fddbd66b01e3e77eb96a2b4dce4f4a749a317479d29fa5929899c5e7a4736ff0",
+    "sim/tb_dual_regfile.sv": "98efde57816d1bed28545261545fcbc1164561b25ba9c56fbebaa4fca16f47d6",
+    "sim/tb_fetch_predict.sv": "a46a7ef305a01e4b9ece45864adc5d06f6d2ca44739cf52d5be47701360ffd08",
+    "sim/tb_front_fifo.sv": "9dcf9846528b3ff8fc67284bbacc4f143183264222b1bafb89e16670df6489fb",
+    "sim/tb_m_fetch_fault.sv": "4e39770b3eff832408d1f8db2f8d893bb1bbc1227b267ef85ba04cde7418e20a",
+    "sim/tb_machine.sv": "404a9b4f9ed9ab46c1abb56ce070d7a1cd384b24f26d94dabdafda96a518bb0a",
+    "sim/tb_machine_demo.sv": "4c8896556d43ee571484c533588ed6993495d6a770b02e0f133c6c66f575ee0d",
+    "sim/tb_modules.sv": "8df27725fdedf83277530ada3c377af6e7efcadf9f1685966345ee36232840a4",
+    "sim/tb_monitor.sv": "0f19a09deee72083adbab67b783dc21b908e4d8cbac9358e5069a641d18aba4e",
+    "sim/tb_muldiv.sv": "d2a03a022242c83872479e78fc120c0e6c4bb9c21727e954cd076707db1c5cbd",
+    "sim/tb_predictor.sv": "32c59ce3ff4710aeca6433841c26d97b8432f81ff9c016e7447dca57c60e18e7",
+    "sim/tb_rom_lookahead.sv": "4d992a4e06fb37bbffe87a2f96dc158473bde9ec1cc938e3f6155f300c40b692",
+    "sim/tb_soc.sv": "8a24e19327ef516bc324f0af24470c37d7b488861e7f3c4d28748c6e07025692",
+    "sim/tb_soc_peripherals.sv": "df3e0914079471ed4bb0d1a24559039fac1355aa8f46b8e4bc1bf740243aefc8",
+    "tests/bp_programs.py": "d6f4ab69189b5933ad9cd8c40107fa97d9956b9d778b3e02d6754c7cf6e818c9",
+    "tests/bp_vectors.py": "fe5029298806ffa108cd367559fd53fb08b4c399cd5c335f5480fef54674cbe2",
+    "tests/cache_programs.py": "5b19adb9e998d3031574bb2fcdeeac97fda8bf156f6668ef84863cb3693f2e5e",
+    "tests/cache_vectors.py": "0154acbc8ab2fb63a6bb21ddd8b77c0f9ff08e02102e88d82ecb796e432c9b83",
+    "tests/dual_machine_programs.py": "7486416ab91cdbc716e429b342c2dd901fa0bb161824dbf07b62e607c9600018",
+    "tests/env/link.ld": "942c689a684772aa4a4dfe9cfd1ffeecf8d99eaa1d1d3e07c3cad6a79b40498d",
+    "tests/env/riscv_test.h": "d6a2950c088ba08760575b69bd9deb9945966e6bff2bee9ee1fd76fec66fea44",
+    "tests/front_predict_reference.py": "08aeda949d78682fec0df6a9be7d0a1f6e25f0b6208eb3a38443dbaee9abc926",
+    "tests/generate.py": "20c89ef9a48a524a0c9620ef5e9cff0b8de923dfad992f530531e90004b93dcd",
+    "tests/lsu_irq_programs.py": "a3b87080d94e734471cf74c4054251c088e49f8635950d6e354104a3bb47f4e9",
+    "tests/m_interrupt_programs.py": "5c2d34eebe0b0a70c7fbc3dfad29f6941be182dad59d84cdadd98ca06c006c9c",
+    "tests/m_reference.py": "6f4bc53a5b8981f36b947700354d50f1479fcb7bbf560923b7c09b9e96272549",
+    "tests/machine_programs.py": "07a4b97b6f83f0d0636449fe6fde0eea3696a98e4e8ce7eda48502ba02b70509",
+    "tests/reference.py": "7e32e5c49c2246fb855220510837e9e59d93e9895817bd8e0028c501ecc7ac9a",
+    "tests/test_board_report.py": "7be4d7698689bb232995167616faeffb63d3482cc8ec319d95d19e7b3fd31339",
+    "tests/test_coremark_parser.py": "a14878e5b085a3ca2f37c8e89f6ea522ce782d7164e17b030478b15902661649",
+    "tests/test_coremark_serial.ps1": "ff4fba08b3054e87c9e6560fc26d45116077d49e8fec7b06f519b06ca161dd9f",
+    "tests/test_dual_log.py": "3c09af421db1dfcb11fedba8008767547795d7018f0d674a4d1a19f9204b4f6b",
+    "tests/test_evolve_log.py": "200e95b0faed3226a72c84bc52ca76c4f53c8e27c2360f816218de19cb864105",
+    "tests/test_front_log.py": "d1fc2c1c8eec880717c04f144717a6283e34e8da7a7eca67b5c8ab762557d925",
+    "tests/test_m_log.py": "acbc2bc41dd3519e7da739d560d8708948656cdc6a62cc9ee73ba9bd39fb1a18",
+    "tests/test_platform_identity.py": "26454c40fd5653c477e8cc7f15a8329d78c258e1545a38c6c1673dec07df01b1",
+    "tests/unit_vectors.py": "db767f23c673922b0b19df5e49bd68c05ec9f74683202aad898e36ac8d57e958",
+    "scripts/arbiter_regress.py": "3c48a3bb94ded4b1578c829fb6106bf5076cec3a35ef56248109d3ac32dbbbb7",
+    "scripts/audit_pds.py": "645ecaaaeecd0120942dfd0b7a5609ae55c24f560c5c32c2f16a3c35e191baf5",
+    "scripts/backend_regress.py": "76c21e509eeef81e9538cbf0edc6a7235ce4b003a805b6bdca7715e51fac15d1",
+    "scripts/board_regress.py": "4b7e909711ac34ed8cf3166b69310d2d3d89bde756fdacfdb470e88b28d16699",
+    "scripts/bp_unit_regress.py": "527f29e1bfc9980f757ceed2b9ace67bd94493d6c163151b8796274d2c8c482c",
+    "scripts/branch_pair_regress.py": "3e5f3b819fc25a755142321aa5d4af1e9dab137edfc29af9e3b057bdc370ce08",
+    "scripts/build_coremark.py": "306713a38f9174b93b5917b14d3c600a7b0e58ae0668d85aabd2ddc29ff89a94",
+    "scripts/build_firmware.py": "6de91d09015f0007dc84dd3ea7333484162d76edbb631183dccea95944a137f1",
+    "scripts/build_machine_demo.py": "bd1013ef373aa047a14749206127c65472613103876aca445c5616ddad91ba06",
+    "scripts/burst_unit_regress.py": "fa2f252316a0bd51955ee6cf5ad33c1706686daef6c8a3260a9eeaa4741f834c",
+    "scripts/cache_board_pds.py": "0d243adf382605ccc0c148cb0d694c5daee00fa0621bdfeadd5270e163b0b6b4",
+    "scripts/cache_machine_tb.py": "bb43e522bd79c14cb3ec20a92c8c09cf95c1782d13034c0b6da628cff59879fb",
+    "scripts/cache_unit_regress.py": "adf507eb1a63f17c5525f622f843501a9a54d7282ad8f873ff38235ca3851a02",
+    "scripts/capture_wave.py": "f99715b1cc262589fa0dfea3d610bc4d5b13f9b7f5555f985866ab936c64f170",
+    "scripts/check_mutations.py": "d7778896a40eb1e9942e323be6c1e7fe283386c4eff7cb0327d52eb6adab3761",
+    "scripts/compiler_sweep.py": "a48d4df98c842b68aee63aa5f649a550d4b29defa79171af26b02e6d7f715b37",
+    "scripts/coremark_regress.py": "d1eff854b8a4c785ce6eb853f30ef27ace573fad14a144da0ef90dd90166aa0c",
+    "scripts/coremark_serial.ps1": "bbeecec0b316e0fd826dddf403369042bb17056a98b8828c798ed639fb51f2f8",
+    "scripts/dual_directed_regress.py": "d6e72d69a62f6e70e23f0e20fc9a23697674239f3635bdcd04f5094623e8f81b",
+    "scripts/dual_docs.py": "04c8858116d1d4b99d35579f4664e1402c70d999ca5d84a3c8fdf0c62e2af4b8",
+    "scripts/dual_fifo_regress.py": "b593731536946cc06184f60beb1ef66809a55d2e8775e34397bfb808056ce23f",
+    "scripts/dual_pair_regress.py": "df8188e8ba2c2281622e796c73c22d96749c0369b65f86c5408b7001b532ecb0",
+    "scripts/dual_pds.py": "f2eb79f1d7de0542e1379f0979c8a8083bbdda57e67d91d644cffad1b783c279",
+    "scripts/dual_regfile_regress.py": "fcebded4e250e63b963a689079bb2df7bb30bbcc1993ba7dc5c3e1ce542436e9",
+    "scripts/dual_summary.py": "358c0f0964c83ead83aa27e241265129a766fa6f091a9ce17d3a524d64a0aeda",
+    "scripts/dual_testbench.py": "11e71f319b14f789ea139b69ef73bd1d2f1dbd75793db876f9c8cc3221bd4726",
+    "scripts/final_core_checks.py": "719520fc70bce2961e1cccfbe0decb0c72935338de5cab017b1d0629dc704f46",
+    "scripts/final_measurements.py": "c5d207c60e779011fe6699a5f79eb9bb838bac2aa7147b638eb3e55631ff2506",
+    "scripts/front_configs.py": "951fc27971f643a17261ebc869ccc1b7499adcf9126af4ba0b8bcc4c5ffae804",
+    "scripts/front_fifo_units.py": "0b5254194a77f34beb7c4799e1f597632c4d4bf984a117ddcd3eb97072b2defb",
+    "scripts/front_final_regress.py": "6712f8e84eca25a1ebd2cfe3d133a7b45e6f78c9193001272bdbcca540396def",
+    "scripts/front_pds.py": "0d2282475c329f6a7f20ca2ce3d4055e880a286f7d767a2a49b7862c0718c4c9",
+    "scripts/front_predict_units.py": "59585f298d232325ea717ca24a2d8aedf043b51f58fdd1e343ff0ec7d563cc82",
+    "scripts/front_summary.py": "6e8c5b0d054fd12dcd2edf0cb76cf185d98e108392bcf6ffaafa193091d1a5f6",
+    "scripts/front_sweep.py": "7080b187f2f99373f21a32d38587d11d8079cdb2f433f8e3f33017e0168f4f50",
+    "scripts/front_synthesis.py": "4483de553c9331576844cf7f240cdf3bbd6f99607cdbbe4545171f62af29cb5b",
+    "scripts/generate_m_boot_vectors.py": "de34be191b3d7b79ab0ff3dcadc1dd1c6cd5ebb8a5b424f25f7437a0bf4819ac",
+    "scripts/lsu_pair_regress.py": "44a6d70a1feb28d0c61f75de61a8ac90314c48fe1db59c0e5bc225de026af48f",
+    "scripts/m_core_regress.py": "a545df275b5f9099a0c76456fade07d350ac568c932839a327c45af69a9ae075",
+    "scripts/m_fetch_fault_regress.py": "9716be986c31b0701c4a9910995fe9973434a73ef7d1e109ae47615131aab7e4",
+    "scripts/m_unit_mapped.py": "15e0b22a1e4ec37997f4fd2fe663c7d1f09ee74c0a7ffcb5f19310c4cb5c9f5c",
+    "scripts/m_unit_regress.py": "f9de7d5ef406bb634814ceed0d9c146bcaaf451b78fc231f453071705e3204a5",
+    "scripts/machine_demo_regress.py": "d049918e6fb59e3139dffbfc1930da7632e1e591950ffee4e79876886e90388e",
+    "scripts/machine_regress.py": "1f3f9a31666f7b13ef7d8494616fb927a757294bbebcf8f31264349ebaed6454",
+    "scripts/mext_pds.py": "5d70474f294ad69f07121a1e30ec17899e3fbf7f1171a39b80a7e73d56ffa647",
+    "scripts/monitor_regress.py": "2f9d3787ea34e8f3dc0d87ec392591cb90fba2e8b4cba6bd0c61e5b1f1b9ad72",
+    "scripts/mul_slot_regress.py": "f65bb655e8a01bc17354b19520d806c8169fcdfa9465d4bcde3b479d51e76d92",
+    "scripts/optimization_checks.py": "85be641e9cb16750d1a9aa48d766136c2d17111a95f7744dca94378dd0e5f224",
+    "scripts/package_dual.py": "ee541b44617104e050aa5075be9e0806932d05dd08458ca78e668e3a77cdcc0b",
+    "scripts/parse_coremark.py": "3ac413f0e9147fa3eb0ac7c068857773cbb1360f6c03c6ca711e62952a592aa7",
+    "scripts/platform_identity.py": "ef37725cd119be50a68d29bbca9fea767b3807fa4c22ccedf2b4272b5f9fbabd",
+    "scripts/prepare_board.py": "c21f19866abcbb80831112398bbfb20543dc87eb4fcf555edc07f3b0dbc068f0",
+    "scripts/probe_m_toolchain.py": "7a3be26e31eb308d726261ffe603c69dd2d60cd991bf98ad5350d88484bc0946",
+    "scripts/regress.py": "60e67e5eab03f3f9754a9133046a1b306611bb7c362fe3df85c495e1c9997c43",
+    "scripts/report_board_coremark.py": "eb72c55040cac9b4a1aa23f5e3ccc803122ffc5fe6a8f2592667fb8cfcaafcdc",
+    "scripts/run_backend_stage.ps1": "c1b299ca8e780b828de2d56a6e3b93d6a939e15b1ae583ae45303e5d4c195fdf",
+    "scripts/run_board_coremark.ps1": "21b3b365e1f15b716c5afba3767edc1feaecd9f16ee494ccc63263bd6ac6c1e4",
+    "scripts/run_board_stage.ps1": "f3466a3d768e5bb21ae97c64b3d91725e1f68005726dd1057ee1ceec089466b2",
+    "scripts/run_cache_stage.ps1": "2669b38bd38017496992673d9418c0229f700e23458d4f751816aaf64f2b4761",
+    "scripts/run_pds.py": "e840d975733fca0bb169610de85f3b7fd1a82b741f9d234419b6265563ec614a",
+    "scripts/soc_regress.py": "c018ad71797d58bed74668a9645416ee0373481db41249271cb733d359b1de4d",
+    "scripts/summarize_mext.py": "ba677a69596dc91b858422cd78430ceeea385fb063d8cb968d99347b30d6a272",
+    "scripts/verify_dual_log.py": "fd5502da99fd5bae3dcf06457ec487003183b076f30269b7e3b48116eeacd35e",
+    "scripts/verify_fast_multiplier.py": "0e05a855d3e8c3f3511165ea5590eafee96803b0b440a94d8b5c8f5061c1c786",
+    "scripts/verify_front_log.py": "ef918299b0258ed16c56f731bd8fcecd2c2e6537303427050c122a3fdf9a1e41",
+    "scripts/verify_m_log.py": "250ee66566f252f53e75d1adfe0d897d9bef3390ad35d0738cc22c465dbb9e81",
+    "scripts/verify_package.py": "0a66e3deb33cc26f4e267cfa12a0b4b652d9c190720e1f8336f6bd2f91b16c75",
+    "third_party/coremark/core_list_join.c": "ca00e4e010ece47d7f040cb92aa50a95345a00d3171b59d088f6b243be06ce7b",
+    "third_party/coremark/core_main.c": "17884c93c5b94378eb0ff02b4df3725756cf2addb9b8cbcaa6200a4649ff5ca7",
+    "third_party/coremark/core_matrix.c": "ecdff717b5a5c4907d221a606760e25499899cbf617582c05d40db71c91351e4",
+    "third_party/coremark/core_state.c": "f4b84bb0a3452c45a4daa664ab502bfdccbd31cb57d93e9ac490c60937717a4e",
+    "third_party/coremark/core_util.c": "a3fbfcb9bb943b638624b8ece01c5836dd56a96d7bcde2697b248d077447327f",
+    "third_party/coremark/coremark.h": "29f7eb0f0bdf6002f6c7dccfa4f8f9f32c0b8f6709f6538c2b73221938a9c8f1",
+    "third_party/coremark/coremark.md5": "dad92861212f8f012e75974e23ea97f7a275a375e0d3bc1d3b216423ba6b6306",
+    "third_party/coremark/LICENSE.md": "9577b9c846f61fd69a0d8ac965998c6450c7d8969f71f0bb4a931b91aebad28a",
+    "third_party/coremark/README.md": "5581fb67dc1609cbd1865f150dbcb1050d96c602987792456850eb96eb0dd08c",
+    "third_party/coremark/upstream-lock.json": "4d33f4ecdce3ac64bdf00d5d77cf6127f35546d04f5a8640104d61ea5bfff50b",
+    "third_party/coremark/UPSTREAM.md": "db62ee47eac6d3f64bd24c336a0404851b3d69d2a78f5ef7d9938b1dfe3f720a",
+    "third_party/riscv-tests/isa/macros/scalar/test_macros.h": "7dfef3a05ce20ea3d791a6bb9587f28ac415d7a15d9975afab3e824d918c26e9",
+    "third_party/riscv-tests/isa/rv32ui/add.S": "fc58a191fe5c59f95a6a7d28313e6ac43d30cd14683c5e12cf7c36f5afaf7e19",
+    "third_party/riscv-tests/isa/rv32ui/addi.S": "329cf3f4f9dd85ca49dfa3995f8124e5b88fcd2e1d5a60f048748d996d7a214a",
+    "third_party/riscv-tests/isa/rv32ui/and.S": "530f0e60cddba6e71057284899a5abf3e2215e4839b54fc30665ebd6cdb970f6",
+    "third_party/riscv-tests/isa/rv32ui/andi.S": "152e3675938460bb1e151c7106db8b5b37c9d1504371d4486920699990b77b08",
+    "third_party/riscv-tests/isa/rv32ui/auipc.S": "6ff9ffb624b5cb9ba09abc984e65db6a0ef21249c282f3075aae397fc0d0651b",
+    "third_party/riscv-tests/isa/rv32ui/beq.S": "6ac569afb793b0ef9a2b761f50c29ba62c58d2555471e198c5cc7eae37ecda78",
+    "third_party/riscv-tests/isa/rv32ui/bge.S": "30aab0162b243fc5e1452ee797741b29ba67cd6b7d948c8f14a13593a89e92c6",
+    "third_party/riscv-tests/isa/rv32ui/bgeu.S": "f1eaaba930d3ddb6ad9a6e1f7b5b5d11589768d1a2f3f8a8562a7525a0465825",
+    "third_party/riscv-tests/isa/rv32ui/blt.S": "94bfeef39f85b4d2efea6d090d35ebea078f7435902279dbed069797a0939a44",
+    "third_party/riscv-tests/isa/rv32ui/bltu.S": "48aa29dde0e9b93ef7443b0cc447ce7e0ee5f012125b362bf999d6bb26dab2e7",
+    "third_party/riscv-tests/isa/rv32ui/bne.S": "31009cea25fc08d7f28e8050a172b952eccb0d70c1a76037cec7fb75fecb6e99",
+    "third_party/riscv-tests/isa/rv32ui/fence_i.S": "2c69707105f7e9a7788b5298df337c0fd90fb5ed553cbaf9a36f908cd5c9d3d8",
+    "third_party/riscv-tests/isa/rv32ui/jal.S": "c1363aaaa68a41629d7452e7d425b26310b5ce258c4eba0f3303be0006bf151f",
+    "third_party/riscv-tests/isa/rv32ui/jalr.S": "7692a49f51472947d4a88ee820f7e61115e86ab874db09079447893d9535817f",
+    "third_party/riscv-tests/isa/rv32ui/lb.S": "3553f2d59de9e1496b17f135469597245105ab1a1bd2adeee6bf6e1e1c8a8055",
+    "third_party/riscv-tests/isa/rv32ui/lbu.S": "1dff517dd2c33cc26678302a0d3949232faeb84222a8edf97bd0411d0b774542",
+    "third_party/riscv-tests/isa/rv32ui/ld_st.S": "afe2a6812b4b695e3e9e5ea36726d8c1de7982539eee22dc9312bf481cd1b911",
+    "third_party/riscv-tests/isa/rv32ui/lh.S": "e7ae579858cec3b2b2f2d1cabbd48908a1fe862a8dfc5c7cd75eb418f14a05d4",
+    "third_party/riscv-tests/isa/rv32ui/lhu.S": "95c1c2f0b76abaeb77602ba5f6d1e1fafd538986f7ed68eeaacf5418f4e2270a",
+    "third_party/riscv-tests/isa/rv32ui/lui.S": "fe8dae76f1cd388b5d3b8b7e952205dfd2fc8fadf057f16de48ecda6eb1fe1ad",
+    "third_party/riscv-tests/isa/rv32ui/lw.S": "45287aaa4e0ca4962d15837e41255bd11e69da8477126f921132e6243fdc7824",
+    "third_party/riscv-tests/isa/rv32ui/ma_data.S": "46e99521cb93208077041e1d46c2e7c051f6edd9b2e660c0f8bcd94c972dc7b8",
+    "third_party/riscv-tests/isa/rv32ui/Makefrag": "b27cb5675d1eeaa07a7b471e1aab6c34b46fe14e674eb3600566f4e42b7048a7",
+    "third_party/riscv-tests/isa/rv32ui/or.S": "12ccc0ebfa7a47738944e64a7789f8807b6d51619a705268e0d302049c2bb256",
+    "third_party/riscv-tests/isa/rv32ui/ori.S": "64aa0e98ababcde5bb9666138b9b9ac361293b0cb030a046f2eb9eeb5d959910",
+    "third_party/riscv-tests/isa/rv32ui/sb.S": "57856776ad67d8bd1f568077b9ec16d67fd5de9a84000b16dce5aedba5a01f0d",
+    "third_party/riscv-tests/isa/rv32ui/sh.S": "ce218a82fe2d04d8ffb256bfae30ddc0caa0f5dc392e2b3d8fcd8f87f9a490a8",
+    "third_party/riscv-tests/isa/rv32ui/simple.S": "4b80ead0309195eae9723189274d54a8cf478d3922ba928c7c3c9bfe2a283def",
+    "third_party/riscv-tests/isa/rv32ui/sll.S": "2d976803efe03ab56944a44d472c05d78e066690cb6d7b5d394d7d1378b5f3ce",
+    "third_party/riscv-tests/isa/rv32ui/slli.S": "20ff3262292d98ef1810c944bcd0cc3d35f8e5b5f204f1d9cfc1eb7b8e1b52ff",
+    "third_party/riscv-tests/isa/rv32ui/slt.S": "3d084fc64d2547d35d8a26dd634b1815fafee80e7e2b06fe17e9ca2d01bb03d6",
+    "third_party/riscv-tests/isa/rv32ui/slti.S": "00d0b78142738211b57b54f9dd0969336ae27bc3cc60adc2f06fa771dfb26134",
+    "third_party/riscv-tests/isa/rv32ui/sltiu.S": "421c938784d370c8d59d81c24e0660f6d58c7c289f3a1f9512b1a56bf938de65",
+    "third_party/riscv-tests/isa/rv32ui/sltu.S": "369112e43406e17e6c4f27b6f400f7ae98f0d63a1229db1d38a13ca31bf219e9",
+    "third_party/riscv-tests/isa/rv32ui/sra.S": "0decaa9cbdde1029bd5c2b9e78cf9b28900c93c6be0fea5adedbcd940ef1cc83",
+    "third_party/riscv-tests/isa/rv32ui/srai.S": "b9c078bd267a6c78f3b1a6931b9a35b4dd451eccaec3b4672aa42478b8d46e69",
+    "third_party/riscv-tests/isa/rv32ui/srl.S": "4b84f36d5293e440c00939a40eb5c90119dbef475d3d284fae8d116986a09c5c",
+    "third_party/riscv-tests/isa/rv32ui/srli.S": "c06d33bbbd85fcd017836c0b316520908ee032b4edd2c69a867f0e85c7af219a",
+    "third_party/riscv-tests/isa/rv32ui/st_ld.S": "d3c2fefeb4277882e87c282ebb99f64498ed75fec549478d9c070b92510d6616",
+    "third_party/riscv-tests/isa/rv32ui/sub.S": "0f701137fef9db64b2b866dbfdb43f8f91d6368fb7f175a8bb5c20d52635d3c6",
+    "third_party/riscv-tests/isa/rv32ui/sw.S": "0733c0630599f5eec4e91f53959e5f21f13f28b323feaef9e809f75194066da1",
+    "third_party/riscv-tests/isa/rv32ui/xor.S": "8db2b3215ab1915856e5ef48b91f78e0f40be39de7e51acd125749f4cea765d9",
+    "third_party/riscv-tests/isa/rv32ui/xori.S": "9723c56e6552961078492c5b399d4f7d16292fc0245622de81ef8a2d3775b5d4",
+    "third_party/riscv-tests/isa/rv32um/div.S": "79f8906baf488934fc7f9be627249dfc2f333a89cb23ef721c4eeee0d708b944",
+    "third_party/riscv-tests/isa/rv32um/divu.S": "ad32e6924158705e4db1301aa853d8756f90cb43557db1e01c6322f71bbaae98",
+    "third_party/riscv-tests/isa/rv32um/Makefrag": "3c68bc4173103a5efb113601aa86d13fe7b2db63867488513373ae74fa2c3061",
+    "third_party/riscv-tests/isa/rv32um/mul.S": "391bc5a92e9b7c6618818904d115e0109f56f8964927fd6b502969e0d42676b2",
+    "third_party/riscv-tests/isa/rv32um/mulh.S": "c14e290f1ad053221d62292d02a5c05f8d711bf9aa85438eeddb0adf4db5d5e1",
+    "third_party/riscv-tests/isa/rv32um/mulhsu.S": "1fbb396fcbd425fe5cb90d5958353c3327696773dda7d03c01badb0c0afc8acc",
+    "third_party/riscv-tests/isa/rv32um/mulhu.S": "cdd7cb8a43a97afc6c15b2de78632bf1b0e289109d8e2d1e8e99c8a694301acf",
+    "third_party/riscv-tests/isa/rv32um/rem.S": "05a86c46c2a9a6b3b878eaa87c8c73cd6a3ed8598a57b9ea191d001e1afaf47c",
+    "third_party/riscv-tests/isa/rv32um/remu.S": "7be2ce9dce2d1cb52ab2776a6941b6654df2b5ed9ea52fcd9a0445f24ada269b",
+    "third_party/riscv-tests/isa/rv64ui/add.S": "2fe7af9dcdc0e5d99c6ab22ba1d8bfc87f907cd46924f0bd442f6f5c6074f4ab",
+    "third_party/riscv-tests/isa/rv64ui/addi.S": "029629ca6279882aeac5358f7e8d06b7116784f5ab433a912390c88660efde1b",
+    "third_party/riscv-tests/isa/rv64ui/addiw.S": "9033a1b8bf3ec0be1f2b8173973da640cbf1c676a862d252178f042a5d84707c",
+    "third_party/riscv-tests/isa/rv64ui/addw.S": "38d0ea805704f6a0555076e9a89280af60e626a489a8f2255cf920e8a8e5b696",
+    "third_party/riscv-tests/isa/rv64ui/and.S": "d910be02e05212a60d45bca91848505a297a1e3ea5769dbd284d180f7b1bc155",
+    "third_party/riscv-tests/isa/rv64ui/andi.S": "67c09e7f68cdff8737db5204c51ef515287a6eb1678328c1fd1af56ef6f00f41",
+    "third_party/riscv-tests/isa/rv64ui/auipc.S": "e9504093412f5c2686a5fd060387b930c1f335d8a598ccf797e52620b8f6eac9",
+    "third_party/riscv-tests/isa/rv64ui/beq.S": "077fb5acb24f3fdaa5f5df4e63562f4c662ea83abad20997bca5c0f16bcf605a",
+    "third_party/riscv-tests/isa/rv64ui/bge.S": "6a8a9cf29ceb9886c7e24f0ebb0a08009b2f53c162c03fee3ec8fa1f2fc36fcd",
+    "third_party/riscv-tests/isa/rv64ui/bgeu.S": "b21aaa1bbe75dc179e099069e12d4b293cfd2a2ce720926a6e6adbae3c4f4b11",
+    "third_party/riscv-tests/isa/rv64ui/blt.S": "2184f7dd9374b3945e36f56e87ad46b99210248b2c59849ee242d5d443ba6891",
+    "third_party/riscv-tests/isa/rv64ui/bltu.S": "bfd2647f80a5047be5a6ee0e8378dd5fad24535f6ead20d60af156785b931492",
+    "third_party/riscv-tests/isa/rv64ui/bne.S": "90259f2e7143578e775dbc4c8f08f66c5ec08eed48dcb58177a3c23cbcae2124",
+    "third_party/riscv-tests/isa/rv64ui/fence_i.S": "18b335c6258adbdcfb10dfa1bcc10581f0ece154dbdc58a1356134abf9f9cf7b",
+    "third_party/riscv-tests/isa/rv64ui/jal.S": "4052e966c2e2e38c65d49e6565fb8b69373591458e043bc0ac03dd17dbd7fe6a",
+    "third_party/riscv-tests/isa/rv64ui/jalr.S": "76545a5cec7384ee081829fb0e25d2d2a407b2b442077de6ae005acd09d3b5e3",
+    "third_party/riscv-tests/isa/rv64ui/lb.S": "3bb59813e69ab8264266704d8f0a811ea34483a58d7266fa67f41337bd93add0",
+    "third_party/riscv-tests/isa/rv64ui/lbu.S": "a8b5c1ebd4654c0e27b27f553d71060d0f2cd1ab72e2acf599faf59504766ec6",
+    "third_party/riscv-tests/isa/rv64ui/ld.S": "cdedb21b5a7c91a8c4b8764a45a182265b2b27fe03492809cf17f3c512a39c4c",
+    "third_party/riscv-tests/isa/rv64ui/ld_st.S": "4b226fc153d8806e01d8e4a0f37a0d0d0a7be268ec501977141f371e14d2bd0e",
+    "third_party/riscv-tests/isa/rv64ui/lh.S": "fdf520ca4157c13ead5ca56b3497af93b3588f91f94c612bc33e3fb4009c7233",
+    "third_party/riscv-tests/isa/rv64ui/lhu.S": "64c614f06bc4098a874e1d9967c8a7c3ce855521bfa54687ce256bce07a6174c",
+    "third_party/riscv-tests/isa/rv64ui/lui.S": "bfba09de9629195ec89ba30d45aafb054f777246c1463569222833d1c8c0035c",
+    "third_party/riscv-tests/isa/rv64ui/lw.S": "f72a8c35a116c10c8bd5cdc6bcd6017e703da859005eba0ed32a1c9a0998f078",
+    "third_party/riscv-tests/isa/rv64ui/lwu.S": "43395909ea08c7450391d703d8b7ec007202646dbaf84b0fc5e352b22eeb1acf",
+    "third_party/riscv-tests/isa/rv64ui/ma_data.S": "e15955056119e03c1d1fc985680696a669ba03405471f14716741ceb54580384",
+    "third_party/riscv-tests/isa/rv64ui/Makefrag": "5b94d93967345cbbc688d7f7c6420f246233a8011bf1285170bb2cfb178506d4",
+    "third_party/riscv-tests/isa/rv64ui/or.S": "05394fea088930be702f2929cbc22cff85f913cb55705ba5f5885031dabdf828",
+    "third_party/riscv-tests/isa/rv64ui/ori.S": "35b0102da3be78caf05d9442b11fd5889481c8df4aef7106e22021d0ecfd8716",
+    "third_party/riscv-tests/isa/rv64ui/sb.S": "e842e20e36650d4eddf0c788c2c65471be3f700a9988c262c421d0cba9da92f3",
+    "third_party/riscv-tests/isa/rv64ui/sd.S": "2dfea01e7c8eb6ce00c4f41ebf5ff88ff8b0c3029fd942c485cbb0b22618952a",
+    "third_party/riscv-tests/isa/rv64ui/sh.S": "0271c314ce5b2538b0a399bbeae42baa846542ae26b6e14ab58bac83d71bb5dc",
+    "third_party/riscv-tests/isa/rv64ui/simple.S": "76cee36269404a72cc6be42a396224833aa3d6cdc73a66f5bd110a8de42abb79",
+    "third_party/riscv-tests/isa/rv64ui/sll.S": "5e034057f4061e22946cc7f38264eb284443adbbe28aecbbdec7331e6132a132",
+    "third_party/riscv-tests/isa/rv64ui/slli.S": "65778667261e94fd6ba0370cf6ac5a26737d9af4d45aaf0c3ea06caaf6a469c0",
+    "third_party/riscv-tests/isa/rv64ui/slliw.S": "39d9da428b50c6b6ed5db5764f8ad829997082f337be8248d11bfb07bf678101",
+    "third_party/riscv-tests/isa/rv64ui/sllw.S": "e1d1850824e2fc0b44ddc302c60795618848658b967dc8ca1c97b7bf2b0541e1",
+    "third_party/riscv-tests/isa/rv64ui/slt.S": "82dde2528fefb6f143a44f8519ffd9a686eeca837279b5d158c0ecf218298011",
+    "third_party/riscv-tests/isa/rv64ui/slti.S": "1efb039e26ec84e172e031d543642b284c28bcf88646e44f3ce28b38b64330ac",
+    "third_party/riscv-tests/isa/rv64ui/sltiu.S": "159c500127729169cc042caa9df9cb6c9c96b3bca19f1fbb3206f13a3ea81351",
+    "third_party/riscv-tests/isa/rv64ui/sltu.S": "a694589e47eea4c2e48ed55ec347c744f99ce2fc45fb9bd35bce757529276165",
+    "third_party/riscv-tests/isa/rv64ui/sra.S": "170ca4e10fa809f5fb4fdd6ff84f93a67e33619c2e74c953194fd43828e6cd16",
+    "third_party/riscv-tests/isa/rv64ui/srai.S": "a739deb9c960281ac1727c2def1ccc95f567975e29b48010228a152001cfaa7b",
+    "third_party/riscv-tests/isa/rv64ui/sraiw.S": "0ec3423ff90f14d4b89c9ed03298d469b40c9336adf45a06d6048d53db2e241f",
+    "third_party/riscv-tests/isa/rv64ui/sraw.S": "815ea20674a7ad5617af3308131a17da519832790cd9bb108fcd0e7c2afb786f",
+    "third_party/riscv-tests/isa/rv64ui/srl.S": "e10ab29e7788bdbd08ad856b79fa0969f18eb2b5f1cab7836bc45ffca6ff9b03",
+    "third_party/riscv-tests/isa/rv64ui/srli.S": "cea129355663d47b2b8b8a2eba14777e94f8736f05f85206063497b06e1f341b",
+    "third_party/riscv-tests/isa/rv64ui/srliw.S": "9708af6e5fcefa494e2d081333b0f0d1752cf6eabfbedab735ee230f3a2030f7",
+    "third_party/riscv-tests/isa/rv64ui/srlw.S": "87d174f454d26f808d9beb5076a97ab0185f951ac71ab15bb9533a866b944068",
+    "third_party/riscv-tests/isa/rv64ui/st_ld.S": "e4494bcb997191a6243a65001184938450b94a41923498c3b020b28774bb0f0b",
+    "third_party/riscv-tests/isa/rv64ui/sub.S": "5c55570735043bdf76e6730b9cc98afede9e0e3388a4d4ddb711d6a523ef4792",
+    "third_party/riscv-tests/isa/rv64ui/subw.S": "94945493961be8c239e1968c6f9b2c8ecf45b4caa406281efe115e188b07f6d9",
+    "third_party/riscv-tests/isa/rv64ui/sw.S": "fafc588376ce966275a77ca28cd663e1e69ac98ee4dd29b86bb80533315614ea",
+    "third_party/riscv-tests/isa/rv64ui/xor.S": "68c46917d16b127b11ae30a69e1efdbc3d7284663b2f1237acfab75d9e980725",
+    "third_party/riscv-tests/isa/rv64ui/xori.S": "5616a1f63ce5002d9133d52a3d39cfae36cb980b268a49730619e83c8c9d5df9",
+    "third_party/riscv-tests/isa/rv64um/div.S": "1e382f4d8c5bfe3aef332047caf2c163edfe60f8f05e7e356f716192eebfa299",
+    "third_party/riscv-tests/isa/rv64um/divu.S": "b7f3ff55929fc9f4107e37ceb35b21978bf334e7a34ea13fefa95e19a851f868",
+    "third_party/riscv-tests/isa/rv64um/divuw.S": "9c7f383db7ff7a70f37b338c615f5866e833b536de67e5dd342871c8401c7654",
+    "third_party/riscv-tests/isa/rv64um/divw.S": "9de8c0469ca8fe36274ac7f77f36c2c9966b842cf5ed374140f9e3c4630e9af2",
+    "third_party/riscv-tests/isa/rv64um/Makefrag": "9f9e0ea6c8cd1ef2d99c3ecfbeb05a4df60371b49a1b83d4a5707ca10ea9890e",
+    "third_party/riscv-tests/isa/rv64um/mul.S": "4c1a7a39ccb7b7e4ae4ea45eeb79c8dfdaa04d66cb8c57e8f7f8b97639d9aace",
+    "third_party/riscv-tests/isa/rv64um/mulh.S": "895c3fe181c0310a46fdcc8c2314b3243b187618bdda493a104e953a1d631c39",
+    "third_party/riscv-tests/isa/rv64um/mulhsu.S": "fe263e0cfb6426400992fa9e7bda8f10444a7ffabfd6cd756a25ec23904814cc",
+    "third_party/riscv-tests/isa/rv64um/mulhu.S": "cd90ddd5471f195d9a1124c6e8cd7522ba59303140376c20c2095839f2171999",
+    "third_party/riscv-tests/isa/rv64um/mulw.S": "53b9eee6ce184c503e38bd25e79dac84b4cf9d513c257afb96aafaf4a0e66159",
+    "third_party/riscv-tests/isa/rv64um/rem.S": "97ea9f7556394ffbc628dc46ad3b7e66349866bf8caa9571fb234f7c72eb7874",
+    "third_party/riscv-tests/isa/rv64um/remu.S": "b6150d5e4386c6d97e7d0ea68b757c30e1e857cb721c57bbc585b2edbebe5019",
+    "third_party/riscv-tests/isa/rv64um/remuw.S": "9d48b134c671013a00b34f74c93bb27f1309fd610f4f7e78194ab280875682c9",
+    "third_party/riscv-tests/isa/rv64um/remw.S": "01dbf946ccbdee5f374230d636687a2e7da041211e8bc305829523cbdbe539f9",
+    "third_party/riscv-tests/LICENSE": "eb9b877b34054331d6cd257c3144cc82bb7953a797ce54981b8ab1baeb141583",
+    "third_party/riscv-tests/UPSTREAM.md": "6146fc320c1009d1009aa4cb8966fb8b928581d3f217dff4e2ee784cc342873a"
+  },
+  "alu_vectors": 2752,
+  "limitations": [
+    "No FPGA synthesis/place-and-route/board validation in this stage",
+    "Project ISS is not Spike or an official certification oracle",
+    "Upstream RV32UI bodies use a project EEI harness; no official ISA certification claimed",
+    "This RV32I regression checks through the first trap; CSR/interrupt/return tests are in reports/machine",
+    "Zifencei and misaligned-access emulation are not implemented"
+  ]
+}

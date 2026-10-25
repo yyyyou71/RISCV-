@@ -1,0 +1,4 @@
+RUN xvlog.bat
+RUN xelab.bat
+RUN xsim.bat
+COREMARK_REGRESSION_PASS [["performance", 1, 334553], ["validation", 1, 334451], ["performance", 2, 668892], ["validation", 2, 668856]]

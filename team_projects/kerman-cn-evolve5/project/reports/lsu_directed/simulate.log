@@ -1,0 +1,158 @@
+
+****** xsim v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 23 23:36:31 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/branch_directed/xsim_script.tcl
+# xsim {branch_directed} -testplusarg MANIFEST=manifest.txt -testplusarg RESULTS=results.csv -testplusarg TRACE=retire.log -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS load_f0_o0_i0d0 packets=12 cycles=32
+PASS load_f0_o0_i1d1 packets=12 cycles=36
+PASS load_f0_o0_i2d2 packets=12 cycles=53
+PASS load_f0_o0_i0d3 packets=12 cycles=56
+PASS load_f0_o1_i0d0 packets=12 cycles=32
+PASS load_f0_o1_i1d1 packets=12 cycles=36
+PASS load_f0_o1_i2d2 packets=12 cycles=53
+PASS load_f0_o1_i0d3 packets=12 cycles=56
+PASS load_f0_o2_i0d0 packets=12 cycles=32
+PASS load_f0_o2_i1d1 packets=12 cycles=36
+PASS load_f0_o2_i2d2 packets=12 cycles=53
+PASS load_f0_o2_i0d3 packets=12 cycles=56
+PASS load_f0_o3_i0d0 packets=12 cycles=32
+PASS load_f0_o3_i1d1 packets=12 cycles=36
+PASS load_f0_o3_i2d2 packets=12 cycles=53
+PASS load_f0_o3_i0d3 packets=12 cycles=56
+PASS load_f1_o0_i0d0 packets=12 cycles=32
+PASS load_f1_o0_i1d1 packets=12 cycles=36
+PASS load_f1_o0_i2d2 packets=12 cycles=53
+PASS load_f1_o0_i0d3 packets=12 cycles=56
+PASS load_f1_o2_i0d0 packets=12 cycles=32
+PASS load_f1_o2_i1d1 packets=12 cycles=36
+PASS load_f1_o2_i2d2 packets=12 cycles=53
+PASS load_f1_o2_i0d3 packets=12 cycles=56
+PASS load_f2_o0_i0d0 packets=12 cycles=32
+PASS load_f2_o0_i1d1 packets=12 cycles=36
+PASS load_f2_o0_i2d2 packets=12 cycles=53
+PASS load_f2_o0_i0d3 packets=12 cycles=56
+PASS load_f4_o1_i0d0 packets=12 cycles=32
+PASS load_f4_o1_i1d1 packets=12 cycles=36
+PASS load_f4_o1_i2d2 packets=12 cycles=53
+PASS load_f4_o1_i0d3 packets=12 cycles=56
+PASS load_f5_o2_i0d0 packets=12 cycles=32
+PASS load_f5_o2_i1d1 packets=12 cycles=36
+PASS load_f5_o2_i2d2 packets=12 cycles=53
+PASS load_f5_o2_i0d3 packets=12 cycles=56
+PASS store_f0_o0_i0d0 packets=8 cycles=29
+PASS store_f0_o0_i1d1 packets=8 cycles=33
+PASS store_f0_o0_i2d2 packets=8 cycles=45
+PASS store_f0_o0_i0d3 packets=8 cycles=53
+PASS store_f0_o1_i0d0 packets=8 cycles=29
+PASS store_f0_o1_i1d1 packets=8 cycles=33
+PASS store_f0_o1_i2d2 packets=8 cycles=45
+PASS store_f0_o1_i0d3 packets=8 cycles=53
+PASS store_f0_o2_i0d0 packets=8 cycles=29
+PASS store_f0_o2_i1d1 packets=8 cycles=33
+PASS store_f0_o2_i2d2 packets=8 cycles=45
+PASS store_f0_o2_i0d3 packets=8 cycles=53
+PASS store_f0_o3_i0d0 packets=8 cycles=29
+PASS store_f0_o3_i1d1 packets=8 cycles=33
+PASS store_f0_o3_i2d2 packets=8 cycles=45
+PASS store_f0_o3_i0d3 packets=8 cycles=53
+PASS store_f1_o0_i0d0 packets=8 cycles=29
+PASS store_f1_o0_i1d1 packets=8 cycles=33
+PASS store_f1_o0_i2d2 packets=8 cycles=45
+PASS store_f1_o0_i0d3 packets=8 cycles=53
+PASS store_f1_o2_i0d0 packets=8 cycles=29
+PASS store_f1_o2_i1d1 packets=8 cycles=33
+PASS store_f1_o2_i2d2 packets=8 cycles=45
+PASS store_f1_o2_i0d3 packets=8 cycles=53
+PASS store_f2_o0_i0d0 packets=8 cycles=29
+PASS store_f2_o0_i1d1 packets=8 cycles=33
+PASS store_f2_o0_i2d2 packets=8 cycles=45
+PASS store_f2_o0_i0d3 packets=8 cycles=53
+PASS misaligned_False_1_1_i0d0 packets=6 cycles=27
+PASS misaligned_False_1_1_i1d1 packets=6 cycles=30
+PASS misaligned_False_1_1_i2d2 packets=6 cycles=37
+PASS misaligned_False_1_1_i0d3 packets=6 cycles=27
+PASS misaligned_False_2_1_i0d0 packets=6 cycles=27
+PASS misaligned_False_2_1_i1d1 packets=6 cycles=30
+PASS misaligned_False_2_1_i2d2 packets=6 cycles=37
+PASS misaligned_False_2_1_i0d3 packets=6 cycles=27
+PASS misaligned_False_2_2_i0d0 packets=6 cycles=27
+PASS misaligned_False_2_2_i1d1 packets=6 cycles=30
+PASS misaligned_False_2_2_i2d2 packets=6 cycles=37
+PASS misaligned_False_2_2_i0d3 packets=6 cycles=27
+PASS access_fault_False_i0d0 packets=6 cycles=27
+PASS access_fault_False_i1d1 packets=6 cycles=31
+PASS access_fault_False_i2d2 packets=6 cycles=41
+PASS access_fault_False_i0d3 packets=6 cycles=39
+PASS fault_cancels_m_False_i0d0 packets=6 cycles=28
+PASS fault_cancels_m_False_i1d1 packets=6 cycles=31
+PASS fault_cancels_m_False_i2d2 packets=6 cycles=41
+PASS fault_cancels_m_False_i0d3 packets=6 cycles=40
+PASS misaligned_True_1_1_i0d0 packets=6 cycles=27
+PASS misaligned_True_1_1_i1d1 packets=6 cycles=30
+PASS misaligned_True_1_1_i2d2 packets=6 cycles=37
+PASS misaligned_True_1_1_i0d3 packets=6 cycles=27
+PASS misaligned_True_2_1_i0d0 packets=6 cycles=27
+PASS misaligned_True_2_1_i1d1 packets=6 cycles=30
+PASS misaligned_True_2_1_i2d2 packets=6 cycles=37
+PASS misaligned_True_2_1_i0d3 packets=6 cycles=27
+PASS misaligned_True_2_2_i0d0 packets=6 cycles=27
+PASS misaligned_True_2_2_i1d1 packets=6 cycles=30
+PASS misaligned_True_2_2_i2d2 packets=6 cycles=37
+PASS misaligned_True_2_2_i0d3 packets=6 cycles=27
+PASS access_fault_True_i0d0 packets=6 cycles=27
+PASS access_fault_True_i1d1 packets=6 cycles=31
+PASS access_fault_True_i2d2 packets=6 cycles=41
+PASS access_fault_True_i0d3 packets=6 cycles=39
+PASS fault_cancels_m_True_i0d0 packets=6 cycles=28
+PASS fault_cancels_m_True_i1d1 packets=6 cycles=31
+PASS fault_cancels_m_True_i2d2 packets=6 cycles=41
+PASS fault_cancels_m_True_i0d3 packets=6 cycles=40
+PASS second_load_x0_i0d0 packets=8 cycles=28
+PASS second_load_x0_i1d1 packets=8 cycles=32
+PASS second_load_x0_i2d2 packets=8 cycles=42
+PASS second_load_x0_i0d3 packets=8 cycles=40
+PASS second_load_raw_reject_i0d0 packets=7 cycles=28
+PASS second_load_raw_reject_i1d1 packets=7 cycles=32
+PASS second_load_raw_reject_i2d2 packets=7 cycles=42
+PASS second_load_raw_reject_i0d3 packets=7 cycles=40
+PASS second_load_waw_reject_i0d0 packets=7 cycles=28
+PASS second_load_waw_reject_i1d1 packets=7 cycles=32
+PASS second_load_waw_reject_i2d2 packets=7 cycles=42
+PASS second_load_waw_reject_i0d3 packets=7 cycles=40
+PASS second_load_war_allowed_i0d0 packets=7 cycles=28
+PASS second_load_war_allowed_i1d1 packets=7 cycles=31
+PASS second_load_war_allowed_i2d2 packets=7 cycles=41
+PASS second_load_war_allowed_i0d3 packets=7 cycles=40
+PASS jalr_target_32_i0d0 packets=8 cycles=30
+PASS jalr_target_32_i1d1 packets=8 cycles=33
+PASS jalr_target_32_i2d2 packets=8 cycles=43
+PASS jalr_target_32_i0d3 packets=8 cycles=30
+PASS jalr_target_33_i0d0 packets=8 cycles=30
+PASS jalr_target_33_i1d1 packets=8 cycles=33
+PASS jalr_target_33_i2d2 packets=8 cycles=43
+PASS jalr_target_33_i0d3 packets=8 cycles=30
+PASS jalr_target_34_i0d0 packets=6 cycles=27
+PASS jalr_target_34_i1d1 packets=6 cycles=30
+PASS jalr_target_34_i2d2 packets=6 cycles=37
+PASS jalr_target_34_i0d3 packets=6 cycles=27
+PASS jalr_raw_reject_i0d0 packets=3 cycles=27
+PASS jalr_raw_reject_i1d1 packets=3 cycles=29
+PASS jalr_raw_reject_i2d2 packets=3 cycles=36
+PASS jalr_raw_reject_i0d3 packets=3 cycles=27
+PASS jalr_return_second_i0d0 packets=5 cycles=26
+PASS jalr_return_second_i1d1 packets=5 cycles=29
+PASS jalr_return_second_i2d2 packets=5 cycles=36
+PASS jalr_return_second_i0d3 packets=5 cycles=26
+LSU_COVERAGE loads=22 stores=32 exceptions=22 jalr=8
+REGRESSION_PASS cases=140 packets=1132
+$finish called at time : 57500 ns : File "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_lsu_directed/tb.sv" Line 249
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 23:36:34 2026...

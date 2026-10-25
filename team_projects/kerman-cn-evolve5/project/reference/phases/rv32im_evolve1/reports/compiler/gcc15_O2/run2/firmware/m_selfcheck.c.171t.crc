@@ -1,0 +1,224 @@
+
+;; Function m_selfcheck (m_selfcheck, funcdef_no=1, decl_uid=1601, cgraph_uid=3, symbol_order=2)
+
+
+Examining m_selfcheck function.
+Loop iteration number is chrec_dont_know.
+int m_selfcheck ()
+{
+  uint32_t value;
+  unsigned int op;
+  unsigned int i;
+  long unsigned int _1;
+  long unsigned int _2;
+  unsigned int _3;
+  long unsigned int _4;
+  unsigned int _5;
+  long unsigned int _6;
+  int _7;
+  long unsigned int _8;
+  long unsigned int _33;
+  long unsigned int _35;
+  unsigned int ivtmp_43;
+  unsigned int ivtmp_44;
+  unsigned int ivtmp_45;
+  unsigned int ivtmp_46;
+
+  <bb 2> [local count: 63226850]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 16>; [100.00%]
+
+  <bb 20> [local count: 782661683]:
+
+  <bb 3> [local count: 954449105]:
+  # op_30 = PHI <op_16(20), 0(16)>
+  # ivtmp_43 = PHI <ivtmp_44(20), 8(16)>
+  # DEBUG op => op_30
+  # DEBUG BEGIN_STMT
+  # DEBUG D#1 => m_vectors[i_15][0]
+  # DEBUG D#2 => m_vectors[i_15][1]
+  # DEBUG op => op_30
+  # DEBUG a => D#1
+  # DEBUG b => D#2
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  switch (op_30) <default: <L16> [12.50%], case 0: <L9> [12.50%], case 1: <L10> [12.50%], case 2: <L11> [12.50%], case 3: <L12> [12.50%], case 4: <L13> [12.50%], case 5: <L14> [12.50%], case 6: <L15> [12.50%]>
+
+  <bb 4> [local count: 119306138]:
+<L9>:
+  # DEBUG op => op_30
+  # DEBUG op => op_30
+  # DEBUG a => D#1
+  # DEBUG b => D#2
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mul %0,%1,%2" : "=r" value_18 : "r" _1, "r" _2);
+  # DEBUG value => value_18
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 5> [local count: 119306138]:
+<L10>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulh %0,%1,%2" : "=r" value_19 : "r" _1, "r" _2);
+  # DEBUG value => value_19
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 6> [local count: 119306138]:
+<L11>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulhsu %0,%1,%2" : "=r" value_20 : "r" _1, "r" _2);
+  # DEBUG value => value_20
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 7> [local count: 119306138]:
+<L12>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulhu %0,%1,%2" : "=r" value_21 : "r" _1, "r" _2);
+  # DEBUG value => value_21
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 8> [local count: 119306138]:
+<L13>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("div %0,%1,%2" : "=r" value_22 : "r" _1, "r" _2);
+  # DEBUG value => value_22
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 9> [local count: 119306138]:
+<L14>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("divu %0,%1,%2" : "=r" value_23 : "r" _1, "r" _2);
+  # DEBUG value => value_23
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 10> [local count: 119306138]:
+<L15>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("rem %0,%1,%2" : "=r" value_24 : "r" _1, "r" _2);
+  # DEBUG value => value_24
+  # DEBUG BEGIN_STMT
+  goto <bb 12>; [100.00%]
+
+  <bb 11> [local count: 119306138]:
+  # op_37 = PHI <op_30(3)>
+<L16>:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("remu %0,%1,%2" : "=r" value_25 : "r" _1, "r" _2);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_25
+  # DEBUG BEGIN_STMT
+  _5 = op_37 + 2;
+  _8 = m_vectors[i_15][_5];
+  if (_8 != value_25)
+    goto <bb 21>; [5.50%]
+  else
+    goto <bb 25>; [94.50%]
+
+  <bb 25> [local count: 112744301]:
+
+  <bb 22> [local count: 119292721]:
+  goto <bb 15>; [100.00%]
+
+  <bb 21> [local count: 6561837]:
+  # _33 = PHI <_8(11)>
+  # i_32 = PHI <i_15(11)>
+  # value_9 = PHI <value_25(11)>
+  # op_38 = PHI <op_37(11)>
+  goto <bb 13>; [100.00%]
+
+  <bb 12> [local count: 835142967]:
+  # value_26 = PHI <value_18(4), value_19(5), value_20(6), value_21(7), value_22(8), value_23(9), value_24(10)>
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_26
+  # DEBUG BEGIN_STMT
+  _3 = op_30 + 2;
+  _4 = m_vectors[i_15][_3];
+  if (_4 != value_26)
+    goto <bb 23>; [5.50%]
+  else
+    goto <bb 14>; [94.50%]
+
+  <bb 23> [local count: 45932863]:
+  # i_14 = PHI <i_15(12)>
+  # _35 = PHI <_4(12)>
+  # value_36 = PHI <value_26(12)>
+  # op_39 = PHI <op_30(12)>
+
+  <bb 13> [local count: 52494701]:
+  # _6 = PHI <_35(23), _33(21)>
+  # value_28 = PHI <value_36(23), value_9(21)>
+  # i_40 = PHI <i_14(23), i_32(21)>
+  # op_41 = PHI <op_39(23), op_38(21)>
+  # DEBUG BEGIN_STMT
+  ee_printf ("M_CHECK FAIL vector=%u op=%u expected=%08x actual=%08x\n", i_40, op_41, _6, value_28);
+  # DEBUG BEGIN_STMT
+  goto <bb 18>; [100.00%]
+
+  <bb 14> [local count: 789210103]:
+  # DEBUG BEGIN_STMT
+  op_16 = op_30 + 1;
+  # DEBUG op => op_16
+  # DEBUG BEGIN_STMT
+  ivtmp_44 = ivtmp_43 - 1;
+  if (ivtmp_44 != 0)
+    goto <bb 20>; [99.17%]
+  else
+    goto <bb 26>; [0.83%]
+
+  <bb 26> [local count: 6548420]:
+  goto <bb 22>; [100.00%]
+
+  <bb 15> [local count: 119292720]:
+  # DEBUG op => 8
+  # DEBUG BEGIN_STMT
+  i_13 = i_15 + 1;
+  # DEBUG i => i_13
+  # DEBUG BEGIN_STMT
+  ivtmp_46 = ivtmp_45 - 1;
+  if (ivtmp_46 != 0)
+    goto <bb 19>; [91.00%]
+  else
+    goto <bb 17>; [9.00%]
+
+  <bb 19> [local count: 108560570]:
+
+  <bb 16> [local count: 171787420]:
+  # i_15 = PHI <i_13(19), 0(2)>
+  # ivtmp_45 = PHI <ivtmp_46(19), 16(2)>
+  # DEBUG i => i_15
+  # DEBUG op => 0
+  # DEBUG BEGIN_STMT
+  _1 = m_vectors[i_15][0];
+  _2 = m_vectors[i_15][1];
+  goto <bb 3>; [100.00%]
+
+  <bb 17> [local count: 10732150]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("M_CHECK PASS vectors=128 instructions=8\n");
+  # DEBUG BEGIN_STMT
+
+  <bb 18> [local count: 63226851]:
+  # _7 = PHI <0(13), 1(17)>
+  return _7;
+
+}
+
+

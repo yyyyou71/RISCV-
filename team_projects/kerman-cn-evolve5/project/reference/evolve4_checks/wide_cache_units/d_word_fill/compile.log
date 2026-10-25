@@ -1,0 +1,16 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_burst_arbiter.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_burst_arbiter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_burst_cache_2way.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_burst_cache_2way
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_cache_2way.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_cache_2way
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_dcache.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_dcache
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_icache.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_icache
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/rtl/cache/rv32_word_to_burst.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_word_to_burst
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve4/sim/burst_word_test_adapter.sv" into library work
+INFO: [VRFC 10-311] analyzing module burst_word_test_adapter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_cache_units/wide/d_word_fill/tb_cache_unit.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_cache_unit

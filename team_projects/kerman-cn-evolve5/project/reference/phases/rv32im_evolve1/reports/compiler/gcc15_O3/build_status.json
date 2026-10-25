@@ -1,0 +1,11 @@
+{
+  "config": "gcc15_O3",
+  "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+  "optimization": "O3",
+  "extra_flags": [
+    "-fdump-tree-crc-details"
+  ],
+  "status": "passed",
+  "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3\\firmware\\coremark",
+  "image_bytes": 24696
+}

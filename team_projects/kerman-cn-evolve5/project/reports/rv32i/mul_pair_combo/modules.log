@@ -1,0 +1,17 @@
+
+****** xsim v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 23 23:36:30 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/rv32_modules/xsim_script.tcl
+# xsim {rv32_modules} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+MODULES_PASS alu_vectors=2752 regfile=all_registers decoder=10_cases
+$finish called at time : 3192 ns : File "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve5/sim/tb_modules.sv" Line 79
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 23:36:32 2026...

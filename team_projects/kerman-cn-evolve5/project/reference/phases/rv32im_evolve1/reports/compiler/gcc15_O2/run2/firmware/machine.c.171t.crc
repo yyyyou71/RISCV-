@@ -1,0 +1,51 @@
+
+;; Function machine_fatal (machine_fatal, funcdef_no=1, decl_uid=1477, cgraph_uid=2, symbol_order=1) (executed once)
+
+
+Examining machine_fatal function.
+Loop iteration number is chrec_dont_know.
+void machine_fatal (struct machine_frame * frame)
+{
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+
+  <bb 2> [local count: 10631108]:
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrc mstatus, %0" :  : "r" 8 : "memory");
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrw mie, %0" :  : "r" 0 : "memory");
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745924B] ={v} 131;
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745920B] ={v} 3;
+  # DEBUG BEGIN_STMT
+  uart_puts ("MACHINE_FATAL cause=");
+  # DEBUG BEGIN_STMT
+  _1 = frame_10(D)->mcause;
+  uart_put_u32 (_1);
+  # DEBUG BEGIN_STMT
+  uart_puts (" pc=");
+  # DEBUG BEGIN_STMT
+  _2 = frame_10(D)->mepc;
+  uart_put_u32 (_2);
+  # DEBUG BEGIN_STMT
+  uart_puts (" tval=");
+  # DEBUG BEGIN_STMT
+  _3 = frame_10(D)->mtval;
+  uart_put_u32 (_3);
+  # DEBUG BEGIN_STMT
+  uart_putc (10);
+  # DEBUG BEGIN_STMT
+  uart_flush ();
+
+  <bb 3> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+
+  <bb 4> [local count: 1073741824]:
+  goto <bb 3>; [100.00%]
+
+}
+
+

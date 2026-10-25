@@ -1,0 +1,2 @@
+RUN PDS EVOLVE5 mul_pair_combo
+EVOLVE5_PDS_PASS mul_pair_combo DSP=4

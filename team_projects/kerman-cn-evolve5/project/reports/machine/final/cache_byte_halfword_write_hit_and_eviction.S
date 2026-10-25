@@ -1,0 +1,47 @@
+.option norvc
+.option norelax
+.section .text
+.globl _start
+_start:
+li sp,0xe000
+li s0,0x8000
+lw a0,0(s0)
+li t6,287454020
+bne a0,t6,fail
+li t0,0x55aa33cc
+sw t0,0(s0)
+li t0,0x80
+sb t0,1(s0)
+lb a0,1(s0)
+li t6,4294967168
+bne a0,t6,fail
+lbu a0,1(s0)
+li t6,128
+bne a0,t6,fail
+li t0,0xbeef
+sh t0,2(s0)
+lw a0,0(s0)
+li t6,3203367116
+bne a0,t6,fail
+lh a0,2(s0)
+li t6,4294950639
+bne a0,t6,fail
+lhu a0,2(s0)
+li t6,48879
+bne a0,t6,fail
+lw a1,512(s0)
+lw a2,1024(s0)
+lw a0,0(s0)
+li t6,3203367116
+bne a0,t6,fail
+j pass
+pass:
+li t0,0xfff0
+li t1,1
+sw t1,0(t0)
+j .
+fail:
+li t0,0xfff0
+li t1,0xdead
+sw t1,0(t0)
+j .

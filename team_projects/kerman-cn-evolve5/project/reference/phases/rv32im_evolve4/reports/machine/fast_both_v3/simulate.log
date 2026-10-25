@@ -1,0 +1,95 @@
+
+****** xsim v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 23 23:20:25 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/machine_core/xsim_script.tcl
+# xsim {machine_core} -testplusarg MANIFEST=manifest.txt -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+MACHINE_CASE_PASS csr_six_forms_warl_i0d0
+MACHINE_CASE_PASS csr_six_forms_warl_i1d1
+MACHINE_CASE_PASS csr_six_forms_warl_i2d2
+MACHINE_CASE_PASS csr_six_forms_warl_i0d3
+MACHINE_CASE_PASS counters_write_inhibit_wfi_i0d0
+MACHINE_CASE_PASS counters_write_inhibit_wfi_i2d2
+MACHINE_CASE_PASS precise_exceptions_return_i0d0
+MACHINE_CASE_PASS precise_exceptions_return_i1d1
+MACHINE_CASE_PASS precise_exceptions_return_i2d2
+MACHINE_CASE_PASS precise_exceptions_return_i0d3
+MACHINE_CASE_PASS irq_level_retrigger_direct_i0d0
+MACHINE_CASE_PASS irq_level_retrigger_direct_i2d2
+MACHINE_CASE_PASS irq_level_retrigger_vectored_i0d0
+MACHINE_CASE_PASS irq_level_retrigger_vectored_i2d2
+MACHINE_CASE_PASS irq_wait_load_i0d3
+MACHINE_CASE_PASS irq_wait_load_i2d3
+MACHINE_CASE_PASS irq_wait_store_i0d3
+MACHINE_CASE_PASS irq_wait_store_i2d3
+MACHINE_CASE_PASS irq_cancelled_drain_i0d3
+MACHINE_CASE_PASS irq_cancelled_drain_i2d3
+MACHINE_CASE_PASS exception_beats_pending_irq_i0d3
+MACHINE_CASE_PASS exception_beats_pending_irq_i2d3
+MACHINE_CASE_PASS irq_cancelled_by_older_csr_commit_i0d3
+MACHINE_CASE_PASS irq_cancelled_by_older_csr_commit_i2d3
+MACHINE_CASE_PASS bp_taken_to_not_taken_side_effects_i0d0
+MACHINE_CASE_PASS bp_taken_to_not_taken_side_effects_i2d2
+MACHINE_CASE_PASS bp_taken_to_not_taken_side_effects_i0d3
+MACHINE_CASE_PASS bp_indirect_target_changes_i0d0
+MACHINE_CASE_PASS bp_indirect_target_changes_i2d2
+MACHINE_CASE_PASS bp_indirect_target_changes_i0d3
+MACHINE_CASE_PASS bp_full_tag_alias_i0d0
+MACHINE_CASE_PASS bp_full_tag_alias_i2d2
+MACHINE_CASE_PASS bp_full_tag_alias_i0d3
+MACHINE_CASE_PASS bp_taken_target_equals_fallthrough_i0d0
+MACHINE_CASE_PASS bp_taken_target_equals_fallthrough_i2d2
+MACHINE_CASE_PASS bp_taken_target_equals_fallthrough_i0d3
+MACHINE_CASE_PASS cache_byte_halfword_write_hit_and_eviction_i0d0
+MACHINE_CASE_PASS cache_byte_halfword_write_hit_and_eviction_i2d2
+MACHINE_CASE_PASS cache_byte_halfword_write_hit_and_eviction_i0d3
+MACHINE_CASE_PASS cache_irq_during_write_hit_i0d3
+MACHINE_CASE_PASS cache_irq_during_write_hit_i2d3
+MACHINE_CASE_PASS m_irq_scene17_mul_i0d0
+MACHINE_CASE_PASS m_irq_scene17_mul_i1d1
+MACHINE_CASE_PASS m_irq_scene17_mul_i2d2
+MACHINE_CASE_PASS m_irq_scene17_mul_i0d3
+MACHINE_CASE_PASS m_irq_scene18_divu_i0d0
+MACHINE_CASE_PASS m_irq_scene18_divu_i1d1
+MACHINE_CASE_PASS m_irq_scene18_divu_i2d2
+MACHINE_CASE_PASS m_irq_scene18_divu_i0d3
+MACHINE_CASE_PASS m_irq_scene19_mulh_i0d0
+MACHINE_CASE_PASS m_irq_scene19_mulh_i1d1
+MACHINE_CASE_PASS m_irq_scene19_mulh_i2d2
+MACHINE_CASE_PASS m_irq_scene19_mulh_i0d3
+MACHINE_CASE_PASS m_irq_scene20_div_i0d0
+MACHINE_CASE_PASS m_irq_scene20_div_i1d1
+MACHINE_CASE_PASS m_irq_scene20_div_i2d2
+MACHINE_CASE_PASS m_irq_scene20_div_i0d3
+MACHINE_CASE_PASS dual_irq_after_ordered_pair_i0d0
+MACHINE_CASE_PASS dual_irq_after_ordered_pair_i1d1
+MACHINE_CASE_PASS dual_irq_after_ordered_pair_i2d2
+MACHINE_CASE_PASS dual_irq_after_ordered_pair_i0d3
+MACHINE_CASE_PASS dual_older_fault_5_suppresses_alu_i0d0
+MACHINE_CASE_PASS dual_older_fault_5_suppresses_alu_i1d1
+MACHINE_CASE_PASS dual_older_fault_5_suppresses_alu_i2d2
+MACHINE_CASE_PASS dual_older_fault_5_suppresses_alu_i0d3
+MACHINE_CASE_PASS dual_older_fault_7_suppresses_alu_i0d0
+MACHINE_CASE_PASS dual_older_fault_7_suppresses_alu_i1d1
+MACHINE_CASE_PASS dual_older_fault_7_suppresses_alu_i2d2
+MACHINE_CASE_PASS dual_older_fault_7_suppresses_alu_i0d3
+MACHINE_CASE_PASS irq_second_load_i1d1
+MACHINE_CASE_PASS irq_second_load_i2d2
+MACHINE_CASE_PASS irq_second_load_i0d3
+MACHINE_CASE_PASS irq_second_store_i1d1
+MACHINE_CASE_PASS irq_second_store_i2d2
+MACHINE_CASE_PASS irq_second_store_i0d3
+MACHINE_CASE_PASS second_fault_before_irq_i1d1
+MACHINE_CASE_PASS second_fault_before_irq_i2d2
+MACHINE_CASE_PASS second_fault_before_irq_i0d3
+MACHINE_REGRESSION_PASS cases=78
+$finish called at time : 691857 ns : File "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_machine_fast_v3/tb_machine.sv" Line 147
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 23:20:29 2026...

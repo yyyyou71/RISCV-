@@ -1,0 +1,2514 @@
+
+;; Function core_bench_list (core_bench_list, funcdef_no=4, decl_uid=1509, cgraph_uid=5, symbol_order=4)
+
+
+Examining core_bench_list function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+ee_u16 core_bench_list (struct core_results * res, ee_s16 finder_idx)
+{
+  short int info$idx;
+  short int info$data16;
+  struct list_head * p;
+  struct list_head * q;
+  struct list_head * e;
+  struct list_head * tail;
+  ee_s32 insize;
+  ee_s32 nmerges;
+  ee_s32 psize;
+  ee_s32 qsize;
+  struct list_head * list;
+  struct list_head * list;
+  struct list_head * list;
+  struct list_head * p;
+  struct list_head * q;
+  struct list_head * e;
+  struct list_head * tail;
+  ee_s32 insize;
+  ee_s32 nmerges;
+  ee_s32 psize;
+  ee_s32 qsize;
+  struct list_head * list;
+  struct list_head * list;
+  struct list_head * list;
+  struct list_data * tmp;
+  struct list_data * tmp;
+  struct list_head * ret;
+  struct list_head * next;
+  struct list_head * tmp;
+  struct list_head * list;
+  ee_s16 i;
+  struct list_data info;
+  struct list_head * finder;
+  ee_s16 find_num;
+  struct list_head * list;
+  ee_u16 missed;
+  ee_u16 found;
+  ee_u16 retval;
+  short int _1;
+  struct list_head_s * _2;
+  struct list_data_s * _3;
+  short int _4;
+  short int _5;
+  short unsigned int _6;
+  struct list_data_s * _7;
+  short int _8;
+  short int _9;
+  short unsigned int _10;
+  struct list_head_s * _11;
+  struct list_head_s * _12;
+  struct list_head_s * _13;
+  unsigned short _15;
+  unsigned short _16;
+  short int _17;
+  unsigned short i.6_18;
+  unsigned short _19;
+  struct list_head_s * _22;
+  struct list_data_s * _23;
+  short int _24;
+  struct list_data_s * _26;
+  short int _27;
+  short unsigned int _62;
+  short unsigned int _84;
+  struct list_data_s * _88;
+  struct list_head_s * _89;
+  struct list_head_s * _90;
+  struct list_data_s * _92;
+  struct list_head_s * _93;
+  short int _96;
+  short int _101;
+  short int _106;
+  struct list_data_s * _110;
+  short int _111;
+  short unsigned int _112;
+  struct list_head * _113;
+  struct list_data_s * _118;
+  short int _119;
+  short int _120;
+  short unsigned int prephitmp_121;
+  _Bool _136;
+  _Bool _137;
+  _Bool _138;
+  struct list_data_s * _142;
+  struct list_data_s * _143;
+  long int _144;
+  _Bool _151;
+  _Bool _152;
+  _Bool _153;
+  struct list_data_s * _170;
+  short int _171;
+  struct list_head * _173;
+  struct list_data_s * _178;
+  short int _179;
+  short int _180;
+  struct list_head_s * prephitmp_183;
+  _Bool _196;
+  _Bool _197;
+  _Bool _198;
+  struct list_data_s * _202;
+  struct list_data_s * _203;
+  struct list_head_s * pretmp_204;
+  _Bool _211;
+  _Bool _212;
+  _Bool _213;
+  short int _227;
+  short int _228;
+  unsigned short _229;
+  unsigned short _230;
+  short int _231;
+  short int _232;
+  short int _233;
+  short int _234;
+  unsigned short _235;
+  unsigned short _236;
+  short int _237;
+  short int _238;
+  short int _239;
+  int _240;
+  short int _241;
+  int _242;
+  long int _243;
+  short int _301;
+  struct list_head_s * _326;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG retval => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG found => 0
+  # DEBUG missed => 0
+  # DEBUG BEGIN_STMT
+  list_50 = res_49(D)->list;
+  # DEBUG list => list_50
+  # DEBUG BEGIN_STMT
+  find_num_51 = res_49(D)->seed3;
+  # DEBUG find_num => find_num_51
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG info$data16 => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG info$idx => finder_idx_53(D)
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG list => list_50
+  # DEBUG missed => 0
+  # DEBUG found => 0
+  # DEBUG retval => 0
+  # DEBUG BEGIN_STMT
+  if (find_num_51 > 0)
+    goto <bb 86>; [89.00%]
+  else
+    goto <bb 22>; [11.00%]
+
+  <bb 86> [local count: 12992276]:
+
+  <bb 3> [local count: 118111600]:
+  # retval_61 = PHI <retval_29(98), 0(86)>
+  # found_298 = PHI <found_33(98), 0(86)>
+  # missed_300 = PHI <missed_35(98), 0(86)>
+  # list_302 = PHI <next_315(98), list_50(86)>
+  # i_306 = PHI <i_83(98), 0(86)>
+  # info$idx_40 = PHI <info$idx_32(98), finder_idx_53(D)(86)>
+  # DEBUG info$idx => info$idx_40
+  # DEBUG i => i_306
+  # DEBUG list => list_302
+  # DEBUG missed => missed_300
+  # DEBUG found => found_298
+  # DEBUG retval => retval_61
+  # DEBUG BEGIN_STMT
+  _1 = i_306 & 255;
+  # DEBUG info$data16 => _1
+  # DEBUG BEGIN_STMT
+  # DEBUG list => list_302
+  # DEBUG info => &info
+  # DEBUG INLINE_ENTRY core_list_find
+  # DEBUG BEGIN_STMT
+  if (info$idx_40 >= 0)
+    goto <bb 5>; [59.00%]
+  else
+    goto <bb 4>; [41.00%]
+
+  <bb 4> [local count: 48425756]:
+  # DEBUG list => list_302
+  # DEBUG BEGIN_STMT
+  if (list_302 != 0B)
+    goto <bb 89>; [100.00%]
+  else
+    goto <bb 103>; [0.00%]
+
+  <bb 89> [local count: 48425756]:
+  goto <bb 9>; [100.00%]
+
+  <bb 5> [local count: 69685844]:
+  # DEBUG list => list_302
+  # DEBUG BEGIN_STMT
+  if (list_302 != 0B)
+    goto <bb 88>; [100.00%]
+  else
+    goto <bb 104>; [0.00%]
+
+  <bb 104> [count: 0]:
+  goto <bb 79>; [100.00%]
+
+  <bb 88> [local count: 69685844]:
+  goto <bb 7>; [100.00%]
+
+  <bb 6> [local count: 581735940]:
+  # DEBUG BEGIN_STMT
+  list_109 = list_318->next;
+  # DEBUG list => list_109
+  # DEBUG BEGIN_STMT
+  if (list_109 != 0B)
+    goto <bb 100>; [94.50%]
+  else
+    goto <bb 10>; [5.50%]
+
+  <bb 100> [local count: 549740463]:
+
+  <bb 7> [local count: 615593587]:
+  # list_318 = PHI <list_109(100), list_302(88)>
+  # DEBUG list => list_318
+  _110 = list_318->info;
+  _111 = _110->idx;
+  if (info$idx_40 != _111)
+    goto <bb 6>; [94.50%]
+  else
+    goto <bb 106>; [5.50%]
+
+  <bb 106> [local count: 33857647]:
+  # list_297 = PHI <list_318(7)>
+  goto <bb 10>; [100.00%]
+
+  <bb 8> [local count: 404257177]:
+  # DEBUG BEGIN_STMT
+  list_117 = list_319->next;
+  # DEBUG list => list_117
+  # DEBUG BEGIN_STMT
+  if (list_117 != 0B)
+    goto <bb 101>; [94.50%]
+  else
+    goto <bb 10>; [5.50%]
+
+  <bb 101> [local count: 382023032]:
+
+  <bb 9> [local count: 427785372]:
+  # list_319 = PHI <list_117(101), list_302(89)>
+  # DEBUG list => list_319
+  _118 = list_319->info;
+  _119 = _118->data16;
+  _120 = _119 & 255;
+  if (_1 != _120)
+    goto <bb 8>; [94.50%]
+  else
+    goto <bb 108>; [5.50%]
+
+  <bb 108> [local count: 23528195]:
+  # list_296 = PHI <list_319(9)>
+
+  <bb 10> [local count: 111615463]:
+  # _113 = PHI <list_297(106), list_296(108), 0B(6), 0B(8)>
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG this_find => _113
+  # DEBUG BEGIN_STMT
+  # DEBUG list => list_302
+  # DEBUG INLINE_ENTRY core_list_reverse
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 0B
+  # DEBUG list => list_302
+  # DEBUG BEGIN_STMT
+  if (list_302 != 0B)
+    goto <bb 87>; [91.98%]
+  else
+    goto <bb 12>; [8.02%]
+
+  <bb 87> [local count: 102669384]:
+
+  <bb 11> [local count: 955630225]:
+  # list_313 = PHI <tmp_73(99), list_302(87)>
+  # next_314 = PHI <list_313(99), 0B(87)>
+  # DEBUG next => next_314
+  # DEBUG list => list_313
+  # DEBUG BEGIN_STMT
+  tmp_73 = list_313->next;
+  # DEBUG tmp => tmp_73
+  # DEBUG BEGIN_STMT
+  list_313->next = next_314;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG next => list_313
+  # DEBUG list => tmp_73
+  # DEBUG BEGIN_STMT
+  if (tmp_73 != 0B)
+    goto <bb 99>; [89.00%]
+  else
+    goto <bb 110>; [11.00%]
+
+  <bb 110> [local count: 105119324]:
+  # list_321 = PHI <list_313(11)>
+  goto <bb 12>; [100.00%]
+
+  <bb 99> [local count: 850510901]:
+  goto <bb 11>; [100.00%]
+
+  <bb 12> [local count: 114065404]:
+  # next_315 = PHI <list_321(110), 0B(10)>
+  # DEBUG BEGIN_STMT
+  # DEBUG list => NULL
+  # DEBUG tmp => NULL
+  # DEBUG next => NULL
+  # DEBUG list => next_315
+  # DEBUG BEGIN_STMT
+  if (_113 == 0B)
+    goto <bb 13>; [27.52%]
+  else
+    goto <bb 14>; [72.48%]
+
+  <bb 13> [local count: 28937342]:
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG this_find => NULL
+  # DEBUG list => NULL
+  # DEBUG tmp => NULL
+  # DEBUG next => NULL
+  # DEBUG list => NULL
+  # DEBUG BEGIN_STMT
+  missed_80 = missed_300 + 1;
+  # DEBUG missed => missed_80
+  # DEBUG BEGIN_STMT
+  _2 = next_315->next;
+  _3 = _2->info;
+  _4 = _3->data16;
+  _5 = _4 >> 8;
+  _96 = _5 & 1;
+  _6 = (short unsigned int) _96;
+  retval_81 = _6 + retval_61;
+  # DEBUG retval => retval_81
+  goto <bb 18>; [100.00%]
+
+  <bb 14> [local count: 82678120]:
+  # DEBUG BEGIN_STMT
+  found_75 = found_298 + 1;
+  # DEBUG found => found_75
+  # DEBUG BEGIN_STMT
+  _7 = _113->info;
+  _8 = _7->data16;
+  _101 = _8 & 1;
+  if (_101 != 0)
+    goto <bb 15>; [50.00%]
+  else
+    goto <bb 16>; [50.00%]
+
+  <bb 15> [local count: 41339060]:
+  # DEBUG BEGIN_STMT
+  _9 = _8 >> 9;
+  _106 = _9 & 1;
+  _10 = (short unsigned int) _106;
+  retval_76 = _10 + retval_61;
+  # DEBUG retval => retval_76
+
+  <bb 16> [local count: 82678120]:
+  # retval_28 = PHI <retval_61(14), retval_76(15)>
+  # DEBUG retval => retval_28
+  # DEBUG BEGIN_STMT
+  _11 = _113->next;
+  if (_11 != 0B)
+    goto <bb 17>; [70.00%]
+  else
+    goto <bb 136>; [30.00%]
+
+  <bb 17> [local count: 57874685]:
+  # DEBUG BEGIN_STMT
+  # DEBUG finder => _11
+  # DEBUG BEGIN_STMT
+  _12 = MEM[(struct list_head *)_11].next;
+  _113->next = _12;
+  # DEBUG BEGIN_STMT
+  _13 = next_315->next;
+  MEM[(struct list_head *)_11].next = _13;
+  # DEBUG BEGIN_STMT
+  next_315->next = _11;
+
+  <bb 136> [local count: 24803436]:
+
+  <bb 18> [local count: 118111600]:
+  # retval_29 = PHI <retval_81(13), retval_28(136)>
+  # found_33 = PHI <found_298(13), found_75(136)>
+  # missed_35 = PHI <missed_80(13), missed_300(136)>
+  # DEBUG missed => missed_35
+  # DEBUG found => found_33
+  # DEBUG retval => retval_29
+  # DEBUG BEGIN_STMT
+  if (info$idx_40 >= 0)
+    goto <bb 19>; [59.00%]
+  else
+    goto <bb 20>; [41.00%]
+
+  <bb 19> [local count: 69685845]:
+  # DEBUG BEGIN_STMT
+  _15 = (unsigned short) info$idx_40;
+  _16 = _15 + 1;
+  _17 = (short int) _16;
+  # DEBUG info$idx => _17
+
+  <bb 20> [local count: 118111600]:
+  # info$idx_32 = PHI <info$idx_40(18), _17(19)>
+  # DEBUG info$idx => info$idx_32
+  # DEBUG BEGIN_STMT
+  i.6_18 = (unsigned short) i_306;
+  _19 = i.6_18 + 1;
+  i_83 = (ee_s16) _19;
+  # DEBUG i => i_83
+  # DEBUG list => next_315
+  # DEBUG missed => missed_35
+  # DEBUG found => found_33
+  # DEBUG retval => retval_29
+  # DEBUG BEGIN_STMT
+  if (find_num_51 > i_83)
+    goto <bb 98>; [89.00%]
+  else
+    goto <bb 21>; [11.00%]
+
+  <bb 98> [local count: 105119324]:
+  goto <bb 3>; [100.00%]
+
+  <bb 21> [local count: 12992276]:
+  # _301 = PHI <_1(20)>
+  # retval_299 = PHI <retval_29(20)>
+  # info$idx_56 = PHI <info$idx_32(20)>
+  # found_344 = PHI <found_33(20)>
+  # missed_343 = PHI <missed_35(20)>
+  # next_339 = PHI <next_315(20)>
+  _84 = found_344 * 4;
+  _62 = _84 - missed_343;
+  _112 = retval_299 + _62;
+
+  <bb 22> [local count: 14598063]:
+  # list_303 = PHI <next_339(21), list_50(2)>
+  # info$data16_47 = PHI <_301(21), 0(2)>
+  # info$idx_246 = PHI <info$idx_56(21), finder_idx_53(D)(2)>
+  # prephitmp_121 = PHI <_112(21), 0(2)>
+  # DEBUG info$idx => info$idx_246
+  # DEBUG info$data16 => info$data16_47
+  # DEBUG BEGIN_STMT
+  # DEBUG retval => D#3
+  # DEBUG BEGIN_STMT
+  if (finder_idx_53(D) > 0)
+    goto <bb 84>; [41.48%]
+  else
+    goto <bb 44>; [58.52%]
+
+  <bb 84> [local count: 6055277]:
+
+  <bb 23> [local count: 55048084]:
+  # list_158 = PHI <list_303(84), list_288(43)>
+  # insize_130 = PHI <1(84), insize_157(43)>
+  # DEBUG insize => insize_130
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG nmerges => 0
+  # DEBUG tail => 0B
+  # DEBUG p => list_158
+  # DEBUG list => 0B
+  # DEBUG BEGIN_STMT
+  if (list_158 != 0B)
+    goto <bb 85>; [100.00%]
+  else
+    goto <bb 41>; [0.00%]
+
+  <bb 85> [local count: 55048084]:
+
+  <bb 24> [local count: 445389233]:
+  # nmerges_320 = PHI <nmerges_125(96), 0(85)>
+  # p_322 = PHI <q_290(96), list_158(85)>
+  # tail_323 = PHI <tail_285(96), 0B(85)>
+  # list_325 = PHI <list_289(96), 0B(85)>
+  # DEBUG nmerges => nmerges_320
+  # DEBUG tail => tail_323
+  # DEBUG p => p_322
+  # DEBUG list => list_325
+  # DEBUG BEGIN_STMT
+  nmerges_125 = nmerges_320 + 1;
+  # DEBUG nmerges => nmerges_125
+  # DEBUG BEGIN_STMT
+  # DEBUG q => p_322
+  # DEBUG BEGIN_STMT
+  # DEBUG psize => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  goto <bb 27>; [100.00%]
+
+  <bb 25> [local count: 3934497101]:
+  # DEBUG BEGIN_STMT
+  psize_127 = psize_126 + 1;
+  # DEBUG psize => psize_127
+  # DEBUG BEGIN_STMT
+  q_129 = q_128->next;
+  # DEBUG q => q_129
+  # DEBUG BEGIN_STMT
+  if (q_129 == 0B)
+    goto <bb 115>; [5.50%]
+  else
+    goto <bb 97>; [94.50%]
+
+  <bb 115> [local count: 216397339]:
+  # psize_279 = PHI <psize_127(25)>
+
+  <bb 26> [local count: 445389232]:
+  # q_271 = PHI <0B(115), q_278(116)>
+  # psize_269 = PHI <psize_279(115), psize_280(116)>
+  goto <bb 38>; [100.00%]
+
+  <bb 97> [local count: 3718099762]:
+
+  <bb 27> [local count: 4163488995]:
+  # q_128 = PHI <p_322(24), q_129(97)>
+  # psize_126 = PHI <0(24), psize_127(97)>
+  # DEBUG i => psize_126
+  # DEBUG psize => psize_126
+  # DEBUG q => q_128
+  # DEBUG BEGIN_STMT
+  if (psize_126 < insize_130)
+    goto <bb 25>; [94.50%]
+  else
+    goto <bb 116>; [5.50%]
+
+  <bb 116> [local count: 228991893]:
+  # psize_280 = PHI <psize_126(27)>
+  # q_278 = PHI <q_128(27)>
+  goto <bb 26>; [100.00%]
+
+  <bb 28> [local count: 3603603935]:
+  # DEBUG BEGIN_STMT
+  if (psize_131 == 0)
+    goto <bb 29>; [50.00%]
+  else
+    goto <bb 32>; [50.00%]
+
+  <bb 29> [local count: 1801801972]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_132
+  # DEBUG BEGIN_STMT
+  q_133 = q_132->next;
+  # DEBUG q => q_133
+  # DEBUG BEGIN_STMT
+  qsize_135 = qsize_134 + -1;
+  # DEBUG qsize => qsize_135
+  goto <bb 35>; [100.00%]
+
+  <bb 30> [local count: 5826600028]:
+  # DEBUG qsize => qsize_134
+  # DEBUG psize => psize_131
+  # DEBUG tail => tail_149
+  # DEBUG q => q_132
+  # DEBUG p => p_139
+  # DEBUG list => list_166
+  # DEBUG BEGIN_STMT
+  _136 = qsize_134 == 0;
+  _137 = q_132 == 0B;
+  _138 = _136 | _137;
+  if (_138 != 0)
+    goto <bb 31>; [65.46%]
+  else
+    goto <bb 32>; [34.54%]
+
+  <bb 31> [local count: 3814201002]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_139
+  # DEBUG BEGIN_STMT
+  p_140 = p_139->next;
+  # DEBUG p => p_140
+  # DEBUG BEGIN_STMT
+  psize_141 = psize_131 + -1;
+  # DEBUG psize => psize_141
+  goto <bb 35>; [100.00%]
+
+  <bb 32> [local count: 3814201002]:
+  # DEBUG BEGIN_STMT
+  _142 = p_139->info;
+  _143 = q_132->info;
+  _144 = cmp_complex (_142, _143, res_49(D));
+  if (_144 <= 0)
+    goto <bb 33>; [41.00%]
+  else
+    goto <bb 34>; [59.00%]
+
+  <bb 33> [local count: 1563822396]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_139
+  # DEBUG BEGIN_STMT
+  p_145 = p_139->next;
+  # DEBUG p => p_145
+  # DEBUG BEGIN_STMT
+  psize_146 = psize_131 + -1;
+  # DEBUG psize => psize_146
+  goto <bb 35>; [100.00%]
+
+  <bb 34> [local count: 2250378606]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_132
+  # DEBUG BEGIN_STMT
+  q_147 = q_132->next;
+  # DEBUG q => q_147
+  # DEBUG BEGIN_STMT
+  qsize_148 = qsize_134 + -1;
+  # DEBUG qsize => qsize_148
+
+  <bb 35> [local count: 9430203958]:
+  # p_161 = PHI <p_139(29), p_140(31), p_145(33), p_139(34)>
+  # q_162 = PHI <q_133(29), q_132(31), q_132(33), q_147(34)>
+  # e_150 = PHI <q_132(29), p_139(31), p_139(33), q_132(34)>
+  # psize_163 = PHI <0(29), psize_141(31), psize_146(33), psize_131(34)>
+  # qsize_164 = PHI <qsize_135(29), qsize_134(31), qsize_134(33), qsize_148(34)>
+  # DEBUG qsize => qsize_164
+  # DEBUG psize => psize_163
+  # DEBUG e => e_150
+  # DEBUG q => q_162
+  # DEBUG p => p_161
+  # DEBUG BEGIN_STMT
+  if (tail_149 != 0B)
+    goto <bb 36>; [70.00%]
+  else
+    goto <bb 37>; [30.00%]
+
+  <bb 36> [local count: 6601142796]:
+  # DEBUG BEGIN_STMT
+  tail_149->next = e_150;
+
+  <bb 37> [local count: 9430203955]:
+  # list_165 = PHI <e_150(35), list_166(36)>
+
+  <bb 38> [local count: 9875593200]:
+  # list_166 = PHI <list_325(26), list_165(37)>
+  # p_139 = PHI <p_322(26), p_161(37)>
+  # q_132 = PHI <q_271(26), q_162(37)>
+  # tail_149 = PHI <tail_323(26), e_150(37)>
+  # psize_131 = PHI <psize_269(26), psize_163(37)>
+  # qsize_134 = PHI <insize_130(26), qsize_164(37)>
+  # DEBUG qsize => qsize_134
+  # DEBUG psize => psize_131
+  # DEBUG tail => tail_149
+  # DEBUG q => q_132
+  # DEBUG p => p_139
+  # DEBUG list => list_166
+  # DEBUG BEGIN_STMT
+  if (psize_131 > 0)
+    goto <bb 30>; [59.00%]
+  else
+    goto <bb 39>; [41.00%]
+
+  <bb 39> [local count: 4048993177]:
+  _151 = qsize_134 > 0;
+  _152 = q_132 != 0B;
+  _153 = _151 & _152;
+  if (_153 != 0)
+    goto <bb 28>; [89.00%]
+  else
+    goto <bb 40>; [11.00%]
+
+  <bb 40> [local count: 445389251]:
+  # q_290 = PHI <q_132(39)>
+  # list_289 = PHI <list_166(39)>
+  # tail_285 = PHI <tail_149(39)>
+  # DEBUG nmerges => nmerges_125
+  # DEBUG tail => tail_285
+  # DEBUG p => q_290
+  # DEBUG list => list_289
+  # DEBUG BEGIN_STMT
+  if (q_290 != 0B)
+    goto <bb 96>; [89.00%]
+  else
+    goto <bb 42>; [11.00%]
+
+  <bb 96> [local count: 396396434]:
+  goto <bb 24>; [100.00%]
+
+  <bb 41> [count: 0]:
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)0B].next ={v} 0B;
+  __builtin_trap ();
+
+  <bb 42> [local count: 48992813]:
+  # nmerges_291 = PHI <nmerges_125(40)>
+  # list_288 = PHI <list_289(40)>
+  # tail_283 = PHI <tail_285(40)>
+  # DEBUG BEGIN_STMT
+  tail_283->next = 0B;
+  # DEBUG BEGIN_STMT
+  if (nmerges_291 <= 1)
+    goto <bb 120>; [0.00%]
+  else
+    goto <bb 43>; [100.00%]
+
+  <bb 120> [local count: 2]:
+  # list_287 = PHI <list_288(42)>
+  goto <bb 44>; [100.00%]
+
+  <bb 43> [local count: 48992816]:
+  # DEBUG BEGIN_STMT
+  insize_157 = insize_130 * 2;
+  # DEBUG insize => insize_157
+  # DEBUG BEGIN_STMT
+  goto <bb 23>; [100.00%]
+
+  <bb 44> [local count: 8542774]:
+  # list_38 = PHI <list_303(22), list_287(120)>
+  # DEBUG list => NULL
+  # DEBUG qsize => NULL
+  # DEBUG psize => NULL
+  # DEBUG nmerges => NULL
+  # DEBUG insize => NULL
+  # DEBUG tail => NULL
+  # DEBUG e => NULL
+  # DEBUG q => NULL
+  # DEBUG p => NULL
+  # DEBUG list => list_38
+  # DEBUG BEGIN_STMT
+  _22 = list_38->next;
+  # DEBUG item => _22
+  # DEBUG INLINE_ENTRY core_list_remove
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  ret_86 = MEM[(struct list_head *)_22].next;
+  # DEBUG ret => ret_86
+  # DEBUG BEGIN_STMT
+  tmp_87 = MEM[(struct list_head *)_22].info;
+  # DEBUG tmp => tmp_87
+  # DEBUG BEGIN_STMT
+  _88 = ret_86->info;
+  MEM[(struct list_head *)_22].info = _88;
+  # DEBUG BEGIN_STMT
+  ret_86->info = tmp_87;
+  # DEBUG BEGIN_STMT
+  _89 = MEM[(struct list_head *)_22].next;
+  _90 = _89->next;
+  MEM[(struct list_head *)_22].next = _90;
+  # DEBUG BEGIN_STMT
+  ret_86->next = 0B;
+  # DEBUG BEGIN_STMT
+  # DEBUG item => NULL
+  # DEBUG ret => NULL
+  # DEBUG tmp => NULL
+  # DEBUG remover => ret_86
+  # DEBUG BEGIN_STMT
+  # DEBUG list => list_38
+  # DEBUG info => &info
+  # DEBUG INLINE_ENTRY core_list_find
+  # DEBUG BEGIN_STMT
+  if (info$idx_246 >= 0)
+    goto <bb 82>; [59.00%]
+  else
+    goto <bb 83>; [41.00%]
+
+  <bb 83> [local count: 3502537]:
+  goto <bb 48>; [100.00%]
+
+  <bb 82> [local count: 5040237]:
+  goto <bb 46>; [100.00%]
+
+  <bb 45> [local count: 71899948]:
+  # DEBUG BEGIN_STMT
+  list_169 = list_327->next;
+  # DEBUG list => list_169
+  # DEBUG BEGIN_STMT
+  if (list_169 != 0B)
+    goto <bb 94>; [94.50%]
+  else
+    goto <bb 49>; [5.50%]
+
+  <bb 94> [local count: 67945451]:
+
+  <bb 46> [local count: 76084601]:
+  # list_327 = PHI <list_169(94), list_38(82)>
+  # DEBUG list => list_327
+  _170 = list_327->info;
+  _171 = _170->idx;
+  if (_171 != info$idx_246)
+    goto <bb 45>; [94.50%]
+  else
+    goto <bb 122>; [5.50%]
+
+  <bb 122> [local count: 4184653]:
+  # list_277 = PHI <list_327(46)>
+  goto <bb 49>; [100.00%]
+
+  <bb 47> [local count: 49964372]:
+  # DEBUG BEGIN_STMT
+  list_177 = list_328->next;
+  # DEBUG list => list_177
+  # DEBUG BEGIN_STMT
+  if (list_177 != 0B)
+    goto <bb 95>; [94.50%]
+  else
+    goto <bb 49>; [5.50%]
+
+  <bb 95> [local count: 47216332]:
+
+  <bb 48> [local count: 52872351]:
+  # list_328 = PHI <list_177(95), list_38(83)>
+  # DEBUG list => list_328
+  _178 = list_328->info;
+  _179 = _178->data16;
+  _180 = _179 & 255;
+  if (info$data16_47 != _180)
+    goto <bb 47>; [94.50%]
+  else
+    goto <bb 124>; [5.50%]
+
+  <bb 124> [local count: 2907979]:
+  # list_276 = PHI <list_328(48)>
+
+  <bb 49> [local count: 13795170]:
+  # _173 = PHI <list_277(122), list_276(124), 0B(45), 0B(47)>
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG finder => _173
+  # DEBUG BEGIN_STMT
+  if (_173 == 0B)
+    goto <bb 50>; [25.93%]
+  else
+    goto <bb 51>; [74.07%]
+
+  <bb 50> [local count: 4379419]:
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG finder => 0B
+  # DEBUG BEGIN_STMT
+  finder_60 = list_38->next;
+  # DEBUG finder => finder_60
+  # DEBUG retval => D#3
+  # DEBUG BEGIN_STMT
+  if (finder_60 != 0B)
+    goto <bb 51>; [63.33%]
+  else
+    goto <bb 54>; [36.67%]
+
+  <bb 51> [local count: 12992276]:
+  # finder_293 = PHI <finder_60(50), _173(49)>
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG finder => NULL
+  # DEBUG retval => NULL
+
+  <bb 52> [local count: 118111600]:
+  # retval_268 = PHI <retval_70(93), prephitmp_121(51)>
+  # finder_304 = PHI <finder_71(93), finder_293(51)>
+  # DEBUG finder => finder_304
+  # DEBUG retval => retval_268
+  # DEBUG BEGIN_STMT
+  _23 = list_38->info;
+  _24 = _23->data16;
+  retval_70 = crc16 (_24, retval_268);
+  # DEBUG retval => retval_70
+  # DEBUG BEGIN_STMT
+  finder_71 = finder_304->next;
+  # DEBUG finder => finder_71
+  # DEBUG retval => retval_70
+  # DEBUG BEGIN_STMT
+  if (finder_71 != 0B)
+    goto <bb 93>; [89.00%]
+  else
+    goto <bb 53>; [11.00%]
+
+  <bb 93> [local count: 105119324]:
+  goto <bb 52>; [100.00%]
+
+  <bb 53> [local count: 12992276]:
+  # retval_335 = PHI <retval_70(52)>
+  pretmp_204 = list_38->next;
+
+  <bb 54> [local count: 14598063]:
+  # retval_182 = PHI <retval_335(53), prephitmp_121(50)>
+  # prephitmp_183 = PHI <pretmp_204(53), finder_60(50)>
+  # DEBUG BEGIN_STMT
+  # DEBUG item_removed => ret_86
+  # DEBUG item_modified => list_38->next
+  # DEBUG INLINE_ENTRY core_list_undo_remove
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  tmp_91 = ret_86->info;
+  # DEBUG tmp => tmp_91
+  # DEBUG BEGIN_STMT
+  _92 = MEM[(struct list_head *)prephitmp_183].info;
+  ret_86->info = _92;
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)prephitmp_183].info = tmp_91;
+  # DEBUG BEGIN_STMT
+  _93 = MEM[(struct list_head *)prephitmp_183].next;
+  ret_86->next = _93;
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)prephitmp_183].next = ret_86;
+  # DEBUG BEGIN_STMT
+  # DEBUG item_removed => NULL
+  # DEBUG item_modified => NULL
+  # DEBUG tmp => NULL
+  # DEBUG remover => ret_86
+  # DEBUG BEGIN_STMT
+  # DEBUG list => list_38
+  # DEBUG cmp => cmp_idx
+  # DEBUG res => 0B
+  # DEBUG INLINE_ENTRY core_list_mergesort
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG insize => 1
+
+  <bb 55> [local count: 132709932]:
+  # list_218 = PHI <list_38(54), list_261(76)>
+  # insize_190 = PHI <1(54), insize_217(76)>
+  # DEBUG insize => insize_190
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG nmerges => 0
+  # DEBUG tail => 0B
+  # DEBUG p => list_218
+  # DEBUG list => 0B
+  # DEBUG BEGIN_STMT
+  if (list_218 != 0B)
+    goto <bb 81>; [89.00%]
+  else
+    goto <bb 73>; [11.00%]
+
+  <bb 81> [local count: 118111840]:
+
+  <bb 56> [local count: 1073744451]:
+  # nmerges_329 = PHI <nmerges_185(91), 0(81)>
+  # p_331 = PHI <q_272(91), list_218(81)>
+  # tail_332 = PHI <tail_270(91), 0B(81)>
+  # list_334 = PHI <list_264(91), 0B(81)>
+  # DEBUG nmerges => nmerges_329
+  # DEBUG tail => tail_332
+  # DEBUG p => p_331
+  # DEBUG list => list_334
+  # DEBUG BEGIN_STMT
+  nmerges_185 = nmerges_329 + 1;
+  # DEBUG nmerges => nmerges_185
+  # DEBUG BEGIN_STMT
+  # DEBUG q => p_331
+  # DEBUG BEGIN_STMT
+  # DEBUG psize => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  goto <bb 59>; [100.00%]
+
+  <bb 57> [local count: 9485286396]:
+  # DEBUG BEGIN_STMT
+  psize_187 = psize_186 + 1;
+  # DEBUG psize => psize_187
+  # DEBUG BEGIN_STMT
+  q_189 = q_188->next;
+  # DEBUG q => q_189
+  # DEBUG BEGIN_STMT
+  if (q_189 == 0B)
+    goto <bb 128>; [5.50%]
+  else
+    goto <bb 92>; [94.50%]
+
+  <bb 128> [local count: 521690749]:
+  # psize_253 = PHI <psize_187(57)>
+
+  <bb 58> [local count: 1073744452]:
+  # q_286 = PHI <0B(128), q_248(129)>
+  # psize_284 = PHI <psize_253(128), psize_251(129)>
+  goto <bb 70>; [100.00%]
+
+  <bb 92> [local count: 8963595647]:
+
+  <bb 59> [local count: 10037340100]:
+  # q_188 = PHI <p_331(56), q_189(92)>
+  # psize_186 = PHI <0(56), psize_187(92)>
+  # DEBUG i => psize_186
+  # DEBUG psize => psize_186
+  # DEBUG q => q_188
+  # DEBUG BEGIN_STMT
+  if (psize_186 < insize_190)
+    goto <bb 57>; [94.50%]
+  else
+    goto <bb 129>; [5.50%]
+
+  <bb 129> [local count: 552053703]:
+  # psize_251 = PHI <psize_186(59)>
+  # q_248 = PHI <q_188(59)>
+  goto <bb 58>; [100.00%]
+
+  <bb 60> [local count: 8687569086]:
+  # DEBUG BEGIN_STMT
+  if (psize_191 == 0)
+    goto <bb 61>; [50.00%]
+  else
+    goto <bb 64>; [50.00%]
+
+  <bb 61> [local count: 4343784554]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_192
+  # DEBUG BEGIN_STMT
+  q_193 = q_192->next;
+  # DEBUG q => q_193
+  # DEBUG BEGIN_STMT
+  qsize_195 = qsize_194 + -1;
+  # DEBUG qsize => qsize_195
+  goto <bb 67>; [100.00%]
+
+  <bb 62> [local count: 14046768510]:
+  # DEBUG qsize => qsize_194
+  # DEBUG psize => psize_191
+  # DEBUG tail => tail_209
+  # DEBUG q => q_192
+  # DEBUG p => p_199
+  # DEBUG list => list_226
+  # DEBUG BEGIN_STMT
+  _196 = qsize_194 == 0;
+  _197 = q_192 == 0B;
+  _198 = _196 | _197;
+  if (_198 != 0)
+    goto <bb 63>; [65.46%]
+  else
+    goto <bb 64>; [34.54%]
+
+  <bb 63> [local count: 9195276538]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_199
+  # DEBUG BEGIN_STMT
+  p_200 = p_199->next;
+  # DEBUG p => p_200
+  # DEBUG BEGIN_STMT
+  psize_201 = psize_191 + -1;
+  # DEBUG psize => psize_201
+  goto <bb 67>; [100.00%]
+
+  <bb 64> [local count: 9195276538]:
+  # DEBUG BEGIN_STMT
+  _202 = p_199->info;
+  _203 = q_192->info;
+  # DEBUG a => _202
+  # DEBUG b => _203
+  # DEBUG res => 0B
+  # DEBUG INLINE_ENTRY cmp_idx
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _227 = MEM[(struct list_data *)_202].data16;
+  _228 = _227 & -256;
+  _229 = (unsigned short) _227;
+  _230 = _229 >> 8;
+  _231 = (short int) _230;
+  _232 = _228 | _231;
+  MEM[(struct list_data *)_202].data16 = _232;
+  # DEBUG BEGIN_STMT
+  _233 = MEM[(struct list_data *)_203].data16;
+  _234 = _233 & -256;
+  _235 = (unsigned short) _233;
+  _236 = _235 >> 8;
+  _237 = (short int) _236;
+  _238 = _234 | _237;
+  MEM[(struct list_data *)_203].data16 = _238;
+  # DEBUG BEGIN_STMT
+  _239 = MEM[(struct list_data *)_202].idx;
+  _240 = (int) _239;
+  _241 = MEM[(struct list_data *)_203].idx;
+  _242 = (int) _241;
+  _243 = _240 - _242;
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG res => NULL
+  if (_243 <= 0)
+    goto <bb 65>; [41.00%]
+  else
+    goto <bb 66>; [59.00%]
+
+  <bb 65> [local count: 3770063345]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_199
+  # DEBUG BEGIN_STMT
+  p_205 = p_199->next;
+  # DEBUG p => p_205
+  # DEBUG BEGIN_STMT
+  psize_206 = psize_191 + -1;
+  # DEBUG psize => psize_206
+  goto <bb 67>; [100.00%]
+
+  <bb 66> [local count: 5425213192]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_192
+  # DEBUG BEGIN_STMT
+  q_207 = q_192->next;
+  # DEBUG q => q_207
+  # DEBUG BEGIN_STMT
+  qsize_208 = qsize_194 + -1;
+  # DEBUG qsize => qsize_208
+
+  <bb 67> [local count: 22734337585]:
+  # p_221 = PHI <p_199(61), p_200(63), p_205(65), p_199(66)>
+  # q_222 = PHI <q_193(61), q_192(63), q_192(65), q_207(66)>
+  # e_210 = PHI <q_192(61), p_199(63), p_199(65), q_192(66)>
+  # psize_223 = PHI <0(61), psize_201(63), psize_206(65), psize_191(66)>
+  # qsize_224 = PHI <qsize_195(61), qsize_194(63), qsize_194(65), qsize_208(66)>
+  # DEBUG qsize => qsize_224
+  # DEBUG psize => psize_223
+  # DEBUG e => e_210
+  # DEBUG q => q_222
+  # DEBUG p => p_221
+  # DEBUG BEGIN_STMT
+  if (tail_209 != 0B)
+    goto <bb 68>; [70.00%]
+  else
+    goto <bb 69>; [30.00%]
+
+  <bb 68> [local count: 15914036369]:
+  # DEBUG BEGIN_STMT
+  tail_209->next = e_210;
+
+  <bb 69> [local count: 22734337577]:
+  # list_74 = PHI <e_210(67), list_226(68)>
+
+  <bb 70> [local count: 23808082058]:
+  # list_226 = PHI <list_334(58), list_74(69)>
+  # p_199 = PHI <p_331(58), p_221(69)>
+  # q_192 = PHI <q_286(58), q_222(69)>
+  # tail_209 = PHI <tail_332(58), e_210(69)>
+  # psize_191 = PHI <psize_284(58), psize_223(69)>
+  # qsize_194 = PHI <insize_190(58), qsize_224(69)>
+  # DEBUG qsize => qsize_194
+  # DEBUG psize => psize_191
+  # DEBUG tail => tail_209
+  # DEBUG q => q_192
+  # DEBUG p => p_199
+  # DEBUG list => list_226
+  # DEBUG BEGIN_STMT
+  if (psize_191 > 0)
+    goto <bb 62>; [59.00%]
+  else
+    goto <bb 71>; [41.00%]
+
+  <bb 71> [local count: 9761313559]:
+  _211 = qsize_194 > 0;
+  _212 = q_192 != 0B;
+  _213 = _211 & _212;
+  if (_213 != 0)
+    goto <bb 60>; [89.00%]
+  else
+    goto <bb 72>; [11.00%]
+
+  <bb 72> [local count: 1073744495]:
+  # q_272 = PHI <q_192(71)>
+  # tail_270 = PHI <tail_209(71)>
+  # list_264 = PHI <list_226(71)>
+  # DEBUG nmerges => nmerges_185
+  # DEBUG tail => tail_270
+  # DEBUG p => q_272
+  # DEBUG list => list_264
+  # DEBUG BEGIN_STMT
+  if (q_272 != 0B)
+    goto <bb 91>; [89.00%]
+  else
+    goto <bb 74>; [11.00%]
+
+  <bb 91> [local count: 955632601]:
+  goto <bb 56>; [100.00%]
+
+  <bb 73> [local count: 14598092]:
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)0B].next ={v} 0B;
+  __builtin_trap ();
+
+  <bb 74> [local count: 118111884]:
+  # nmerges_273 = PHI <nmerges_185(72)>
+  # tail_267 = PHI <tail_270(72)>
+  # list_261 = PHI <list_264(72)>
+  # DEBUG BEGIN_STMT
+  tail_267->next = 0B;
+  # DEBUG BEGIN_STMT
+  if (nmerges_273 <= 1)
+    goto <bb 75>; [0.00%]
+  else
+    goto <bb 76>; [100.00%]
+
+  <bb 75> [local count: 12992315]:
+  # list_260 = PHI <list_261(74)>
+  # DEBUG BEGIN_STMT
+  # DEBUG list => NULL
+  # DEBUG cmp => NULL
+  # DEBUG res => NULL
+  # DEBUG qsize => NULL
+  # DEBUG psize => NULL
+  # DEBUG nmerges => NULL
+  # DEBUG insize => NULL
+  # DEBUG tail => NULL
+  # DEBUG e => NULL
+  # DEBUG q => NULL
+  # DEBUG p => NULL
+  # DEBUG list => list_260
+  # DEBUG BEGIN_STMT
+  finder_63 = list_260->next;
+  # DEBUG BEGIN_STMT
+  # DEBUG finder => finder_63
+  # DEBUG retval => retval_182
+  # DEBUG BEGIN_STMT
+  if (finder_63 != 0B)
+    goto <bb 80>; [100.00%]
+  else
+    goto <bb 78>; [0.00%]
+
+  <bb 76> [local count: 118111891]:
+  # DEBUG BEGIN_STMT
+  insize_217 = insize_190 * 2;
+  # DEBUG insize => insize_217
+  # DEBUG BEGIN_STMT
+  goto <bb 55>; [100.00%]
+
+  <bb 80> [local count: 12992315]:
+
+  <bb 77> [local count: 118111600]:
+  # retval_57 = PHI <retval_67(90), retval_182(80)>
+  # finder_305 = PHI <finder_68(90), finder_63(80)>
+  # DEBUG finder => finder_305
+  # DEBUG retval => retval_57
+  # DEBUG BEGIN_STMT
+  _26 = list_260->info;
+  _27 = _26->data16;
+  retval_67 = crc16 (_27, retval_57);
+  # DEBUG retval => retval_67
+  # DEBUG BEGIN_STMT
+  finder_68 = finder_305->next;
+  # DEBUG finder => finder_68
+  # DEBUG retval => retval_67
+  # DEBUG BEGIN_STMT
+  if (finder_68 != 0B)
+    goto <bb 90>; [89.00%]
+  else
+    goto <bb 134>; [11.00%]
+
+  <bb 134> [local count: 12992276]:
+  # retval_330 = PHI <retval_67(77)>
+  goto <bb 78>; [100.00%]
+
+  <bb 90> [local count: 105119324]:
+  goto <bb 77>; [100.00%]
+
+  <bb 78> [local count: 14598063]:
+  # retval_122 = PHI <retval_330(134), retval_182(75)>
+  # DEBUG BEGIN_STMT
+  info ={v} {CLOBBER(eos)};
+  return retval_122;
+
+  <bb 103> [count: 0]:
+
+  <bb 79> [count: 0]:
+  # DEBUG list => NULL
+  # DEBUG list => NULL
+  # DEBUG info => NULL
+  # DEBUG this_find => NULL
+  # DEBUG list => NULL
+  # DEBUG tmp => NULL
+  # DEBUG next => NULL
+  # DEBUG list => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG missed => missed_300 + 1
+  # DEBUG BEGIN_STMT
+  _326 ={v} MEM[(struct list_head *)0B].next;
+  __builtin_trap ();
+
+}
+
+
+
+;; Function core_list_init (core_list_init, funcdef_no=5, decl_uid=1506, cgraph_uid=6, symbol_order=5)
+
+
+Examining core_list_init function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+struct list_head * core_list_init (ee_u32 blksize, struct list_head * memblock, ee_s16 seed)
+{
+  struct list_head * p;
+  struct list_head * q;
+  struct list_head * e;
+  struct list_head * tail;
+  ee_s32 insize;
+  ee_s32 nmerges;
+  ee_s32 psize;
+  ee_s32 qsize;
+  struct list_head * list;
+  ee_u16 pat;
+  ee_u16 dat;
+  struct list_head * finder;
+  ee_u32 i;
+  struct list_data * datablock_end;
+  struct list_data * datablock;
+  struct list_head * memblock_end;
+  ee_u32 size;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  struct list_data_s * _4;
+  struct list_head * _5;
+  struct list_data * _6;
+  short unsigned int _7;
+  short unsigned int _9;
+  short unsigned int _10;
+  short unsigned int _11;
+  short int _13;
+  long unsigned int _14;
+  short int _16;
+  short unsigned int _17;
+  short unsigned int seed.17_18;
+  unsigned short _19;
+  unsigned short _20;
+  unsigned short _21;
+  unsigned short _22;
+  short int _24;
+  struct list_head_s * _25;
+  short unsigned int _26;
+  unsigned short _52;
+  struct list_head * _55;
+  struct list_data * _56;
+  struct list_head_s * _57;
+  struct list_head * _58;
+  struct list_data * _59;
+  struct list_head_s * _60;
+  short unsigned int _80;
+  unsigned short _81;
+  _Bool _94;
+  _Bool _95;
+  _Bool _96;
+  struct list_data_s * _100;
+  struct list_data_s * _101;
+  _Bool _109;
+  _Bool _110;
+  _Bool _111;
+  short int _125;
+  short int _126;
+  unsigned short _127;
+  unsigned short _128;
+  short int _129;
+  short int _130;
+  short int _131;
+  short int _132;
+  unsigned short _133;
+  unsigned short _134;
+  short int _135;
+  short int _136;
+  short int _137;
+  int _138;
+  short int _139;
+  int _140;
+  long int _141;
+  struct list_head_s * _164;
+  short int _178;
+  struct list_data_s * pretmp_204;
+  long unsigned int _205;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG per_item => 20
+  # DEBUG BEGIN_STMT
+  _1 = blksize_33(D) / 20;
+  size_34 = _1 + 4294967294;
+  # DEBUG size => size_34
+  # DEBUG BEGIN_STMT
+  _2 = size_34 * 8;
+  memblock_end_36 = memblock_78(D) + _2;
+  # DEBUG memblock_end => memblock_end_36
+  # DEBUG BEGIN_STMT
+  # DEBUG datablock => memblock_end_36
+  # DEBUG BEGIN_STMT
+  _3 = size_34 * 4;
+  datablock_end_37 = memblock_end_36 + _3;
+  # DEBUG datablock_end => datablock_end_37
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG list => memblock_78(D)
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  memblock_78(D)->next = 0B;
+  # DEBUG BEGIN_STMT
+  memblock_78(D)->info = memblock_end_36;
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_data_s *)memblock_end_36].idx = 0;
+  # DEBUG BEGIN_STMT
+  _4 = memblock_78(D)->info;
+  _4->data16 = -32640;
+  # DEBUG BEGIN_STMT
+  _5 = memblock_78(D) + 8;
+  # DEBUG memblock => _5
+  # DEBUG BEGIN_STMT
+  _6 = memblock_end_36 + 4;
+  # DEBUG datablock => _6
+  # DEBUG BEGIN_STMT
+  # DEBUG info$idx => 32767
+  # DEBUG BEGIN_STMT
+  # DEBUG info$data16 => -1
+  # DEBUG BEGIN_STMT
+  # DEBUG insert_point => memblock_78(D)
+  # DEBUG info => &info
+  # DEBUG memblock => &memblock
+  # DEBUG datablock => &datablock
+  # DEBUG memblock_end => memblock_end_36
+  # DEBUG datablock_end => datablock_end_37
+  # DEBUG INLINE_ENTRY core_list_insert_new
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _55 = memblock_78(D) + 16;
+  if (memblock_end_36 <= _55)
+    goto <bb 56>; [17.38%]
+  else
+    goto <bb 3>; [82.62%]
+
+  <bb 56> [local count: 16960065]:
+  goto <bb 5>; [100.00%]
+
+  <bb 3> [local count: 97583804]:
+  # DEBUG BEGIN_STMT
+  _56 = memblock_end_36 + 8;
+  if (datablock_end_37 <= _56)
+    goto <bb 56>; [17.38%]
+  else
+    goto <bb 4>; [82.62%]
+
+  <bb 4> [local count: 80623739]:
+  # DEBUG BEGIN_STMT
+  # DEBUG newitem => _5
+  # DEBUG BEGIN_STMT
+  # DEBUG memblock => _55
+  # DEBUG BEGIN_STMT
+  _57 = memblock_78(D)->next;
+  MEM[(struct list_head *)memblock_78(D) + 8B].next = _57;
+  # DEBUG BEGIN_STMT
+  memblock_78(D)->next = _5;
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)memblock_78(D) + 8B].info = _6;
+  # DEBUG BEGIN_STMT
+  # DEBUG datablock => _56
+  # DEBUG BEGIN_STMT
+  # DEBUG to => _6
+  # DEBUG from => &info
+  # DEBUG INLINE_ENTRY copy_info
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_data *)memblock_end_36 + 4B].data16 = -1;
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_data *)memblock_end_36 + 4B].idx = 32767;
+  # DEBUG to => NULL
+  # DEBUG from => NULL
+  # DEBUG BEGIN_STMT
+
+  <bb 5> [local count: 118111600]:
+  # memblock_149 = PHI <_55(4), _5(56)>
+  # datablock_144 = PHI <_56(4), _6(56)>
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG datablock => datablock_144
+  # DEBUG memblock => memblock_149
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (size_34 != 0)
+    goto <bb 7>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 6> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  finder_42 = memblock_78(D)->next;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG finder => finder_42
+  # DEBUG i => 1
+  # DEBUG BEGIN_STMT
+  _164 = finder_42->next;
+  if (_164 != 0B)
+    goto <bb 13>; [89.00%]
+  else
+    goto <bb 12>; [11.00%]
+
+  <bb 7> [local count: 105119324]:
+  _26 = (short unsigned int) seed_46(D);
+
+  <bb 8> [local count: 789541692]:
+  # i_161 = PHI <i_54(53), 0(7)>
+  # memblock_179 = PHI <memblock_73(53), memblock_149(7)>
+  # datablock_180 = PHI <datablock_76(53), datablock_144(7)>
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG datablock => datablock_180
+  # DEBUG memblock => memblock_179
+  # DEBUG i => i_161
+  # DEBUG BEGIN_STMT
+  # DEBUG D#17 => (short unsigned int) i_161
+  # DEBUG D#16 => D#17 ^ _26
+  # DEBUG datpat => D#16 & 15
+  # DEBUG BEGIN_STMT
+  # DEBUG D#15 => D#16 << 3
+  # DEBUG D#14 => D#15 & 120
+  # DEBUG D#13 => D#17 & 7
+  # DEBUG D#12 => D#14 | D#13
+  # DEBUG dat => D#12
+  # DEBUG BEGIN_STMT
+  # DEBUG D#11 => D#12 * 257
+  # DEBUG info$data16 => (short int) D#11
+  # DEBUG BEGIN_STMT
+  # DEBUG insert_point => memblock_78(D)
+  # DEBUG info => &info
+  # DEBUG memblock => &memblock
+  # DEBUG datablock => &datablock
+  # DEBUG memblock_end => memblock_end_36
+  # DEBUG datablock_end => datablock_end_37
+  # DEBUG INLINE_ENTRY core_list_insert_new
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _58 = memblock_179 + 8;
+  if (memblock_end_36 <= _58)
+    goto <bb 57>; [17.38%]
+  else
+    goto <bb 9>; [82.62%]
+
+  <bb 57> [local count: 137222345]:
+  goto <bb 11>; [100.00%]
+
+  <bb 9> [local count: 789541692]:
+  # DEBUG BEGIN_STMT
+  _59 = datablock_180 + 4;
+  if (datablock_end_37 <= _59)
+    goto <bb 57>; [17.38%]
+  else
+    goto <bb 10>; [82.62%]
+
+  <bb 10> [local count: 652319347]:
+  _7 = (short unsigned int) i_161;
+  _9 = _7 ^ _26;
+  _80 = _9 << 3;
+  _10 = _80 & 120;
+  _11 = _7 & 7;
+  dat_53 = _10 | _11;
+  _52 = dat_53 * 257;
+  _13 = (short int) _52;
+  # DEBUG BEGIN_STMT
+  # DEBUG newitem => memblock_179
+  # DEBUG BEGIN_STMT
+  # DEBUG memblock => _58
+  # DEBUG BEGIN_STMT
+  _60 = memblock_78(D)->next;
+  memblock_179->next = _60;
+  # DEBUG BEGIN_STMT
+  memblock_78(D)->next = memblock_179;
+  # DEBUG BEGIN_STMT
+  memblock_179->info = datablock_180;
+  # DEBUG BEGIN_STMT
+  # DEBUG datablock => _59
+  # DEBUG BEGIN_STMT
+  # DEBUG to => datablock_180
+  # DEBUG from => &info
+  # DEBUG INLINE_ENTRY copy_info
+  # DEBUG BEGIN_STMT
+  datablock_180->data16 = _13;
+  # DEBUG BEGIN_STMT
+  datablock_180->idx = 32767;
+  # DEBUG to => NULL
+  # DEBUG from => NULL
+  # DEBUG BEGIN_STMT
+
+  <bb 11> [local count: 789541692]:
+  # memblock_73 = PHI <memblock_179(57), _58(10)>
+  # datablock_76 = PHI <datablock_180(57), _59(10)>
+  # DEBUG datablock => datablock_76
+  # DEBUG memblock => memblock_73
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG BEGIN_STMT
+  i_54 = i_161 + 1;
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG datablock => datablock_76
+  # DEBUG memblock => memblock_73
+  # DEBUG i => i_54
+  # DEBUG BEGIN_STMT
+  if (size_34 > i_54)
+    goto <bb 54>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 54> [local count: 702692106]:
+  if (memblock_end_36 <= _58)
+    goto <bb 52>; [17.38%]
+  else
+    goto <bb 53>; [82.62%]
+
+  <bb 53> [local count: 702692106]:
+  goto <bb 8>; [100.00%]
+
+  <bb 52> [local count: 18269738]:
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG datablock => datablock_76
+  # DEBUG memblock => memblock_73
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG D#17 => NULL
+  # DEBUG D#16 => D#17 ^ _26
+  # DEBUG datpat => D#16 & 15
+  # DEBUG BEGIN_STMT
+  # DEBUG D#15 => D#16 << 3
+  # DEBUG D#14 => D#15 & 120
+  # DEBUG D#13 => D#17 & 7
+  # DEBUG D#12 => D#14 | D#13
+  # DEBUG dat => D#12
+  # DEBUG BEGIN_STMT
+  # DEBUG D#11 => D#12 * 257
+  # DEBUG info$data16 => (short int) D#11
+  # DEBUG BEGIN_STMT
+  # DEBUG insert_point => memblock_78(D)
+  # DEBUG info => &info
+  # DEBUG memblock => &memblock
+  # DEBUG datablock => &datablock
+  # DEBUG memblock_end => memblock_end_36
+  # DEBUG datablock_end => datablock_end_37
+  # DEBUG INLINE_ENTRY core_list_insert_new
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG insert_point => NULL
+  # DEBUG info => NULL
+  # DEBUG memblock => NULL
+  # DEBUG datablock => NULL
+  # DEBUG memblock_end => NULL
+  # DEBUG datablock_end => NULL
+  # DEBUG datablock => datablock_76
+  # DEBUG memblock => memblock_73
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  goto <bb 6>; [100.00%]
+
+  <bb 12> [local count: 118111600]:
+  goto <bb 18>; [100.00%]
+
+  <bb 13> [local count: 105119324]:
+  _14 = size_34 / 5;
+
+  <bb 14> [local count: 955630224]:
+  # i_155 = PHI <_205(43), 1(13)>
+  # finder_174 = PHI <finder_51(43), finder_42(13)>
+  # DEBUG finder => finder_174
+  # DEBUG i => i_155
+  # DEBUG BEGIN_STMT
+  pretmp_204 = finder_174->info;
+  _205 = i_155 + 1;
+  if (_14 > i_155)
+    goto <bb 15>; [50.00%]
+  else
+    goto <bb 16>; [50.00%]
+
+  <bb 15> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  # DEBUG i => i_155 + 1
+  _16 = (short int) i_155;
+  goto <bb 17>; [100.00%]
+
+  <bb 16> [local count: 477815112]:
+  # DEBUG finder => finder_174
+  # DEBUG BEGIN_STMT
+  # DEBUG i => i_155 + 1
+  _17 = (short unsigned int) i_155;
+  seed.17_18 = (short unsigned int) seed_46(D);
+  pat_47 = _17 ^ seed.17_18;
+  # DEBUG pat => pat_47
+  # DEBUG BEGIN_STMT
+  _19 = (unsigned short) _205;
+  _20 = _19 << 8;
+  _21 = _20 & 1792;
+  _22 = _21 | pat_47;
+  _81 = _22 & 16383;
+  _24 = (short int) _81;
+
+  <bb 17> [local count: 955630224]:
+  # _178 = PHI <_16(15), _24(16)>
+  pretmp_204->idx = _178;
+  # DEBUG i => _205
+  # DEBUG BEGIN_STMT
+  finder_51 = finder_174->next;
+  # DEBUG finder => finder_51
+  # DEBUG i => _205
+  # DEBUG BEGIN_STMT
+  _25 = finder_51->next;
+  if (_25 != 0B)
+    goto <bb 43>; [89.00%]
+  else
+    goto <bb 12>; [11.00%]
+
+  <bb 43> [local count: 850510900]:
+  goto <bb 14>; [100.00%]
+
+  <bb 18> [local count: 1073743987]:
+  # list_116 = PHI <memblock_78(D)(12), list_199(39)>
+  # insize_88 = PHI <1(12), insize_115(39)>
+  # DEBUG insize => insize_88
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG nmerges => 0
+  # DEBUG tail => 0B
+  # DEBUG p => list_116
+  # DEBUG list => 0B
+  # DEBUG BEGIN_STMT
+  if (list_116 != 0B)
+    goto <bb 40>; [89.00%]
+  else
+    goto <bb 36>; [11.00%]
+
+  <bb 40> [local count: 955632149]:
+
+  <bb 19> [local count: 8687568690]:
+  # nmerges_181 = PHI <nmerges_83(41), 0(40)>
+  # p_183 = PHI <q_203(41), list_116(40)>
+  # tail_184 = PHI <tail_202(41), 0B(40)>
+  # list_186 = PHI <list_200(41), 0B(40)>
+  # DEBUG nmerges => nmerges_181
+  # DEBUG tail => tail_184
+  # DEBUG p => p_183
+  # DEBUG list => list_186
+  # DEBUG BEGIN_STMT
+  nmerges_83 = nmerges_181 + 1;
+  # DEBUG nmerges => nmerges_83
+  # DEBUG BEGIN_STMT
+  # DEBUG q => p_183
+  # DEBUG BEGIN_STMT
+  # DEBUG psize => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  goto <bb 22>; [100.00%]
+
+  <bb 20> [local count: 76744589517]:
+  # DEBUG BEGIN_STMT
+  psize_85 = psize_84 + 1;
+  # DEBUG psize => psize_85
+  # DEBUG BEGIN_STMT
+  q_87 = q_86->next;
+  # DEBUG q => q_87
+  # DEBUG BEGIN_STMT
+  if (q_87 == 0B)
+    goto <bb 21>; [5.50%]
+  else
+    goto <bb 42>; [94.50%]
+
+  <bb 21> [local count: 8687568697]:
+  # q_170 = PHI <0B(20), q_86(22)>
+  # psize_168 = PHI <psize_85(20), psize_84(22)>
+  goto <bb 33>; [100.00%]
+
+  <bb 42> [local count: 72523637116]:
+
+  <bb 22> [local count: 81211205829]:
+  # q_86 = PHI <p_183(19), q_87(42)>
+  # psize_84 = PHI <0(19), psize_85(42)>
+  # DEBUG i => psize_84
+  # DEBUG psize => psize_84
+  # DEBUG q => q_86
+  # DEBUG BEGIN_STMT
+  if (psize_84 < insize_88)
+    goto <bb 20>; [94.50%]
+  else
+    goto <bb 21>; [5.50%]
+
+  <bb 23> [local count: 70290331315]:
+  # DEBUG BEGIN_STMT
+  if (psize_89 == 0)
+    goto <bb 24>; [50.00%]
+  else
+    goto <bb 27>; [50.00%]
+
+  <bb 24> [local count: 35145165747]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_90
+  # DEBUG BEGIN_STMT
+  q_91 = q_90->next;
+  # DEBUG q => q_91
+  # DEBUG BEGIN_STMT
+  qsize_93 = qsize_92 + -1;
+  # DEBUG qsize => qsize_93
+  goto <bb 30>; [100.00%]
+
+  <bb 25> [local count: 113651126425]:
+  # DEBUG qsize => qsize_92
+  # DEBUG psize => psize_89
+  # DEBUG tail => tail_107
+  # DEBUG q => q_90
+  # DEBUG p => p_97
+  # DEBUG list => list_124
+  # DEBUG BEGIN_STMT
+  _94 = qsize_92 == 0;
+  _95 = q_90 == 0B;
+  _96 = _94 | _95;
+  if (_96 != 0)
+    goto <bb 26>; [65.46%]
+  else
+    goto <bb 27>; [34.54%]
+
+  <bb 26> [local count: 74398146131]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_97
+  # DEBUG BEGIN_STMT
+  p_98 = p_97->next;
+  # DEBUG p => p_98
+  # DEBUG BEGIN_STMT
+  psize_99 = psize_89 + -1;
+  # DEBUG psize => psize_99
+  goto <bb 30>; [100.00%]
+
+  <bb 27> [local count: 74398146131]:
+  # DEBUG BEGIN_STMT
+  _100 = p_97->info;
+  _101 = q_90->info;
+  # DEBUG a => _100
+  # DEBUG b => _101
+  # DEBUG res => 0B
+  # DEBUG INLINE_ENTRY cmp_idx
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _125 = MEM[(struct list_data *)_100].data16;
+  _126 = _125 & -256;
+  _127 = (unsigned short) _125;
+  _128 = _127 >> 8;
+  _129 = (short int) _128;
+  _130 = _126 | _129;
+  MEM[(struct list_data *)_100].data16 = _130;
+  # DEBUG BEGIN_STMT
+  _131 = MEM[(struct list_data *)_101].data16;
+  _132 = _131 & -256;
+  _133 = (unsigned short) _131;
+  _134 = _133 >> 8;
+  _135 = (short int) _134;
+  _136 = _132 | _135;
+  MEM[(struct list_data *)_101].data16 = _136;
+  # DEBUG BEGIN_STMT
+  _137 = MEM[(struct list_data *)_100].idx;
+  _138 = (int) _137;
+  _139 = MEM[(struct list_data *)_101].idx;
+  _140 = (int) _139;
+  _141 = _138 - _140;
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG res => NULL
+  if (_141 <= 0)
+    goto <bb 28>; [41.00%]
+  else
+    goto <bb 29>; [59.00%]
+
+  <bb 28> [local count: 30503239630]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_97
+  # DEBUG BEGIN_STMT
+  p_103 = p_97->next;
+  # DEBUG p => p_103
+  # DEBUG BEGIN_STMT
+  psize_104 = psize_89 + -1;
+  # DEBUG psize => psize_104
+  goto <bb 30>; [100.00%]
+
+  <bb 29> [local count: 43894906501]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_90
+  # DEBUG BEGIN_STMT
+  q_105 = q_90->next;
+  # DEBUG q => q_105
+  # DEBUG BEGIN_STMT
+  qsize_106 = qsize_92 + -1;
+  # DEBUG qsize => qsize_106
+
+  <bb 30> [local count: 183941457651]:
+  # p_119 = PHI <p_97(24), p_98(26), p_103(28), p_97(29)>
+  # q_120 = PHI <q_91(24), q_90(26), q_90(28), q_105(29)>
+  # e_108 = PHI <q_90(24), p_97(26), p_97(28), q_90(29)>
+  # psize_121 = PHI <0(24), psize_99(26), psize_104(28), psize_89(29)>
+  # qsize_122 = PHI <qsize_93(24), qsize_92(26), qsize_92(28), qsize_106(29)>
+  # DEBUG qsize => qsize_122
+  # DEBUG psize => psize_121
+  # DEBUG e => e_108
+  # DEBUG q => q_120
+  # DEBUG p => p_119
+  # DEBUG BEGIN_STMT
+  if (tail_107 != 0B)
+    goto <bb 31>; [70.00%]
+  else
+    goto <bb 32>; [30.00%]
+
+  <bb 31> [local count: 128759020840]:
+  # DEBUG BEGIN_STMT
+  tail_107->next = e_108;
+
+  <bb 32> [local count: 183941457587]:
+  # list_158 = PHI <e_108(30), list_124(31)>
+
+  <bb 33> [local count: 192629026521]:
+  # list_124 = PHI <list_186(21), list_158(32)>
+  # p_97 = PHI <p_183(21), p_119(32)>
+  # q_90 = PHI <q_170(21), q_120(32)>
+  # tail_107 = PHI <tail_184(21), e_108(32)>
+  # psize_89 = PHI <psize_168(21), psize_121(32)>
+  # qsize_92 = PHI <insize_88(21), qsize_122(32)>
+  # DEBUG qsize => qsize_92
+  # DEBUG psize => psize_89
+  # DEBUG tail => tail_107
+  # DEBUG q => q_90
+  # DEBUG p => p_97
+  # DEBUG list => list_124
+  # DEBUG BEGIN_STMT
+  if (psize_89 > 0)
+    goto <bb 25>; [59.00%]
+  else
+    goto <bb 34>; [41.00%]
+
+  <bb 34> [local count: 78977900185]:
+  _109 = qsize_92 > 0;
+  _110 = q_90 != 0B;
+  _111 = _109 & _110;
+  if (_111 != 0)
+    goto <bb 23>; [89.00%]
+  else
+    goto <bb 35>; [11.00%]
+
+  <bb 35> [local count: 8687569049]:
+  # q_203 = PHI <q_90(34)>
+  # tail_202 = PHI <tail_107(34)>
+  # list_200 = PHI <list_124(34)>
+  # DEBUG nmerges => nmerges_83
+  # DEBUG tail => tail_202
+  # DEBUG p => q_203
+  # DEBUG list => list_200
+  # DEBUG BEGIN_STMT
+  if (q_203 != 0B)
+    goto <bb 41>; [89.00%]
+  else
+    goto <bb 37>; [11.00%]
+
+  <bb 41> [local count: 7731936459]:
+  goto <bb 19>; [100.00%]
+
+  <bb 36> [local count: 118111838]:
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)0B].next ={v} 0B;
+  __builtin_trap ();
+
+  <bb 37> [local count: 955632508]:
+  # nmerges_50 = PHI <nmerges_83(35)>
+  # tail_201 = PHI <tail_202(35)>
+  # list_199 = PHI <list_200(35)>
+  # DEBUG BEGIN_STMT
+  tail_201->next = 0B;
+  # DEBUG BEGIN_STMT
+  if (nmerges_50 <= 1)
+    goto <bb 38>; [0.00%]
+  else
+    goto <bb 39>; [100.00%]
+
+  <bb 38> [local count: 118111959]:
+  # list_198 = PHI <list_199(37)>
+  # DEBUG BEGIN_STMT
+  # DEBUG list => NULL
+  # DEBUG qsize => NULL
+  # DEBUG psize => NULL
+  # DEBUG nmerges => NULL
+  # DEBUG insize => NULL
+  # DEBUG tail => NULL
+  # DEBUG e => NULL
+  # DEBUG q => NULL
+  # DEBUG p => NULL
+  # DEBUG list => list_198
+  # DEBUG BEGIN_STMT
+  # DEBUG datablock => NULL
+  return list_198;
+
+  <bb 39> [local count: 955632567]:
+  # DEBUG BEGIN_STMT
+  insize_115 = insize_88 * 2;
+  # DEBUG insize => insize_115
+  # DEBUG BEGIN_STMT
+  goto <bb 18>; [100.00%]
+
+}
+
+
+
+;; Function core_list_find (core_list_find, funcdef_no=9, decl_uid=1532, cgraph_uid=10, symbol_order=9)
+
+
+Examining core_list_find function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+struct list_head * core_list_find (struct list_head * list, struct list_data * info)
+{
+  struct list_head * list;
+  short int _1;
+  struct list_data_s * _2;
+  short int _3;
+  struct list_head * _6;
+  struct list_data_s * _15;
+  short int _16;
+  short int _17;
+  short int _18;
+
+  <bb 2> [local count: 194683948]:
+  # DEBUG BEGIN_STMT
+  _1 = info_8(D)->idx;
+  if (_1 >= 0)
+    goto <bb 4>; [59.00%]
+  else
+    goto <bb 3>; [41.00%]
+
+  <bb 3> [local count: 79820418]:
+  # DEBUG list => list_9(D)
+  # DEBUG BEGIN_STMT
+  if (list_9(D) != 0B)
+    goto <bb 11>; [94.50%]
+  else
+    goto <bb 9>; [5.50%]
+
+  <bb 11> [local count: 75430295]:
+  _18 = info_8(D)->data16;
+  goto <bb 8>; [100.00%]
+
+  <bb 4> [local count: 114863530]:
+  # DEBUG list => list_9(D)
+  # DEBUG BEGIN_STMT
+  if (list_9(D) != 0B)
+    goto <bb 10>; [94.50%]
+  else
+    goto <bb 9>; [5.50%]
+
+  <bb 10> [local count: 108546036]:
+  goto <bb 6>; [100.00%]
+
+  <bb 5> [local count: 958878294]:
+  # DEBUG BEGIN_STMT
+  list_11 = list_21->next;
+  # DEBUG list => list_11
+  # DEBUG BEGIN_STMT
+  if (list_11 != 0B)
+    goto <bb 12>; [94.50%]
+  else
+    goto <bb 9>; [5.50%]
+
+  <bb 12> [local count: 906139988]:
+
+  <bb 6> [local count: 1014686024]:
+  # list_21 = PHI <list_11(12), list_9(D)(10)>
+  # DEBUG list => list_21
+  _2 = list_21->info;
+  _3 = _2->idx;
+  if (_1 != _3)
+    goto <bb 5>; [94.50%]
+  else
+    goto <bb 17>; [5.50%]
+
+  <bb 17> [local count: 55807731]:
+  # list_20 = PHI <list_21(6)>
+  goto <bb 9>; [100.00%]
+
+  <bb 7> [local count: 666339145]:
+  # DEBUG BEGIN_STMT
+  list_14 = list_12->next;
+  # DEBUG list => list_14
+  # DEBUG BEGIN_STMT
+  if (list_14 != 0B)
+    goto <bb 13>; [94.50%]
+  else
+    goto <bb 9>; [5.50%]
+
+  <bb 13> [local count: 629690492]:
+
+  <bb 8> [local count: 705120787]:
+  # list_12 = PHI <list_14(13), list_9(D)(11)>
+  # DEBUG list => list_12
+  _15 = list_12->info;
+  _16 = _15->data16;
+  _17 = _16 & 255;
+  if (_17 != _18)
+    goto <bb 7>; [94.50%]
+  else
+    goto <bb 19>; [5.50%]
+
+  <bb 19> [local count: 38781643]:
+  # list_13 = PHI <list_12(8)>
+
+  <bb 9> [local count: 194683950]:
+  # _6 = PHI <list_20(17), list_13(19), 0B(4), 0B(7), 0B(5), 0B(3)>
+  # DEBUG list => NULL
+  return _6;
+
+}
+
+
+
+;; Function core_list_reverse (core_list_reverse, funcdef_no=10, decl_uid=1534, cgraph_uid=11, symbol_order=10)
+
+
+Examining core_list_reverse function.
+Loop iteration number is chrec_dont_know.
+struct list_head * core_list_reverse (struct list_head * list)
+{
+  struct list_head * tmp;
+  struct list_head * next;
+
+  <bb 2> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG next => 0B
+  # DEBUG list => list_4(D)
+  # DEBUG BEGIN_STMT
+  if (list_4(D) != 0B)
+    goto <bb 5>; [89.00%]
+  else
+    goto <bb 7>; [11.00%]
+
+  <bb 5> [local count: 105119324]:
+
+  <bb 3> [local count: 955630224]:
+  # list_11 = PHI <tmp_6(6), list_4(D)(5)>
+  # next_12 = PHI <list_11(6), 0B(5)>
+  # DEBUG next => next_12
+  # DEBUG list => list_11
+  # DEBUG BEGIN_STMT
+  tmp_6 = list_11->next;
+  # DEBUG tmp => tmp_6
+  # DEBUG BEGIN_STMT
+  list_11->next = next_12;
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG next => list_11
+  # DEBUG list => tmp_6
+  # DEBUG BEGIN_STMT
+  if (tmp_6 != 0B)
+    goto <bb 6>; [89.00%]
+  else
+    goto <bb 8>; [11.00%]
+
+  <bb 8> [local count: 105119324]:
+  # list_2 = PHI <list_11(3)>
+  goto <bb 4>; [100.00%]
+
+  <bb 6> [local count: 850510900]:
+  goto <bb 3>; [100.00%]
+
+  <bb 7> [local count: 12992276]:
+
+  <bb 4> [local count: 118111600]:
+  # next_13 = PHI <list_2(8), 0B(7)>
+  # DEBUG BEGIN_STMT
+  return next_13;
+
+}
+
+
+
+;; Function core_list_mergesort (core_list_mergesort, funcdef_no=11, decl_uid=1554, cgraph_uid=12, symbol_order=11)
+
+
+Examining core_list_mergesort function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number is chrec_dont_know.
+struct list_head * core_list_mergesort (struct list_head * list, ee_s32 (*list_cmp) (struct list_data *, struct list_data *, struct core_results *) cmp, struct core_results * res)
+{
+  ee_s32 qsize;
+  ee_s32 psize;
+  ee_s32 nmerges;
+  ee_s32 insize;
+  struct list_head * tail;
+  struct list_head * e;
+  struct list_head * q;
+  struct list_head * p;
+  _Bool _1;
+  _Bool _2;
+  _Bool _3;
+  struct list_data_s * _4;
+  struct list_data_s * _5;
+  long int _6;
+  _Bool _7;
+  _Bool _8;
+  _Bool _9;
+
+  <bb 2> [local count: 658371]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG insize => 1
+
+  <bb 3> [local count: 5985203]:
+  # list_10 = PHI <list_34(D)(2), list_71(24)>
+  # insize_22 = PHI <1(2), insize_37(24)>
+  # DEBUG insize => insize_22
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG nmerges => 0
+  # DEBUG tail => 0B
+  # DEBUG p => list_10
+  # DEBUG list => 0B
+  # DEBUG BEGIN_STMT
+  if (list_10 != 0B)
+    goto <bb 25>; [89.00%]
+  else
+    goto <bb 21>; [11.00%]
+
+  <bb 25> [local count: 5326831]:
+
+  <bb 4> [local count: 48425754]:
+  # list_25 = PHI <list_72(26), 0B(25)>
+  # p_69 = PHI <q_62(26), list_10(25)>
+  # tail_65 = PHI <tail_61(26), 0B(25)>
+  # nmerges_67 = PHI <nmerges_38(26), 0(25)>
+  # DEBUG nmerges => nmerges_67
+  # DEBUG tail => tail_65
+  # DEBUG p => p_69
+  # DEBUG list => list_25
+  # DEBUG BEGIN_STMT
+  nmerges_38 = nmerges_67 + 1;
+  # DEBUG nmerges => nmerges_38
+  # DEBUG BEGIN_STMT
+  # DEBUG q => p_69
+  # DEBUG BEGIN_STMT
+  # DEBUG psize => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  goto <bb 7>; [100.00%]
+
+  <bb 5> [local count: 427785350]:
+  # DEBUG BEGIN_STMT
+  psize_40 = psize_24 + 1;
+  # DEBUG psize => psize_40
+  # DEBUG BEGIN_STMT
+  q_41 = q_16->next;
+  # DEBUG q => q_41
+  # DEBUG BEGIN_STMT
+  if (q_41 == 0B)
+    goto <bb 28>; [5.50%]
+  else
+    goto <bb 27>; [94.50%]
+
+  <bb 28> [local count: 23528194]:
+  # psize_73 = PHI <psize_40(5)>
+
+  <bb 6> [local count: 48425754]:
+  # q_70 = PHI <0B(28), q_76(29)>
+  # psize_64 = PHI <psize_73(28), psize_74(29)>
+  goto <bb 18>; [100.00%]
+
+  <bb 27> [local count: 404257156]:
+
+  <bb 7> [local count: 452682910]:
+  # q_16 = PHI <p_69(4), q_41(27)>
+  # psize_24 = PHI <0(4), psize_40(27)>
+  # DEBUG i => psize_24
+  # DEBUG psize => psize_24
+  # DEBUG q => q_16
+  # DEBUG BEGIN_STMT
+  if (insize_22 > psize_24)
+    goto <bb 5>; [94.50%]
+  else
+    goto <bb 29>; [5.50%]
+
+  <bb 29> [local count: 24897560]:
+  # q_76 = PHI <q_16(7)>
+  # psize_74 = PHI <psize_24(7)>
+  goto <bb 6>; [100.00%]
+
+  <bb 8> [local count: 391808389]:
+  # DEBUG BEGIN_STMT
+  if (psize_27 == 0)
+    goto <bb 9>; [50.00%]
+  else
+    goto <bb 33>; [50.00%]
+
+  <bb 9> [local count: 195904195]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_18
+  # DEBUG BEGIN_STMT
+  q_52 = q_18->next;
+  # DEBUG q => q_52
+  # DEBUG BEGIN_STMT
+  qsize_53 = qsize_29 + -1;
+  # DEBUG qsize => qsize_53
+  goto <bb 15>; [100.00%]
+
+  <bb 10> [local count: 633507680]:
+  # DEBUG qsize => qsize_29
+  # DEBUG psize => psize_27
+  # DEBUG tail => tail_20
+  # DEBUG q => q_18
+  # DEBUG p => p_14
+  # DEBUG list => list_11
+  # DEBUG BEGIN_STMT
+  _1 = qsize_29 == 0;
+  _2 = q_18 == 0B;
+  _3 = _1 | _2;
+  if (_3 != 0)
+    goto <bb 11>; [65.46%]
+  else
+    goto <bb 34>; [34.54%]
+
+  <bb 34> [local count: 218801742]:
+  goto <bb 30>; [100.00%]
+
+  <bb 11> [local count: 414705938]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_14
+  # DEBUG BEGIN_STMT
+  p_50 = p_14->next;
+  # DEBUG p => p_50
+  # DEBUG BEGIN_STMT
+  psize_51 = psize_27 + -1;
+  # DEBUG psize => psize_51
+  goto <bb 15>; [100.00%]
+
+  <bb 33> [local count: 195904195]:
+
+  <bb 30> [local count: 414705937]:
+
+  <bb 12> [local count: 414705938]:
+  # DEBUG BEGIN_STMT
+  _4 = p_14->info;
+  _5 = q_18->info;
+  _6 = cmp_43(D) (_4, _5, res_44(D));
+  if (_6 <= 0)
+    goto <bb 13>; [41.00%]
+  else
+    goto <bb 14>; [59.00%]
+
+  <bb 13> [local count: 170029433]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => p_14
+  # DEBUG BEGIN_STMT
+  p_48 = p_14->next;
+  # DEBUG p => p_48
+  # DEBUG BEGIN_STMT
+  psize_49 = psize_27 + -1;
+  # DEBUG psize => psize_49
+  goto <bb 15>; [100.00%]
+
+  <bb 14> [local count: 244676505]:
+  # DEBUG BEGIN_STMT
+  # DEBUG e => q_18
+  # DEBUG BEGIN_STMT
+  q_46 = q_18->next;
+  # DEBUG q => q_46
+  # DEBUG BEGIN_STMT
+  qsize_47 = qsize_29 + -1;
+  # DEBUG qsize => qsize_47
+
+  <bb 15> [local count: 1025316069]:
+  # p_13 = PHI <p_14(9), p_50(11), p_48(13), p_14(14)>
+  # q_17 = PHI <q_52(9), q_18(11), q_18(13), q_46(14)>
+  # e_19 = PHI <q_18(9), p_14(11), p_14(13), q_18(14)>
+  # psize_26 = PHI <0(9), psize_51(11), psize_49(13), psize_27(14)>
+  # qsize_28 = PHI <qsize_53(9), qsize_29(11), qsize_29(13), qsize_47(14)>
+  # DEBUG qsize => qsize_28
+  # DEBUG psize => psize_26
+  # DEBUG e => e_19
+  # DEBUG q => q_17
+  # DEBUG p => p_13
+  # DEBUG BEGIN_STMT
+  if (tail_20 != 0B)
+    goto <bb 16>; [70.00%]
+  else
+    goto <bb 32>; [30.00%]
+
+  <bb 32> [local count: 307594818]:
+  goto <bb 17>; [100.00%]
+
+  <bb 16> [local count: 717721251]:
+  # DEBUG BEGIN_STMT
+  tail_20->next = e_19;
+
+  <bb 17> [local count: 1025316069]:
+  # list_63 = PHI <list_11(16), e_19(32)>
+
+  <bb 18> [local count: 1073741824]:
+  # list_11 = PHI <list_25(6), list_63(17)>
+  # p_14 = PHI <p_69(6), p_13(17)>
+  # q_18 = PHI <q_70(6), q_17(17)>
+  # tail_20 = PHI <tail_65(6), e_19(17)>
+  # psize_27 = PHI <psize_64(6), psize_26(17)>
+  # qsize_29 = PHI <insize_22(6), qsize_28(17)>
+  # DEBUG qsize => qsize_29
+  # DEBUG psize => psize_27
+  # DEBUG tail => tail_20
+  # DEBUG q => q_18
+  # DEBUG p => p_14
+  # DEBUG list => list_11
+  # DEBUG BEGIN_STMT
+  if (psize_27 > 0)
+    goto <bb 10>; [59.00%]
+  else
+    goto <bb 19>; [41.00%]
+
+  <bb 19> [local count: 440234144]:
+  _7 = qsize_29 > 0;
+  _8 = q_18 != 0B;
+  _9 = _7 & _8;
+  if (_9 != 0)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 20>; [11.00%]
+
+  <bb 20> [local count: 48425756]:
+  # list_72 = PHI <list_11(19)>
+  # q_62 = PHI <q_18(19)>
+  # tail_61 = PHI <tail_20(19)>
+  # DEBUG nmerges => nmerges_38
+  # DEBUG tail => tail_61
+  # DEBUG p => q_62
+  # DEBUG list => list_72
+  # DEBUG BEGIN_STMT
+  if (q_62 != 0B)
+    goto <bb 26>; [89.00%]
+  else
+    goto <bb 22>; [11.00%]
+
+  <bb 26> [local count: 43098923]:
+  goto <bb 4>; [100.00%]
+
+  <bb 21> [local count: 658372]:
+  # DEBUG BEGIN_STMT
+  MEM[(struct list_head *)0B].next ={v} 0B;
+  __builtin_trap ();
+
+  <bb 22> [local count: 5326833]:
+  # nmerges_77 = PHI <nmerges_38(20)>
+  # list_71 = PHI <list_72(20)>
+  # tail_59 = PHI <tail_61(20)>
+  # DEBUG BEGIN_STMT
+  tail_59->next = 0B;
+  # DEBUG BEGIN_STMT
+  if (nmerges_77 <= 1)
+    goto <bb 23>; [0.00%]
+  else
+    goto <bb 24>; [100.00%]
+
+  <bb 23> [local count: 658373]:
+  # list_66 = PHI <list_71(22)>
+  # DEBUG BEGIN_STMT
+  return list_66;
+
+  <bb 24> [local count: 5326833]:
+  # DEBUG BEGIN_STMT
+  insize_37 = insize_22 * 2;
+  # DEBUG insize => insize_37
+  # DEBUG BEGIN_STMT
+  goto <bb 3>; [100.00%]
+
+}
+
+

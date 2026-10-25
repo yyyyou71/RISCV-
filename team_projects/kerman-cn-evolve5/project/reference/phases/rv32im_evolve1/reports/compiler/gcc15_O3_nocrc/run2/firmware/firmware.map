@@ -1,0 +1,691 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .text.timer_delay
+                0x00000000       0x58 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .text.timer_set_compare
+                0x00000000       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .text.uart_getc_timeout
+                0x00000000       0x84 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.__mulsi3
+                0x00000000       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.__udivsi3
+                0x00000000       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.__umodsi3
+                0x00000000       0x4c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.__divsi3
+                0x00000000       0x84 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.__modsi3
+                0x00000000       0x70 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.memcpy   0x00000000       0xb4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.memset   0x00000000       0xec C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.memcmp   0x00000000       0x3c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text.strlen   0x00000000       0x24 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_info    0x00000000      0x7b7 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_abbrev  0x00000000      0x1f2 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_loclists
+                0x00000000      0x863 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_aranges
+                0x00000000       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_rnglists
+                0x00000000      0x11b C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_line    0x00000000      0xb7a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_str     0x00000000      0x29b C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_line_str
+                0x00000000      0x19e C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .debug_frame   0x00000000       0xa0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .riscv.attributes
+                0x00000000       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .rodata.platform_cache_selftest.str1.4
+                0x00000000       0x4a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .text.platform_cache_selftest
+                0x00000000      0x288 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.calc_func
+                0x00000000      0x140 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.cmp_idx  0x00000000       0x54 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.copy_info
+                0x00000000       0x14 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_insert_new
+                0x00000000       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_remove
+                0x00000000       0x2c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_undo_remove
+                0x00000000       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_find
+                0x00000000       0x4c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_reverse
+                0x00000000       0x24 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text.core_list_mergesort
+                0x00000000      0x1b0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .text.iterate  0x00000000       0xe0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .rodata.str1.4
+                0x00000000       0x16 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .data.mem_name
+                0x00000000        0xc C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_sum
+                0x00000000       0x98 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_mul_const
+                0x00000000       0x4c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_add_const
+                0x00000000       0x38 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_mul_vect
+                0x00000000       0x5c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_mul_matrix
+                0x00000000       0xa4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text.matrix_mul_matrix_bitextract
+                0x00000000       0xb8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+ .text.crcu8    0x00000000      0x128 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+ .comment       0x00000000       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x00000000         0x00008000         xr
+RAM              0x20000000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\runtime.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.text           0x00000000     0x4e40
+ *(.text.boot)
+ .text.boot     0x00000000       0x7c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+                0x00000000                _start
+ *(.text .text.*)
+ .text.uart_init
+                0x0000007c       0x1c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x0000007c                uart_init
+ .text.uart_putc
+                0x00000098        0xc C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x00000098                uart_putc
+ .text.uart_puts
+                0x000000a4       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x000000a4                uart_puts
+ .text.uart_flush
+                0x000000c4       0x18 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x000000c4                uart_flush
+ .text.uart_puthex8
+                0x000000dc       0x30 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x000000dc                uart_puthex8
+ .text.uart_put_u32
+                0x0000010c      0x35c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x0000010c                uart_put_u32
+ .text.timer_ticks
+                0x00000468       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x00000468                timer_ticks
+ .text.timer_start
+                0x00000488       0x1c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x00000488                timer_start
+ .text.timer_disable_compare
+                0x000004a4       0x14 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                0x000004a4                timer_disable_compare
+ .text.platform_valid
+                0x000004b8      0x124 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                0x000004b8                platform_valid
+ .text.platform_identity
+                0x000005dc      0x1ac C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                0x000005dc                platform_identity
+ .text.platform_stats
+                0x00000788       0xa0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                0x00000788                platform_stats
+ .text.machine_init
+                0x00000828       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                0x00000828                machine_init
+ .text.machine_fatal
+                0x00000848       0xa4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                0x00000848                machine_fatal
+ .text.machine_exception
+                0x000008ec       0x10 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                0x000008ec                machine_exception
+ .text.machine_timer_interrupt
+                0x000008fc       0x24 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                0x000008fc                machine_timer_interrupt
+ .text.machine_trap_dispatch
+                0x00000920       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                0x00000920                machine_trap_dispatch
+ .text.machine_trap_entry
+                0x00000954      0x15c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+                0x00000954                machine_trap_entry
+ .text.ee_printf
+                0x00000ab0      0x4b0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00000ab0                ee_printf
+ .text.menu     0x00000f60       0x58 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .text.start_time
+                0x00000fb8       0x3c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00000fb8                start_time
+ .text.stop_time
+                0x00000ff4       0x34 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00000ff4                stop_time
+ .text.get_time
+                0x00001028       0xac C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00001028                get_time
+ .text.time_in_secs
+                0x000010d4       0x14 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x000010d4                time_in_secs
+ .text.portable_init
+                0x000010e8       0x68 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x000010e8                portable_init
+ .text.portable_fini
+                0x00001150      0x4c0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00001150                portable_fini
+ .text.coremark_entry
+                0x00001610      0x6e0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x00001610                coremark_entry
+ .text.m_selfcheck
+                0x00001cf0      0x108 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+                0x00001cf0                m_selfcheck
+ .text.dual_selfcheck
+                0x00001df8      0x148 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+                0x00001df8                dual_selfcheck
+ .text.dual_smoke_loop
+                0x00001f40      0x110 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+                0x00001f40                dual_smoke_loop
+ .text.cmp_complex
+                0x00002050      0x274 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+                0x00002050                cmp_complex
+ .text.core_bench_list
+                0x000022c4      0x5c0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+                0x000022c4                core_bench_list
+ .text.core_list_init
+                0x00002884      0x2d0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+                0x00002884                core_list_init
+ .text.coremark_main
+                0x00002b54      0xa68 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+                0x00002b54                coremark_main
+ .text.matrix_test
+                0x000035bc      0x560 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+                0x000035bc                matrix_test
+ .text.core_bench_matrix
+                0x00003b1c       0x44 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+                0x00003b1c                core_bench_matrix
+ .text.core_init_matrix
+                0x00003b60      0x11c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+                0x00003b60                core_init_matrix
+ .text.core_init_state
+                0x00003c7c      0x30c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                0x00003c7c                core_init_state
+ .text.core_state_transition
+                0x00003f88      0x2e8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                0x00003f88                core_state_transition
+ .text.core_bench_state
+                0x00004270      0x224 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                0x00004270                core_bench_state
+ .text.get_seed_32
+                0x00004494       0x64 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x00004494                get_seed_32
+ .text.crcu16   0x000044f8      0x24c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x000044f8                crcu16
+ .text.crcu32   0x00004744      0x4a4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x00004744                crcu32
+ .text.crc16    0x00004be8      0x250 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x00004be8                crc16
+ .text.check_data_types
+                0x00004e38        0x8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x00004e38                check_data_types
+                0x00004e40                        . = ALIGN (0x4)
+
+.rodata         0x00004e40     0x10f4
+ *(.rodata .rodata.* .srodata .srodata.*)
+ .rodata.uart_puthex8.str1.4
+                0x00004e40      0xc91 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                                 0x11 (size before relaxing)
+ .rodata.platform_identity.str1.4
+                0x00005ad1        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                                 0x62 (size before relaxing)
+ .rodata.platform_stats.str1.4
+                0x00005ad1        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                                 0x24 (size before relaxing)
+ .rodata.str1.4
+                0x00005ad1        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                                 0x60 (size before relaxing)
+ *fill*         0x00005ad1        0x3 
+ .rodata.names.0
+                0x00005ad4       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .rodata.machine_fatal.str1.4
+                0x00005afc        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                                 0x27 (size before relaxing)
+ .rodata.ee_printf.str1.4
+                0x00005afc        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                 0x29 (size before relaxing)
+ .rodata.ee_printf
+                0x00005afc      0x108 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .rodata.menu.str1.4
+                0x00005c04        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                 0xbe (size before relaxing)
+ .rodata.portable_init.str1.4
+                0x00005c04        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                 0x5d (size before relaxing)
+ .rodata.portable_fini.str1.4
+                0x00005c04        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                0x160 (size before relaxing)
+ .rodata.coremark_entry.str1.4
+                0x00005c04        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                0x17f (size before relaxing)
+ .rodata.coremark_entry
+                0x00005c04       0x58 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .rodata.m_selfcheck.str1.4
+                0x00005c5c        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+                                 0x61 (size before relaxing)
+ .rodata.m_vectors
+                0x00005c5c      0x280 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .rodata.dual_selfcheck.str1.4
+                0x00005edc        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+                                 0x3f (size before relaxing)
+ .rodata.coremark_main.str1.4
+                0x00005edc        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+                                0x5fd (size before relaxing)
+ .rodata.str1.4
+                0x00005edc        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                                 0xad (size before relaxing)
+ .rodata.errpat
+                0x00005edc       0x10 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .rodata.scipat
+                0x00005eec       0x10 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .rodata.floatpat
+                0x00005efc       0x10 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .rodata.intpat
+                0x00005f0c       0x10 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .rodata.get_seed_32
+                0x00005f1c       0x18 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                0x00005f34                        . = ALIGN (0x4)
+
+.rela.dyn       0x00005f34        0x0
+ .rela.text.boot
+                0x00005f34        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+
+.data           0x20000000        0xc load address 0x00005f34
+                0x20000000                        __data_start = .
+ *(.data .data.* .sdata .sdata.*)
+ .data.default_num_contexts
+                0x20000000        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x20000000                default_num_contexts
+ .data.seed4_volatile
+                0x20000004        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x20000004                seed4_volatile
+ .data.seed3_volatile
+                0x20000008        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x20000008                seed3_volatile
+                0x2000000c                        . = ALIGN (0x4)
+                0x2000000c                        __data_end = .
+                0x00005f34                        __data_load_start = LOADADDR (.data)
+                0x00005f40                        __rom_image_end = (LOADADDR (.data) + SIZEOF (.data))
+
+.bss            0x20000010      0x7f4 load address 0x00005f40
+                0x20000010                        __bss_start = .
+ *(.bss .bss.* .sbss .sbss.*)
+ .bss.tick_overflow
+                0x20000010        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .bss.mode_validation
+                0x20000014        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .bss.stop_cycles
+                0x20000018        0x8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .bss.start_cycles
+                0x20000020        0x8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .bss.seed5_volatile
+                0x20000028        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x20000028                seed5_volatile
+ .bss.seed2_volatile
+                0x2000002c        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x2000002c                seed2_volatile
+ .bss.seed1_volatile
+                0x20000030        0x4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                0x20000030                seed1_volatile
+ .bss.static_memblk
+                0x20000034      0x7d0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+                0x20000034                static_memblk
+ *(COMMON)
+                0x20000804                        . = ALIGN (0x4)
+                0x20000804                        __bss_end = .
+                0x20000800                        __global_pointer$ = (ORIGIN (RAM) + 0x800)
+                0x20008000                        __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x20007000                        __stack_bottom = (__stack_top - 0x1000)
+                0x00000001                        ASSERT ((__bss_end <= __stack_bottom), RAM sections overlap reserved 4 KiB stack)
+                0x00000001                        ASSERT ((__rom_image_end <= (ORIGIN (ROM) + LENGTH (ROM))), ROM overflow)
+
+/DISCARD/
+ *(.comment)
+ *(.eh_frame*)
+ *(.note*)
+OUTPUT(C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\firmware.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x31 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .riscv.attributes
+                0x00000031       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .riscv.attributes
+                0x00000064       0x37 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .riscv.attributes
+                0x0000009b       0x37 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .riscv.attributes
+                0x000000d2       0x35 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .riscv.attributes
+                0x00000107       0x37 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .riscv.attributes
+                0x0000013e       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .riscv.attributes
+                0x00000171       0x37 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .riscv.attributes
+                0x000001a8       0x35 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .riscv.attributes
+                0x000001dd       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .riscv.attributes
+                0x00000210       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .riscv.attributes
+                0x00000243       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .riscv.attributes
+                0x00000276       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .riscv.attributes
+                0x000002a9       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_line     0x00000000     0xc095
+ .debug_line    0x00000000       0xc6 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .debug_line    0x000000c6     0x112a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_line    0x000011f0      0x8e5 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_line    0x00001ad5      0x215 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_line    0x00001cea      0x246 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .debug_line    0x00001f30     0x2052 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_line    0x00003f82      0x4bf C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_line    0x00004441      0x251 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_line    0x00004692      0x1ce C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .debug_line    0x00004860     0x22cc C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_line    0x00006b2c     0x147b C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_line    0x00007fa7     0x1682 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_line    0x00009629     0x1380 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_line    0x0000a9a9     0x16ec C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_line_str
+                0x00000000      0x7b4
+ .debug_line_str
+                0x00000000      0x7b4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+                                 0xc0 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                                0x195 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                                0x1fd (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                                0x20a (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+                                 0xb1 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                0x29a (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+                                0x233 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+                                0x1c5 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+                                 0xb7 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+                                0x22f (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+                                0x225 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+                                0x229 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                                0x227 (size before relaxing)
+ .debug_line_str
+                0x000007b4        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                                0x21a (size before relaxing)
+
+.debug_info     0x00000000     0x5beb
+ .debug_info    0x00000000       0x31 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .debug_info    0x00000031      0x464 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_info    0x00000495      0x5fd C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_info    0x00000a92      0x2c6 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_info    0x00000d58       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .debug_info    0x00000d8b     0x1357 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_info    0x000020e2      0x1f9 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_info    0x000022db      0x174 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_info    0x0000244f       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .debug_info    0x00002482     0x128e C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_info    0x00003710      0xd1d C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_info    0x0000442d      0xc62 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_info    0x0000508f      0x4f6 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_info    0x00005585      0x666 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_abbrev   0x00000000     0x1804
+ .debug_abbrev  0x00000000       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .debug_abbrev  0x00000028      0x1f4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_abbrev  0x0000021c      0x205 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_abbrev  0x00000421      0x14a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_abbrev  0x0000056b       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .debug_abbrev  0x00000593      0x386 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_abbrev  0x00000919      0x16a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_abbrev  0x00000a83      0x111 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_abbrev  0x00000b94       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .debug_abbrev  0x00000bbc      0x36a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_abbrev  0x00000f26      0x25b C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_abbrev  0x00001181      0x279 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_abbrev  0x000013fa      0x23a C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_abbrev  0x00001634      0x1d0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_aranges  0x00000000      0x368
+ .debug_aranges
+                0x00000000       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+ .debug_aranges
+                0x00000020       0x78 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_aranges
+                0x00000098       0x38 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_aranges
+                0x000000d0       0x40 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_aranges
+                0x00000110       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+ .debug_aranges
+                0x00000130       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_aranges
+                0x00000190       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_aranges
+                0x000001b0       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_aranges
+                0x000001d0       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+ .debug_aranges
+                0x000001f0       0x78 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_aranges
+                0x00000268       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_aranges
+                0x00000290       0x60 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_aranges
+                0x000002f0       0x30 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_aranges
+                0x00000320       0x48 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_str      0x00000000      0xd58
+ .debug_str     0x00000000      0xd58 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\coremark_crt0.o
+                                 0xd3 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+                                0x305 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+                                0x2d8 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+                                0x2fe (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\trap_entry.o
+                                 0xd0 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+                                0x639 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+                                0x25e (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+                                0x256 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_smoke.o
+                                 0xd3 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+                                0x54a (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+                                0x4f4 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+                                0x350 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+                                0x3b0 (size before relaxing)
+ .debug_str     0x00000d58        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+                                0x305 (size before relaxing)
+
+.debug_loclists
+                0x00000000     0x833a
+ .debug_loclists
+                0x00000000      0x9fb C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_loclists
+                0x000009fb      0x20c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_loclists
+                0x00000c07       0xa6 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_loclists
+                0x00000cad     0x1159 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_loclists
+                0x00001e06      0x2fa C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_loclists
+                0x00002100       0x79 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_loclists
+                0x00002179     0x1d6e C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_loclists
+                0x00003ee7      0x965 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_loclists
+                0x0000484c     0x1105 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_loclists
+                0x00005951      0x915 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_loclists
+                0x00006266     0x20d4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_rnglists
+                0x00000000      0x982
+ .debug_rnglists
+                0x00000000      0x170 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_rnglists
+                0x00000170       0x63 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_rnglists
+                0x000001d3       0x2c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_rnglists
+                0x000001ff      0x208 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_rnglists
+                0x00000407       0xb2 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_rnglists
+                0x000004b9       0x14 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_rnglists
+                0x000004cd      0x1a5 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_rnglists
+                0x00000672       0x68 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_rnglists
+                0x000006da      0x107 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_rnglists
+                0x000007e1       0x79 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_rnglists
+                0x0000085a      0x128 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o
+
+.debug_frame    0x00000000      0x8b8
+ .debug_frame   0x00000000       0xe4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\drivers.o
+ .debug_frame   0x000000e4       0xa8 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\platform.o
+ .debug_frame   0x0000018c       0x84 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\machine.o
+ .debug_frame   0x00000210      0x1c0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_portme.o
+ .debug_frame   0x000003d0       0x38 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\m_selfcheck.o
+ .debug_frame   0x00000408       0x30 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\dual_check.o
+ .debug_frame   0x00000438      0x194 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_list_join.o
+ .debug_frame   0x000005cc       0xa0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_main.o
+ .debug_frame   0x0000066c      0x128 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_matrix.o
+ .debug_frame   0x00000794       0xa4 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_state.o
+ .debug_frame   0x00000838       0x80 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_nocrc\firmware\coremark\core_util.o

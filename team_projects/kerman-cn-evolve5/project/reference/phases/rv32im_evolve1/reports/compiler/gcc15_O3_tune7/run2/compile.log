@@ -1,0 +1,39 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_compiler_gcc15_O3_tune7_2/rv32_board_design.v" into library work
+INFO: [VRFC 10-311] analyzing module rv32_burst_arbiter
+INFO: [VRFC 10-311] analyzing module rv32_burst_cache_2way
+INFO: [VRFC 10-311] analyzing module rv32_cache_2way
+INFO: [VRFC 10-311] analyzing module rv32_dcache
+INFO: [VRFC 10-311] analyzing module rv32_icache
+INFO: [VRFC 10-311] analyzing module rv32_word_to_burst
+INFO: [VRFC 10-311] analyzing module rv32_alu
+INFO: [VRFC 10-311] analyzing module rv32_core
+INFO: [VRFC 10-311] analyzing module rv32_csr
+INFO: [VRFC 10-311] analyzing module rv32_decode
+INFO: [VRFC 10-311] analyzing module rv32_fetch
+INFO: [VRFC 10-311] analyzing module rv32_fetch_scalar
+INFO: [VRFC 10-311] analyzing module rv32_fetch_dual
+INFO: [VRFC 10-311] analyzing module rv32_muldiv
+INFO: [VRFC 10-311] analyzing module rv32_predictor
+INFO: [VRFC 10-311] analyzing module rv32_regfile
+INFO: [VRFC 10-311] analyzing module rv32_gpio
+INFO: [VRFC 10-311] analyzing module rv32_monitor
+INFO: [VRFC 10-311] analyzing module rv32_soc
+INFO: [VRFC 10-311] analyzing module rv32_soc_fabric
+INFO: [VRFC 10-311] analyzing module rv32_soc_memory
+INFO: [VRFC 10-311] analyzing module rv32_timer
+INFO: [VRFC 10-311] analyzing module rv32_uart
+INFO: [VRFC 10-311] analyzing module board_button
+INFO: [VRFC 10-311] analyzing module board_reset
+INFO: [VRFC 10-311] analyzing module board_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_compiler_gcc15_O3_tune7_2/tb_coremark.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_coremark
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/sim/bp_profile_monitor.sv" into library work
+INFO: [VRFC 10-311] analyzing module bp_profile_monitor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/sim/burst_profile_monitor.sv" into library work
+INFO: [VRFC 10-311] analyzing module burst_profile_monitor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/sim/front_profile_monitor.sv" into library work
+INFO: [VRFC 10-311] analyzing module front_profile_monitor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/sim/dual_profile_monitor.sv" into library work
+INFO: [VRFC 10-311] analyzing module dual_profile_monitor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/sim/evolve_profile_monitor.sv" into library work
+INFO: [VRFC 10-311] analyzing module evolve_profile_monitor

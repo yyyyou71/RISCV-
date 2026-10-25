@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "hardware_tested": false,
+  "vectors": 17952,
+  "cancellation_cases": 48,
+  "operations": 8,
+  "response_backpressure_cycles": "0..7",
+  "oracle": "Python arbitrary-precision arithmetic"
+}

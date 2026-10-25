@@ -1,0 +1,2215 @@
+
+;; Function matrix_test (matrix_test, funcdef_no=1, decl_uid=1535, cgraph_uid=2, symbol_order=1)
+
+
+Examining matrix_test function.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+Loop iteration number isn't a constant.
+ee_s16 matrix_test (ee_u32 N, MATRES * C, MATDAT * A, MATDAT * B, MATDAT val)
+{
+  ee_u32 i;
+  ee_u32 j;
+  ee_u32 k;
+  MATRES tmp;
+  ee_u32 i;
+  ee_u32 j;
+  ee_u32 k;
+  ee_u32 i;
+  ee_u32 j;
+  ee_u32 i;
+  ee_u32 j;
+  ee_u32 i;
+  ee_u32 j;
+  MATRES tmp;
+  MATRES prev;
+  MATRES cur;
+  ee_s16 ret;
+  ee_u32 i;
+  ee_u32 j;
+  MATRES tmp;
+  MATRES prev;
+  MATRES cur;
+  ee_s16 ret;
+  ee_u32 i;
+  ee_u32 j;
+  MATRES tmp;
+  MATRES prev;
+  MATRES cur;
+  ee_s16 ret;
+  ee_u32 i;
+  ee_u32 j;
+  MATRES tmp;
+  MATRES prev;
+  MATRES cur;
+  ee_s16 ret;
+  ee_u32 i;
+  ee_u32 j;
+  ee_u32 i;
+  ee_u32 j;
+  MATDAT clipval;
+  ee_u16 crc;
+  long unsigned int _8;
+  long unsigned int _17;
+  ee_s16 _24;
+  long unsigned int _25;
+  MATDAT * _26;
+  short int _27;
+  unsigned short _28;
+  short int _29;
+  long unsigned int _33;
+  long unsigned int _35;
+  long unsigned int _36;
+  MATRES * _37;
+  unsigned short _44;
+  _Bool _46;
+  unsigned short _47;
+  unsigned short _49;
+  unsigned short _50;
+  long unsigned int _59;
+  long unsigned int _61;
+  long unsigned int _62;
+  MATRES * _63;
+  unsigned short _70;
+  _Bool _72;
+  unsigned short _73;
+  unsigned short _75;
+  unsigned short _76;
+  long unsigned int _85;
+  long unsigned int _87;
+  long unsigned int _88;
+  MATRES * _89;
+  unsigned short _96;
+  _Bool _98;
+  unsigned short _99;
+  unsigned short _101;
+  unsigned short _102;
+  long unsigned int _111;
+  long unsigned int _113;
+  long unsigned int _114;
+  MATRES * _115;
+  unsigned short _122;
+  _Bool _124;
+  unsigned short _125;
+  unsigned short _127;
+  unsigned short _128;
+  long unsigned int _137;
+  long unsigned int _139;
+  long unsigned int _140;
+  MATDAT * _141;
+  short int _142;
+  long int _143;
+  long unsigned int _145;
+  MATRES * _146;
+  long int _147;
+  long unsigned int _151;
+  long unsigned int _153;
+  long unsigned int _154;
+  MATDAT * _155;
+  short int _156;
+  unsigned short _157;
+  unsigned short _159;
+  short int _160;
+  unsigned short _171;
+  long unsigned int _174;
+  MATRES * _175;
+  long unsigned int _177;
+  long unsigned int _179;
+  long unsigned int _180;
+  MATDAT * _181;
+  short int _182;
+  long int _183;
+  long unsigned int _184;
+  MATDAT * _185;
+  short int _186;
+  long int _187;
+  long int _188;
+  long int _189;
+  long unsigned int _193;
+  long unsigned int _195;
+  long unsigned int _196;
+  MATRES * _197;
+  long unsigned int _200;
+  long unsigned int _201;
+  MATDAT * _202;
+  short int _203;
+  long int _204;
+  long unsigned int _205;
+  long unsigned int _206;
+  long unsigned int _207;
+  MATDAT * _208;
+  short int _209;
+  long int _210;
+  long int _211;
+  long int _212;
+  long unsigned int _217;
+  long unsigned int _219;
+  long unsigned int _220;
+  MATRES * _221;
+  long unsigned int _223;
+  long unsigned int _224;
+  MATDAT * _225;
+  short int _226;
+  long int _227;
+  long unsigned int _228;
+  long unsigned int _229;
+  long unsigned int _230;
+  MATDAT * _231;
+  short int _232;
+  long int _233;
+  long unsigned int _236;
+  long int _237;
+  long int _238;
+  long unsigned int _239;
+  long int _240;
+  long int _241;
+  long unsigned int _242;
+  long unsigned int _243;
+  long unsigned int _244;
+  long int _245;
+  unsigned short _469;
+  long int _477;
+  long int _487;
+  long int prephitmp_504;
+  long int prephitmp_528;
+  long int prephitmp_558;
+  unsigned short _594;
+  unsigned short _595;
+  unsigned short _596;
+  unsigned short _597;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG crc => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG clipval => val_2(D) | -4096
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG A => A_6(D)
+  # DEBUG val => val_2(D)
+  # DEBUG INLINE_ENTRY matrix_add_const
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_5(D) != 0)
+    goto <bb 6>; [89.00%]
+  else
+    goto <bb 18>; [11.00%]
+
+  <bb 82> [local count: 837518623]:
+
+  <bb 3> [local count: 955630224]:
+  # j_373 = PHI <j_161(82), 0(7)>
+  # DEBUG j => j_373
+  # DEBUG BEGIN_STMT
+  _153 = _151 + j_373;
+  _154 = _153 * 2;
+  _155 = A_6(D) + _154;
+  _156 = *_155;
+  _157 = (unsigned short) _156;
+  _159 = _157 + _469;
+  _160 = (short int) _159;
+  *_155 = _160;
+  # DEBUG BEGIN_STMT
+  j_161 = j_373 + 1;
+  # DEBUG j => j_161
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_161)
+    goto <bb 82>; [87.64%]
+  else
+    goto <bb 4>; [12.36%]
+
+  <bb 4> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_162 = i_372 + 1;
+  # DEBUG i => i_162
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_162)
+    goto <bb 81>; [89.00%]
+  else
+    goto <bb 5>; [11.00%]
+
+  <bb 81> [local count: 105119324]:
+  goto <bb 7>; [100.00%]
+
+  <bb 5> [local count: 12992276]:
+  _477 = (long int) val_2(D);
+  goto <bb 10>; [100.00%]
+
+  <bb 6> [local count: 12992276]:
+  clipval_3 = val_2(D) | -4096;
+  _469 = (unsigned short) val_2(D);
+
+  <bb 7> [local count: 118111600]:
+  # i_372 = PHI <i_162(81), 0(6)>
+  # DEBUG i => i_372
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _151 = N_5(D) * i_372;
+  goto <bb 3>; [100.00%]
+
+  <bb 80> [local count: 837518623]:
+
+  <bb 8> [local count: 955630224]:
+  # j_371 = PHI <j_148(80), 0(10)>
+  # DEBUG j => j_371
+  # DEBUG BEGIN_STMT
+  _139 = _137 + j_371;
+  _140 = _139 * 2;
+  _141 = A_6(D) + _140;
+  _142 = *_141;
+  _143 = (long int) _142;
+  _145 = _139 * 4;
+  _146 = C_7(D) + _145;
+  _147 = _143 * _477;
+  *_146 = _147;
+  # DEBUG BEGIN_STMT
+  j_148 = j_371 + 1;
+  # DEBUG j => j_148
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_148)
+    goto <bb 80>; [87.64%]
+  else
+    goto <bb 9>; [12.36%]
+
+  <bb 9> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_149 = i_370 + 1;
+  # DEBUG N => NULL
+  # DEBUG A => NULL
+  # DEBUG val => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG i => i_149
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_149)
+    goto <bb 79>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 79> [local count: 105119324]:
+
+  <bb 10> [local count: 118111600]:
+  # i_370 = PHI <i_149(79), 0(5)>
+  # DEBUG N => NULL
+  # DEBUG A => NULL
+  # DEBUG val => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG i => i_370
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _137 = N_5(D) * i_370;
+  goto <bb 8>; [100.00%]
+
+  <bb 11> [local count: 12992276]:
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => 0
+  # DEBUG ret => 0
+  # DEBUG prev => 0
+  # DEBUG tmp => 0
+  # DEBUG BEGIN_STMT
+  _487 = (long int) clipval_3;
+  goto <bb 17>; [100.00%]
+
+  <bb 78> [local count: 837518623]:
+
+  <bb 12> [local count: 955630224]:
+  # j_359 = PHI <j_130(78), 0(17)>
+  # tmp_360 = PHI <tmp_133(78), tmp_368(17)>
+  # ret_362 = PHI <ret_129(78), ret_367(17)>
+  # prev_364 = PHI <cur_116(78), prev_369(17)>
+  # DEBUG j => j_359
+  # DEBUG ret => ret_362
+  # DEBUG prev => prev_364
+  # DEBUG tmp => tmp_360
+  # DEBUG BEGIN_STMT
+  _113 = _111 + j_359;
+  _114 = _113 * 4;
+  _115 = C_7(D) + _114;
+  cur_116 = *_115;
+  # DEBUG cur => cur_116
+  # DEBUG BEGIN_STMT
+  tmp_118 = cur_116 + tmp_360;
+  # DEBUG tmp => tmp_118
+  # DEBUG BEGIN_STMT
+  _597 = (unsigned short) ret_362;
+  if (tmp_118 > _487)
+    goto <bb 13>; [50.00%]
+  else
+    goto <bb 14>; [50.00%]
+
+  <bb 13> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _122 = _597 + 10;
+  # DEBUG ret => (ee_s16) _122
+  # DEBUG BEGIN_STMT
+  # DEBUG tmp => 0
+  goto <bb 15>; [100.00%]
+
+  <bb 14> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _124 = cur_116 > prev_364;
+  _125 = (unsigned short) _124;
+  _127 = _125 + _597;
+  # DEBUG ret => (ee_s16) _127
+
+  <bb 15> [local count: 955630224]:
+  # tmp_133 = PHI <0(13), tmp_118(14)>
+  # _128 = PHI <_122(13), _127(14)>
+  ret_129 = (ee_s16) _128;
+  # DEBUG ret => ret_129
+  # DEBUG tmp => tmp_133
+  # DEBUG BEGIN_STMT
+  # DEBUG prev => cur_116
+  # DEBUG BEGIN_STMT
+  j_130 = j_359 + 1;
+  # DEBUG j => j_130
+  # DEBUG ret => ret_129
+  # DEBUG prev => cur_116
+  # DEBUG tmp => tmp_133
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_130)
+    goto <bb 78>; [87.64%]
+  else
+    goto <bb 16>; [12.36%]
+
+  <bb 16> [local count: 118111600]:
+  # cur_581 = PHI <cur_116(15)>
+  # ret_580 = PHI <ret_129(15)>
+  # tmp_578 = PHI <tmp_133(15)>
+  # DEBUG BEGIN_STMT
+  i_131 = i_358 + 1;
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_131
+  # DEBUG ret => ret_580
+  # DEBUG prev => cur_581
+  # DEBUG tmp => tmp_578
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_131)
+    goto <bb 77>; [89.00%]
+  else
+    goto <bb 19>; [11.00%]
+
+  <bb 77> [local count: 105119324]:
+
+  <bb 17> [local count: 118111600]:
+  # i_358 = PHI <i_131(77), 0(11)>
+  # ret_367 = PHI <ret_580(77), 0(11)>
+  # tmp_368 = PHI <tmp_578(77), 0(11)>
+  # prev_369 = PHI <cur_581(77), 0(11)>
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_358
+  # DEBUG j => 0
+  # DEBUG ret => ret_367
+  # DEBUG prev => prev_369
+  # DEBUG tmp => tmp_368
+  # DEBUG BEGIN_STMT
+  _111 = N_5(D) * i_358;
+  goto <bb 12>; [100.00%]
+
+  <bb 18> [local count: 1605787]:
+  # DEBUG N => NULL
+  # DEBUG A => NULL
+  # DEBUG val => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_42 = crc16 (0, 0);
+  # DEBUG crc => crc_42
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_vect
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_54 = crc16 (0, crc_42);
+  # DEBUG crc => crc_54
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_matrix
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_163 = crc16 (0, crc_54);
+  # DEBUG crc => crc_163
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_matrix_bitextract
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG tmp => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_16 = crc16 (0, crc_163);
+  # DEBUG crc => crc_16
+  # DEBUG BEGIN_STMT
+  # DEBUG D#2 => (unsigned short) val_2(D)
+  # DEBUG D#1 => -D#2
+  # DEBUG N => N_5(D)
+  # DEBUG A => A_6(D)
+  # DEBUG val => (short int) D#1
+  # DEBUG INLINE_ENTRY matrix_add_const
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 57>; [100.00%]
+
+  <bb 19> [local count: 12992276]:
+  # ret_579 = PHI <ret_580(16)>
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_10 = crc16 (ret_579, 0);
+  # DEBUG crc => crc_10
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_vect
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 20> [local count: 118111600]:
+  # i_386 = PHI <i_191(75), 0(19)>
+  # DEBUG i => i_386
+  # DEBUG BEGIN_STMT
+  _174 = i_386 * 4;
+  _175 = C_7(D) + _174;
+  *_175 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _177 = N_5(D) * i_386;
+
+  <bb 21> [local count: 955630224]:
+  # j_387 = PHI <j_190(76), 0(20)>
+  # prephitmp_504 = PHI <_189(76), 0(20)>
+  # DEBUG j => j_387
+  # DEBUG BEGIN_STMT
+  _179 = _177 + j_387;
+  _180 = _179 * 2;
+  _181 = A_6(D) + _180;
+  _182 = *_181;
+  _183 = (long int) _182;
+  _184 = j_387 * 2;
+  _185 = B_11(D) + _184;
+  _186 = *_185;
+  _187 = (long int) _186;
+  _188 = _183 * _187;
+  _189 = _188 + prephitmp_504;
+  *_175 = _189;
+  # DEBUG BEGIN_STMT
+  j_190 = j_387 + 1;
+  # DEBUG j => j_190
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_190)
+    goto <bb 76>; [87.64%]
+  else
+    goto <bb 22>; [12.36%]
+
+  <bb 76> [local count: 837518623]:
+  goto <bb 21>; [100.00%]
+
+  <bb 22> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_191 = i_386 + 1;
+  # DEBUG i => i_191
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_191)
+    goto <bb 75>; [89.00%]
+  else
+    goto <bb 60>; [11.00%]
+
+  <bb 75> [local count: 105119324]:
+  goto <bb 20>; [100.00%]
+
+  <bb 60> [local count: 12992276]:
+  goto <bb 28>; [100.00%]
+
+  <bb 74> [local count: 837518623]:
+
+  <bb 23> [local count: 955630224]:
+  # j_347 = PHI <j_104(74), 0(28)>
+  # tmp_348 = PHI <tmp_107(74), tmp_356(28)>
+  # ret_350 = PHI <ret_103(74), ret_355(28)>
+  # prev_352 = PHI <cur_90(74), prev_357(28)>
+  # DEBUG j => j_347
+  # DEBUG ret => ret_350
+  # DEBUG prev => prev_352
+  # DEBUG tmp => tmp_348
+  # DEBUG BEGIN_STMT
+  _87 = _85 + j_347;
+  _88 = _87 * 4;
+  _89 = C_7(D) + _88;
+  cur_90 = *_89;
+  # DEBUG cur => cur_90
+  # DEBUG BEGIN_STMT
+  tmp_92 = cur_90 + tmp_348;
+  # DEBUG tmp => tmp_92
+  # DEBUG BEGIN_STMT
+  _596 = (unsigned short) ret_350;
+  if (tmp_92 > _487)
+    goto <bb 24>; [50.00%]
+  else
+    goto <bb 25>; [50.00%]
+
+  <bb 24> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _96 = _596 + 10;
+  # DEBUG ret => (ee_s16) _96
+  # DEBUG BEGIN_STMT
+  # DEBUG tmp => 0
+  goto <bb 26>; [100.00%]
+
+  <bb 25> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _98 = cur_90 > prev_352;
+  _99 = (unsigned short) _98;
+  _101 = _99 + _596;
+  # DEBUG ret => (ee_s16) _101
+
+  <bb 26> [local count: 955630224]:
+  # tmp_107 = PHI <0(24), tmp_92(25)>
+  # _102 = PHI <_96(24), _101(25)>
+  ret_103 = (ee_s16) _102;
+  # DEBUG ret => ret_103
+  # DEBUG tmp => tmp_107
+  # DEBUG BEGIN_STMT
+  # DEBUG prev => cur_90
+  # DEBUG BEGIN_STMT
+  j_104 = j_347 + 1;
+  # DEBUG j => j_104
+  # DEBUG ret => ret_103
+  # DEBUG prev => cur_90
+  # DEBUG tmp => tmp_107
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_104)
+    goto <bb 74>; [87.64%]
+  else
+    goto <bb 27>; [12.36%]
+
+  <bb 27> [local count: 118111600]:
+  # cur_585 = PHI <cur_90(26)>
+  # ret_584 = PHI <ret_103(26)>
+  # tmp_582 = PHI <tmp_107(26)>
+  # DEBUG BEGIN_STMT
+  i_105 = i_346 + 1;
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_105
+  # DEBUG ret => ret_584
+  # DEBUG prev => cur_585
+  # DEBUG tmp => tmp_582
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_105)
+    goto <bb 73>; [89.00%]
+  else
+    goto <bb 29>; [11.00%]
+
+  <bb 73> [local count: 105119324]:
+
+  <bb 28> [local count: 118111600]:
+  # i_346 = PHI <i_105(73), 0(60)>
+  # ret_355 = PHI <ret_584(73), 0(60)>
+  # tmp_356 = PHI <tmp_582(73), 0(60)>
+  # prev_357 = PHI <cur_585(73), 0(60)>
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_346
+  # DEBUG j => 0
+  # DEBUG ret => ret_355
+  # DEBUG prev => prev_357
+  # DEBUG tmp => tmp_356
+  # DEBUG BEGIN_STMT
+  _85 = N_5(D) * i_346;
+  goto <bb 23>; [100.00%]
+
+  <bb 29> [local count: 12992276]:
+  # ret_583 = PHI <ret_584(27)>
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_15 = crc16 (ret_583, crc_10);
+  # DEBUG crc => crc_15
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_matrix
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 34>; [100.00%]
+
+  <bb 71> [local count: 837518607]:
+
+  <bb 30> [local count: 955630206]:
+  # j_389 = PHI <j_214(71), 0(34)>
+  # DEBUG j => j_389
+  # DEBUG BEGIN_STMT
+  _195 = _193 + j_389;
+  _196 = _195 * 4;
+  _197 = C_7(D) + _196;
+  *_197 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG k => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 31> [local count: 7731917179]:
+  # k_390 = PHI <k_213(72), 0(30)>
+  # prephitmp_528 = PHI <_212(72), 0(30)>
+  # DEBUG k => k_390
+  # DEBUG BEGIN_STMT
+  _200 = _193 + k_390;
+  _201 = _200 * 2;
+  _202 = A_6(D) + _201;
+  _203 = *_202;
+  _204 = (long int) _203;
+  _205 = N_5(D) * k_390;
+  _206 = _205 + j_389;
+  _207 = _206 * 2;
+  _208 = B_11(D) + _207;
+  _209 = *_208;
+  _210 = (long int) _209;
+  _211 = _204 * _210;
+  _212 = _211 + prephitmp_528;
+  *_197 = _212;
+  # DEBUG BEGIN_STMT
+  k_213 = k_390 + 1;
+  # DEBUG k => k_213
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > k_213)
+    goto <bb 72>; [87.64%]
+  else
+    goto <bb 32>; [12.36%]
+
+  <bb 72> [local count: 6776286963]:
+  goto <bb 31>; [100.00%]
+
+  <bb 32> [local count: 955630206]:
+  # DEBUG BEGIN_STMT
+  j_214 = j_389 + 1;
+  # DEBUG j => j_214
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_214)
+    goto <bb 71>; [87.64%]
+  else
+    goto <bb 33>; [12.36%]
+
+  <bb 33> [local count: 118111599]:
+  # DEBUG BEGIN_STMT
+  i_215 = i_388 + 1;
+  # DEBUG i => i_215
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_215)
+    goto <bb 70>; [89.00%]
+  else
+    goto <bb 59>; [11.00%]
+
+  <bb 59> [local count: 12992276]:
+  goto <bb 40>; [100.00%]
+
+  <bb 70> [local count: 105119323]:
+
+  <bb 34> [local count: 118111599]:
+  # i_388 = PHI <i_215(70), 0(29)>
+  # DEBUG i => i_388
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _193 = N_5(D) * i_388;
+  goto <bb 30>; [100.00%]
+
+  <bb 69> [local count: 837518623]:
+
+  <bb 35> [local count: 955630224]:
+  # j_335 = PHI <j_78(69), 0(40)>
+  # tmp_336 = PHI <tmp_81(69), tmp_344(40)>
+  # ret_338 = PHI <ret_77(69), ret_343(40)>
+  # prev_340 = PHI <cur_64(69), prev_345(40)>
+  # DEBUG j => j_335
+  # DEBUG ret => ret_338
+  # DEBUG prev => prev_340
+  # DEBUG tmp => tmp_336
+  # DEBUG BEGIN_STMT
+  _61 = _59 + j_335;
+  _62 = _61 * 4;
+  _63 = C_7(D) + _62;
+  cur_64 = *_63;
+  # DEBUG cur => cur_64
+  # DEBUG BEGIN_STMT
+  tmp_66 = cur_64 + tmp_336;
+  # DEBUG tmp => tmp_66
+  # DEBUG BEGIN_STMT
+  _595 = (unsigned short) ret_338;
+  if (tmp_66 > _487)
+    goto <bb 36>; [50.00%]
+  else
+    goto <bb 37>; [50.00%]
+
+  <bb 36> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _70 = _595 + 10;
+  # DEBUG ret => (ee_s16) _70
+  # DEBUG BEGIN_STMT
+  # DEBUG tmp => 0
+  goto <bb 38>; [100.00%]
+
+  <bb 37> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _72 = cur_64 > prev_340;
+  _73 = (unsigned short) _72;
+  _75 = _73 + _595;
+  # DEBUG ret => (ee_s16) _75
+
+  <bb 38> [local count: 955630224]:
+  # tmp_81 = PHI <0(36), tmp_66(37)>
+  # _76 = PHI <_70(36), _75(37)>
+  ret_77 = (ee_s16) _76;
+  # DEBUG ret => ret_77
+  # DEBUG tmp => tmp_81
+  # DEBUG BEGIN_STMT
+  # DEBUG prev => cur_64
+  # DEBUG BEGIN_STMT
+  j_78 = j_335 + 1;
+  # DEBUG j => j_78
+  # DEBUG ret => ret_77
+  # DEBUG prev => cur_64
+  # DEBUG tmp => tmp_81
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_78)
+    goto <bb 69>; [87.64%]
+  else
+    goto <bb 39>; [12.36%]
+
+  <bb 39> [local count: 118111600]:
+  # cur_589 = PHI <cur_64(38)>
+  # ret_588 = PHI <ret_77(38)>
+  # tmp_586 = PHI <tmp_81(38)>
+  # DEBUG BEGIN_STMT
+  i_79 = i_334 + 1;
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_79
+  # DEBUG ret => ret_588
+  # DEBUG prev => cur_589
+  # DEBUG tmp => tmp_586
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_79)
+    goto <bb 68>; [89.00%]
+  else
+    goto <bb 41>; [11.00%]
+
+  <bb 68> [local count: 105119324]:
+
+  <bb 40> [local count: 118111600]:
+  # i_334 = PHI <i_79(68), 0(59)>
+  # ret_343 = PHI <ret_588(68), 0(59)>
+  # tmp_344 = PHI <tmp_586(68), 0(59)>
+  # prev_345 = PHI <cur_589(68), 0(59)>
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_334
+  # DEBUG j => 0
+  # DEBUG ret => ret_343
+  # DEBUG prev => prev_345
+  # DEBUG tmp => tmp_344
+  # DEBUG BEGIN_STMT
+  _59 = N_5(D) * i_334;
+  goto <bb 35>; [100.00%]
+
+  <bb 41> [local count: 12992276]:
+  # ret_587 = PHI <ret_588(39)>
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_19 = crc16 (ret_587, crc_15);
+  # DEBUG crc => crc_19
+  # DEBUG BEGIN_STMT
+  # DEBUG N => N_5(D)
+  # DEBUG C => C_7(D)
+  # DEBUG A => A_6(D)
+  # DEBUG B => B_11(D)
+  # DEBUG INLINE_ENTRY matrix_mul_matrix_bitextract
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 46>; [100.00%]
+
+  <bb 66> [local count: 837518607]:
+
+  <bb 42> [local count: 955630206]:
+  # j_392 = PHI <j_247(66), 0(46)>
+  # DEBUG j => j_392
+  # DEBUG BEGIN_STMT
+  _219 = _217 + j_392;
+  _220 = _219 * 4;
+  _221 = C_7(D) + _220;
+  *_221 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG k => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 43> [local count: 7731917179]:
+  # k_393 = PHI <k_246(67), 0(42)>
+  # prephitmp_558 = PHI <_245(67), 0(42)>
+  # DEBUG k => k_393
+  # DEBUG BEGIN_STMT
+  _223 = _217 + k_393;
+  _224 = _223 * 2;
+  _225 = A_6(D) + _224;
+  _226 = *_225;
+  _227 = (long int) _226;
+  _228 = N_5(D) * k_393;
+  _229 = _228 + j_392;
+  _230 = _229 * 2;
+  _231 = B_11(D) + _230;
+  _232 = *_231;
+  _233 = (long int) _232;
+  tmp_234 = _227 * _233;
+  # DEBUG tmp => tmp_234
+  # DEBUG BEGIN_STMT
+  _236 = (long unsigned int) prephitmp_558;
+  _237 = tmp_234 >> 2;
+  _238 = _237 & 15;
+  _239 = (long unsigned int) _238;
+  _240 = tmp_234 >> 5;
+  _241 = _240 & 127;
+  _242 = (long unsigned int) _241;
+  _243 = _239 * _242;
+  _244 = _236 + _243;
+  _245 = (long int) _244;
+  *_221 = _245;
+  # DEBUG BEGIN_STMT
+  k_246 = k_393 + 1;
+  # DEBUG k => k_246
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > k_246)
+    goto <bb 67>; [87.64%]
+  else
+    goto <bb 44>; [12.36%]
+
+  <bb 67> [local count: 6776286963]:
+  goto <bb 43>; [100.00%]
+
+  <bb 44> [local count: 955630206]:
+  # DEBUG BEGIN_STMT
+  j_247 = j_392 + 1;
+  # DEBUG j => j_247
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_247)
+    goto <bb 66>; [87.64%]
+  else
+    goto <bb 45>; [12.36%]
+
+  <bb 45> [local count: 118111599]:
+  # DEBUG BEGIN_STMT
+  i_248 = i_391 + 1;
+  # DEBUG i => i_248
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_248)
+    goto <bb 65>; [89.00%]
+  else
+    goto <bb 58>; [11.00%]
+
+  <bb 58> [local count: 12992276]:
+  goto <bb 52>; [100.00%]
+
+  <bb 65> [local count: 105119323]:
+
+  <bb 46> [local count: 118111599]:
+  # i_391 = PHI <i_248(65), 0(41)>
+  # DEBUG i => i_391
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _217 = N_5(D) * i_391;
+  goto <bb 42>; [100.00%]
+
+  <bb 64> [local count: 837518623]:
+
+  <bb 47> [local count: 955630224]:
+  # j_323 = PHI <j_52(64), 0(52)>
+  # tmp_324 = PHI <tmp_55(64), tmp_332(52)>
+  # ret_326 = PHI <ret_51(64), ret_331(52)>
+  # prev_328 = PHI <cur_38(64), prev_333(52)>
+  # DEBUG j => j_323
+  # DEBUG ret => ret_326
+  # DEBUG prev => prev_328
+  # DEBUG tmp => tmp_324
+  # DEBUG BEGIN_STMT
+  _35 = _33 + j_323;
+  _36 = _35 * 4;
+  _37 = C_7(D) + _36;
+  cur_38 = *_37;
+  # DEBUG cur => cur_38
+  # DEBUG BEGIN_STMT
+  tmp_40 = cur_38 + tmp_324;
+  # DEBUG tmp => tmp_40
+  # DEBUG BEGIN_STMT
+  _594 = (unsigned short) ret_326;
+  if (tmp_40 > _487)
+    goto <bb 48>; [50.00%]
+  else
+    goto <bb 49>; [50.00%]
+
+  <bb 48> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _44 = _594 + 10;
+  # DEBUG ret => (ee_s16) _44
+  # DEBUG BEGIN_STMT
+  # DEBUG tmp => 0
+  goto <bb 50>; [100.00%]
+
+  <bb 49> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _46 = cur_38 > prev_328;
+  _47 = (unsigned short) _46;
+  _49 = _47 + _594;
+  # DEBUG ret => (ee_s16) _49
+
+  <bb 50> [local count: 955630224]:
+  # tmp_55 = PHI <0(48), tmp_40(49)>
+  # _50 = PHI <_44(48), _49(49)>
+  ret_51 = (ee_s16) _50;
+  # DEBUG ret => ret_51
+  # DEBUG tmp => tmp_55
+  # DEBUG BEGIN_STMT
+  # DEBUG prev => cur_38
+  # DEBUG BEGIN_STMT
+  j_52 = j_323 + 1;
+  # DEBUG j => j_52
+  # DEBUG ret => ret_51
+  # DEBUG prev => cur_38
+  # DEBUG tmp => tmp_55
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_52)
+    goto <bb 64>; [87.64%]
+  else
+    goto <bb 51>; [12.36%]
+
+  <bb 51> [local count: 118111600]:
+  # cur_593 = PHI <cur_38(50)>
+  # ret_592 = PHI <ret_51(50)>
+  # tmp_590 = PHI <tmp_55(50)>
+  # DEBUG BEGIN_STMT
+  i_53 = i_322 + 1;
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG tmp => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_53
+  # DEBUG ret => ret_592
+  # DEBUG prev => cur_593
+  # DEBUG tmp => tmp_590
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_53)
+    goto <bb 63>; [89.00%]
+  else
+    goto <bb 53>; [11.00%]
+
+  <bb 63> [local count: 105119324]:
+
+  <bb 52> [local count: 118111600]:
+  # i_322 = PHI <i_53(63), 0(58)>
+  # ret_331 = PHI <ret_592(63), 0(58)>
+  # tmp_332 = PHI <tmp_590(63), 0(58)>
+  # prev_333 = PHI <cur_593(63), 0(58)>
+  # DEBUG N => NULL
+  # DEBUG C => NULL
+  # DEBUG A => NULL
+  # DEBUG B => NULL
+  # DEBUG tmp => NULL
+  # DEBUG k => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG cur => NULL
+  # DEBUG i => i_322
+  # DEBUG j => 0
+  # DEBUG ret => ret_331
+  # DEBUG prev => prev_333
+  # DEBUG tmp => tmp_332
+  # DEBUG BEGIN_STMT
+  _33 = N_5(D) * i_322;
+  goto <bb 47>; [100.00%]
+
+  <bb 53> [local count: 12992276]:
+  # ret_591 = PHI <ret_592(51)>
+  # DEBUG BEGIN_STMT
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG ret => NULL
+  # DEBUG cur => NULL
+  # DEBUG prev => NULL
+  # DEBUG tmp => NULL
+  crc_23 = crc16 (ret_591, crc_19);
+  # DEBUG crc => crc_23
+  # DEBUG BEGIN_STMT
+  # DEBUG D#3 => (unsigned short) val_2(D)
+  # DEBUG D#1 => -D#3
+  # DEBUG N => N_5(D)
+  # DEBUG A => A_6(D)
+  # DEBUG val => (short int) D#1
+  # DEBUG INLINE_ENTRY matrix_add_const
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 56>; [100.00%]
+
+  <bb 62> [local count: 837518623]:
+
+  <bb 54> [local count: 955630224]:
+  # j_320 = PHI <j_30(62), 0(56)>
+  # DEBUG j => j_320
+  # DEBUG BEGIN_STMT
+  _8 = _17 + j_320;
+  _25 = _8 * 2;
+  _26 = A_6(D) + _25;
+  _27 = *_26;
+  _28 = (unsigned short) _27;
+  _171 = _28 - _469;
+  _29 = (short int) _171;
+  *_26 = _29;
+  # DEBUG BEGIN_STMT
+  j_30 = j_320 + 1;
+  # DEBUG j => j_30
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > j_30)
+    goto <bb 62>; [87.64%]
+  else
+    goto <bb 55>; [12.36%]
+
+  <bb 55> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_31 = i_321 + 1;
+  # DEBUG i => i_31
+  # DEBUG BEGIN_STMT
+  if (N_5(D) > i_31)
+    goto <bb 61>; [89.00%]
+  else
+    goto <bb 83>; [11.00%]
+
+  <bb 61> [local count: 105119324]:
+
+  <bb 56> [local count: 118111600]:
+  # i_321 = PHI <i_31(61), 0(53)>
+  # DEBUG i => i_321
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _17 = N_5(D) * i_321;
+  goto <bb 54>; [100.00%]
+
+  <bb 83> [local count: 12992276]:
+  crc_564 = crc_23;
+
+  <bb 57> [local count: 14598063]:
+  # crc_222 = PHI <crc_564(83), crc_16(18)>
+  # DEBUG N => NULL
+  # DEBUG A => NULL
+  # DEBUG val => NULL
+  # DEBUG j => NULL
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+  _24 = (ee_s16) crc_222;
+  return _24;
+
+}
+
+
+
+;; Function core_init_matrix (core_init_matrix, funcdef_no=2, decl_uid=1525, cgraph_uid=3, symbol_order=2)
+
+
+Examining core_init_matrix function.
+Loop iteration number is chrec_dont_know.
+Loop iteration number isn't a constant.
+ee_u32 core_init_matrix (ee_u32 blksize, void * memblk, ee_s32 seed, struct mat_params * p)
+{
+  ee_u32 j;
+  ee_u32 i;
+  MATDAT val;
+  ee_s32 order;
+  MATDAT * B;
+  MATDAT * A;
+  ee_u32 N;
+  long unsigned int _6;
+  long int _7;
+  unsigned short _8;
+  unsigned short _9;
+  unsigned short _10;
+  long unsigned int _11;
+  long unsigned int _12;
+  long unsigned int _13;
+  MATDAT * _14;
+  unsigned short _15;
+  MATDAT * _16;
+  MATDAT * _17;
+  unsigned int _18;
+  unsigned int _19;
+  unsigned int _20;
+  MATRES * _21;
+  long unsigned int _29;
+  unsigned short _48;
+  long unsigned int _58;
+  long unsigned int powmult_71;
+  long unsigned int powmult_74;
+  int _129;
+  int prephitmp_130;
+  unsigned int _138;
+  unsigned int _139;
+  int prephitmp_145;
+  unsigned int _146;
+  unsigned int _147;
+  unsigned int _148;
+  MATDAT * _149;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG N => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG order => 1
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  if (seed_33(D) == 0)
+    goto <bb 5>; [50.00%]
+  else
+    goto <bb 18>; [50.00%]
+
+  <bb 14> [local count: 12992276]:
+
+  <bb 4> [local count: 118111600]:
+  # i_73 = PHI <i_54(17), 0(14)>
+  # DEBUG j => 0
+  # DEBUG i => i_73
+  # DEBUG seed => seed_56
+  # DEBUG BEGIN_STMT
+  i_54 = i_73 + 1;
+  # DEBUG i => i_54
+  # DEBUG BEGIN_STMT
+  powmult_71 = i_54 * i_54;
+  j_55 = powmult_71 * 8;
+  # DEBUG j => j_55
+  # DEBUG i => i_54
+  # DEBUG seed => seed_56
+  # DEBUG BEGIN_STMT
+  if (blksize_34(D) > j_55)
+    goto <bb 17>; [89.00%]
+  else
+    goto <bb 7>; [11.00%]
+
+  <bb 17> [local count: 105119324]:
+  goto <bb 4>; [100.00%]
+
+  <bb 18> [local count: 7299032]:
+
+  <bb 5> [local count: 14598063]:
+  # seed_56 = PHI <1(2), seed_33(D)(18)>
+  # DEBUG j => 0
+  # DEBUG i => 0
+  # DEBUG seed => seed_56
+  # DEBUG BEGIN_STMT
+  _146 = (unsigned int) memblk_36(D);
+  _147 = _146 + 3;
+  _148 = _147 & 4294967292;
+  _149 = (MATDAT *) _148;
+  if (blksize_34(D) != 0)
+    goto <bb 14>; [89.00%]
+  else
+    goto <bb 6>; [11.00%]
+
+  <bb 6> [local count: 1605787]:
+  # DEBUG BEGIN_STMT
+  # DEBUG N => 4294967295
+  # DEBUG BEGIN_STMT
+  # DEBUG D#17 => (unsigned int) memblk_36(D)
+  # DEBUG D#16 => D#17 + 3
+  # DEBUG D#15 => D#16 & 4294967292
+  # DEBUG A => (MATDAT *) D#15
+  # DEBUG BEGIN_STMT
+  B_23 = _149 + 2;
+  # DEBUG B => B_23
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG order => 1
+  # DEBUG seed => seed_56
+  # DEBUG BEGIN_STMT
+  goto <bb 9>; [100.00%]
+
+  <bb 7> [local count: 12992276]:
+  # i_144 = PHI <i_73(4)>
+  # DEBUG BEGIN_STMT
+  # DEBUG N => i_144
+  # DEBUG BEGIN_STMT
+  # DEBUG D#14 => (unsigned int) memblk_36(D)
+  # DEBUG D#13 => D#14 + 3
+  # DEBUG D#12 => D#13 & 4294967292
+  # DEBUG A => (MATDAT *) D#12
+  # DEBUG BEGIN_STMT
+  powmult_74 = i_144 * i_144;
+  _6 = powmult_74 * 2;
+  B_38 = _149 + _6;
+  # DEBUG B => B_38
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG order => 1
+  # DEBUG seed => seed_56
+  # DEBUG BEGIN_STMT
+  if (i_144 != 0)
+    goto <bb 8>; [87.64%]
+  else
+    goto <bb 13>; [12.36%]
+
+  <bb 8> [local count: 11386489]:
+  _129 = (int) i_144;
+
+  <bb 9> [local count: 12992276]:
+  # _29 = PHI <_6(8), 2(6)>
+  # N_65 = PHI <i_144(8), 4294967295(6)>
+  # B_63 = PHI <B_38(8), B_23(6)>
+  # prephitmp_130 = PHI <_129(8), -1(6)>
+  goto <bb 12>; [100.00%]
+
+  <bb 16> [local count: 837518623]:
+
+  <bb 10> [local count: 955630224]:
+  # seed_67 = PHI <seed_46(16), seed_69(12)>
+  # order_70 = PHI <order_52(16), order_72(12)>
+  # j_76 = PHI <j_53(16), 0(12)>
+  # DEBUG j => j_76
+  # DEBUG order => order_70
+  # DEBUG seed => seed_67
+  # DEBUG BEGIN_STMT
+  _7 = seed_67 * order_70;
+  seed_46 = _7 % 65536;
+  # DEBUG seed => seed_46
+  # DEBUG BEGIN_STMT
+  _8 = (unsigned short) seed_46;
+  _9 = (unsigned short) order_70;
+  _10 = _8 + _9;
+  val_47 = (MATDAT) _10;
+  # DEBUG BEGIN_STMT
+  # DEBUG val => val_47
+  # DEBUG BEGIN_STMT
+  _12 = _11 + j_76;
+  _13 = _12 * 2;
+  _14 = B_63 + _13;
+  *_14 = val_47;
+  # DEBUG BEGIN_STMT
+  _15 = _9 + _10;
+  # DEBUG val => (MATDAT) _15
+  # DEBUG BEGIN_STMT
+  _48 = _15 & 255;
+  val_50 = (MATDAT) _48;
+  # DEBUG val => val_50
+  # DEBUG BEGIN_STMT
+  _16 = _149 + _13;
+  *_16 = val_50;
+  # DEBUG BEGIN_STMT
+  order_52 = order_70 + 1;
+  # DEBUG order => order_52
+  # DEBUG BEGIN_STMT
+  j_53 = j_76 + 1;
+  # DEBUG j => j_53
+  # DEBUG order => order_52
+  # DEBUG seed => seed_46
+  # DEBUG BEGIN_STMT
+  if (j_53 < N_65)
+    goto <bb 16>; [87.64%]
+  else
+    goto <bb 11>; [12.36%]
+
+  <bb 11> [local count: 118111600]:
+  # seed_141 = PHI <seed_46(10)>
+  _139 = (unsigned int) order_72;
+  _138 = N_65 + _139;
+  order_140 = (ee_s32) _138;
+  # DEBUG BEGIN_STMT
+  i_45 = i_75 + 1;
+  # DEBUG i => i_45
+  # DEBUG order => order_140
+  # DEBUG seed => seed_141
+  # DEBUG BEGIN_STMT
+  if (i_45 < N_65)
+    goto <bb 15>; [89.00%]
+  else
+    goto <bb 20>; [11.00%]
+
+  <bb 20> [local count: 12992276]:
+  goto <bb 13>; [100.00%]
+
+  <bb 15> [local count: 105119324]:
+
+  <bb 12> [local count: 118111600]:
+  # seed_69 = PHI <seed_141(15), seed_56(9)>
+  # order_72 = PHI <order_140(15), 1(9)>
+  # i_75 = PHI <i_45(15), 0(9)>
+  # DEBUG i => i_75
+  # DEBUG j => 0
+  # DEBUG order => order_72
+  # DEBUG seed => seed_69
+  # DEBUG BEGIN_STMT
+  _11 = N_65 * i_75;
+  goto <bb 10>; [100.00%]
+
+  <bb 13> [local count: 14598063]:
+  # _58 = PHI <_29(20), _6(7)>
+  # N_27 = PHI <N_65(20), 0(7)>
+  # B_62 = PHI <B_63(20), B_38(7)>
+  # prephitmp_145 = PHI <prephitmp_130(20), 0(7)>
+  # DEBUG BEGIN_STMT
+  p_40(D)->A = _149;
+  # DEBUG BEGIN_STMT
+  p_40(D)->B = B_62;
+  # DEBUG BEGIN_STMT
+  _17 = B_62 + _58;
+  _18 = (unsigned int) _17;
+  _19 = _18 + 3;
+  _20 = _19 & 4294967292;
+  _21 = (MATRES *) _20;
+  p_40(D)->C = _21;
+  # DEBUG BEGIN_STMT
+  p_40(D)->N = prephitmp_145;
+  # DEBUG BEGIN_STMT
+  return N_27;
+
+}
+
+
+
+;; Function matrix_sum (matrix_sum, funcdef_no=3, decl_uid=1539, cgraph_uid=4, symbol_order=3)
+
+
+Examining matrix_sum function.
+Loop iteration number isn't a constant.
+ee_s16 matrix_sum (ee_u32 N, MATRES * C, MATDAT clipval)
+{
+  ee_u32 j;
+  ee_u32 i;
+  ee_s16 ret;
+  MATRES cur;
+  MATRES prev;
+  MATRES tmp;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  MATRES * _4;
+  unsigned short _7;
+  _Bool _8;
+  unsigned short _9;
+  unsigned short _11;
+  unsigned short _22;
+  long int _36;
+  unsigned short _61;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG cur => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG ret => 0
+  # DEBUG prev => 0
+  # DEBUG tmp => 0
+  # DEBUG BEGIN_STMT
+  if (N_23(D) != 0)
+    goto <bb 3>; [89.00%]
+  else
+    goto <bb 13>; [11.00%]
+
+  <bb 3> [local count: 12992276]:
+  _36 = (long int) clipval_29(D);
+  goto <bb 9>; [100.00%]
+
+  <bb 12> [local count: 837518623]:
+
+  <bb 4> [local count: 955630224]:
+  # tmp_39 = PHI <tmp_12(12), tmp_41(9)>
+  # prev_42 = PHI <cur_27(12), prev_44(9)>
+  # ret_45 = PHI <ret_17(12), ret_48(9)>
+  # j_50 = PHI <j_30(12), 0(9)>
+  # DEBUG j => j_50
+  # DEBUG ret => ret_45
+  # DEBUG prev => prev_42
+  # DEBUG tmp => tmp_39
+  # DEBUG BEGIN_STMT
+  _2 = _1 + j_50;
+  _3 = _2 * 4;
+  _4 = C_26(D) + _3;
+  cur_27 = *_4;
+  # DEBUG cur => cur_27
+  # DEBUG BEGIN_STMT
+  tmp_28 = cur_27 + tmp_39;
+  # DEBUG tmp => tmp_28
+  # DEBUG BEGIN_STMT
+  _61 = (unsigned short) ret_45;
+  if (tmp_28 > _36)
+    goto <bb 5>; [50.00%]
+  else
+    goto <bb 6>; [50.00%]
+
+  <bb 5> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _7 = _61 + 10;
+  # DEBUG ret => (ee_s16) _7
+  # DEBUG BEGIN_STMT
+  # DEBUG tmp => 0
+  goto <bb 7>; [100.00%]
+
+  <bb 6> [local count: 477815112]:
+  # DEBUG BEGIN_STMT
+  _8 = cur_27 > prev_42;
+  _9 = (unsigned short) _8;
+  _11 = _9 + _61;
+  # DEBUG ret => (ee_s16) _11
+
+  <bb 7> [local count: 955630224]:
+  # tmp_12 = PHI <0(5), tmp_28(6)>
+  # _22 = PHI <_7(5), _11(6)>
+  ret_17 = (ee_s16) _22;
+  # DEBUG ret => ret_17
+  # DEBUG tmp => tmp_12
+  # DEBUG BEGIN_STMT
+  # DEBUG prev => cur_27
+  # DEBUG BEGIN_STMT
+  j_30 = j_50 + 1;
+  # DEBUG j => j_30
+  # DEBUG ret => ret_17
+  # DEBUG prev => cur_27
+  # DEBUG tmp => tmp_12
+  # DEBUG BEGIN_STMT
+  if (N_23(D) > j_30)
+    goto <bb 12>; [87.64%]
+  else
+    goto <bb 8>; [12.36%]
+
+  <bb 8> [local count: 118111600]:
+  # tmp_60 = PHI <tmp_12(7)>
+  # ret_59 = PHI <ret_17(7)>
+  # cur_57 = PHI <cur_27(7)>
+  # DEBUG BEGIN_STMT
+  i_25 = i_49 + 1;
+  # DEBUG i => i_25
+  # DEBUG ret => ret_59
+  # DEBUG prev => cur_57
+  # DEBUG tmp => tmp_60
+  # DEBUG BEGIN_STMT
+  if (N_23(D) > i_25)
+    goto <bb 11>; [89.00%]
+  else
+    goto <bb 14>; [11.00%]
+
+  <bb 14> [local count: 12992276]:
+  # ret_58 = PHI <ret_59(8)>
+  goto <bb 10>; [100.00%]
+
+  <bb 11> [local count: 105119324]:
+
+  <bb 9> [local count: 118111600]:
+  # tmp_41 = PHI <tmp_60(11), 0(3)>
+  # prev_44 = PHI <cur_57(11), 0(3)>
+  # ret_48 = PHI <ret_59(11), 0(3)>
+  # i_49 = PHI <i_25(11), 0(3)>
+  # DEBUG i => i_49
+  # DEBUG j => 0
+  # DEBUG ret => ret_48
+  # DEBUG prev => prev_44
+  # DEBUG tmp => tmp_41
+  # DEBUG BEGIN_STMT
+  _1 = N_23(D) * i_49;
+  goto <bb 4>; [100.00%]
+
+  <bb 13> [local count: 1605787]:
+
+  <bb 10> [local count: 14598063]:
+  # ret_47 = PHI <ret_58(14), 0(13)>
+  # DEBUG BEGIN_STMT
+  return ret_47;
+
+}
+
+
+
+;; Function matrix_mul_const (matrix_mul_const, funcdef_no=4, decl_uid=1544, cgraph_uid=5, symbol_order=4)
+
+
+Examining matrix_mul_const function.
+Loop iteration number isn't a constant.
+void matrix_mul_const (ee_u32 N, MATRES * C, MATDAT * A, MATDAT val)
+{
+  ee_u32 j;
+  ee_u32 i;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  MATDAT * _4;
+  short int _5;
+  long int _6;
+  long unsigned int _8;
+  MATRES * _9;
+  long int _10;
+  long int _44;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_16(D) != 0)
+    goto <bb 3>; [89.00%]
+  else
+    goto <bb 10>; [11.00%]
+
+  <bb 3> [local count: 12992276]:
+  _44 = (long int) val_19(D);
+  goto <bb 6>; [100.00%]
+
+  <bb 9> [local count: 837518623]:
+
+  <bb 4> [local count: 955630224]:
+  # j_28 = PHI <j_22(9), 0(6)>
+  # DEBUG j => j_28
+  # DEBUG BEGIN_STMT
+  _2 = _1 + j_28;
+  _3 = _2 * 2;
+  _4 = A_18(D) + _3;
+  _5 = *_4;
+  _6 = (long int) _5;
+  _8 = _2 * 4;
+  _9 = C_20(D) + _8;
+  _10 = _6 * _44;
+  *_9 = _10;
+  # DEBUG BEGIN_STMT
+  j_22 = j_28 + 1;
+  # DEBUG j => j_22
+  # DEBUG BEGIN_STMT
+  if (N_16(D) > j_22)
+    goto <bb 9>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_17 = i_27 + 1;
+  # DEBUG i => i_17
+  # DEBUG BEGIN_STMT
+  if (N_16(D) > i_17)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 11> [local count: 12992276]:
+  goto <bb 7>; [100.00%]
+
+  <bb 8> [local count: 105119324]:
+
+  <bb 6> [local count: 118111600]:
+  # i_27 = PHI <i_17(8), 0(3)>
+  # DEBUG i => i_27
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _1 = N_16(D) * i_27;
+  goto <bb 4>; [100.00%]
+
+  <bb 10> [local count: 1605787]:
+
+  <bb 7> [local count: 14598063]:
+  return;
+
+}
+
+
+
+;; Function matrix_add_const (matrix_add_const, funcdef_no=5, decl_uid=1563, cgraph_uid=6, symbol_order=5)
+
+
+Examining matrix_add_const function.
+Loop iteration number isn't a constant.
+void matrix_add_const (ee_u32 N, MATDAT * A, MATDAT val)
+{
+  ee_u32 j;
+  ee_u32 i;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  MATDAT * _4;
+  short int _5;
+  unsigned short _6;
+  unsigned short _8;
+  short int _9;
+  unsigned short _43;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_15(D) != 0)
+    goto <bb 3>; [89.00%]
+  else
+    goto <bb 10>; [11.00%]
+
+  <bb 3> [local count: 12992276]:
+  _43 = (unsigned short) val_18(D);
+  goto <bb 6>; [100.00%]
+
+  <bb 9> [local count: 837518623]:
+
+  <bb 4> [local count: 955630224]:
+  # j_26 = PHI <j_20(9), 0(6)>
+  # DEBUG j => j_26
+  # DEBUG BEGIN_STMT
+  _2 = _1 + j_26;
+  _3 = _2 * 2;
+  _4 = A_17(D) + _3;
+  _5 = *_4;
+  _6 = (unsigned short) _5;
+  _8 = _6 + _43;
+  _9 = (short int) _8;
+  *_4 = _9;
+  # DEBUG BEGIN_STMT
+  j_20 = j_26 + 1;
+  # DEBUG j => j_20
+  # DEBUG BEGIN_STMT
+  if (N_15(D) > j_20)
+    goto <bb 9>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_16 = i_25 + 1;
+  # DEBUG i => i_16
+  # DEBUG BEGIN_STMT
+  if (N_15(D) > i_16)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 11> [local count: 12992276]:
+  goto <bb 7>; [100.00%]
+
+  <bb 8> [local count: 105119324]:
+
+  <bb 6> [local count: 118111600]:
+  # i_25 = PHI <i_16(8), 0(3)>
+  # DEBUG i => i_25
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _1 = N_15(D) * i_25;
+  goto <bb 4>; [100.00%]
+
+  <bb 10> [local count: 1605787]:
+
+  <bb 7> [local count: 14598063]:
+  return;
+
+}
+
+
+
+;; Function matrix_mul_vect (matrix_mul_vect, funcdef_no=6, decl_uid=1549, cgraph_uid=7, symbol_order=6)
+
+
+Examining matrix_mul_vect function.
+Loop iteration number isn't a constant.
+void matrix_mul_vect (ee_u32 N, MATRES * C, MATDAT * A, MATDAT * B)
+{
+  ee_u32 j;
+  ee_u32 i;
+  long unsigned int _1;
+  MATRES * _2;
+  long unsigned int _4;
+  long unsigned int _5;
+  long unsigned int _6;
+  MATDAT * _7;
+  short int _8;
+  long int _9;
+  long unsigned int _10;
+  MATDAT * _11;
+  short int _12;
+  long int _13;
+  long int _14;
+  long int _15;
+  long int prephitmp_50;
+
+  <bb 2> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_21(D) != 0)
+    goto <bb 7>; [89.00%]
+  else
+    goto <bb 10>; [11.00%]
+
+  <bb 10> [local count: 1605787]:
+
+  <bb 3> [local count: 14598063]:
+  return;
+
+  <bb 7> [local count: 12992276]:
+
+  <bb 4> [local count: 118111600]:
+  # i_33 = PHI <i_24(8), 0(7)>
+  # DEBUG i => i_33
+  # DEBUG BEGIN_STMT
+  _1 = i_33 * 4;
+  _2 = C_22(D) + _1;
+  *_2 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _4 = N_21(D) * i_33;
+
+  <bb 5> [local count: 955630224]:
+  # j_34 = PHI <j_28(9), 0(4)>
+  # prephitmp_50 = PHI <_15(9), 0(4)>
+  # DEBUG j => j_34
+  # DEBUG BEGIN_STMT
+  _5 = _4 + j_34;
+  _6 = _5 * 2;
+  _7 = A_25(D) + _6;
+  _8 = *_7;
+  _9 = (long int) _8;
+  _10 = j_34 * 2;
+  _11 = B_26(D) + _10;
+  _12 = *_11;
+  _13 = (long int) _12;
+  _14 = _9 * _13;
+  _15 = _14 + prephitmp_50;
+  *_2 = _15;
+  # DEBUG BEGIN_STMT
+  j_28 = j_34 + 1;
+  # DEBUG j => j_28
+  # DEBUG BEGIN_STMT
+  if (N_21(D) > j_28)
+    goto <bb 9>; [87.64%]
+  else
+    goto <bb 6>; [12.36%]
+
+  <bb 9> [local count: 837518623]:
+  goto <bb 5>; [100.00%]
+
+  <bb 6> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  i_24 = i_33 + 1;
+  # DEBUG i => i_24
+  # DEBUG BEGIN_STMT
+  if (N_21(D) > i_24)
+    goto <bb 8>; [89.00%]
+  else
+    goto <bb 11>; [11.00%]
+
+  <bb 11> [local count: 12992276]:
+  goto <bb 3>; [100.00%]
+
+  <bb 8> [local count: 105119324]:
+  goto <bb 4>; [100.00%]
+
+}
+
+
+
+;; Function matrix_mul_matrix (matrix_mul_matrix, funcdef_no=7, decl_uid=1554, cgraph_uid=8, symbol_order=7)
+
+
+Examining matrix_mul_matrix function.
+Loop iteration number isn't a constant.
+void matrix_mul_matrix (ee_u32 N, MATRES * C, MATDAT * A, MATDAT * B)
+{
+  ee_u32 k;
+  ee_u32 j;
+  ee_u32 i;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  MATRES * _4;
+  long unsigned int _6;
+  long unsigned int _7;
+  MATDAT * _8;
+  short int _9;
+  long int _10;
+  long unsigned int _11;
+  long unsigned int _12;
+  long unsigned int _13;
+  MATDAT * _14;
+  short int _15;
+  long int _16;
+  long int _17;
+  long int _18;
+  long int prephitmp_64;
+
+  <bb 2> [local count: 1804255]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_26(D) != 0)
+    goto <bb 9>; [89.00%]
+  else
+    goto <bb 13>; [11.00%]
+
+  <bb 9> [local count: 1605787]:
+  goto <bb 7>; [100.00%]
+
+  <bb 11> [local count: 103513537]:
+
+  <bb 3> [local count: 118111600]:
+  # j_42 = PHI <j_30(11), 0(7)>
+  # DEBUG j => j_42
+  # DEBUG BEGIN_STMT
+  _2 = _1 + j_42;
+  _3 = _2 * 4;
+  _4 = C_28(D) + _3;
+  *_4 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG k => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 4> [local count: 955630225]:
+  # k_43 = PHI <k_34(12), 0(3)>
+  # prephitmp_64 = PHI <_18(12), 0(3)>
+  # DEBUG k => k_43
+  # DEBUG BEGIN_STMT
+  _6 = _1 + k_43;
+  _7 = _6 * 2;
+  _8 = A_31(D) + _7;
+  _9 = *_8;
+  _10 = (long int) _9;
+  _11 = N_26(D) * k_43;
+  _12 = _11 + j_42;
+  _13 = _12 * 2;
+  _14 = B_32(D) + _13;
+  _15 = *_14;
+  _16 = (long int) _15;
+  _17 = _10 * _16;
+  _18 = _17 + prephitmp_64;
+  *_4 = _18;
+  # DEBUG BEGIN_STMT
+  k_34 = k_43 + 1;
+  # DEBUG k => k_34
+  # DEBUG BEGIN_STMT
+  if (N_26(D) > k_34)
+    goto <bb 12>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 12> [local count: 837518624]:
+  goto <bb 4>; [100.00%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  j_30 = j_42 + 1;
+  # DEBUG j => j_30
+  # DEBUG BEGIN_STMT
+  if (N_26(D) > j_30)
+    goto <bb 11>; [87.64%]
+  else
+    goto <bb 6>; [12.36%]
+
+  <bb 6> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  i_27 = i_41 + 1;
+  # DEBUG i => i_27
+  # DEBUG BEGIN_STMT
+  if (N_26(D) > i_27)
+    goto <bb 10>; [89.00%]
+  else
+    goto <bb 14>; [11.00%]
+
+  <bb 14> [local count: 1605787]:
+  goto <bb 8>; [100.00%]
+
+  <bb 10> [local count: 12992276]:
+
+  <bb 7> [local count: 14598063]:
+  # i_41 = PHI <i_27(10), 0(9)>
+  # DEBUG i => i_41
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _1 = N_26(D) * i_41;
+  goto <bb 3>; [100.00%]
+
+  <bb 13> [local count: 198468]:
+
+  <bb 8> [local count: 1804255]:
+  return;
+
+}
+
+
+
+;; Function matrix_mul_matrix_bitextract (matrix_mul_matrix_bitextract, funcdef_no=8, decl_uid=1559, cgraph_uid=9, symbol_order=8)
+
+
+Examining matrix_mul_matrix_bitextract function.
+Loop iteration number isn't a constant.
+void matrix_mul_matrix_bitextract (ee_u32 N, MATRES * C, MATDAT * A, MATDAT * B)
+{
+  MATRES tmp;
+  ee_u32 k;
+  ee_u32 j;
+  ee_u32 i;
+  long unsigned int _1;
+  long unsigned int _2;
+  long unsigned int _3;
+  MATRES * _4;
+  long unsigned int _5;
+  long unsigned int _6;
+  MATDAT * _7;
+  short int _8;
+  long int _9;
+  long unsigned int _10;
+  long unsigned int _11;
+  long unsigned int _12;
+  MATDAT * _13;
+  short int _14;
+  long int _15;
+  long unsigned int _17;
+  long int _18;
+  long unsigned int _19;
+  long int _20;
+  long unsigned int _21;
+  long unsigned int _22;
+  long unsigned int _23;
+  long int _24;
+  long int _33;
+  long int _37;
+  long int prephitmp_89;
+
+  <bb 2> [local count: 1804255]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  if (N_32(D) != 0)
+    goto <bb 9>; [89.00%]
+  else
+    goto <bb 13>; [11.00%]
+
+  <bb 9> [local count: 1605787]:
+  goto <bb 7>; [100.00%]
+
+  <bb 11> [local count: 103513537]:
+
+  <bb 3> [local count: 118111600]:
+  # j_51 = PHI <j_38(11), 0(7)>
+  # DEBUG j => j_51
+  # DEBUG BEGIN_STMT
+  _2 = _1 + j_51;
+  _3 = _2 * 4;
+  _4 = C_35(D) + _3;
+  *_4 = 0;
+  # DEBUG BEGIN_STMT
+  # DEBUG k => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 4> [local count: 955630225]:
+  # k_52 = PHI <k_43(12), 0(3)>
+  # prephitmp_89 = PHI <_24(12), 0(3)>
+  # DEBUG k => k_52
+  # DEBUG BEGIN_STMT
+  _5 = _1 + k_52;
+  _6 = _5 * 2;
+  _7 = A_39(D) + _6;
+  _8 = *_7;
+  _9 = (long int) _8;
+  _10 = N_32(D) * k_52;
+  _11 = _10 + j_51;
+  _12 = _11 * 2;
+  _13 = B_40(D) + _12;
+  _14 = *_13;
+  _15 = (long int) _14;
+  tmp_41 = _9 * _15;
+  # DEBUG tmp => tmp_41
+  # DEBUG BEGIN_STMT
+  _17 = (long unsigned int) prephitmp_89;
+  _18 = tmp_41 >> 2;
+  _37 = _18 & 15;
+  _19 = (long unsigned int) _37;
+  _20 = tmp_41 >> 5;
+  _33 = _20 & 127;
+  _21 = (long unsigned int) _33;
+  _22 = _19 * _21;
+  _23 = _17 + _22;
+  _24 = (long int) _23;
+  *_4 = _24;
+  # DEBUG BEGIN_STMT
+  k_43 = k_52 + 1;
+  # DEBUG k => k_43
+  # DEBUG BEGIN_STMT
+  if (N_32(D) > k_43)
+    goto <bb 12>; [87.64%]
+  else
+    goto <bb 5>; [12.36%]
+
+  <bb 12> [local count: 837518624]:
+  goto <bb 4>; [100.00%]
+
+  <bb 5> [local count: 118111600]:
+  # DEBUG BEGIN_STMT
+  j_38 = j_51 + 1;
+  # DEBUG j => j_38
+  # DEBUG BEGIN_STMT
+  if (N_32(D) > j_38)
+    goto <bb 11>; [87.64%]
+  else
+    goto <bb 6>; [12.36%]
+
+  <bb 6> [local count: 14598063]:
+  # DEBUG BEGIN_STMT
+  i_34 = i_50 + 1;
+  # DEBUG i => i_34
+  # DEBUG BEGIN_STMT
+  if (N_32(D) > i_34)
+    goto <bb 10>; [89.00%]
+  else
+    goto <bb 14>; [11.00%]
+
+  <bb 14> [local count: 1605787]:
+  goto <bb 8>; [100.00%]
+
+  <bb 10> [local count: 12992276]:
+
+  <bb 7> [local count: 14598063]:
+  # i_50 = PHI <i_34(10), 0(9)>
+  # DEBUG i => i_50
+  # DEBUG j => 0
+  # DEBUG BEGIN_STMT
+  _1 = N_32(D) * i_50;
+  goto <bb 3>; [100.00%]
+
+  <bb 13> [local count: 198468]:
+
+  <bb 8> [local count: 1804255]:
+  return;
+
+}
+
+

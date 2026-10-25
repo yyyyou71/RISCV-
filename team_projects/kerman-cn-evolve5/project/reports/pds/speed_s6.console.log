@@ -1,0 +1,12 @@
+RUN PDS EVOLVE5 mul_pair_combo
+Traceback (most recent call last):
+  File "C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\outputs\rv32im_evolve5\scripts\dual_pds.py", line 89, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\outputs\rv32im_evolve5\scripts\dual_pds.py", line 61, in main
+    facts=audit(build,report)
+          ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\outputs\rv32im_evolve5\scripts\audit_pds.py", line 46, in audit
+    assert 'All Constraints Met.' in rtr and 'PG2L100H' in rtr and 'FBG484' in rtr,'Timing/target sign-off failed'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Timing/target sign-off failed

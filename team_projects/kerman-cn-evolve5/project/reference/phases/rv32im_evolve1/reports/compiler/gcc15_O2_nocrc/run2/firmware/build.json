@@ -1,0 +1,104 @@
+{
+  "elf_class": 32,
+  "machine": 243,
+  "entry": 0,
+  "rvc_flag": false,
+  "instruction_words_checked": 3754,
+  "isa": "RV32IM_Zicsr plus MRET/WFI",
+  "sections": [
+    {
+      "name": ".text",
+      "address": 0,
+      "bytes": 15016
+    },
+    {
+      "name": ".rodata",
+      "address": 15016,
+      "bytes": 4376
+    },
+    {
+      "name": ".data",
+      "address": 536870912,
+      "bytes": 12
+    },
+    {
+      "name": ".bss",
+      "address": 536870928,
+      "bytes": 2036
+    }
+  ],
+  "app": "coremark",
+  "optimization": "O2",
+  "image_bytes": 19404,
+  "clock_hz": 25000000,
+  "baud": 115200,
+  "build_id": "EVOLVE1_BOARD",
+  "software_isa": "native",
+  "extra_flags": [
+    "-fno-optimize-crc"
+  ],
+  "default_iterations": 2048,
+  "total_data_size": 2000,
+  "contexts": 1,
+  "tick_unit": "microseconds",
+  "precise_result_source": "CM_RESULT raw 64-bit CPU-clock cycles",
+  "flags": [
+    "-march=rv32im_zicsr2p0",
+    "-mabi=ilp32",
+    "-mcmodel=medlow",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-strict-aliasing",
+    "-fno-pic",
+    "-fno-stack-protector",
+    "-fno-common",
+    "-fno-asynchronous-unwind-tables",
+    "-fno-unwind-tables",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fno-tree-loop-distribute-patterns",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-std=gnu11",
+    "-g",
+    "-O2",
+    "-DSOC_CLOCK_HZ=25000000u",
+    "-DSOC_UART_BAUD=115200u",
+    "-fno-optimize-crc"
+  ],
+  "printed_flags": "-march=rv32im_zicsr2p0 -mabi=ilp32 -mcmodel=medlow -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-strict-aliasing -fno-pic -fno-stack-protector -fno-common -fno-asynchronous-unwind-tables -fno-unwind-tables -ffunction-sections -fdata-sections -fno-tree-loop-distribute-patterns -Wall -Wextra -Werror -std=gnu11 -g -O2 -DSOC_CLOCK_HZ=25000000u -DSOC_UART_BAUD=115200u -fno-optimize-crc; link: -nostdlib --gc-sections --no-relax",
+  "upstream_commit": "b56889a7bd9d5624fbeff2a73ba69878e6a9c146",
+  "algorithm_checksums": {
+    "core_list_join.c": {
+      "md5": "9007fe7861b60ee6f210d156b62974c8",
+      "sha256": "ca00e4e010ece47d7f040cb92aa50a95345a00d3171b59d088f6b243be06ce7b"
+    },
+    "core_main.c": {
+      "md5": "4a9e6dadce1ac3866381021fbe843fc9",
+      "sha256": "17884c93c5b94378eb0ff02b4df3725756cf2addb9b8cbcaa6200a4649ff5ca7"
+    },
+    "core_matrix.c": {
+      "md5": "5fa21a0f7c3964167c9691db531ca652",
+      "sha256": "ecdff717b5a5c4907d221a606760e25499899cbf617582c05d40db71c91351e4"
+    },
+    "core_state.c": {
+      "md5": "fb49e7605c125306575a83f14f5798ac",
+      "sha256": "f4b84bb0a3452c45a4daa664ab502bfdccbd31cb57d93e9ac490c60937717a4e"
+    },
+    "core_util.c": {
+      "md5": "45540ba2145adea1ec7ea2c72a1fbbcb",
+      "sha256": "a3fbfcb9bb943b638624b8ece01c5836dd56a96d7bcde2697b248d077447327f"
+    },
+    "coremark.h": {
+      "md5": "8ca974c013b380dc7f0d6d1afb76eb2d",
+      "sha256": "29f7eb0f0bdf6002f6c7dccfa4f8f9f32c0b8f6709f6538c2b73221938a9c8f1"
+    }
+  },
+  "same_compilation_flags_for_all_sources": true,
+  "linked_prebuilt_libraries": false,
+  "elf_sha256": "7350aecd20ded0f128553f8e061f3d9e940d9fa1a246777c49b3dddf56e972f4",
+  "compiler": "riscv-none-elf-gcc.exe (xPack GNU RISC-V Embedded GCC x86_64) 15.2.0"
+}

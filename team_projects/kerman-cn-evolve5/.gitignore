@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+*.lic
+*.pfx
+*.p12
+/.local/
+/project/work/
+/project/build/
+.Xil/

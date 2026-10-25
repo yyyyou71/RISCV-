@@ -1,0 +1,2270 @@
+License checkout: fabric_shell from C:\pango\license\pds_1893418FAC4B.lic
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG484
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG484 successfully.
+Executing : add_design -verilog rv32_board_design.v
+Executing : add_design -verilog rv32_board_design.v successfully.
+Executing : add_constraint -fdc board_io_reference.fdc
+Executing : add_constraint -fdc board_io_reference.fdc successfully.
+Executing : add_constraint -fdc timing.fdc
+Executing : add_constraint -fdc timing.fdc successfully.
+
+
+Executing : compile -top_module board_top
+
+
+Process "Compile" started.
+Current time: Fri Oct 23 23:37:25 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+License checkout: fabric_ads from C:\pango\license\pds_1893418FAC4B.lic
+Compiling verification operator library.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+I: Enable Verilog2k features and keywords
+Start rtl-analyze.
+Executing : .rtl_analyze -work work -include_path {C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4} C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v
+I: Verilog-0001: Analyzing file C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 20)] Analyzing module rv32_burst_arbiter (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 74)] Analyzing module rv32_burst_cache_2way (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 281)] Analyzing module rv32_cache_2way (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 437)] Analyzing module rv32_dcache (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 481)] Analyzing module rv32_icache (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 526)] Analyzing module rv32_word_to_burst (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 558)] Analyzing module rv32_alu (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 591)] Analyzing module rv32_core (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1179)] Analyzing module rv32_csr (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1259)] Analyzing module rv32_decode (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1379)] Analyzing module rv32_fetch (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1448)] Analyzing module rv32_fetch_scalar (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1539)] Analyzing module rv32_fetch_dual (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1661)] Analyzing module rv32_muldiv (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1738)] Analyzing module rv32_predictor (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1860)] Analyzing module rv32_regfile (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1896)] Analyzing module rv32_gpio (library work)
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1910)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1911)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1947)] Analyzing module rv32_monitor (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2001)] Analyzing module rv32_soc (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2104)] Analyzing module rv32_soc_fabric (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2220)] Analyzing module rv32_soc_memory (library work)
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2248)] Convert attribute name from syn_romstyle to PAP_RAM_STYLE
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2249)] Convert attribute name from syn_ramstyle to PAP_RAM_STYLE
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2373)] Analyzing module rv32_timer (library work)
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2426)] Analyzing module rv32_uart (library work)
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2449)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2450)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2571)] Analyzing module board_button (library work)
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2577)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2599)] Analyzing module board_reset (library work)
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2605)] Convert attribute name from syn_preserve to PAP_PRESERVE
+I: Verilog-0002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2628)] Analyzing module board_top (library work)
+Parsing done.
+Executing : .rtl_analyze -work work -include_path {C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4} C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v successfully.
+I: Module "board_top" is set as top module.
+Executing : rtl-analyze successfully. Time elapsed: 1.751s wall, 0.016s user + 0.000s system = 0.016s CPU (0.9%)
+
+Start rtl-elaborate.
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2628)] Elaborating module board_top
+I: Module instance {board_top} parameter value:
+    CLOCK_HZ = 32'b00000001011111010111100001000000
+    BAUD = 32'b00000000000000011100001000000000
+    M_ENABLE = 32'b00000000000000000000000000000001
+    BP_ENABLE = 32'b00000000000000000000000000000001
+    BP_INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+    FETCH_DEPTH = 32'b00000000000000000000000000000100
+    FETCH_BYPASS = 32'b00000000000000000000000000000001
+    LOAD_FORWARD = 32'b00000000000000000000000000000001
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+    PAIR_BRANCH = 32'b00000000000000000000000000000001
+    PAIR_MEMORY = 32'b00000000000000000000000000000001
+    PAIR_JALR = 32'b00000000000000000000000000000001
+    FAST_MUL = 32'b00000000000000000000000000000001
+    FAST_STORE = 32'b00000000000000000000000000000001
+    PAIR_MUL = 32'b00000000000000000000000000000001
+    BURST_BACKEND = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    MEM_FIRST_WAIT = 32'b00000000000000000000000000000000
+    MEM_BEAT_GAP = 32'b00000000000000000000000000000000
+    ICACHE_ENABLE = 32'b00000000000000000000000000000001
+    DCACHE_ENABLE = 32'b00000000000000000000000000000001
+    CACHE_SET_BITS = 32'b00000000000000000000000000000101
+    CACHE_LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    RESET_HOLD_CYCLES = 32'b00000000000000111101000010010000
+    BUTTON_DEBOUNCE_CYCLES = 32'b00000000000000111101000010010000
+    ROM_FILE = firmware_rom.hex
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2654)] Elaborating instance u_reset
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2599)] Elaborating module board_reset
+I: Module instance {board_top/u_reset} parameter value:
+    HOLD_CYCLES = 32'b00000000000000111101000010010000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2657)] Elaborating instance u_button
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2571)] Elaborating module board_button
+I: Module instance {board_top/u_button} parameter value:
+    DEBOUNCE_CYCLES = 32'b00000000000000111101000010010000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2661)] Elaborating instance u_soc
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2001)] Elaborating module rv32_soc
+I: Module instance {board_top/u_soc} parameter value:
+    CLOCK_HZ = 32'b00000001011111010111100001000000
+    BAUD = 32'b00000000000000011100001000000000
+    M_ENABLE = 32'b00000000000000000000000000000001
+    BP_ENABLE = 32'b00000000000000000000000000000001
+    BP_INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+    FETCH_DEPTH = 32'b00000000000000000000000000000100
+    FETCH_BYPASS = 32'b00000000000000000000000000000001
+    LOAD_FORWARD = 32'b00000000000000000000000000000001
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+    PAIR_BRANCH = 32'b00000000000000000000000000000001
+    PAIR_MEMORY = 32'b00000000000000000000000000000001
+    PAIR_JALR = 32'b00000000000000000000000000000001
+    FAST_MUL = 32'b00000000000000000000000000000001
+    FAST_STORE = 32'b00000000000000000000000000000001
+    PAIR_MUL = 32'b00000000000000000000000000000001
+    BURST_BACKEND = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    MEM_FIRST_WAIT = 32'b00000000000000000000000000000000
+    MEM_BEAT_GAP = 32'b00000000000000000000000000000000
+    ICACHE_ENABLE = 32'b00000000000000000000000000000001
+    DCACHE_ENABLE = 32'b00000000000000000000000000000001
+    CACHE_SET_BITS = 32'b00000000000000000000000000000101
+    CACHE_LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    RESET_MTVEC = 32'b00000000000000000000000000000000
+    ROM_FILE = firmware_rom.hex
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2061)] Elaborating instance cpu
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 591)] Elaborating module rv32_core
+I: Module instance {board_top/u_soc/cpu} parameter value:
+    RESET_PC = 32'b00000000000000000000000000000000
+    RESET_MTVEC = 32'b00000000000000000000000000000000
+    M_ENABLE = 32'b00000000000000000000000000000001
+    BP_ENABLE = 32'b00000000000000000000000000000001
+    BP_INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+    FETCH_DEPTH = 32'b00000000000000000000000000000100
+    FETCH_BYPASS = 32'b00000000000000000000000000000001
+    LOAD_FORWARD = 32'b00000000000000000000000000000001
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+    PAIR_BRANCH = 32'b00000000000000000000000000000001
+    PAIR_MEMORY = 32'b00000000000000000000000000000001
+    PAIR_JALR = 32'b00000000000000000000000000000001
+    FAST_MUL = 32'b00000000000000000000000000000001
+    FAST_STORE = 32'b00000000000000000000000000000001
+    PAIR_MUL = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 675)] Elaborating instance fetch
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1379)] Elaborating module rv32_fetch
+I: Module instance {board_top/u_soc/cpu/fetch} parameter value:
+    RESET_PC = 32'b00000000000000000000000000000000
+    BP_ENABLE = 32'b00000000000000000000000000000001
+    BP_INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+    DEPTH = 32'b00000000000000000000000000000100
+    BYPASS = 32'b00000000000000000000000000000001
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1415)] Elaborating instance impl
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1539)] Elaborating module rv32_fetch_dual
+I: Module instance {board_top/u_soc/cpu/fetch/expanded.impl} parameter value:
+    RESET_PC = 32'b00000000000000000000000000000000
+    BP_ENABLE = 32'b00000000000000000000000000000001
+    BP_INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+    DEPTH = 32'b00000000000000000000000000000100
+    BYPASS = 32'b00000000000000000000000000000001
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1584)] Elaborating instance predictor
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1738)] Elaborating module rv32_predictor
+I: Module instance {board_top/u_soc/cpu/fetch/expanded.impl/predictor} parameter value:
+    ENABLE = 32'b00000000000000000000000000000001
+    INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1592)] Elaborating instance predictor
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1738)] Elaborating module rv32_predictor
+I: Module instance {board_top/u_soc/cpu/fetch/expanded.impl/query_second.predictor} parameter value:
+    ENABLE = 32'b00000000000000000000000000000001
+    INDEX_BITS = 32'b00000000000000000000000000000101
+    GSHARE_ENABLE = 32'b00000000000000000000000000000000
+    PHT_BITS = 32'b00000000000000000000000000001000
+    RAS_DEPTH = 32'b00000000000000000000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 688)] Elaborating instance decode
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1259)] Elaborating module rv32_decode
+I: Module instance {board_top/u_soc/cpu/decode} parameter value:
+    M_ENABLE = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 696)] Elaborating instance decode_second
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1259)] Elaborating module rv32_decode
+I: Module instance {board_top/u_soc/cpu/decode_second} parameter value:
+    M_ENABLE = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 710)] Elaborating instance regfile
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1860)] Elaborating module rv32_regfile
+I: Module instance {board_top/u_soc/cpu/regfile} parameter value:
+    DUAL_ENABLE = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 776)] Elaborating instance alu_second
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 558)] Elaborating module rv32_alu
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 780)] Elaborating instance alu
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 558)] Elaborating module rv32_alu
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 866)] Elaborating instance csrfile
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1179)] Elaborating module rv32_csr
+I: Module instance {board_top/u_soc/cpu/csrfile} parameter value:
+    RESET_MTVEC = 32'b00000000000000000000000000000000
+    IMPL_ID = 32'b00000000000000110010010111111111
+    M_ENABLE = 32'b00000000000000000000000000000001
+    UARCH_CONFIG = 32'b11110001010101000000000010000110
+    ISSUE_CONFIG = 32'b11010001000000000000000000000011
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 909)] Elaborating instance unit
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1661)] Elaborating module rv32_muldiv
+I: Module instance {board_top/u_soc/cpu/m_extension.unit} parameter value:
+    FAST_MUL = 32'b00000000000000000000000000000001
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2071)] Elaborating instance i_cache
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 481)] Elaborating module rv32_icache
+I: Module instance {board_top/u_soc/i_cache} parameter value:
+    BURST_INTERFACE = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    WIDE_FETCH = 32'b00000000000000000000000000000001
+    ENABLE = 32'b00000000000000000000000000000001
+    SET_BITS = 32'b00000000000000000000000000000101
+    LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    ROM_BYTES = 32'b00000000000000001000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 507)] Elaborating instance cache
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 74)] Elaborating module rv32_burst_cache_2way
+I: Module instance {board_top/u_soc/i_cache/burst.cache} parameter value:
+    ENABLE = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    READ_ONLY = 32'b00000000000000000000000000000001
+    SECOND_READ = 32'b00000000000000000000000000000001
+    FAST_STORE = 32'b00000000000000000000000000000000
+    SET_BITS = 32'b00000000000000000000000000000101
+    LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    ROM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BASE = 32'b00100000000000000000000000000000
+    RAM_BYTES = 32'b00000000000000000000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2077)] Elaborating instance d_cache
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 437)] Elaborating module rv32_dcache
+I: Module instance {board_top/u_soc/d_cache} parameter value:
+    BURST_INTERFACE = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    FAST_STORE = 32'b00000000000000000000000000000001
+    ENABLE = 32'b00000000000000000000000000000001
+    SET_BITS = 32'b00000000000000000000000000000101
+    LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    ROM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BASE = 32'b00100000000000000000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 464)] Elaborating instance cache
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 74)] Elaborating module rv32_burst_cache_2way
+I: Module instance {board_top/u_soc/d_cache/burst.cache} parameter value:
+    ENABLE = 32'b00000000000000000000000000000001
+    BURST_FILL = 32'b00000000000000000000000000000001
+    READ_ONLY = 32'b00000000000000000000000000000000
+    SECOND_READ = 32'b00000000000000000000000000000000
+    FAST_STORE = 32'b00000000000000000000000000000001
+    SET_BITS = 32'b00000000000000000000000000000101
+    LINE_WORD_BITS = 32'b00000000000000000000000000000010
+    ROM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BASE = 32'b00100000000000000000000000000000
+    RAM_BYTES = 32'b00000000000000001000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2083)] Elaborating instance arbiter
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 20)] Elaborating module rv32_burst_arbiter
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2092)] Elaborating instance fabric
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2104)] Elaborating module rv32_soc_fabric
+I: Module instance {board_top/u_soc/fabric} parameter value:
+    BURST_INTERFACE = 32'b00000000000000000000000000000001
+    FIRST_WAIT = 32'b00000000000000000000000000000000
+    BEAT_GAP = 32'b00000000000000000000000000000000
+    MONITOR_ENABLE = 32'b00000000000000000000000000000001
+    CACHE_BYTES = 32'b00000000000000000000010000000000
+    LINE_BYTES = 32'b00000000000000000000000000010000
+    CACHE_SETS = 32'b00000000000000000000000000100000
+    BP_ENTRIES = 32'b00000000000000000000000000100000
+    HW_CONFIG = 32'b00000000000000000000000000111111
+    CLOCK_HZ = 32'b00000001011111010111100001000000
+    BAUD = 32'b00000000000000011100001000000000
+    ROM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BYTES = 32'b00000000000000001000000000000000
+    ROM_FILE = firmware_rom.hex
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2159)] Elaborating instance monitor
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1947)] Elaborating module rv32_monitor
+I: Module instance {board_top/u_soc/fabric/monitor} parameter value:
+    ENABLE = 32'b00000000000000000000000000000001
+    CLOCK_HZ = 32'b00000001011111010111100001000000
+    CACHE_BYTES = 32'b00000000000000000000010000000000
+    LINE_BYTES = 32'b00000000000000000000000000010000
+    SETS = 32'b00000000000000000000000000100000
+    BP_ENTRIES = 32'b00000000000000000000000000100000
+    CONFIG = 32'b00000000000000000000000000111111
+    FIRST_WAIT = 32'b00000000000000000000000000000000
+    BEAT_GAP = 32'b00000000000000000000000000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2181)] Elaborating instance memory
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2220)] Elaborating module rv32_soc_memory
+I: Module instance {board_top/u_soc/fabric/memory} parameter value:
+    BURST_INTERFACE = 32'b00000000000000000000000000000001
+    FIRST_WAIT = 32'b00000000000000000000000000000000
+    BEAT_GAP = 32'b00000000000000000000000000000000
+    ROM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BYTES = 32'b00000000000000001000000000000000
+    RAM_BASE = 32'b00100000000000000000000000000000
+    ROM_FILE = firmware_rom.hex
+I: Found Verilog include file C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/firmware_rom.hex
+I: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2266)] Loading memory data from file C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/firmware_rom.hex
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2250)] Net rom_iq in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2250)] Net rom_dq in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2250)] Net ram_dq in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2251)] Net i_data_valid in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2251)] Net d_rom_q in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2251)] Net d_ram_q in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2252)] Net i_word_valid in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+W: Verilog-2021: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2253)] Net i_word_addr in rv32_soc_memory(original module rv32_soc_memory) does not have a driver, tie it to 0
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2188)] Elaborating instance uart
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2426)] Elaborating module rv32_uart
+I: Module instance {board_top/u_soc/fabric/uart} parameter value:
+    CLOCK_HZ = 32'b00000001011111010111100001000000
+    BAUD = 32'b00000000000000011100001000000000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2192)] Elaborating instance gpio
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1896)] Elaborating module rv32_gpio
+I: Module instance {board_top/u_soc/fabric/gpio} parameter value:
+    WIDTH = 32'b00000000000000000000000000001000
+I: Verilog-0004: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2197)] Elaborating instance timer
+I: Verilog-0003: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2373)] Elaborating module rv32_timer
+Executing : rtl-elaborate successfully. Time elapsed: 0.093s wall, 0.078s user + 0.000s system = 0.078s CPU (83.9%)
+
+Start rtl-prep.
+Executing : rtl-prep successfully. Time elapsed: 0.114s wall, 0.078s user + 0.016s system = 0.094s CPU (82.4%)
+
+Start rtl-infer.
+Start DFF-inference.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[31] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[30] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[29] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[28] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[27] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[26] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[25] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[24] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[23] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[22] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[21] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[20] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[19] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2580)] Removed register node u_button/change_count[18] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[31] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[30] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[29] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[28] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[27] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[26] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[25] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[24] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[23] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[22] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[21] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[20] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[19] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2612)] Removed register node u_reset/release_count[18] that is stuck at constant 0.
+I: Removed inst burst_memory.dr that is redundant to burst_memory.de.
+Executing : DFF-inference successfully.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1011)] Removed register node u_soc/cpu/halted that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2341)] Removed register node u_soc/fabric/memory/burst_memory.de that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][0] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][1] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][2] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][3] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][4] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][5] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][6] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][7] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][8] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][9] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][10] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][11] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][12] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][13] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][14] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][15] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][16] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][17] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][18] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][19] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][20] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][21] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][22] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][23] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][24] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][25] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][26] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][27] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][28] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][29] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][30] that is stuck at constant 0.
+W: Sdm-2000: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1874)] Removed register node u_soc/cpu/regfile/regs[0][31] that is stuck at constant 0.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2332)] Found Ram ram, depth=8192, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2332)] Found Ram ram, depth=8192, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2332)] Found Ram ram, depth=8192, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2332)] Found Ram ram, depth=8192, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 2546)] Found Ram fifo, depth=4, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[0].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[0].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[1].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[1].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[2].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[2].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[3].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[3].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[0].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[0].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[1].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[1].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[2].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[2].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[3].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 179)] Found Ram enabled.second_port.bytes[3].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 201)] Found Ram enabled.tag1, depth=32, width=23.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 201)] Found Ram enabled.tag0, depth=32, width=23.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[0].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[0].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[1].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[1].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[2].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[2].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[3].bank0, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 166)] Found Ram enabled.bytes[3].bank1, depth=128, width=8.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 201)] Found Ram enabled.tag1, depth=32, width=23.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 201)] Found Ram enabled.tag0, depth=32, width=23.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1773)] Found Ram table_enabled.tags, depth=32, width=25.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1773)] Found Ram table_enabled.targets, depth=32, width=30.
+I: Sdm-0001: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32_board_design.v(line number: 1773)] Found Ram table_enabled.direction, depth=32, width=2.
+Executing : rtl-infer successfully. Time elapsed: 9.800s wall, 6.266s user + 3.406s system = 9.672s CPU (98.7%)
+
+Start rtl-control-opt.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+Executing : rtl-control-opt successfully. Time elapsed: 0.124s wall, 0.125s user + 0.000s system = 0.125s CPU (100.5%)
+
+Start rtl-data-opt.
+Executing : rtl-data-opt successfully. Time elapsed: 0.312s wall, 0.297s user + 0.016s system = 0.312s CPU (100.1%)
+
+Start FSM inference.
+I: FSM x_cause_fsm[31:0] inferred.
+FSM x_cause_fsm[31:0] STG:
+Number of reachable states: 5
+Input nets: N3750 N3753 N3756 id_ecall id_fetch_error 
+S0(00000000000000000000000000000000)-->S0(00000000000000000000000000000000): xx10x
+S1(00000000000000000000000000000001)-->S0(00000000000000000000000000000000): xx10x
+S2(00000000000000000000000000000010)-->S0(00000000000000000000000000000000): xx10x
+S3(00000000000000000000000000000011)-->S0(00000000000000000000000000000000): xx10x
+S4(00000000000000000000000000001011)-->S0(00000000000000000000000000000000): xx10x
+S0(00000000000000000000000000000000)-->S1(00000000000000000000000000000001): xxxx1
+S1(00000000000000000000000000000001)-->S1(00000000000000000000000000000001): xxxx1
+S2(00000000000000000000000000000010)-->S1(00000000000000000000000000000001): xxxx1
+S3(00000000000000000000000000000011)-->S1(00000000000000000000000000000001): xxxx1
+S4(00000000000000000000000000001011)-->S1(00000000000000000000000000000001): xxxx1
+S0(00000000000000000000000000000000)-->S2(00000000000000000000000000000010): 1xxxx
+S1(00000000000000000000000000000001)-->S2(00000000000000000000000000000010): 1xxxx
+S2(00000000000000000000000000000010)-->S2(00000000000000000000000000000010): 1xxxx
+S3(00000000000000000000000000000011)-->S2(00000000000000000000000000000010): 1xxxx
+S4(00000000000000000000000000001011)-->S2(00000000000000000000000000000010): 1xxxx
+S0(00000000000000000000000000000000)-->S3(00000000000000000000000000000011): x1xxx
+S1(00000000000000000000000000000001)-->S3(00000000000000000000000000000011): x1xxx
+S2(00000000000000000000000000000010)-->S3(00000000000000000000000000000011): x1xxx
+S3(00000000000000000000000000000011)-->S3(00000000000000000000000000000011): x1xxx
+S4(00000000000000000000000000001011)-->S3(00000000000000000000000000000011): x1xxx
+S0(00000000000000000000000000000000)-->S4(00000000000000000000000000001011): xx11x
+S1(00000000000000000000000000000001)-->S4(00000000000000000000000000001011): xx11x
+S2(00000000000000000000000000000010)-->S4(00000000000000000000000000001011): xx11x
+S3(00000000000000000000000000000011)-->S4(00000000000000000000000000001011): xx11x
+S4(00000000000000000000000000001011)-->S4(00000000000000000000000000001011): xx11x
+
+I: FSM burst_memory.b_state_fsm[1:0] inferred.
+FSM burst_memory.b_state_fsm[1:0] STG:
+Number of reachable states: 2
+Input nets: N222 b_cmd_valid b_rsp_last b_rsp_ready 
+S0(00)-->S1(10): x1xx
+S1(10)-->S0(00): xx11
+S1(10)-->S1(10): xx01
+
+I: FSM rx_state_fsm[2:0] inferred.
+FSM rx_state_fsm[2:0] STG:
+Number of reachable states: 5
+Input nets: N401 N541 rx_sync 
+S0(000)-->S1(001): xx0
+S1(001)-->S2(010): 1x0
+S2(010)-->S3(011): x1x
+S3(011)-->S4(100): 1x0
+S4(100)-->S0(000): xx1
+S1(001)-->S0(000): 1x1
+S3(011)-->S0(000): 1x1
+
+I: FSM state_fsm[2:0] inferred.
+FSM state_fsm[2:0] STG:
+Number of reachable states: 4
+Input nets: N210 N302 N617 req_op[2:1] req_valid rsp_ready 
+S0(000)-->S2(011): xx01x1x
+S0(000)-->S1(010): 0xx0x1x
+S0(000)-->S1(010): xxx011x
+S1(010)-->S3(100): xxxxxxx
+S1(010)-->S3(100): x1xxxxx
+S2(011)-->S3(100): x1xxxxx
+S0(000)-->S3(100): xx11x1x
+S1(010)-->S3(100): xx11x1x
+S0(000)-->S3(100): 1xx001x
+S1(010)-->S3(100): 1xx001x
+S3(100)-->S0(000): xxxxxx1
+
+I: FSM enabled.state_fsm[2:0] inferred.
+FSM enabled.state_fsm[2:0] STG:
+Number of reachable states: 6
+Input nets: N276 N443 N1012 N1021 N1340 cmd_ready s_valid 
+S0(000)-->S1(001): 1xx1xxx
+S0(000)-->S3(011): 0xx1xxx
+S1(001)-->S2(010): xxxxx1x
+S2(010)-->S3(011): xx1x1xx
+S2(010)-->S5(101): xx1x0xx
+S3(011)-->S4(100): xxxxx1x
+S4(100)-->S0(000): x1xxxxx
+S5(101)-->S0(000): xxxxxx1
+S4(100)-->S0(000): x1xxxx1
+S5(101)-->S0(000): x1xxxx1
+
+I: FSM enabled.state_fsm[2:0] inferred.
+FSM enabled.state_fsm[2:0] STG:
+Number of reachable states: 6
+Input nets: N228 N398 N957 N966 N1285 cmd_ready s_valid s_write 
+S0(000)-->S1(001): 1xx1xxxx
+S0(000)-->S3(011): 0xx1x0xx
+S0(000)-->S3(011): 0xx1xx0x
+S0(000)-->S3(011): 0xx1xxx0
+S0(000)-->S4(100): 0xx1x111
+S1(001)-->S2(010): xxxxx1xx
+S2(010)-->S3(011): xx1x1xxx
+S2(010)-->S5(101): xx1x0xxx
+S3(011)-->S4(100): xxxxx1xx
+S4(100)-->S0(000): x1xxxxxx
+S5(101)-->S0(000): xxxxxx1x
+S4(100)-->S0(000): x1xxxx1x
+S5(101)-->S0(000): x1xxxx1x
+
+Executing : FSM inference successfully. Time elapsed: 0.118s wall, 0.109s user + 0.016s system = 0.125s CPU (105.9%)
+
+Start sdm2adm.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+I: Constant propagation done on N1364_1 (bmsWIDEMUX).
+I: Constant propagation done on N281[0] (bmsWIDEMUX).
+I: Constant propagation done on N281[1] (bmsWIDEMUX).
+I: Constant propagation done on N281[2] (bmsWIDEMUX).
+I: Constant propagation done on N281[3] (bmsWIDEMUX).
+I: Constant propagation done on N281[4] (bmsWIDEMUX).
+I: Constant propagation done on N281[5] (bmsWIDEMUX).
+I: Constant propagation done on N281[6] (bmsWIDEMUX).
+I: Constant propagation done on N281[7] (bmsWIDEMUX).
+I: Constant propagation done on N281[8] (bmsWIDEMUX).
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+W: Loop was found during constant probe.
+Executing : sdm2adm successfully. Time elapsed: 0.430s wall, 0.391s user + 0.031s system = 0.422s CPU (98.1%)
+
+Saving design to DB.
+Action compile: Real time elapsed is 0h:0m:17s
+Action compile: CPU time elapsed is 0h:0m:9s
+Action compile: Process CPU time elapsed is 0h:0m:9s
+Current time: Fri Oct 23 23:37:41 2026
+Action compile: Peak memory pool usage is 241 MB
+Action from compile to compile: Total Real Time elapsed is 0h:0m:17s
+Action from compile to compile: Total CPU time elapsed is 0h:0m:9s
+Action from compile to compile: Total Process CPU Time elapsed is 0h:0m:9s
+Process "Compile" done.
+Executing : compile -top_module board_top successfully.
+
+
+Executing : synthesize -ads -frequency 25
+
+
+Process "Synthesize" started.
+Current time: Fri Oct 23 23:37:41 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+License checkout: fabric_ads from C:\pango\license\pds_1893418FAC4B.lic
+Compiling verification operator library.
+Compiling common defs.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+Reading design from compile DB
+Reading design from compile DB successfully.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 148538
+
+Constraint check start.
+Compiling prim grid devices.
+Building architecture model.
+Loading device packaging model.
+Building architecture floorplan logic view.
+Executing : get_ports sys_clk
+Executing : get_ports sys_clk successfully.
+Executing : create_clock -name sys_clk -period 40.000 -waveform {0.000 20.000} [get_ports sys_clk]
+Executing : create_clock -name sys_clk -period 40.000 -waveform {0.000 20.000} [get_ports sys_clk] successfully.
+Executing : get_clocks sys_clk
+Executing : get_clocks sys_clk successfully.
+Executing : set_clock_uncertainty 0.200 [get_clocks sys_clk]
+Executing : set_clock_uncertainty 0.200 [get_clocks sys_clk] successfully.
+Executing : get_ports {key0_n key1_n uart_rx}
+Executing : get_ports {key0_n key1_n uart_rx} successfully.
+Executing : set_false_path -from [get_ports {key0_n key1_n uart_rx}]
+Executing : set_false_path -from [get_ports {key0_n key1_n uart_rx}] successfully.
+Executing : get_ports {led0 led1 uart_tx}
+Executing : get_ports {led0 led1 uart_tx} successfully.
+Executing : set_false_path -to [get_ports {led0 led1 uart_tx}]
+Executing : set_false_path -to [get_ports {led0 led1 uart_tx}] successfully.
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/board_io_reference.fdc(line number: 7)] | Port key0_n has been placed at location M15, whose type is share pin.
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/board_io_reference.fdc(line number: 11)] | Port key1_n has been placed at location M16, whose type is share pin.
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/board_io_reference.fdc(line number: 27)] | Port uart_tx has been placed at location AB21, whose type is share pin.
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/board_io_reference.fdc(line number: 33)] | Port uart_rx has been placed at location AB22, whose type is share pin.
+Constraint check end.
+
+Start pre-mapping.
+I: Constant propagation done on u_soc/cpu/N370 (bmsWIDEINV).
+I: Constant propagation done on u_soc/cpu/N373 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N625 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N731 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N741 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N1208 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N2478 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N2479 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N2490 (bmsREDAND).
+I: Constant propagation done on u_soc/cpu/N2605 (bmsREDAND).
+I: Removed bmsDECODER inst ND2_0 that is redundant to ND1_0
+I: Encoding type of FSM 'x_cause_fsm[31:0]' is: onehot.
+I: Encoding table of FSM 'x_cause_fsm[31:0]':
+I: from  u_soc/cpu/x_cause[31] u_soc/cpu/x_cause[30] u_soc/cpu/x_cause[29] u_soc/cpu/x_cause[28] u_soc/cpu/x_cause[27] u_soc/cpu/x_cause[26] u_soc/cpu/x_cause[25] u_soc/cpu/x_cause[24] u_soc/cpu/x_cause[23] u_soc/cpu/x_cause[22] u_soc/cpu/x_cause[21] u_soc/cpu/x_cause[20] u_soc/cpu/x_cause[19] u_soc/cpu/x_cause[18] u_soc/cpu/x_cause[17] u_soc/cpu/x_cause[16] u_soc/cpu/x_cause[15] u_soc/cpu/x_cause[14] u_soc/cpu/x_cause[13] u_soc/cpu/x_cause[12] u_soc/cpu/x_cause[11] u_soc/cpu/x_cause[10] u_soc/cpu/x_cause[9] u_soc/cpu/x_cause[8] u_soc/cpu/x_cause[7] u_soc/cpu/x_cause[6] u_soc/cpu/x_cause[5] u_soc/cpu/x_cause[4] u_soc/cpu/x_cause[3] u_soc/cpu/x_cause[2] u_soc/cpu/x_cause[1] u_soc/cpu/x_cause[0]
+I: to  u_soc/cpu/x_cause_reg[4] u_soc/cpu/x_cause_reg[3] u_soc/cpu/x_cause_reg[2] u_soc/cpu/x_cause_reg[1] u_soc/cpu/x_cause_reg[0]
+I: 00000000000000000000000000000000 => 00001
+I: 00000000000000000000000000000001 => 00010
+I: 00000000000000000000000000000010 => 00100
+I: 00000000000000000000000000000011 => 01000
+I: 00000000000000000000000000001011 => 10000
+I: Encoding type of FSM 'state_fsm[2:0]' is: onehot.
+I: Encoding table of FSM 'state_fsm[2:0]':
+I: from  u_soc/cpu/m_extension.unit/state[2] u_soc/cpu/m_extension.unit/state[1] u_soc/cpu/m_extension.unit/state[0]
+I: to  u_soc/cpu/m_extension.unit/state_reg[3] u_soc/cpu/m_extension.unit/state_reg[2] u_soc/cpu/m_extension.unit/state_reg[1] u_soc/cpu/m_extension.unit/state_reg[0]
+I: 000 => 0001
+I: 010 => 0010
+I: 011 => 0100
+I: 100 => 1000
+I: Encoding type of FSM 'enabled.state_fsm[2:0]' is: onehot.
+I: Encoding table of FSM 'enabled.state_fsm[2:0]':
+I: from  u_soc/d_cache/burst.cache/enabled.state[2] u_soc/d_cache/burst.cache/enabled.state[1] u_soc/d_cache/burst.cache/enabled.state[0]
+I: to  u_soc/d_cache/burst.cache/enabled.state_reg[5] u_soc/d_cache/burst.cache/enabled.state_reg[4] u_soc/d_cache/burst.cache/enabled.state_reg[3] u_soc/d_cache/burst.cache/enabled.state_reg[2] u_soc/d_cache/burst.cache/enabled.state_reg[1] u_soc/d_cache/burst.cache/enabled.state_reg[0]
+I: 000 => 000001
+I: 001 => 000010
+I: 010 => 000100
+I: 011 => 001000
+I: 100 => 010000
+I: 101 => 100000
+I: Encoding type of FSM 'rx_state_fsm[2:0]' is: onehot.
+I: Encoding table of FSM 'rx_state_fsm[2:0]':
+I: from  u_soc/fabric/uart/rx_state[2] u_soc/fabric/uart/rx_state[1] u_soc/fabric/uart/rx_state[0]
+I: to  u_soc/fabric/uart/rx_state_reg[4] u_soc/fabric/uart/rx_state_reg[3] u_soc/fabric/uart/rx_state_reg[2] u_soc/fabric/uart/rx_state_reg[1] u_soc/fabric/uart/rx_state_reg[0]
+I: 000 => 00001
+I: 001 => 00010
+I: 010 => 00100
+I: 011 => 01000
+I: 100 => 10000
+I: Encoding type of FSM 'burst_memory.b_state_fsm[1:0]' is: onehot.
+I: Encoding table of FSM 'burst_memory.b_state_fsm[1:0]':
+I: from  u_soc/fabric/memory/burst_memory.b_state[1] u_soc/fabric/memory/burst_memory.b_state[0]
+I: to  u_soc/fabric/memory/burst_memory.b_state_reg[1] u_soc/fabric/memory/burst_memory.b_state_reg[0]
+I: 00 => 01
+I: 10 => 10
+I: Encoding type of FSM 'enabled.state_fsm[2:0]' is: onehot.
+I: Encoding table of FSM 'enabled.state_fsm[2:0]':
+I: from  u_soc/i_cache/burst.cache/enabled.state[2] u_soc/i_cache/burst.cache/enabled.state[1] u_soc/i_cache/burst.cache/enabled.state[0]
+I: to  u_soc/i_cache/burst.cache/enabled.state_reg[5] u_soc/i_cache/burst.cache/enabled.state_reg[4] u_soc/i_cache/burst.cache/enabled.state_reg[3] u_soc/i_cache/burst.cache/enabled.state_reg[2] u_soc/i_cache/burst.cache/enabled.state_reg[1] u_soc/i_cache/burst.cache/enabled.state_reg[0]
+I: 000 => 000001
+I: 001 => 000010
+I: 010 => 000100
+I: 011 => 001000
+I: 100 => 010000
+I: 101 => 100000
+W: Public-4008: Instance 'burst_memory.delay_count[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Removed bmsWIDEDFFRSE inst m2_cause[31:0] at 0 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst m_cause[31:0] at 4 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst w2_cause[31:0] at 3 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst w_cause[31:0] at 4 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst trap_cause[31:0] at 4 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst count_inhibit[31:0] at 1 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst mepc[31:0] at 0 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst mtvec[31:0] at 1 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst enabled.saved_base[31:0] at 0 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst tx_frame[9:0] at 9 that is stuck at constant 1.
+W: Removed bmsWIDEDFFRSE inst enabled.saved_base[31:0] at 0 that is stuck at constant 0.
+Executing : pre-mapping successfully. Time elapsed: 0.978s wall, 1.141s user + 0.484s system = 1.625s CPU (166.2%)
+
+Start mod-gen.
+W: Public-4008: Instance 'x2_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'x_prediction_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'm2_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'm_prediction_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'w2_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'w_prediction_index[7:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w_wdata[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w_wmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/data_wait_cycles[63:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/fetch_wait_cycles[63:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/load_stall_cycles[63:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/m2_rmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/m_rmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/redirect_count[63:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w2_addr[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w2_rdata[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w2_rmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w2_wdata[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w2_wmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w_rdata[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'cpu/w_rmask[3:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'd_cache/burst.cache/enabled.bp[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'd_cache/burst.cache/enabled.fe[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'd_cache/burst.cache/enabled.fw[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'i_cache/burst.cache/enabled.bp[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'i_cache/burst.cache/enabled.fe[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'i_cache/burst.cache/enabled.fw[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'i_cache/burst.cache/enabled.wh[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'i_cache/burst.cache/enabled.wm[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/trap_cause[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/trap_pc[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/trap_tval[31:0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 0 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 1 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 2 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 3 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 4 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 5 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 6 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 7 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 8 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 9 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 10 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 11 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 12 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 13 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 14 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 15 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 16 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 17 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 18 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 19 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 20 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 21 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 22 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 23 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 24 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 25 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 26 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 27 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 28 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 29 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 30 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wdata[31:0] at 31 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_write that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wstrb[3:0] at 0 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wstrb[3:0] at 1 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wstrb[3:0] at 2 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/i_cache/burst.cache/enabled.saved_wstrb[3:0] at 3 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 2 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 3 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 4 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 5 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 6 that is stuck at constant 0.
+W: Removed bmsWIDEDFFRSE inst u_soc/fabric/memory/burst_memory.length[7:0] at 7 that is stuck at constant 0.
+I: Removed bmsADD inst u_soc/cpu/fetch/expanded.impl/predictor/N65 that is redundant to u_soc/cpu/fetch/expanded.impl/N1
+I: Removed bmsLT inst u_soc/fabric/N7 that is redundant to u_soc/N1
+I: Removed bmsLT inst u_soc/fabric/N13 that is redundant to u_soc/N6
+I: Removed bmsDECODER inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/ND1 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/ND1
+I: Removed bmsREDAND inst u_soc/fabric/uart/N344 that is redundant to u_soc/fabric/timer/N94
+I: Removed bmsREDAND inst u_soc/fabric/timer/N94 that is redundant to u_soc/fabric/gpio/N78
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N219 that is redundant to u_soc/fabric/gpio/N78
+I: Removed bmsREDAND inst u_soc/fabric/uart/N361 that is redundant to u_soc/fabric/timer/N96
+I: Removed bmsREDAND inst u_soc/fabric/timer/N96 that is redundant to u_soc/fabric/gpio/N80
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N221 that is redundant to u_soc/fabric/gpio/N80
+I: Removed bmsREDAND inst u_soc/fabric/timer/N98 that is redundant to u_soc/fabric/gpio/N82
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N223 that is redundant to u_soc/fabric/gpio/N82
+I: Removed bmsREDAND inst u_soc/fabric/uart/N360 that is redundant to u_soc/fabric/timer/N95
+I: Removed bmsREDAND inst u_soc/fabric/timer/N95 that is redundant to u_soc/fabric/gpio/N79
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N220 that is redundant to u_soc/fabric/gpio/N79
+I: Removed bmsREDAND inst u_soc/fabric/timer/N97 that is redundant to u_soc/fabric/gpio/N81
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N222 that is redundant to u_soc/fabric/gpio/N81
+I: Removed bmsWIDEDFFRSE inst u_soc/monitor_write that is redundant to u_soc/fabric/saved_write
+I: Removed bmsREDAND inst u_soc/fabric/uart/N343 that is redundant to u_soc/fabric/timer/N93
+I: Removed bmsREDAND inst u_soc/fabric/timer/N93 that is redundant to u_soc/fabric/gpio/N77
+I: Removed bmsREDAND inst u_soc/fabric/monitor/N218 that is redundant to u_soc/fabric/gpio/N77
+W: Public-4008: Instance 'u_soc/i_cache/burst.cache/enabled.saved_hit' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+I: Removed bmsREDAND inst u_soc/fabric/N179 that is redundant to u_soc/fabric/N159
+I: Removed bmsREDAND inst u_soc/fabric/N180 that is redundant to u_soc/fabric/N160
+I: Removed bmsREDAND inst u_soc/fabric/N178 that is redundant to u_soc/fabric/N158
+I: Removed inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.valid[31:0] which is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.valid[31:0] (type bmsWIDEDFFRSE)
+I: Removed bmsPMUX inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/N43_1 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/N43_1
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_1_1_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_1_1_1_1_1_1_1_1_1_1_1_0
+I: Removed GTP_RAM32X2SP inst u_soc/cpu/fetch/expanded.impl/query_second.predictor/table_enabled.tags_a_0 that is redundant to u_soc/cpu/fetch/expanded.impl/predictor/table_enabled.tags_a_0
+Executing : mod-gen successfully. Time elapsed: 4.756s wall, 4.969s user + 0.938s system = 5.906s CPU (124.2%)
+
+Start logic-optimization.
+I: Removed bmsWIDEMUX inst u_soc/cpu/fetch/expanded.impl/N163_2 that is redundant to u_soc/cpu/fetch/expanded.impl/N123_2
+I: Removed bmsWIDEMUX inst u_soc/cpu/N3123_2 that is redundant to u_soc/cpu/N960
+Executing : logic-optimization successfully. Time elapsed: 17.758s wall, 16.125s user + 1.281s system = 17.406s CPU (98.0%)
+
+Start tech-mapping phase 1.
+W: Public-4008: Instance 'u_soc/i_cache/burst.cache/enabled.saved_base[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/i_cache/burst.cache/enabled.saved_base[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/i_cache/burst.cache/enabled.saved_base[2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/i_cache/burst.cache/enabled.saved_base[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[11]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[12]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[13]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[14]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[15]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[16]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[17]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[18]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[19]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[20]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[21]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[22]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[23]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[24]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[25]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[26]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[27]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[28]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[29]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[30]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m2_cause[31]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[11]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[12]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[13]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[14]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[15]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[16]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[17]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[18]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[19]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[20]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[21]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[22]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[23]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[24]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[25]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[26]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[27]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[28]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[29]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[30]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_cause[31]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_pc[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_pc[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[11]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[12]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[13]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[14]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[15]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[16]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[17]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[18]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[19]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[20]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[21]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[22]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[23]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[24]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[25]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[26]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[27]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[28]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[29]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[30]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w2_cause[31]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[11]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[12]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[13]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[14]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[15]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[16]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[17]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[18]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[19]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[20]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[21]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[22]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[23]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[24]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[25]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[26]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[27]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[28]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[29]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[30]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_cause[31]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_pc[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/w_pc[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/x_cause_reg[2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[11]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[12]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[13]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[14]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[15]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[16]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[17]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[18]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[19]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[20]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[21]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[22]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[23]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[24]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[25]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[26]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[27]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[28]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[29]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[30]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/count_inhibit[31]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/mepc[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/mepc[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/csrfile/mtvec[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[0][10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[1][10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[2][10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][8]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/fetch/expanded.impl/items[3][10]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[41]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[42]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[43]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[44]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[45]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[46]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[47]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[48]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[49]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[50]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[51]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[52]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[53]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[54]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[55]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[56]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[57]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[58]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[59]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[60]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[61]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[62]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/cpu/m_extension.unit/product[63]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/d_cache/burst.cache/enabled.saved_base[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/d_cache/burst.cache/enabled.saved_base[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/d_cache/burst.cache/enabled.saved_base[2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/d_cache/burst.cache/enabled.saved_base[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/uart/tx_frame[0]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/uart/tx_frame[9]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[1]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[2]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[3]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[4]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[5]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[6]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+W: Public-4008: Instance 'u_soc/fabric/memory/burst_memory.length[7]' of 'bmsWIDEDFFRSE' unit is dangling and will be cleaned.
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_word[0] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[2]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_word[1] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[3]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[4] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[4]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_set[0] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[4]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[5] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[5]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_set[1] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[5]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[6] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[6]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_set[2] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[6]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[7] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[7]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_set[3] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[7]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[8] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[8]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_set[4] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[8]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[9] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[9]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[0] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[9]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_word[0] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[2]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_word[1] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[3]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[4] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[4]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_set[0] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[4]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[5] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[5]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_set[1] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[5]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[6] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[6]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_set[2] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[6]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[7] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[7]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_set[3] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[7]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[8] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[8]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_set[4] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[8]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[9] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[9]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[0] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[9]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_store that is redundant to u_soc/cpu/m2_cause[1]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rd[0] that is redundant to u_soc/cpu/x2_insn[7]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rd[1] that is redundant to u_soc/cpu/x2_insn[8]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rd[2] that is redundant to u_soc/cpu/x2_insn[9]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rd[3] that is redundant to u_soc/cpu/x2_insn[10]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rd[4] that is redundant to u_soc/cpu/x2_insn[11]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs1[0] that is redundant to u_soc/cpu/x_insn[15]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs1[1] that is redundant to u_soc/cpu/x_insn[16]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs1[2] that is redundant to u_soc/cpu/x_insn[17]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs1[3] that is redundant to u_soc/cpu/x_insn[18]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs1[4] that is redundant to u_soc/cpu/x_insn[19]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs2[0] that is redundant to u_soc/cpu/x_insn[20]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs2[1] that is redundant to u_soc/cpu/x_insn[21]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs2[2] that is redundant to u_soc/cpu/x_insn[22]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs2[3] that is redundant to u_soc/cpu/x_insn[23]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rs2[4] that is redundant to u_soc/cpu/x_insn[24]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_insn[12] that is redundant to u_soc/cpu/m2_f3[0]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_insn[13] that is redundant to u_soc/cpu/m2_f3[1]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_insn[14] that is redundant to u_soc/cpu/m2_f3[2]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs1[0] that is redundant to u_soc/cpu/x2_insn[15]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs1[1] that is redundant to u_soc/cpu/x2_insn[16]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs1[2] that is redundant to u_soc/cpu/x2_insn[17]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs1[3] that is redundant to u_soc/cpu/x2_insn[18]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs1[4] that is redundant to u_soc/cpu/x2_insn[19]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs2[0] that is redundant to u_soc/cpu/x2_insn[20]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs2[1] that is redundant to u_soc/cpu/x2_insn[21]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs2[2] that is redundant to u_soc/cpu/x2_insn[22]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs2[3] that is redundant to u_soc/cpu/x2_insn[23]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x2_rs2[4] that is redundant to u_soc/cpu/x2_insn[24]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[10] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[10]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[1] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[10]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[11] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[11]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[2] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[11]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[12] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[12]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[3] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[12]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[13] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[13]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[4] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[13]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[14] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[14]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[5] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[14]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[15] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[15]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[6] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[15]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[16] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[16]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[7] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[16]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[17] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[17]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[8] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[17]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[18] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[18]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[9] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[18]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[19] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[19]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[10] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[19]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[20] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[20]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[11] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[20]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[21] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[21]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[12] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[21]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[22] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[22]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[13] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[22]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[23] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[23]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[14] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[23]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[24] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[24]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[15] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[24]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[25] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[25]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[16] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[25]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[26] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[26]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[17] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[26]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[27] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[27]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[18] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[27]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[28] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[28]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[19] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[28]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[29] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[29]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[20] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[29]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[30] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[30]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[21] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[30]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_base[31] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[31]
+I: Removed GTP_DFF_RE inst u_soc/i_cache/burst.cache/enabled.saved_tag[22] that is redundant to u_soc/i_cache/burst.cache/enabled.saved_addr[31]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[10] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[10]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[1] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[10]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[11] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[11]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[2] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[11]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[12] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[12]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[3] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[12]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[13] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[13]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[4] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[13]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[14] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[14]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[5] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[14]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[15] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[15]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[6] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[15]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[16] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[16]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[7] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[16]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[17] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[17]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[8] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[17]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[18] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[18]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[9] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[18]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[19] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[19]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[10] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[19]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[20] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[20]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[11] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[20]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[21] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[21]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[12] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[21]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[22] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[22]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[13] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[22]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[23] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[23]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[14] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[23]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[24] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[24]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[15] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[24]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[25] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[25]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[16] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[25]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[26] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[26]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[17] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[26]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[27] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[27]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[18] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[27]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[28] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[28]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[19] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[28]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[29] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[29]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[20] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[29]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[30] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[30]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[21] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[30]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_base[31] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[31]
+I: Removed GTP_DFF_RE inst u_soc/d_cache/burst.cache/enabled.saved_tag[22] that is redundant to u_soc/d_cache/burst.cache/enabled.saved_addr[31]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_insn[12] that is redundant to u_soc/cpu/x_f3[0]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_insn[13] that is redundant to u_soc/cpu/x_f3[1]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_insn[14] that is redundant to u_soc/cpu/x_f3[2]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rd[0] that is redundant to u_soc/cpu/x_insn[7]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rd[1] that is redundant to u_soc/cpu/x_insn[8]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rd[2] that is redundant to u_soc/cpu/x_insn[9]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rd[3] that is redundant to u_soc/cpu/x_insn[10]
+I: Removed GTP_DFF_RE inst u_soc/cpu/x_rd[4] that is redundant to u_soc/cpu/x_insn[11]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_insn[12] that is redundant to u_soc/cpu/m_f3[0]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_insn[13] that is redundant to u_soc/cpu/m_f3[1]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_insn[14] that is redundant to u_soc/cpu/m_f3[2]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_rd[0] that is redundant to u_soc/cpu/m_insn[7]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_rd[1] that is redundant to u_soc/cpu/m_insn[8]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_rd[2] that is redundant to u_soc/cpu/m_insn[9]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_rd[3] that is redundant to u_soc/cpu/m2_insn[10]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_rd[4] that is redundant to u_soc/cpu/m2_insn[11]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_rd[0] that is redundant to u_soc/cpu/m2_insn[7]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_rd[1] that is redundant to u_soc/cpu/m2_insn[8]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m2_rd[2] that is redundant to u_soc/cpu/m2_insn[9]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_rd[3] that is redundant to u_soc/cpu/m_insn[10]
+I: Removed GTP_DFF_RE inst u_soc/cpu/m_rd[4] that is redundant to u_soc/cpu/m_insn[11]
+I: Removed GTP_DFF_RE inst u_soc/cpu/w2_rd[3] that is redundant to u_soc/cpu/w2_insn[10]
+I: Removed GTP_DFF_RE inst u_soc/cpu/w2_rd[4] that is redundant to u_soc/cpu/w2_insn[11]
+I: Removed GTP_DFF_RE inst u_soc/cpu/w2_rd[0] that is redundant to u_soc/cpu/w2_insn[7]
+I: Removed GTP_DFF_RE inst u_soc/cpu/w2_rd[1] that is redundant to u_soc/cpu/w2_insn[8]
+I: Removed GTP_DFF_RE inst u_soc/cpu/w2_rd[2] that is redundant to u_soc/cpu/w2_insn[9]
+Executing : tech-mapping phase 1 successfully. Time elapsed: 1.456s wall, 1.281s user + 0.016s system = 1.297s CPU (89.1%)
+
+Start tech-mapping phase 2.
+Executing : tech-mapping phase 2 successfully. Time elapsed: 9.477s wall, 9.594s user + 0.734s system = 10.328s CPU (109.0%)
+
+Start tech-optimization.
+Executing : tech-optimization successfully. Time elapsed: 2.503s wall, 2.859s user + 0.469s system = 3.328s CPU (133.0%)
+
+Start phys-optimization.
+Executing : phys-optimization successfully. Time elapsed: 0.000s wall, 0.000s user + 0.000s system = 0.000s CPU (n/a%)
+
+Start restore-hierarchy.
+Executing : restore-hierarchy successfully. Time elapsed: 1.311s wall, 1.297s user + 0.000s system = 1.297s CPU (98.9%)
+
+W: syn_maxfan of lutcarry N202.eq_15 is more than 10000 on net _N43568, but wasn't replicated.
+W: syn_maxfan of lutcarry N202.eq_15 is more than 10000 on net _N43568, but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_29 is more than 10000 on net second_pc[31], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_28 is more than 10000 on net second_pc[30], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_27 is more than 10000 on net second_pc[29], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_26 is more than 10000 on net second_pc[28], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_25 is more than 10000 on net second_pc[27], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_24 is more than 10000 on net second_pc[26], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_23 is more than 10000 on net second_pc[25], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_22 is more than 10000 on net second_pc[24], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_21 is more than 10000 on net second_pc[23], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_20 is more than 10000 on net second_pc[22], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_19 is more than 10000 on net second_pc[21], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_18 is more than 10000 on net second_pc[20], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_17 is more than 10000 on net second_pc[19], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_16 is more than 10000 on net second_pc[18], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_15 is more than 10000 on net second_pc[17], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_14 is more than 10000 on net second_pc[16], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_13 is more than 10000 on net second_pc[15], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_12 is more than 10000 on net second_pc[14], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_11 is more than 10000 on net second_pc[13], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_10 is more than 10000 on net second_pc[12], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_9 is more than 10000 on net second_pc[11], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_8 is more than 10000 on net second_pc[10], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_7 is more than 10000 on net second_pc[9], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_6 is more than 10000 on net second_pc[8], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_5 is more than 10000 on net second_pc[7], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_4 is more than 10000 on net second_pc[6], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_3 is more than 10000 on net second_pc[5], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_2 is more than 10000 on net second_pc[4], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_1 is more than 10000 on net second_pc[3], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_29 is more than 10000 on net second_pc[31], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_28 is more than 10000 on net second_pc[30], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_27 is more than 10000 on net second_pc[29], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_26 is more than 10000 on net second_pc[28], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_25 is more than 10000 on net second_pc[27], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_24 is more than 10000 on net second_pc[26], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_23 is more than 10000 on net second_pc[25], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_22 is more than 10000 on net second_pc[24], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_21 is more than 10000 on net second_pc[23], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_20 is more than 10000 on net second_pc[22], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_19 is more than 10000 on net second_pc[21], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_18 is more than 10000 on net second_pc[20], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_17 is more than 10000 on net second_pc[19], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_16 is more than 10000 on net second_pc[18], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_15 is more than 10000 on net second_pc[17], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_14 is more than 10000 on net second_pc[16], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_13 is more than 10000 on net second_pc[15], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_12 is more than 10000 on net second_pc[14], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_11 is more than 10000 on net second_pc[13], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_10 is more than 10000 on net second_pc[12], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_9 is more than 10000 on net second_pc[11], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_8 is more than 10000 on net second_pc[10], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_7 is more than 10000 on net second_pc[9], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_6 is more than 10000 on net second_pc[8], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_5 is more than 10000 on net second_pc[7], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_4 is more than 10000 on net second_pc[6], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_3 is more than 10000 on net second_pc[5], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_2 is more than 10000 on net second_pc[4], but wasn't replicated.
+W: syn_maxfan of lutcarry N1_1_1 is more than 10000 on net second_pc[3], but wasn't replicated.
+
+Cell Usage:
+GTP_APM_E2                    4 uses
+GTP_DFF                      10 uses
+GTP_DFF_C                     2 uses
+GTP_DFF_R                    56 uses
+GTP_DFF_RE                 4823 uses
+GTP_DFF_S                     6 uses
+GTP_DFF_SE                   94 uses
+GTP_DRM36K_E1                16 uses
+GTP_GRS                       1 use
+GTP_INV                       1 use
+GTP_LUT1                     10 uses
+GTP_LUT2                     26 uses
+GTP_LUT3                     62 uses
+GTP_LUT4                    382 uses
+GTP_LUT5                   1738 uses
+GTP_LUT6                   3333 uses
+GTP_LUT6CARRY              1776 uses
+GTP_LUT6D                  1471 uses
+GTP_MUX2LUT7                668 uses
+GTP_MUX2LUT8                262 uses
+GTP_RAM32X1DP                 6 uses
+GTP_RAM32X1SP                 1 use
+GTP_RAM32X2DP               104 uses
+GTP_RAM32X2SP                14 uses
+GTP_RAM64X1DP               384 uses
+
+I/O ports: 7
+GTP_INBUF                   4 uses
+GTP_OUTBUF                  3 uses
+
+Mapping Summary:
+Total LUTs: 9307 of 66600 (13.97%)
+	LUTs as dram: 509 of 19900 (2.56%)
+	LUTs as logic: 8798
+Total Registers: 4991 of 133200 (3.75%)
+Total Latches: 0
+
+DRM36K/FIFO:
+Total DRM = 16.0 of 155 (10.32%)
+
+APMs:
+Total APMs = 4.00 of 240 (1.67%)
+
+Total I/O ports = 7 of 285 (2.46%)
+
+
+Overview of Control Sets:
+
+Number of unique control sets : 126
+
+Histogram:
+**************************************************************
+  Fanout      | Count    | Sync Set/Reset    Async Set/Reset
+--------------------------------------------------------------
+  [0, 2)      | 1        | 1                 0
+  [2, 4)      | 15       | 14                1
+  [4, 6)      | 5        | 5                 0
+  [6, 8)      | 2        | 2                 0
+  [8, 10)     | 5        | 5                 0
+  [10, 12)    | 1        | 1                 0
+  [12, 14)    | 0        | 0                 0
+  [14, 16)    | 0        | 0                 0
+  [16, Inf)   | 97       | 97                0
+--------------------------------------------------------------
+  The maximum fanout: 461
+==============================================================
+
+Flip-Flop Distribution:
+************************************************************************
+  Clock Enable    Sync Set/Reset    Async Set/Reset    Total Registers
+------------------------------------------------------------------------
+  NO              NO                NO                 10
+  NO              NO                YES                2
+  NO              YES               NO                 62
+  YES             NO                NO                 0
+  YES             NO                YES                0
+  YES             YES               NO                 4917
+========================================================================
+
+Latch Distribution:
+************************************************
+  Gate Enable    Preset/Clear    Total Latches
+************************************************
+  NO             NO              0
+  NO             YES             0
+  YES            NO              0
+  YES            YES             0
+************************************************
+
+Design 'board_top' has been successfully synthesized to architecture-specific objects.
+Saving design to DB.
+Saving design to board_top_syn.vm
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'led0' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led1' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'key0_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'key1_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+Action synthesize: Real time elapsed is 0h:0m:53s
+Action synthesize: CPU time elapsed is 0h:0m:47s
+Action synthesize: Process CPU time elapsed is 0h:0m:49s
+Current time: Fri Oct 23 23:38:34 2026
+Action synthesize: Peak memory pool usage is 721 MB
+Action from compile to synthesize: Total Real Time elapsed is 0h:1m:10s
+Action from compile to synthesize: Total CPU time elapsed is 0h:0m:56s
+Action from compile to synthesize: Total Process CPU Time elapsed is 0h:0m:58s
+Process "Synthesize" done.
+Executing : synthesize -ads -frequency 25 successfully.
+
+
+Executing : dev_map
+
+
+Process "Device Map" started.
+Current time: Fri Oct 23 23:38:35 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Loading technology operator library.
+Compiling technology operator library.
+Compiling technology operator (valence) library.
+Compiling operator packing rules.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Compiling tech operator impls.
+Building architecture model.
+Loading device packaging model.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 148538
+
+Flattening design 'board_top'
+Device mapping started.
+Optimizing circuit logic.
+Checking design netlist.
+Processing tech operator.
+I: The instance clkbufg_0(GTP_CLKBUFG) has been inserted on the net nt_sys_clk in design, driver pin O(instance sys_clk_ibuf) -> load pin CLK(instance u_button/change_count[0]).
+Converting tech operator to gate operator.
+Processing gate operator.
+I: Infer CARRY group, base inst: u_button/N10_1_1/gateop, insts:17.
+I: Infer CARRY group, base inst: u_reset/N11_1_1/gateop, insts:17.
+I: Infer CARRY group, base inst: u_soc/N18_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/N25_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/N36_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/N38_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/cpu/N199_1_0/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/cpu/N200.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N202.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N218_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/N221_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/N229.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N234.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N239.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N257_1_1/gateop, insts:29.
+I: Infer CARRY group, base inst: u_soc/cpu/N259.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N589_1_1/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/cpu/N887.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N892.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N897.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N913_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/N916_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/N959_1_1/gateop, insts:29.
+I: Infer CARRY group, base inst: u_soc/cpu/N961.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/N1164_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/cpu/N1167_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/cpu/N1171_1_1/gateop, insts:63.
+I: Infer CARRY group, base inst: u_soc/cpu/N1177_1/gateop, insts:64.
+I: Infer CARRY group, base inst: u_soc/cpu/N1237_1_0/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/N1_1_1/gateop, insts:29.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/N27.eq_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/predictor/N45.eq_0/gateop, insts:13.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/predictor/N54.eq_0/gateop, insts:13.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/query_second.predictor/N54.eq_0/gateop, insts:13.
+I: Infer CARRY group, base inst: u_soc/cpu/fetch/expanded.impl/query_second.predictor/N65_1_0/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/cpu/alu/N7.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/alu/N11.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/alu/N39_7_0/gateop, insts:33.
+I: Infer CARRY group, base inst: u_soc/cpu/alu_second/N7.slt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/alu_second/N11.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/alu_second/N39_7_0/gateop, insts:33.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N7_2.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N11_2.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N15.lt_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N19_3.fsub_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N29_0.fsub_1/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N29_1.fsub_0/gateop, insts:33.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N162_2.fsub_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/cpu/m_extension.unit/N165_2.fsub_0/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N8_1_0/gateop, insts:29.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N34.eq_0/gateop, insts:12.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N38.eq_0/gateop, insts:12.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N225_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N230_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N242_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/d_cache/burst.cache/N244_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/fabric/memory/N42_1_0/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/fabric/memory/N52_1_1/gateop, insts:30.
+I: Infer CARRY group, base inst: u_soc/fabric/monitor/N143_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/fabric/timer/N5.lt_0/gateop, insts:32.
+I: Infer CARRY group, base inst: u_soc/fabric/timer/N34_1_1/gateop, insts:63.
+I: Infer CARRY group, base inst: u_soc/fabric/uart/N494_6.fsub_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/fabric/uart/N596_4.fsub_0/gateop, insts:16.
+I: Infer CARRY group, base inst: u_soc/i_cache/burst.cache/N8_1_1/gateop, insts:28.
+I: Infer CARRY group, base inst: u_soc/i_cache/burst.cache/N39.eq_0/gateop, insts:12.
+I: Infer CARRY group, base inst: u_soc/i_cache/burst.cache/N43.eq_0/gateop, insts:12.
+I: Infer CARRY group, base inst: u_soc/i_cache/burst.cache/N273_1_1/gateop, insts:31.
+I: Infer CARRY group, base inst: u_soc/i_cache/burst.cache/N278_1_1/gateop, insts:31.
+I: Infer APM group, base inst: u_soc/cpu/m_extension.unit/N23_m1/gopapm, insts:2.
+I: Infer APM group, base inst: u_soc/cpu/m_extension.unit/N23_m3/gopapm, insts:2.
+Device Utilization Summary:
++------------------------------------------------------------------------+
+| Logic Utilization     | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------+
+| APM                   | 4        | 240           | 2                  
+| FF                    | 4991     | 133200        | 4                  
+| LUT                   | 9307     | 66600         | 14                 
+| Distributed RAM       | 509      | 19900         | 3                  
+| DRM                   | 16       | 155           | 11                 
+| IO                    | 7        | 285           | 3                  
+| RCKB                  | 0        | 24            | 0                  
+| SCANCHAIN             | 0        | 1             | 0                  
+| USCM                  | 1        | 32            | 4                  
+| CCS                   | 1        | 1             | 100                
+| ADC                   | 0        | 1             | 0                  
+| DDR_PHY               | 0        | 24            | 0                  
+| HSSTLP                | 0        | 1             | 0                  
+| GPLL                  | 0        | 6             | 0                  
+| PPLL                  | 0        | 6             | 0                  
+| DDRPHY_CPD            | 0        | 12            | 0                  
+| HCKB                  | 0        | 96            | 0                  
+| IOCKB                 | 0        | 24            | 0                  
+| MRCKB                 | 0        | 12            | 0                  
+| PCIE                  | 0        | 1             | 0                  
+| DDRPHY_IOCLK_DIV      | 0        | 6             | 0                  
+| ANALOG                | 0        | 1             | 0                  
+| TSERDES               | 0        | 48            | 0                  
+| KEYRAM                | 0        | 1             | 0                  
++------------------------------------------------------------------------+
+
+Device mapping done.
+Total device mapping takes 1.22 sec.
+
+Design 'board_top' has been successfully mapped to architecture-specific objects.
+Saving design to DB.
+Action dev_map: Real time elapsed is 0h:0m:15s
+Action dev_map: CPU time elapsed is 0h:0m:12s
+Action dev_map: Process CPU time elapsed is 0h:0m:13s
+Current time: Fri Oct 23 23:38:49 2026
+Action dev_map: Peak memory pool usage is 487 MB
+Action from compile to dev_map: Total Real Time elapsed is 0h:1m:25s
+Action from compile to dev_map: Total CPU time elapsed is 0h:1m:8s
+Action from compile to dev_map: Total Process CPU Time elapsed is 0h:1m:11s
+Process "Device Map" done.
+Executing : dev_map successfully.
+
+
+Executing : pnr -report_timing -plc_decongestion 3 -refineplacement_cluster FALSE -gplace_seed 4 -groute_seed 4 -optimize_multi_corner_timing -fix_hold_violation -fix_hold_violation_iterations 20 -fix_hold_violation_threshold 200 -fix_hold_violation_in_route TRUE -fix_hold_violation_threshold_for_clk_tree 200 -fix_hold_violation_threshold_for_clock_path_cross_srb 1400 -max_hold_violated_paths_num 100000
+
+
+Process "Place & Route" started.
+Current time: Fri Oct 23 23:38:49 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+pnr strategy configuration : 
+strategy name : 0
+Building architecture floorplan logic view.
+Constraint check start.
+Executing : def_port {led0} LOC=J16 VCCIO=1.8 IOSTANDARD=LVCMOS18 DRIVE=4 SLEW=SLOW
+Executing : def_port {led0} LOC=J16 VCCIO=1.8 IOSTANDARD=LVCMOS18 DRIVE=4 SLEW=SLOW successfully
+Executing : def_port {led1} LOC=M17 VCCIO=1.8 IOSTANDARD=LVCMOS18 DRIVE=4 SLEW=SLOW
+Executing : def_port {led1} LOC=M17 VCCIO=1.8 IOSTANDARD=LVCMOS18 DRIVE=4 SLEW=SLOW successfully
+Executing : def_port {uart_tx} LOC=AB21 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=4 SLEW=SLOW
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/device_map/board_top.pcf(line number: 5)] | Port uart_tx has been placed at location AB21, whose type is share pin.
+Executing : def_port {uart_tx} LOC=AB21 VCCIO=3.3 IOSTANDARD=LVCMOS33 DRIVE=4 SLEW=SLOW successfully
+Executing : def_port {key0_n} LOC=M15 VCCIO=1.8 IOSTANDARD=LVCMOS18
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/device_map/board_top.pcf(line number: 6)] | Port key0_n has been placed at location M15, whose type is share pin.
+Executing : def_port {key0_n} LOC=M15 VCCIO=1.8 IOSTANDARD=LVCMOS18 successfully
+Executing : def_port {key1_n} LOC=M16 VCCIO=1.8 IOSTANDARD=LVCMOS18
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/device_map/board_top.pcf(line number: 7)] | Port key1_n has been placed at location M16, whose type is share pin.
+Executing : def_port {key1_n} LOC=M16 VCCIO=1.8 IOSTANDARD=LVCMOS18 successfully
+Executing : def_port {sys_clk} LOC=V4 VCCIO=1.5 IOSTANDARD=LVCMOS15
+Executing : def_port {sys_clk} LOC=V4 VCCIO=1.5 IOSTANDARD=LVCMOS15 successfully
+Executing : def_port {uart_rx} LOC=AB22 VCCIO=3.3 IOSTANDARD=LVCMOS33
+C: ConstraintEditor-2002: [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/device_map/board_top.pcf(line number: 9)] | Port uart_rx has been placed at location AB22, whose type is share pin.
+Executing : def_port {uart_rx} LOC=AB22 VCCIO=3.3 IOSTANDARD=LVCMOS33 successfully
+Constraint check end.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+I: Column Clock Check open.
+Read Column Clock Map.
+
+Placement started.
+Phase 1 Pre global placement started.
+Mapping instance GRS_INST/grs_ccs to CCS_87_316.
+Phase 1.1 1st GP placement started.
+Design Utilization : 14%.
+First map gop timing takes 1.73 sec
+Worst slack after clock region global placement is 13603
+Wirelength after clock region global placement is 143990 and checksum is 83344D5541350413.
+1st GP placement takes 7.94 sec.
+
+Phase 1.2 Clock placement started.
+Mapping instance clkbufg_0/gopclkbufg to USCM_215_576.
+Clock placement takes 0.16 sec.
+
+Wirelength after Pre Global Placement is 143990 and checksum is 83344D5541350413.
+Pre global placement takes 8.73 sec.
+
+Phase 2 Global placement started.
+Phase 2.1 Fixed placement started.
+Placed fixed group with base inst key0_n_ibuf/opit_1 on IOLHR_16_624.
+Placed fixed group with base inst key1_n_ibuf/opit_1 on IOLHR_16_618.
+Placed fixed group with base inst led0_obuf/opit_1 on IOLHR_16_912.
+Placed fixed group with base inst led1_obuf/opit_1 on IOLHR_16_612.
+Placed fixed group with base inst sys_clk_ibuf/opit_1 on IOLHR_364_468.
+Placed fixed group with base inst uart_rx_ibuf/opit_1 on IOLHR_16_486.
+Placed fixed group with base inst uart_tx_obuf/opit_1 on IOLHR_16_492.
+Placed fixed instance GRS_INST/grs_ccs on CCS_87_316.
+Placed fixed instance clkbufg_0/gopclkbufg on USCM_215_576.
+Placed fixed instance BKCL_auto_0 on BKCL_1_646.
+Placed fixed instance BKCL_auto_1 on BKCL_1_340.
+Placed fixed instance BKCL_auto_2 on BKCL_373_340.
+Fixed placement takes 0.34 sec.
+
+Phase 2.2 Process placement started.
+Process placement takes 0.00 sec.
+
+Phase 2.3 IO placement started.
+IO placement takes 0.08 sec.
+
+Phase 2.4 2nd GP placement started.
+Run super clustering :
+	Initial slack -10408.
+	20 iterations finished.
+	Final slack 14615.
+Super clustering done.
+Design Utilization : 14%.
+Worst slack after global placement is 15015
+2nd GP placement takes 11.45 sec.
+
+Wirelength after global placement is 164748 and checksum is 6C430804529695D5.
+Global placement takes 11.89 sec.
+
+Phase 3 Post global placement started.
+Packing LUT6D started.
+I: LUT6D pack result: There are 4214 LUT6 in collection, pack success:28
+Packing LUT6D takes 2.95 sec.
+Phase 3.1 Macro cell placement started.
+I: Process macros using "Greedy".
+Wirelength after macro cell placement is 165656 and checksum is D9A78EF0A2B8E433.
+Macro cell placement takes 0.02 sec.
+
+Phase 3.2 3rd GP placement started.
+Run super clustering :
+	Initial slack -10535.
+	17 iterations finished.
+	Final slack 13809.
+Super clustering done.
+Design Utilization : 14%.
+Worst slack after post global placement is 16090
+3rd GP placement takes 10.23 sec.
+
+Wirelength after post global placement is 148011 and checksum is 7A7BADC18E49DF1A.
+Packing LUT6D started.
+I: LUT6D pack result: There are 4158 LUT6 in collection, pack success:5
+Packing LUT6D takes 2.80 sec.
+Post global placement takes 16.05 sec.
+
+Phase 4 Legalization started.
+The average distance in LP is 0.475578.
+Wirelength after legalization is 157202 and checksum is DC607E79F7CD5AFC.
+Legalization takes 0.64 sec.
+
+Phase 5 Timing-driven detailed placement started.
+Phase 5.1 Replication placement started.
+Worst slack before Replication Place is 14621.
+Replication placement takes 0.42 sec.
+
+Wirelength after replication placement is 157202 and checksum is DC607E79F7CD5AFC.
+Phase 5.2 Swapping placement started.
+Worst slack before detailed placement is 14621, TNS before detailed placement is 0. 
+Worst slack after detailed placement is 14621, TNS after detailed placement is 0. 
+Swapping placement takes 0.38 sec.
+
+Wirelength after detailed placement is 157202 and checksum is DC607E79F7CD5AFC.
+Timing-driven detailed placement takes 0.81 sec.
+
+Worst slack is 14621, TNS after placement is 0.
+Placement done.
+Total placement takes 41.36 sec.
+Finished placement.
+
+Routing started.
+Building routing graph takes 4.58 sec.
+Worst slack is 14621, TNS before global route is 0.
+Processing design graph takes 1.62 sec.
+Total memory for routing:
+	227.385764 M.
+Total nets for routing : 14044.
+Rcf routing step 1 processed 0 nets, it takes 0.00 sec.
+Rcf routing step 2 processed 0 nets, it takes 0.00 sec.
+Rcf routing step 3 processed 0 nets, it takes 0.00 sec.
+Unrouted nets 0 at the end of iteration 0.
+Global Routing step 1 processed 35 nets, it takes 0.05 sec.
+Unrouted nets 93 at the end of iteration 0.
+Unrouted nets 48 at the end of iteration 1.
+Unrouted nets 26 at the end of iteration 2.
+Unrouted nets 22 at the end of iteration 3.
+Unrouted nets 14 at the end of iteration 4.
+Unrouted nets 15 at the end of iteration 5.
+Unrouted nets 13 at the end of iteration 6.
+Unrouted nets 11 at the end of iteration 7.
+Unrouted nets 8 at the end of iteration 8.
+Unrouted nets 9 at the end of iteration 9.
+Unrouted nets 6 at the end of iteration 10.
+Unrouted nets 3 at the end of iteration 11.
+Unrouted nets 2 at the end of iteration 12.
+Unrouted nets 0 at the end of iteration 13.
+Global Routing step 2 processed 240 nets, it takes 4.91 sec.
+Unrouted nets 15 at the end of iteration 0.
+Unrouted nets 13 at the end of iteration 1.
+Unrouted nets 5 at the end of iteration 2.
+Unrouted nets 0 at the end of iteration 3.
+Global Routing step 3 processed 23 nets, it takes 0.14 sec.
+Unrouted nets 441 at the end of iteration 0.
+Unrouted nets 299 at the end of iteration 1.
+Unrouted nets 185 at the end of iteration 2.
+Unrouted nets 112 at the end of iteration 3.
+Unrouted nets 75 at the end of iteration 4.
+Unrouted nets 61 at the end of iteration 5.
+Unrouted nets 38 at the end of iteration 6.
+Unrouted nets 32 at the end of iteration 7.
+Unrouted nets 22 at the end of iteration 8.
+Unrouted nets 16 at the end of iteration 9.
+Unrouted nets 13 at the end of iteration 10.
+Unrouted nets 2 at the end of iteration 11.
+Unrouted nets 0 at the end of iteration 12.
+Global Routing step 4 processed 686 nets, it takes 3.08 sec.
+Global routing takes 8.27 sec.
+Total 17820 subnets.
+    forward max bucket size 207 , backward 197.
+        Unrouted nets 13046 at the end of iteration 0.
+    route iteration 0, CPU time elapsed 3.718750 sec.
+    forward max bucket size 241 , backward 281.
+        Unrouted nets 10597 at the end of iteration 1.
+    route iteration 1, CPU time elapsed 3.500000 sec.
+    forward max bucket size 250 , backward 281.
+        Unrouted nets 8736 at the end of iteration 2.
+    route iteration 2, CPU time elapsed 3.218750 sec.
+    forward max bucket size 245 , backward 257.
+        Unrouted nets 7606 at the end of iteration 3.
+    route iteration 3, CPU time elapsed 3.203125 sec.
+    forward max bucket size 255 , backward 262.
+        Unrouted nets 6592 at the end of iteration 4.
+    route iteration 4, CPU time elapsed 2.906250 sec.
+    forward max bucket size 249 , backward 340.
+        Unrouted nets 5662 at the end of iteration 5.
+    route iteration 5, CPU time elapsed 2.625000 sec.
+    forward max bucket size 360 , backward 548.
+        Unrouted nets 6248 at the end of iteration 6.
+    route iteration 6, CPU time elapsed 2.156250 sec.
+    forward max bucket size 506 , backward 283.
+        Unrouted nets 5875 at the end of iteration 7.
+    route iteration 7, CPU time elapsed 1.890625 sec.
+    forward max bucket size 373 , backward 253.
+        Unrouted nets 5278 at the end of iteration 8.
+    route iteration 8, CPU time elapsed 1.687500 sec.
+    forward max bucket size 379 , backward 310.
+        Unrouted nets 4768 at the end of iteration 9.
+    route iteration 9, CPU time elapsed 1.421875 sec.
+    forward max bucket size 406 , backward 263.
+        Unrouted nets 4245 at the end of iteration 10.
+    route iteration 10, CPU time elapsed 1.437500 sec.
+    forward max bucket size 903 , backward 287.
+        Unrouted nets 3761 at the end of iteration 11.
+    route iteration 11, CPU time elapsed 1.156250 sec.
+    forward max bucket size 638 , backward 203.
+        Unrouted nets 3255 at the end of iteration 12.
+    route iteration 12, CPU time elapsed 1.093750 sec.
+    forward max bucket size 342 , backward 233.
+        Unrouted nets 2800 at the end of iteration 13.
+    route iteration 13, CPU time elapsed 0.875000 sec.
+    forward max bucket size 623 , backward 160.
+        Unrouted nets 2506 at the end of iteration 14.
+    route iteration 14, CPU time elapsed 0.796875 sec.
+    forward max bucket size 401 , backward 282.
+        Unrouted nets 2130 at the end of iteration 15.
+    route iteration 15, CPU time elapsed 0.609375 sec.
+    forward max bucket size 398 , backward 154.
+        Unrouted nets 1835 at the end of iteration 16.
+    route iteration 16, CPU time elapsed 0.890625 sec.
+    forward max bucket size 372 , backward 172.
+        Unrouted nets 1599 at the end of iteration 17.
+    route iteration 17, CPU time elapsed 0.671875 sec.
+    forward max bucket size 435 , backward 130.
+        Unrouted nets 1360 at the end of iteration 18.
+    route iteration 18, CPU time elapsed 0.609375 sec.
+    forward max bucket size 457 , backward 134.
+        Unrouted nets 1207 at the end of iteration 19.
+    route iteration 19, CPU time elapsed 0.515625 sec.
+    forward max bucket size 248 , backward 148.
+        Unrouted nets 1001 at the end of iteration 20.
+    route iteration 20, CPU time elapsed 0.421875 sec.
+    forward max bucket size 241 , backward 162.
+        Unrouted nets 892 at the end of iteration 21.
+    route iteration 21, CPU time elapsed 0.406250 sec.
+    forward max bucket size 334 , backward 128.
+        Unrouted nets 750 at the end of iteration 22.
+    route iteration 22, CPU time elapsed 0.343750 sec.
+    forward max bucket size 198 , backward 214.
+        Unrouted nets 661 at the end of iteration 23.
+    route iteration 23, CPU time elapsed 0.312500 sec.
+    forward max bucket size 392 , backward 147.
+        Unrouted nets 619 at the end of iteration 24.
+    route iteration 24, CPU time elapsed 0.312500 sec.
+    forward max bucket size 211 , backward 158.
+        Unrouted nets 538 at the end of iteration 25.
+    route iteration 25, CPU time elapsed 0.203125 sec.
+    forward max bucket size 387 , backward 158.
+        Unrouted nets 459 at the end of iteration 26.
+    route iteration 26, CPU time elapsed 0.234375 sec.
+    forward max bucket size 225 , backward 130.
+        Unrouted nets 372 at the end of iteration 27.
+    route iteration 27, CPU time elapsed 0.203125 sec.
+    forward max bucket size 175 , backward 120.
+        Unrouted nets 295 at the end of iteration 28.
+    route iteration 28, CPU time elapsed 0.187500 sec.
+    forward max bucket size 148 , backward 73.
+        Unrouted nets 268 at the end of iteration 29.
+    route iteration 29, CPU time elapsed 0.187500 sec.
+    forward max bucket size 191 , backward 196.
+        Unrouted nets 257 at the end of iteration 30.
+    route iteration 30, CPU time elapsed 0.156250 sec.
+    forward max bucket size 195 , backward 115.
+        Unrouted nets 233 at the end of iteration 31.
+    route iteration 31, CPU time elapsed 0.156250 sec.
+    forward max bucket size 133 , backward 90.
+        Unrouted nets 194 at the end of iteration 32.
+    route iteration 32, CPU time elapsed 0.171875 sec.
+    forward max bucket size 115 , backward 82.
+        Unrouted nets 199 at the end of iteration 33.
+    route iteration 33, CPU time elapsed 0.140625 sec.
+    forward max bucket size 193 , backward 86.
+        Unrouted nets 190 at the end of iteration 34.
+    route iteration 34, CPU time elapsed 0.156250 sec.
+    forward max bucket size 262 , backward 195.
+        Unrouted nets 156 at the end of iteration 35.
+    route iteration 35, CPU time elapsed 0.140625 sec.
+    forward max bucket size 262 , backward 201.
+        Unrouted nets 121 at the end of iteration 36.
+    route iteration 36, CPU time elapsed 0.125000 sec.
+    forward max bucket size 160 , backward 66.
+        Unrouted nets 114 at the end of iteration 37.
+    route iteration 37, CPU time elapsed 0.125000 sec.
+    forward max bucket size 48 , backward 59.
+        Unrouted nets 112 at the end of iteration 38.
+    route iteration 38, CPU time elapsed 0.093750 sec.
+    forward max bucket size 46 , backward 72.
+        Unrouted nets 93 at the end of iteration 39.
+    route iteration 39, CPU time elapsed 0.109375 sec.
+    forward max bucket size 58 , backward 56.
+        Unrouted nets 71 at the end of iteration 40.
+    route iteration 40, CPU time elapsed 0.109375 sec.
+    forward max bucket size 43 , backward 54.
+        Unrouted nets 56 at the end of iteration 41.
+    route iteration 41, CPU time elapsed 0.093750 sec.
+    forward max bucket size 64 , backward 78.
+        Unrouted nets 53 at the end of iteration 42.
+    route iteration 42, CPU time elapsed 0.093750 sec.
+    forward max bucket size 67 , backward 36.
+        Unrouted nets 54 at the end of iteration 43.
+    route iteration 43, CPU time elapsed 0.093750 sec.
+    forward max bucket size 76 , backward 65.
+        Unrouted nets 41 at the end of iteration 44.
+    route iteration 44, CPU time elapsed 0.078125 sec.
+    forward max bucket size 100 , backward 65.
+        Unrouted nets 42 at the end of iteration 45.
+    route iteration 45, CPU time elapsed 0.093750 sec.
+    forward max bucket size 48 , backward 39.
+        Unrouted nets 44 at the end of iteration 46.
+    route iteration 46, CPU time elapsed 0.093750 sec.
+    forward max bucket size 54 , backward 38.
+        Unrouted nets 41 at the end of iteration 47.
+    route iteration 47, CPU time elapsed 0.078125 sec.
+    forward max bucket size 61 , backward 51.
+        Unrouted nets 23 at the end of iteration 48.
+    route iteration 48, CPU time elapsed 0.093750 sec.
+    forward max bucket size 37 , backward 26.
+        Unrouted nets 18 at the end of iteration 49.
+    route iteration 49, CPU time elapsed 0.062500 sec.
+    forward max bucket size 60 , backward 103.
+        Unrouted nets 32 at the end of iteration 50.
+    route iteration 50, CPU time elapsed 0.062500 sec.
+    forward max bucket size 48 , backward 85.
+        Unrouted nets 19 at the end of iteration 51.
+    route iteration 51, CPU time elapsed 0.078125 sec.
+    forward max bucket size 61 , backward 42.
+        Unrouted nets 12 at the end of iteration 52.
+    route iteration 52, CPU time elapsed 0.078125 sec.
+    forward max bucket size 25 , backward 23.
+        Unrouted nets 10 at the end of iteration 53.
+    route iteration 53, CPU time elapsed 0.062500 sec.
+    forward max bucket size 41 , backward 20.
+        Unrouted nets 16 at the end of iteration 54.
+    route iteration 54, CPU time elapsed 0.093750 sec.
+    forward max bucket size 34 , backward 20.
+        Unrouted nets 9 at the end of iteration 55.
+    route iteration 55, CPU time elapsed 0.093750 sec.
+    forward max bucket size 32 , backward 18.
+        Unrouted nets 4 at the end of iteration 56.
+    route iteration 56, CPU time elapsed 0.062500 sec.
+    forward max bucket size 21 , backward 17.
+        Unrouted nets 6 at the end of iteration 57.
+    route iteration 57, CPU time elapsed 0.046875 sec.
+    forward max bucket size 112 , backward 56.
+        Unrouted nets 4 at the end of iteration 58.
+    route iteration 58, CPU time elapsed 0.031250 sec.
+    forward max bucket size 134 , backward 57.
+        Unrouted nets 7 at the end of iteration 59.
+    route iteration 59, CPU time elapsed 0.078125 sec.
+    forward max bucket size 56 , backward 17.
+        Unrouted nets 8 at the end of iteration 60.
+    route iteration 60, CPU time elapsed 0.046875 sec.
+    forward max bucket size 29 , backward 35.
+        Unrouted nets 7 at the end of iteration 61.
+    route iteration 61, CPU time elapsed 0.046875 sec.
+    forward max bucket size 43 , backward 23.
+        Unrouted nets 4 at the end of iteration 62.
+    route iteration 62, CPU time elapsed 0.078125 sec.
+    forward max bucket size 123 , backward 36.
+        Unrouted nets 3 at the end of iteration 63.
+    route iteration 63, CPU time elapsed 0.078125 sec.
+    forward max bucket size 34 , backward 12.
+        Unrouted nets 3 at the end of iteration 64.
+    route iteration 64, CPU time elapsed 0.062500 sec.
+    forward max bucket size 20 , backward 10.
+        Unrouted nets 2 at the end of iteration 65.
+    route iteration 65, CPU time elapsed 0.046875 sec.
+    forward max bucket size 10 , backward 8.
+        Unrouted nets 0 at the end of iteration 66.
+    route iteration 66, CPU time elapsed 0.078125 sec.
+Detailed routing takes 66 iterations
+Detailed routing takes 43.59 sec.
+Start fix hold violation.
+Build tmp routing results takes 0.30 sec.
+Timing analysis takes 0.22 sec.
+Hold violation fix iter 0 takes 34.70 sec, total_step_forward 2907137.
+Incremental timing analysis takes 0.12 sec.
+Hold violation fix iter 1 takes 10.55 sec, total_step_forward 1546124.
+Incremental timing analysis takes 0.17 sec.
+Hold violation fix iter 2 takes 10.00 sec, total_step_forward 1392873.
+Incremental timing analysis takes 0.19 sec.
+Hold violation fix iter 3 takes 9.28 sec, total_step_forward 1337689.
+Incremental timing analysis takes 0.19 sec.
+Hold violation fix iter 4 takes 7.73 sec, total_step_forward 1107457.
+Incremental timing analysis takes 0.22 sec.
+Hold violation fix iter 5 takes 7.52 sec, total_step_forward 1053726.
+Hold Violation Fix in router takes 6 iterations.
+Fix hold violation Finished.
+Hold Violation Fix in router takes 82.89 sec.
+
+Dispose routing result:
+    Collect routing result.
+    Delete unused device instances.
+    Annotate routing result.
+    Change LUT configuration.
+    Dispose misc instances.
+    Annotate routing result again.
+Finish routing takes 1.31 sec.
+The timing paths of the clock sys_clk have hold violation, the worst slack : 20.
+Hold fix iterated 1 times
+The hold violation of the clock sys_clk has been fixed unsuccessfully, the finally worst slack: 130(slow), 20(fast).
+Hold violation fix failed. (takes 159.53 sec).
+Used SRB routing arc is 196349.
+Cleanup routing takes 0.05 sec.
+Routing done.
+Total routing takes 303.30 sec.
+
+
+Device Utilization Summary :
++------------------------------------------------------------------------------+
+| Logic Utilization           | Used     | Available     | Utilization(%)     
++------------------------------------------------------------------------------+
+| Use of ADC                  | 0        | 1             | 0                  
+| Use of ANALOG               | 0        | 1             | 0                  
+| Use of APM                  | 4        | 240           | 2                  
+| Use of BKCL                 | 3        | 6             | 50                 
+| Use of CCS                  | 1        | 1             | 100                
+| Use of CLMA                 | 2219     | 11675         | 20                 
+|   FF                        | 3671     | 93400         | 4                  
+|   LUT                       | 6542     | 46700         | 15                 
+|   LUT-FF pairs              | 2570     | 46700         | 6                  
+| Use of CLMS                 | 1005     | 4975          | 21                 
+|   FF                        | 1320     | 39800         | 4                  
+|   LUT                       | 2732     | 19900         | 14                 
+|   LUT-FF pairs              | 867      | 19900         | 5                  
+|   Distributed RAM           | 509      | 19900         | 3                  
+| Use of DDRPHY_CPD           | 0        | 12            | 0                  
+| Use of DDRPHY_IOCLK_DIV     | 0        | 6             | 0                  
+| Use of DDR_PHY              | 0        | 24            | 0                  
+| Use of DRM                  | 16       | 155           | 11                 
+| Use of GPLL                 | 0        | 6             | 0                  
+| Use of GSEB                 | 0        | 218           | 0                  
+| Use of HARD0                | 1076     | 10550         | 11                 
+| Use of HCKB                 | 9        | 96            | 10                 
+|  HCKB dataused              | 3        | 96            | 4                  
+| Use of HCKMUX_TEST          | 0        | 8             | 0                  
+| Use of HSSTLP               | 0        | 1             | 0                  
+| Use of IO                   | 7        | 285           | 3                  
+|   IOBD                      | 3        | 137           | 3                  
+|   IOBS                      | 4        | 148           | 3                  
+| Use of IOCKB                | 0        | 24            | 0                  
+| Use of IOCKMUX_TEST         | 0        | 6             | 0                  
+| Use of IOLHR                | 7        | 300           | 3                  
+| Use of KEYRAM               | 0        | 1             | 0                  
+| Use of MFG_TEST             | 0        | 1             | 0                  
+| Use of MRCKB                | 0        | 12            | 0                  
+| Use of MRCKMUX_TEST         | 0        | 6             | 0                  
+| Use of MRPOSTMUX_TEST       | 0        | 6             | 0                  
+| Use of PCIE                 | 0        | 1             | 0                  
+| Use of PCKMUX_TEST          | 0        | 12            | 0                  
+| Use of PLLMRMUX_TEST        | 0        | 6             | 0                  
+| Use of PLLREFMUX_TEST       | 0        | 6             | 0                  
+| Use of PPLL                 | 0        | 6             | 0                  
+| Use of PREGMUXC_TEST        | 0        | 4             | 0                  
+| Use of PREGMUXLR_TEST       | 0        | 6             | 0                  
+| Use of RCKB                 | 1        | 24            | 5                  
+|  RCKB dataused              | 1        | 24            | 5                  
+| Use of RCKMUX_TEST          | 0        | 6             | 0                  
+| Use of SCANCHAIN            | 0        | 1             | 0                  
+| Use of SCKMUX_TEST          | 0        | 12            | 0                  
+| Use of SFB                  | 0        | 2225          | 0                  
+| Use of SPAD                 | 0        | 4             | 0                  
+| Use of TSERDES              | 0        | 48            | 0                  
+| Use of USCM                 | 1        | 32            | 4                  
+|  USCM dataused              | 0        | 32            | 0                  
+| Use of USCMMUX_TEST         | 0        | 32            | 0                  
++------------------------------------------------------------------------------+
+
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'led0' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led1' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'key0_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'key1_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+I: critical_path_diff_worst_slack: -2877 ps. (place 14621 ps, route 11744 ps)
+I: critical_path_diff_same_rate: 5.00%. (route 100, same 5)
+Finished routing.
+Design 'board_top' has been placed and routed successfully.
+Saving design to DB.
+Finished placement and routing.
+Action pnr: Real time elapsed is 0h:7m:3s
+Action pnr: CPU time elapsed is 0h:6m:34s
+Action pnr: Process CPU time elapsed is 0h:7m:11s
+Current time: Fri Oct 23 23:45:52 2026
+Action pnr: Peak memory pool usage is 1,884 MB
+Action from compile to pnr: Total Real Time elapsed is 0h:8m:28s
+Action from compile to pnr: Total CPU time elapsed is 0h:7m:42s
+Action from compile to pnr: Total Process CPU Time elapsed is 0h:8m:22s
+Process "Place & Route" done.
+Executing : pnr -report_timing -plc_decongestion 3 -refineplacement_cluster FALSE -gplace_seed 4 -groute_seed 4 -optimize_multi_corner_timing -fix_hold_violation -fix_hold_violation_iterations 20 -fix_hold_violation_threshold 200 -fix_hold_violation_in_route TRUE -fix_hold_violation_threshold_for_clk_tree 200 -fix_hold_violation_threshold_for_clock_path_cross_srb 1400 -max_hold_violated_paths_num 100000 successfully.
+
+
+Executing : report_timing -report_exception TRUE
+
+
+Process "Report Timing" started.
+Current time: Fri Oct 23 23:45:53 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from pnr DB.
+Start Report Post-PnR timing.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4087: Port 'led0' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'led1' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'key0_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'key1_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+Report timing is finished successfully.
+Action report_timing: Real time elapsed is 0h:0m:20s
+Action report_timing: CPU time elapsed is 0h:0m:17s
+Action report_timing: Process CPU time elapsed is 0h:0m:19s
+Current time: Fri Oct 23 23:46:12 2026
+Action report_timing: Peak memory pool usage is 1,317 MB
+Action from compile to report_timing: Total Real Time elapsed is 0h:8m:48s
+Action from compile to report_timing: Total CPU time elapsed is 0h:7m:59s
+Action from compile to report_timing: Total Process CPU Time elapsed is 0h:8m:41s
+Process "Report Timing" done.
+Executing : report_timing -report_exception TRUE successfully.
+
+
+Executing : gen_bit_stream
+
+
+Process "Generate Bitstream" started.
+Current time: Fri Oct 23 23:46:13 2026
+Compiling architecture definition.
+Analyzing project file 'C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/rv32im_evolve5.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from DB.
+Start Generating Programming File...
+Reading design from DB takes 2.656250 sec.
+Generating architecture configuration.
+The bitstream file is "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_pds_balanced_s4/generate_bitstream/board_top.sbit"
+Generate programming file takes 14.953125 sec.
+Generating Programming File done.
+Action gen_bit_stream: Real time elapsed is 0h:0m:27s
+Action gen_bit_stream: CPU time elapsed is 0h:0m:24s
+Action gen_bit_stream: Process CPU time elapsed is 0h:0m:24s
+Current time: Fri Oct 23 23:46:39 2026
+Action gen_bit_stream: Peak memory pool usage is 1,306 MB
+Action from compile to gen_bit_stream: Total Real Time elapsed is 0h:9m:15s
+Action from compile to gen_bit_stream: Total CPU time elapsed is 0h:8m:23s
+Action from compile to gen_bit_stream: Total Process CPU Time elapsed is 0h:9m:5s
+Process "Generate Bitstream" done.
+Executing : gen_bit_stream successfully.

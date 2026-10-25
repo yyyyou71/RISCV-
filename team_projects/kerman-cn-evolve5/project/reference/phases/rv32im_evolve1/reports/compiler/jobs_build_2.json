@@ -1,0 +1,106 @@
+{
+  "gcc15_O2_nocrc": {
+    "config": "gcc15_O2_nocrc",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O2",
+    "extra_flags": [
+      "-fno-optimize-crc"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O2_nocrc\\firmware\\coremark",
+    "image_bytes": 19404
+  },
+  "gcc10_O2": {
+    "config": "gcc10_O2",
+    "compiler": "D:\\riscv\\riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-w64-mingw32\\bin\\riscv64-unknown-elf-gcc.exe",
+    "optimization": "O2",
+    "extra_flags": [],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc10_O2\\firmware\\coremark",
+    "image_bytes": 18868
+  },
+  "gcc15_O2": {
+    "config": "gcc15_O2",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O2",
+    "extra_flags": [
+      "-fdump-tree-crc-details"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O2\\firmware\\coremark",
+    "image_bytes": 21536
+  },
+  "gcc15_O2_lto": {
+    "config": "gcc15_O2_lto",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O2",
+    "extra_flags": [
+      "-flto"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O2_lto\\firmware\\coremark",
+    "image_bytes": 18776
+  },
+  "gcc15_O3": {
+    "config": "gcc15_O3",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O3",
+    "extra_flags": [
+      "-fdump-tree-crc-details"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3\\firmware\\coremark",
+    "image_bytes": 24696
+  },
+  "gcc15_O3_nocrc": {
+    "config": "gcc15_O3_nocrc",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O3",
+    "extra_flags": [
+      "-fno-optimize-crc"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3_nocrc\\firmware\\coremark",
+    "image_bytes": 24384
+  },
+  "gcc15_O3_tune7": {
+    "config": "gcc15_O3_tune7",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O3",
+    "extra_flags": [
+      "-mtune=sifive-7-series"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3_tune7\\firmware\\coremark",
+    "image_bytes": 24824
+  },
+  "gcc15_O3_unroll_small": {
+    "config": "gcc15_O3_unroll_small",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O3",
+    "extra_flags": [
+      "-funroll-loops",
+      "--param",
+      "max-unrolled-insns=40",
+      "--param",
+      "max-average-unrolled-insns=20"
+    ],
+    "status": "passed",
+    "firmware": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3_unroll_small\\firmware\\coremark",
+    "image_bytes": 26588
+  },
+  "gcc15_O3_lto_small": {
+    "config": "gcc15_O3_lto_small",
+    "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "optimization": "O3",
+    "extra_flags": [
+      "-flto",
+      "--param",
+      "max-inline-insns-auto=20",
+      "--param",
+      "max-inline-insns-single=100"
+    ],
+    "status": "failed",
+    "error": "Command failed (1): [WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/riscv-none-elf-gcc.exe'), '-march=rv32im_zicsr2p0', '-mabi=ilp32', '-mcmodel=medlow', '-mno-relax', '-msmall-data-limit=0', '-ffreestanding', '-fno-builtin', '-fno-strict-aliasing', '-fno-pic', '-fno-stack-protector', '-fno-common', '-fno-asynchronous-unwind-tables', '-fno-unwind-tables', '-ffunction-sections', '-fdata-sections', '-fno-tree-loop-distribute-patterns', '-Wall', '-Wextra', '-Werror', '-std=gnu11', '-g', '-O3', '-DSOC_CLOCK_HZ=25000000u', '-DSOC_UART_BAUD=115200u', '-flto', '--param', 'max-inline-insns-auto=20', '--param', 'max-inline-insns-single=100', '-nostdlib', '-nostartfiles', '-Wl,--no-relax,--gc-sections', '-Wl,-Map,C:\\\\Users\\\\LZM\\\\Documents\\\\Codex\\\\2026-09-18\\\\ru-h\\\\work\\\\evolve1_build_gcc15_O3_lto_small\\\\firmware\\\\coremark\\\\firmware.map', '-T', WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve1/firmware/link.ld'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/coremark_crt0.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/drivers.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/runtime.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/platform.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/machine.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/trap_entry.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_portme.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/m_selfcheck.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/dual_check.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/dual_smoke.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_list_join.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_main.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_matrix.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_state.o'), WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/core_util.o'), '-o', WindowsPath('C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve1_build_gcc15_O3_lto_small/firmware/coremark/firmware.elf')]\nC:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\evolve1_build_gcc15_O3_lto_small\\firmware\\coremark\\firmware.elf section `.rodata' will not fit in region `ROM'\nC:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: ROM overflow\nC:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: region `ROM' overflowed by 3480 bytes\ncollect2.exe: error: ld returned 1 exit status\n"
+  }
+}

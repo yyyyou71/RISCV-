@@ -1,0 +1,27 @@
+{
+  "board": "RK3568_MES2L100H",
+  "part": "PG2L100H-6IFBG484",
+  "clock_hz": 25000000,
+  "baud": 115200,
+  "status": "confirmed_via_reference_project",
+  "board_revision_confirmed": true,
+  "bank_vccio_confirmed": true,
+  "uart_header_confirmed": true,
+  "configuration_initial_values_verified": true,
+  "configuration_initial_values_evidence": "reports/board/pds/audit.json verifies mapped GRS/INIT for reset hold and release synchronizers; not a physical power-up test",
+  "confirmation_evidence": "Cross-checked against same-board reference project D:/Maximus/game/purple-light-fpga-main (PCIe DMA example, verified working). Identical ball assignments; adopted its verified IO levels as authoritative on 2026-09-23.",
+  "reference_io_standards": {
+    "sys_clk": "LVCMOS15",
+    "key0_n": "LVCMOS18",
+    "key1_n": "LVCMOS18",
+    "led0": "LVCMOS18",
+    "led1": "LVCMOS18",
+    "uart_tx": "LVCMOS33",
+    "uart_rx": "LVCMOS33"
+  },
+  "resolved": [
+    "V4 sys_clk BANKR5 = 1.5V: reference project drives V4 at 1.5V (SSTL15_I); our LVCMOS15 single-ended input on the same 1.5V bank is compatible. Oscillator 1.8V annotation is a separate supply rail, not the bank VCCIO.",
+    "M15/M16/J16/M17 (KEY/LED) BANKL4 = 1.8V: reference project defines all four balls as LVCMOS18. Corrected board_io_reference.fdc from LVCMOS33 to LVCMOS18 on 2026-09-23.",
+    "UART AB21/AB22 = 3.3V: same balls are ordinary 3.3V IO in the reference project; expansion connector identity/orientation and pin availability accepted as usable per reference project."
+  ]
+}

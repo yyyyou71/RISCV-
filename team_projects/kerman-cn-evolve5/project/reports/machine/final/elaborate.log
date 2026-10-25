@@ -1,0 +1,29 @@
+Vivado Simulator v2025.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_2025/2025.2/Vivado/bin/unwrapped/win64.o/xelab.exe tb_machine -s machine_core -mt 4 
+Using 4 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3645] port 'halted' remains unconnected for this instance [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_machine_final/tb_machine.sv:10]
+WARNING: [VRFC 10-3645] port 's_second_valid' remains unconnected for this instance [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/outputs/rv32im_evolve5/rtl/cache/rv32_dcache.v:29]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.rv32_predictor(INDEX_BITS=8,RAS_...
+Compiling module work.rv32_fetch_dual(BP_INDEX_BITS=8,...
+Compiling module work.rv32_fetch(BP_INDEX_BITS=8,RAS_D...
+Compiling module work.rv32_decode(M_ENABLE=1)
+Compiling module work.rv32_regfile(DUAL_ENABLE=1)
+Compiling module work.rv32_alu
+Compiling module work.rv32_csr(IMPL_ID=32'b01100101000...
+Compiling module work.rv32_muldiv(FAST_MUL=1)
+Compiling module work.rv32_core(M_ENABLE=1,BP_INDEX_BI...
+Compiling module work.burst_word_test_adapter
+Compiling module work.rv32_burst_cache_2way(READ_ONLY=...
+Compiling module work.rv32_icache(BURST_INTERFACE=1,WI...
+Compiling module work.rv32_burst_cache_2way(RAM_BASE=3...
+Compiling module work.rv32_dcache(BURST_INTERFACE=1,RA...
+Compiling module work.tb_machine
+Built simulation snapshot machine_core

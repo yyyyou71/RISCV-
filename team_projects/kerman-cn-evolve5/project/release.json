@@ -1,0 +1,227 @@
+{
+  "stage": "EVOLVE5",
+  "status": "offline_verified_board_pending",
+  "default": "speed",
+  "default_iterations": 2048,
+  "clock_hz": 25000000,
+  "hardware_tested": false,
+  "variants": {
+    "balanced": {
+      "config": "mul_pair",
+      "pds_report": "reports/pds/balanced_s4/build.json",
+      "bitstream": "download/coremark_evolve5_balanced_s4_25mhz.sbit",
+      "bitstream_sha256": "c4bf5ba5025022f839236397b29f19ee8feeb5b80c4d0f09804b17b8d678d085",
+      "artifact_label": "balanced_s4",
+      "audit": {
+        "status": "passed",
+        "tool": "PDS 2022.2-SP6.1",
+        "target": "PG2L100H-6IFBG484",
+        "clock_hz": 25000000,
+        "checked_utc": "2026-10-23T15:46:40.178292+00:00",
+        "synthesis_luts": 9307,
+        "synthesis_registers": 4991,
+        "latches": 0,
+        "drm36k_total": 16,
+        "rom_drm36k": 8,
+        "ram_drm36k": 8,
+        "cache_distributed_byte_banks": 24,
+        "cache_data_bits": 24576,
+        "cache_logical_data_bits": 16384,
+        "icache_second_read_replica_bits": 8192,
+        "rom_words_verified": 8192,
+        "reset_ff_init_verified": {
+          "hold_reset": 1,
+          "\\release_sync[0]": 0,
+          "\\release_sync[1]": 0
+        },
+        "timing": {
+          "setup_slow": {
+            "worst_slack_ns": 11.744,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "setup_fast": {
+            "worst_slack_ns": 22.603,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "hold_slow": {
+            "worst_slack_ns": 0.13,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "hold_fast": {
+            "worst_slack_ns": 0.02,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          }
+        },
+        "netlist_sha256": "f988d7f7d29ea576319edefe33c4202a5b43a1cec12350c895cf95b73d0d846a",
+        "combined_rtl_sha256": "e9c1df7b032045ba2ac0eed5c0a765e75e8bddef9be18549147561100cdeb554",
+        "firmware_rom_sha256": "d1f2bb0982c62055915cc24fc1f5681e41559466bea23f35091e40d74fd29763",
+        "electrical_signoff": true,
+        "hardware_tested": false,
+        "timing_scope": "All internal synchronous paths; inherited asynchronous pin exceptions unchanged.",
+        "dsp_primitive": "GTP_APM_E2",
+        "dsp_count": 4,
+        "dsp_instances": [
+          {
+            "name": "N23_m1",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(0), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO ({_N1270, _N1269, _N1268, _N1267, _N1266, _N1265, _N1264, _N33, _N32, _N31, _N30, _N29, _N28, _N27, _N26, _N25, _N24, _N23, _N22, _N21, _N20, _N19, _N18, _N17, _N1263, _N1262, _N1261, _N1260, _N1259, _N1258, _N1257, _N1256, _N1255, _N1254, _N1253, _N1252, _N1251, _N1250, _N1249, _N1248, _N1247, _N1246, _N1245, _N1244, _N1243, _N1242, _N1241, _N1240}),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m1_P[47]_floating , \\N23_m1_P[46]_floating , \\N23_m1_P[45]_floating , \\N23_m1_P[44]_floating , \\N23_m1_P[43]_floating , \\N23_m1_P[42]_floating , \\N23_m1_P[41]_floating , \\N23_m1_P[40]_floating , \\N23_m1_P[39]_floating , \\N23_m1_P[38]_floating , \\N23_m1_P[37]_floating , \\N23_m1_P[36]_floating , \\N23_m1_P[35]_floating , \\N23_m1_P[34]_floating , \\N23_m1_P[33]_floating , \\N23_m1_P[32]_floating , \\N23_m1_P[31]_floating , \\N23_m1_P[30]_floating , \\N23_m1_P[29]_floating , \\N23_m1_P[28]_floating , \\N23_m1_P[27]_floating , \\N23_m1_P[26]_floating , \\N23_m1_P[25]_floating , \\N23_m1_P[24]_floating , _N65, _N64, _N63, _N62, _N61, _N60, _N59, unsigned_product[16], unsigned_product[15], unsigned_product[14], unsigned_product[13], unsigned_product[12], unsigned_product[11], unsigned_product[10], unsigned_product[9], unsigned_product[8], unsigned_product[7], unsigned_product[6], unsigned_product[5], unsigned_product[4], unsigned_product[3], unsigned_product[2], unsigned_product[1], unsigned_product[0]}),\n            .CPI (),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b0}),\n            .MODEZ ({1'b0, 1'b0, 1'b0, 1'b0}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, req_a[23], req_a[22], req_a[21], req_a[20], req_a[19], req_a[18], req_a[17], req_a[16], req_a[15], req_a[14], req_a[13], req_a[12], req_a[11], req_a[10], req_a[9], req_a[8], req_a[7], req_a[6], req_a[5], req_a[4], req_a[3], req_a[2], req_a[1], req_a[0]}),\n            .XB (),\n            .Y ({1'b0, req_b[16], req_b[15], req_b[14], req_b[13], req_b[12], req_b[11], req_b[10], req_b[9], req_b[8], req_b[7], req_b[6], req_b[5], req_b[4], req_b[3], req_b[2], req_b[1], req_b[0]}),\n            .Z (),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m2",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO (),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m2_P[47]_floating , \\N23_m2_P[46]_floating , \\N23_m2_P[45]_floating , \\N23_m2_P[44]_floating , \\N23_m2_P[43]_floating , \\N23_m2_P[42]_floating , \\N23_m2_P[41]_floating , \\N23_m2_P[40]_floating , \\N23_m2_P[39]_floating , \\N23_m2_P[38]_floating , \\N23_m2_P[37]_floating , \\N23_m2_P[36]_floating , \\N23_m2_P[35]_floating , \\N23_m2_P[34]_floating , \\N23_m2_P[33]_floating , \\N23_m2_P[32]_floating , \\N23_m2_P[31]_floating , \\N23_m2_P[30]_floating , \\N23_m2_P[29]_floating , \\N23_m2_P[28]_floating , \\N23_m2_P[27]_floating , \\N23_m2_P[26]_floating , \\N23_m2_P[25]_floating , _N90, _N89, _N88, _N87, _N86, _N85, _N84, _N83, _N82, _N81, _N80, _N79, _N78, _N77, _N76, _N75, _N74, _N73, _N72, _N71, _N70, _N69, _N68, _N67, _N66}),\n            .CPI ({_N1270, _N1269, _N1268, _N1267, _N1266, _N1265, _N1264, _N33, _N32, _N31, _N30, _N29, _N28, _N27, _N26, _N25, _N24, _N23, _N22, _N21, _N20, _N19, _N18, _N17, _N1263, _N1262, _N1261, _N1260, _N1259, _N1258, _N1257, _N1256, _N1255, _N1254, _N1253, _N1252, _N1251, _N1250, _N1249, _N1248, _N1247, _N1246, _N1245, _N1244, _N1243, _N1242, _N1241, _N1240}),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b1, 1'b0, 1'b1}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_b[16], req_b[15], req_b[14], req_b[13], req_b[12], req_b[11], req_b[10], req_b[9], req_b[8], req_b[7], req_b[6], req_b[5], req_b[4], req_b[3], req_b[2], req_b[1], req_b[0]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_a[31], req_a[30], req_a[29], req_a[28], req_a[27], req_a[26], req_a[25], req_a[24]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m3",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO ({_N1302, _N1301, _N1300, _N1299, _N1298, _N1297, _N1296, _N1295, _N145, _N144, _N143, _N142, _N141, _N140, _N139, _N138, _N137, _N136, _N135, _N134, _N133, _N132, _N131, _N130, _N1294, _N1293, _N1292, _N1291, _N1290, _N1289, _N1288, _N1287, _N1286, _N1285, _N1284, _N1283, _N1282, _N1281, _N1280, _N1279, _N1278, _N1277, _N1276, _N1275, _N1274, _N1273, _N1272, _N1271}),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m3_P[47]_floating , \\N23_m3_P[46]_floating , \\N23_m3_P[45]_floating , \\N23_m3_P[44]_floating , \\N23_m3_P[43]_floating , \\N23_m3_P[42]_floating , \\N23_m3_P[41]_floating , \\N23_m3_P[40]_floating , \\N23_m3_P[39]_floating , \\N23_m3_P[38]_floating , \\N23_m3_P[37]_floating , \\N23_m3_P[36]_floating , \\N23_m3_P[35]_floating , \\N23_m3_P[34]_floating , \\N23_m3_P[33]_floating , \\N23_m3_P[32]_floating , \\N23_m3_P[31]_floating , \\N23_m3_P[30]_floating , \\N23_m3_P[29]_floating , \\N23_m3_P[28]_floating , \\N23_m3_P[27]_floating , \\N23_m3_P[26]_floating , \\N23_m3_P[25]_floating , \\N23_m3_P[24]_floating , unsigned_product[40], unsigned_product[39], unsigned_product[38], unsigned_product[37], unsigned_product[36], unsigned_product[35], unsigned_product[34], unsigned_product[33], unsigned_product[32], unsigned_product[31], unsigned_product[30], unsigned_product[29], unsigned_product[28], unsigned_product[27], unsigned_product[26], unsigned_product[25], unsigned_product[24], unsigned_product[23], unsigned_product[22], unsigned_product[21], unsigned_product[20], unsigned_product[19], unsigned_product[18], unsigned_product[17]}),\n            .CPI (),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b0, 1'b1, 1'b0}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, req_a[23], req_a[22], req_a[21], req_a[20], req_a[19], req_a[18], req_a[17], req_a[16], req_a[15], req_a[14], req_a[13], req_a[12], req_a[11], req_a[10], req_a[9], req_a[8], req_a[7], req_a[6], req_a[5], req_a[4], req_a[3], req_a[2], req_a[1], req_a[0]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, req_b[31], req_b[30], req_b[29], req_b[28], req_b[27], req_b[26], req_b[25], req_b[24], req_b[23], req_b[22], req_b[21], req_b[20], req_b[19], req_b[18], req_b[17]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, _N90, _N89, _N88, _N87, _N86, _N85, _N84, _N83, _N82, _N81, _N80, _N79, _N78, _N77, _N76, _N75, _N74, _N73, _N72, _N71, _N70, _N69, _N68, _N67, _N66, _N65, _N64, _N63, _N62, _N61, _N60, _N59}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m4",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(1), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO (),\n            .CXBO (),\n            .CXO (),\n            .P ({_N1239, _N1238, _N1237, _N1236, _N1235, _N1234, _N1233, _N1232, _N1231, _N1230, _N1229, _N1228, _N1227, _N1226, _N1225, _N1224, _N1223, _N1222, _N1221, _N1220, _N1219, _N1218, _N1217, _N1216, _N1215, product[63], product[62], product[61], product[60], product[59], product[58], product[57], product[56], product[55], product[54], product[53], product[52], product[51], product[50], product[49], product[48], product[47], product[46], product[45], product[44], product[43], product[42], product[41]}),\n            .CPI ({_N1302, _N1301, _N1300, _N1299, _N1298, _N1297, _N1296, _N1295, _N145, _N144, _N143, _N142, _N141, _N140, _N139, _N138, _N137, _N136, _N135, _N134, _N133, _N132, _N131, _N130, _N1294, _N1293, _N1292, _N1291, _N1290, _N1289, _N1288, _N1287, _N1286, _N1285, _N1284, _N1283, _N1282, _N1281, _N1280, _N1279, _N1278, _N1277, _N1276, _N1275, _N1274, _N1273, _N1272, _N1271}),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b1, 1'b0, 1'b1}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_b[31], req_b[30], req_b[29], req_b[28], req_b[27], req_b[26], req_b[25], req_b[24], req_b[23], req_b[22], req_b[21], req_b[20], req_b[19], req_b[18], req_b[17]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_a[31], req_a[30], req_a[29], req_a[28], req_a[27], req_a[26], req_a[25], req_a[24]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (N428),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (clk),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (N44),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          }
+        ],
+        "m_isa": "RV32IM_Zicsr",
+        "divider": "32-step restoring RTL, no vendor divider IP"
+      },
+      "slot1_capabilities": [
+        "RV32I ALU/LUI/AUIPC",
+        "branch/JAL/JALR",
+        "load/store through shared LSU",
+        "MUL/MULH/MULHSU/MULHU through shared MDU"
+      ]
+    },
+    "speed": {
+      "config": "mul_pair_combo",
+      "pds_report": "reports/pds/speed_cluster_s1/build.json",
+      "bitstream": "download/coremark_evolve5_speed_cluster_s1_25mhz.sbit",
+      "bitstream_sha256": "d06282b63fa82ddfa49cf3ba8ce22382c2edc2308846a681df7015ff5f0506fc",
+      "artifact_label": "speed_cluster_s1",
+      "audit": {
+        "status": "passed",
+        "tool": "PDS 2022.2-SP6.1",
+        "target": "PG2L100H-6IFBG484",
+        "clock_hz": 25000000,
+        "checked_utc": "2026-10-23T15:54:21.838602+00:00",
+        "synthesis_luts": 10954,
+        "synthesis_registers": 5995,
+        "latches": 0,
+        "drm36k_total": 16,
+        "rom_drm36k": 8,
+        "ram_drm36k": 8,
+        "cache_distributed_byte_banks": 24,
+        "cache_data_bits": 24576,
+        "cache_logical_data_bits": 16384,
+        "icache_second_read_replica_bits": 8192,
+        "rom_words_verified": 8192,
+        "reset_ff_init_verified": {
+          "hold_reset": 1,
+          "\\release_sync[0]": 0,
+          "\\release_sync[1]": 0
+        },
+        "timing": {
+          "setup_slow": {
+            "worst_slack_ns": 12.392,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "setup_fast": {
+            "worst_slack_ns": 23.096,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "hold_slow": {
+            "worst_slack_ns": 0.23,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          },
+          "hold_fast": {
+            "worst_slack_ns": 0.083,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0
+          }
+        },
+        "netlist_sha256": "f59d1900282111f981d93715fd8ed9d60ad79e6f42a75d5111b2417f7203e280",
+        "combined_rtl_sha256": "01e54270417115a280cf15817683ba4466fac8bf92cd5b032124e75bf50ef990",
+        "firmware_rom_sha256": "d1f2bb0982c62055915cc24fc1f5681e41559466bea23f35091e40d74fd29763",
+        "electrical_signoff": true,
+        "hardware_tested": false,
+        "timing_scope": "All internal synchronous paths; inherited asynchronous pin exceptions unchanged.",
+        "dsp_primitive": "GTP_APM_E2",
+        "dsp_count": 4,
+        "dsp_instances": [
+          {
+            "name": "N23_m1",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(0), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO ({_N1313, _N1312, _N1311, _N1310, _N1309, _N1308, _N1307, _N33, _N32, _N31, _N30, _N29, _N28, _N27, _N26, _N25, _N24, _N23, _N22, _N21, _N20, _N19, _N18, _N17, _N1306, _N1305, _N1304, _N1303, _N1302, _N1301, _N1300, _N1299, _N1298, _N1297, _N1296, _N1295, _N1294, _N1293, _N1292, _N1291, _N1290, _N1289, _N1288, _N1287, _N1286, _N1285, _N1284, _N1283}),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m1_P[47]_floating , \\N23_m1_P[46]_floating , \\N23_m1_P[45]_floating , \\N23_m1_P[44]_floating , \\N23_m1_P[43]_floating , \\N23_m1_P[42]_floating , \\N23_m1_P[41]_floating , \\N23_m1_P[40]_floating , \\N23_m1_P[39]_floating , \\N23_m1_P[38]_floating , \\N23_m1_P[37]_floating , \\N23_m1_P[36]_floating , \\N23_m1_P[35]_floating , \\N23_m1_P[34]_floating , \\N23_m1_P[33]_floating , \\N23_m1_P[32]_floating , \\N23_m1_P[31]_floating , \\N23_m1_P[30]_floating , \\N23_m1_P[29]_floating , \\N23_m1_P[28]_floating , \\N23_m1_P[27]_floating , \\N23_m1_P[26]_floating , \\N23_m1_P[25]_floating , \\N23_m1_P[24]_floating , _N65, _N64, _N63, _N62, _N61, _N60, _N59, unsigned_product[16], unsigned_product[15], unsigned_product[14], unsigned_product[13], unsigned_product[12], unsigned_product[11], unsigned_product[10], unsigned_product[9], unsigned_product[8], unsigned_product[7], unsigned_product[6], unsigned_product[5], unsigned_product[4], unsigned_product[3], unsigned_product[2], unsigned_product[1], unsigned_product[0]}),\n            .CPI (),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b0}),\n            .MODEZ ({1'b0, 1'b0, 1'b0, 1'b0}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, req_a[23], req_a[22], req_a[21], req_a[20], req_a[19], req_a[18], req_a[17], req_a[16], req_a[15], req_a[14], req_a[13], req_a[12], req_a[11], req_a[10], req_a[9], req_a[8], req_a[7], req_a[6], req_a[5], req_a[4], req_a[3], req_a[2], req_a[1], req_a[0]}),\n            .XB (),\n            .Y ({1'b0, req_b[16], req_b[15], req_b[14], req_b[13], req_b[12], req_b[11], req_b[10], req_b[9], req_b[8], req_b[7], req_b[6], req_b[5], req_b[4], req_b[3], req_b[2], req_b[1], req_b[0]}),\n            .Z (),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m2",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO (),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m2_P[47]_floating , \\N23_m2_P[46]_floating , \\N23_m2_P[45]_floating , \\N23_m2_P[44]_floating , \\N23_m2_P[43]_floating , \\N23_m2_P[42]_floating , \\N23_m2_P[41]_floating , \\N23_m2_P[40]_floating , \\N23_m2_P[39]_floating , \\N23_m2_P[38]_floating , \\N23_m2_P[37]_floating , \\N23_m2_P[36]_floating , \\N23_m2_P[35]_floating , \\N23_m2_P[34]_floating , \\N23_m2_P[33]_floating , \\N23_m2_P[32]_floating , \\N23_m2_P[31]_floating , \\N23_m2_P[30]_floating , \\N23_m2_P[29]_floating , \\N23_m2_P[28]_floating , \\N23_m2_P[27]_floating , \\N23_m2_P[26]_floating , \\N23_m2_P[25]_floating , _N90, _N89, _N88, _N87, _N86, _N85, _N84, _N83, _N82, _N81, _N80, _N79, _N78, _N77, _N76, _N75, _N74, _N73, _N72, _N71, _N70, _N69, _N68, _N67, _N66}),\n            .CPI ({_N1313, _N1312, _N1311, _N1310, _N1309, _N1308, _N1307, _N33, _N32, _N31, _N30, _N29, _N28, _N27, _N26, _N25, _N24, _N23, _N22, _N21, _N20, _N19, _N18, _N17, _N1306, _N1305, _N1304, _N1303, _N1302, _N1301, _N1300, _N1299, _N1298, _N1297, _N1296, _N1295, _N1294, _N1293, _N1292, _N1291, _N1290, _N1289, _N1288, _N1287, _N1286, _N1285, _N1284, _N1283}),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b1, 1'b0, 1'b1}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_b[16], req_b[15], req_b[14], req_b[13], req_b[12], req_b[11], req_b[10], req_b[9], req_b[8], req_b[7], req_b[6], req_b[5], req_b[4], req_b[3], req_b[2], req_b[1], req_b[0]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_a[31], req_a[30], req_a[29], req_a[28], req_a[27], req_a[26], req_a[25], req_a[24]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m3",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(0), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO ({_N1345, _N1344, _N1343, _N1342, _N1341, _N1340, _N1339, _N1338, _N145, _N144, _N143, _N142, _N141, _N140, _N139, _N138, _N137, _N136, _N135, _N134, _N133, _N132, _N131, _N130, _N1337, _N1336, _N1335, _N1334, _N1333, _N1332, _N1331, _N1330, _N1329, _N1328, _N1327, _N1326, _N1325, _N1324, _N1323, _N1322, _N1321, _N1320, _N1319, _N1318, _N1317, _N1316, _N1315, _N1314}),\n            .CXBO (),\n            .CXO (),\n            .P ({\\N23_m3_P[47]_floating , \\N23_m3_P[46]_floating , \\N23_m3_P[45]_floating , \\N23_m3_P[44]_floating , \\N23_m3_P[43]_floating , \\N23_m3_P[42]_floating , \\N23_m3_P[41]_floating , \\N23_m3_P[40]_floating , \\N23_m3_P[39]_floating , \\N23_m3_P[38]_floating , \\N23_m3_P[37]_floating , \\N23_m3_P[36]_floating , \\N23_m3_P[35]_floating , \\N23_m3_P[34]_floating , \\N23_m3_P[33]_floating , \\N23_m3_P[32]_floating , \\N23_m3_P[31]_floating , \\N23_m3_P[30]_floating , \\N23_m3_P[29]_floating , \\N23_m3_P[28]_floating , \\N23_m3_P[27]_floating , \\N23_m3_P[26]_floating , \\N23_m3_P[25]_floating , \\N23_m3_P[24]_floating , unsigned_product[40], unsigned_product[39], unsigned_product[38], unsigned_product[37], unsigned_product[36], unsigned_product[35], unsigned_product[34], unsigned_product[33], unsigned_product[32], unsigned_product[31], unsigned_product[30], unsigned_product[29], unsigned_product[28], unsigned_product[27], unsigned_product[26], unsigned_product[25], unsigned_product[24], unsigned_product[23], unsigned_product[22], unsigned_product[21], unsigned_product[20], unsigned_product[19], unsigned_product[18], unsigned_product[17]}),\n            .CPI (),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b0, 1'b1, 1'b0}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, req_a[23], req_a[22], req_a[21], req_a[20], req_a[19], req_a[18], req_a[17], req_a[16], req_a[15], req_a[14], req_a[13], req_a[12], req_a[11], req_a[10], req_a[9], req_a[8], req_a[7], req_a[6], req_a[5], req_a[4], req_a[3], req_a[2], req_a[1], req_a[0]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, req_b[31], req_b[30], req_b[29], req_b[28], req_b[27], req_b[26], req_b[25], req_b[24], req_b[23], req_b[22], req_b[21], req_b[20], req_b[19], req_b[18], req_b[17]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, _N90, _N89, _N88, _N87, _N86, _N85, _N84, _N83, _N82, _N81, _N80, _N79, _N78, _N77, _N76, _N75, _N74, _N73, _N72, _N71, _N70, _N69, _N68, _N67, _N66, _N65, _N64, _N63, _N62, _N61, _N60, _N59}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (1'b0),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          },
+          {
+            "name": "N23_m4",
+            "parameters": "\n            .GRS_EN(\"TRUE\"), \n            .ASYNC_RST(0), \n            .X_REG(0), \n            .XB_REG(0), \n            .Y_REG(0), \n            .Z_REG(0), \n            .P_REG(1), \n            .CXO_REG(0), \n            .CPO_REG(0), \n            .MULT_REG(0), \n            .PREADD_REG(0), \n            .MODEIN_REG(0), \n            .MODEY_REG(0), \n            .MODEZ_REG(0), \n            .X_SEL(0), \n            .XB_SEL(0), \n            .CIN_SEL(0), \n            .ROUNDMODE_SEL(0), \n            .USE_SIMD(0), \n            .USE_ACCLOW(0), \n            .USE_PREADD(0), \n            .USE_POSTADD(1), \n            .USE_MULT(1), \n            .P_INIT0(48'b000000000000000000000000000000000000000000000000), \n            .P_INIT1(48'b000000000000000000000000000000000000000000000000)",
+            "ports": "\n            .CPO (),\n            .CXBO (),\n            .CXO (),\n            .P ({_N1282, _N1281, _N1280, _N1279, _N1278, _N1277, _N1276, _N1275, _N1274, _N1273, _N1272, _N1271, _N1270, _N1269, _N1268, _N1267, _N1266, _N1265, _N1264, _N1263, _N1262, _N1261, _N1260, _N1259, _N1258, product[63], product[62], product[61], product[60], product[59], product[58], product[57], product[56], product[55], product[54], product[53], product[52], product[51], product[50], product[49], product[48], product[47], product[46], product[45], product[44], product[43], product[42], product[41]}),\n            .CPI ({_N1345, _N1344, _N1343, _N1342, _N1341, _N1340, _N1339, _N1338, _N145, _N144, _N143, _N142, _N141, _N140, _N139, _N138, _N137, _N136, _N135, _N134, _N133, _N132, _N131, _N130, _N1337, _N1336, _N1335, _N1334, _N1333, _N1332, _N1331, _N1330, _N1329, _N1328, _N1327, _N1326, _N1325, _N1324, _N1323, _N1322, _N1321, _N1320, _N1319, _N1318, _N1317, _N1316, _N1315, _N1314}),\n            .CXBI (),\n            .CXI (),\n            .MODEIN ({1'b0, 1'b0, 1'b0, 1'b1, 1'b0}),\n            .MODEY ({1'b0, 1'b0, 1'b1}),\n            .MODEZ ({1'b0, 1'b1, 1'b0, 1'b1}),\n            .X ({1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_b[31], req_b[30], req_b[29], req_b[28], req_b[27], req_b[26], req_b[25], req_b[24], req_b[23], req_b[22], req_b[21], req_b[20], req_b[19], req_b[18], req_b[17]}),\n            .XB (),\n            .Y ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, req_a[31], req_a[30], req_a[29], req_a[28], req_a[27], req_a[26], req_a[25], req_a[24]}),\n            .Z ({1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx, 1'bx}),\n            .COUT (),\n            .CEM (),\n            .CEMODEIN (),\n            .CEMODEY (),\n            .CEMODEZ (),\n            .CEP (N428),\n            .CEPRE (),\n            .CEX1 (),\n            .CEX2 (),\n            .CEX3 (),\n            .CEXB (),\n            .CEY1 (),\n            .CEY2 (),\n            .CEZ (),\n            .CIN (),\n            .CLK (clk),\n            .RSTM (),\n            .RSTMODEIN (),\n            .RSTMODEY (),\n            .RSTMODEZ (),\n            .RSTP (N44),\n            .RSTPRE (),\n            .RSTX (),\n            .RSTXB (),\n            .RSTY (),\n            .RSTZ ()"
+          }
+        ],
+        "m_isa": "RV32IM_Zicsr",
+        "divider": "32-step restoring RTL, no vendor divider IP"
+      },
+      "slot1_capabilities": [
+        "RV32I ALU/LUI/AUIPC",
+        "branch/JAL/JALR",
+        "load/store through shared LSU",
+        "MUL/MULH/MULHSU/MULHU through shared MDU"
+      ]
+    }
+  },
+  "protected": {
+    "rv32i_cache_board": {
+      "status": "unchanged",
+      "files": 939
+    },
+    "rv32i_debug": {
+      "status": "unchanged",
+      "files": 423
+    },
+    "rv32i_stress": {
+      "status": "unchanged",
+      "files": 298
+    },
+    "rv32i_acceptance": {
+      "status": "unchanged",
+      "files": 55
+    },
+    "rv32i_profile": {
+      "status": "unchanged",
+      "files": 468
+    },
+    "rv32im_mext1": {
+      "status": "unchanged",
+      "files": 952
+    },
+    "rv32im_front1": {
+      "status": "unchanged",
+      "files": 2289
+    },
+    "rv32im_dual1": {
+      "status": "unchanged",
+      "files": 1401
+    }
+  },
+  "firmware_build": "EVOLVE1_BOARD",
+  "firmware_bin_sha256": "9156a5bbb76ce9269518136d1a1443c7691c83325595392b55123b496a9372ef",
+  "notes": "Firmware build name tracks the frozen compiler-stage binary; MIMPID/FRONT_CFG distinguish the EVOLVE5 hardware."
+}

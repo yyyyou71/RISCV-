@@ -1,0 +1,9 @@
+Generated 118 programs / 469 timing cases
+RUN xvlog.bat
+RUN xelab.bat
+RUN xsim.bat
+RUN xelab.bat
+RUN xsim.bat
+RUN riscv64-unknown-elf-gcc.exe
+PASS 469 cases, 233261 differential packets, 40/40 RV32I instruction kinds
+Results: C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\outputs\rv32im_evolve5\reports\rv32i\mul_pair_combo

@@ -1,0 +1,66 @@
+test_bad_compile_flags (test_board_report.ReportTests.test_bad_compile_flags) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_missing_identity (test_board_report.ReportTests.test_missing_identity) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_missing_validation (test_board_report.ReportTests.test_missing_validation) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_mixed_log (test_board_report.ReportTests.test_mixed_log) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_short_not_accepted (test_board_report.ReportTests.test_short_not_accepted) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_simulation_not_accepted (test_board_report.ReportTests.test_simulation_not_accepted) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_three_resource_denominators (test_board_report.ReportTests.test_three_resource_denominators) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_wrong_build (test_board_report.ReportTests.test_wrong_build) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_wrong_variant (test_board_report.ReportTests.test_wrong_variant) ... skipped 'Historical CACHE3-only report fixtures; DUAL1 uses test_dual_log'
+test_bad_crc_cannot_claim_pass (test_coremark_parser.ParserTests.test_bad_crc_cannot_claim_pass) ... ok
+test_cycle_count_over_32bits (test_coremark_parser.ParserTests.test_cycle_count_over_32bits) ... ok
+test_exact_ten_seconds_with_both_seeds (test_coremark_parser.ParserTests.test_exact_ten_seconds_with_both_seeds) ... ok
+test_flag_domain_rejected (test_coremark_parser.ParserTests.test_flag_domain_rejected) ... ok
+test_missing_begin_rejected (test_coremark_parser.ParserTests.test_missing_begin_rejected) ... ok
+test_missing_validation (test_coremark_parser.ParserTests.test_missing_validation) ... ok
+test_nonstandard_size_rejected (test_coremark_parser.ParserTests.test_nonstandard_size_rejected) ... ok
+test_one_cycle_short (test_coremark_parser.ParserTests.test_one_cycle_short) ... ok
+test_requested_iterations_must_match (test_coremark_parser.ParserTests.test_requested_iterations_must_match) ... ok
+test_simulation_is_not_board_score (test_coremark_parser.ParserTests.test_simulation_is_not_board_score) ... ok
+test_unit_rejected (test_coremark_parser.ParserTests.test_unit_rejected) ... ok
+test_wrong_clock_rejected (test_coremark_parser.ParserTests.test_wrong_clock_rejected) ... ok
+test_invalid_mutations (test_dual_log.DualLogTests.test_invalid_mutations) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_micro_ipc (test_dual_log.DualLogTests.test_micro_ipc) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_scalar_rejects_nonzero_pairs (test_dual_log.DualLogTests.test_scalar_rejects_nonzero_pairs) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_three_configs (test_dual_log.DualLogTests.test_three_configs) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_positive_is_simulation (test_evolve_log.EvolveLogTests.test_positive_is_simulation) ... ok
+test_rejections (test_evolve_log.EvolveLogTests.test_rejections) ... ok
+test_bypass_bit_required (test_front_log.FrontLogTests.test_bypass_bit_required) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_cfg_values (test_front_log.FrontLogTests.test_cfg_values) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_duplicate_front (test_front_log.FrontLogTests.test_duplicate_front) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_incomplete_validation (test_front_log.FrontLogTests.test_incomplete_validation) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_missing_front (test_front_log.FrontLogTests.test_missing_front) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_missing_last_ready (test_front_log.FrontLogTests.test_missing_last_ready) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_short_rejected (test_front_log.FrontLogTests.test_short_rejected) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_valid_synthetic_has_no_board_origin (test_front_log.FrontLogTests.test_valid_synthetic_has_no_board_origin) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_build (test_front_log.FrontLogTests.test_wrong_build) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_crc (test_front_log.FrontLogTests.test_wrong_crc) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_depth (test_front_log.FrontLogTests.test_wrong_depth) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_ras (test_front_log.FrontLogTests.test_wrong_ras) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_bad_crc (test_m_log.LogTests.test_bad_crc) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_duplicate_begin (test_m_log.LogTests.test_duplicate_begin) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_incomplete_pair (test_m_log.LogTests.test_incomplete_pair) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_missing_boot_test (test_m_log.LogTests.test_missing_boot_test) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_short_rejected (test_m_log.LogTests.test_short_rejected) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_synthetic_positive_not_hardware (test_m_log.LogTests.test_synthetic_positive_not_hardware) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_truncated_tail (test_m_log.LogTests.test_truncated_tail) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_hardware (test_m_log.LogTests.test_wrong_hardware) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_wrong_software_isa (test_m_log.LogTests.test_wrong_software_isa) ... skipped 'Historical DUAL1 fixtures; current release uses test_evolve_log'
+test_duplicate_field_rejected (test_platform_identity.IdentityTests.test_duplicate_field_rejected) ... ok
+test_flags_rejected (test_platform_identity.IdentityTests.test_flags_rejected) ... ok
+test_junk_field_rejected (test_platform_identity.IdentityTests.test_junk_field_rejected) ... ok
+test_lowercase_hex (test_platform_identity.IdentityTests.test_lowercase_hex) ... ok
+test_missing_boot (test_platform_identity.IdentityTests.test_missing_boot) ... ok
+test_missing_identity (test_platform_identity.IdentityTests.test_missing_identity) ... ok
+test_mixed_variants_rejected (test_platform_identity.IdentityTests.test_mixed_variants_rejected) ... ok
+test_old_build_rejected (test_platform_identity.IdentityTests.test_old_build_rejected) ... ok
+test_reset_drops_identity (test_platform_identity.IdentityTests.test_reset_drops_identity) ... ok
+test_three_variants (test_platform_identity.IdentityTests.test_three_variants) ... ok
+test_valid (test_platform_identity.IdentityTests.test_valid) ... ok
+test_wrong_bp_rejected (test_platform_identity.IdentityTests.test_wrong_bp_rejected) ... ok
+test_wrong_fields (test_platform_identity.IdentityTests.test_wrong_fields) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 0.007s
+
+OK (skipped=34)

@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "started_utc": "2026-10-23T15:30:19.998026+00:00",
+  "error": "\n****** xsim v2025.2 (64-bit)\n  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025\n  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025\n  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025\n  **** Start of session at: Fri Oct 23 23:30:30 2026\n    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.\n    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.\n\nsource xsim.dir/coremark_sim/xsim_script.tcl\n# xsim {coremark_sim} -autoloadwcfg -runall\nTime resolution is 1 ps\nrun -all\nFatal: Firmware failure: PORT_CHECK FAIL\nTime: 45745 us  Iteration: 0  Process: /tb_coremark/Initial37_58  Scope: tb_coremark  File: C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_mul_pair_unroll/tb_coremark.sv Line: 52\n$finish called at time : 45745 us\nrun: Time (s): cpu = 00:00:00 ; elapsed = 00:00:07 . Memory (MB): peak = 220.188 ; gain = 0.000\nexit\nINFO: [Common 17-206] Exiting xsim at Fri Oct 23 23:30:38 2026...\n"
+}

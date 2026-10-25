@@ -1,0 +1,44 @@
+Vivado Simulator v2025.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_2025/2025.2/Vivado/bin/unwrapped/win64.o/xelab.exe tb_coremark -s coremark_sim -mt 4 
+Using 4 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3645] port 'retire2_mem_addr' remains unconnected for this instance [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_predictor_sweep_fast_btb256/rv32_board_design.v:2057]
+WARNING: [VRFC 10-3645] port 's_second_valid' remains unconnected for this instance [C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve4_predictor_sweep_fast_btb256/rv32_board_design.v:464]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.board_reset
+Compiling module work.board_button
+Compiling module work.rv32_predictor(INDEX_BITS=8)
+Compiling module work.rv32_fetch_dual(BP_INDEX_BITS=8,...
+Compiling module work.rv32_fetch(BP_INDEX_BITS=8,DEPTH...
+Compiling module work.rv32_decode(M_ENABLE=1)
+Compiling module work.rv32_decode
+Compiling module work.rv32_regfile(DUAL_ENABLE=1)
+Compiling module work.rv32_alu
+Compiling module work.rv32_csr(IMPL_ID=32'b01100001000...
+Compiling module work.rv32_muldiv(FAST_MUL=1)
+Compiling module work.rv32_core(M_ENABLE=1,BP_INDEX_BI...
+Compiling module work.rv32_burst_cache_2way(READ_ONLY=...
+Compiling module work.rv32_icache(BURST_INTERFACE=1,WI...
+Compiling module work.rv32_burst_cache_2way(FAST_STORE...
+Compiling module work.rv32_dcache(BURST_INTERFACE=1,FA...
+Compiling module work.rv32_burst_arbiter
+Compiling module work.rv32_monitor(BP_ENTRIES=256,CONF...
+Compiling module work.rv32_soc_memory(BURST_INTERFACE=...
+Compiling module work.rv32_uart(CLOCK_HZ=25000000)
+Compiling module work.rv32_gpio
+Compiling module work.rv32_timer
+Compiling module work.rv32_soc_fabric(BURST_INTERFACE=...
+Compiling module work.rv32_soc(CLOCK_HZ=25000000,M_ENA...
+Compiling module work.board_top
+Compiling module work.front_profile_monitor
+Compiling module work.dual_profile_monitor
+Compiling module work.bp_profile_monitor
+Compiling module work.burst_profile_monitor
+Compiling module work.tb_coremark
+Built simulation snapshot coremark_sim

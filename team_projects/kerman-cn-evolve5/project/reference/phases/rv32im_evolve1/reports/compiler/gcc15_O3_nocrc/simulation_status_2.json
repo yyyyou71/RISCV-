@@ -1,0 +1,10 @@
+{
+  "config": "gcc15_O3_nocrc",
+  "compiler": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\work\\toolchains\\gcc15\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+  "optimization": "O3",
+  "extra_flags": [
+    "-fno-optimize-crc"
+  ],
+  "status": "passed",
+  "evidence": "C:\\Users\\LZM\\Documents\\Codex\\2026-09-18\\ru-h\\outputs\\rv32im_evolve1\\reports\\compiler\\gcc15_O3_nocrc\\run2"
+}

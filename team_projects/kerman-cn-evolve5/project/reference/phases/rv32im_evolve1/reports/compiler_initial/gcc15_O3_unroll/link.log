@@ -1,0 +1,4 @@
+C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O3_unroll\firmware\coremark\firmware.elf section `.rodata' will not fit in region `ROM'
+C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: ROM overflow
+C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: region `ROM' overflowed by 1848 bytes
+collect2.exe: error: ld returned 1 exit status

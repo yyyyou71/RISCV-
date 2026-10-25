@@ -1,0 +1,186 @@
+{
+  "status": "passed",
+  "hardware_tested": false,
+  "cases": 140,
+  "programs": [
+    {
+      "name": "load_f0_o0",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f0_o1",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f0_o2",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f0_o3",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f1_o0",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f1_o2",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f2_o0",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f4_o1",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "load_f5_o2",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "store_f0_o0",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f0_o1",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f0_o2",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f0_o3",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f1_o0",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f1_o2",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "store_f2_o0",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "misaligned_False_1_1",
+      "packets": 6,
+      "cause": 4
+    },
+    {
+      "name": "misaligned_False_2_1",
+      "packets": 6,
+      "cause": 4
+    },
+    {
+      "name": "misaligned_False_2_2",
+      "packets": 6,
+      "cause": 4
+    },
+    {
+      "name": "access_fault_False",
+      "packets": 6,
+      "cause": 5
+    },
+    {
+      "name": "fault_cancels_m_False",
+      "packets": 6,
+      "cause": 5
+    },
+    {
+      "name": "misaligned_True_1_1",
+      "packets": 6,
+      "cause": 6
+    },
+    {
+      "name": "misaligned_True_2_1",
+      "packets": 6,
+      "cause": 6
+    },
+    {
+      "name": "misaligned_True_2_2",
+      "packets": 6,
+      "cause": 6
+    },
+    {
+      "name": "access_fault_True",
+      "packets": 6,
+      "cause": 7
+    },
+    {
+      "name": "fault_cancels_m_True",
+      "packets": 6,
+      "cause": 7
+    },
+    {
+      "name": "second_load_x0",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "second_load_raw_reject",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "second_load_waw_reject",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "second_load_war_allowed",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "jalr_target_32",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "jalr_target_33",
+      "packets": 8,
+      "cause": 11
+    },
+    {
+      "name": "jalr_target_34",
+      "packets": 6,
+      "cause": 0
+    },
+    {
+      "name": "jalr_raw_reject",
+      "packets": 3,
+      "cause": 11
+    },
+    {
+      "name": "jalr_return_second",
+      "packets": 5,
+      "cause": 11
+    }
+  ],
+  "packets": 1132,
+  "coverage": [
+    "LSU_COVERAGE loads=22 stores=32 exceptions=22 jalr=8"
+  ]
+}

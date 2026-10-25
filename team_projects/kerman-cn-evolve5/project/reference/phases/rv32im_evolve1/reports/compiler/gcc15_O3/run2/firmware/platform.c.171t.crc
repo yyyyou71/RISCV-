@@ -1,0 +1,429 @@
+
+;; Function platform_stats (platform_stats, funcdef_no=3, decl_uid=1466, cgraph_uid=4, symbol_order=3)
+
+
+Examining platform_stats function.
+Loop iteration number is 9.
+Loop iteration number isn't a constant.
+void platform_stats ()
+{
+  unsigned int i;
+  static const char * const names[10] = {" ih=", " im=", " dh=", " dm=", " wh=", " wm=", " read_cmd=", " burst_cmd=", " read_beat=", " write_rsp="};
+  long unsigned int _1;
+  const char * _2;
+  unsigned int _3;
+  unsigned int _4;
+  volatile uint32_t * _5;
+  long unsigned int _6;
+  unsigned int ivtmp_7;
+  unsigned int ivtmp_8;
+
+  <bb 2> [local count: 97603128]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073754148B] ={v} 1;
+  # DEBUG BEGIN_STMT
+  uart_puts ("CACHE_STATS scope=cumulative32 seq=");
+  # DEBUG BEGIN_STMT
+  _1 ={v} MEM[(volatile uint32_t *)1073754144B];
+  uart_put_u32 (_1);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 3> [local count: 976138696]:
+  # i_19 = PHI <i_16(5), 0(2)>
+  # ivtmp_8 = PHI <ivtmp_7(5), 10(2)>
+  # DEBUG i => i_19
+  # DEBUG BEGIN_STMT
+  _2 = names[i_19];
+  uart_puts (_2);
+  # DEBUG BEGIN_STMT
+  _3 = i_19 + 268438560;
+  _4 = _3 * 4;
+  _5 = (volatile uint32_t *) _4;
+  _6 ={v} *_5;
+  uart_put_u32 (_6);
+  # DEBUG BEGIN_STMT
+  i_16 = i_19 + 1;
+  # DEBUG i => i_16
+  # DEBUG BEGIN_STMT
+  ivtmp_7 = ivtmp_8 - 1;
+  if (ivtmp_7 != 0)
+    goto <bb 5>; [90.00%]
+  else
+    goto <bb 4>; [10.00%]
+
+  <bb 5> [local count: 878535567]:
+  goto <bb 3>; [100.00%]
+
+  <bb 4> [local count: 97603128]:
+  # DEBUG BEGIN_STMT
+  uart_putc (10);
+  return;
+
+}
+
+
+
+;; Function platform_cache_selftest (platform_cache_selftest, funcdef_no=4, decl_uid=1470, cgraph_uid=5, symbol_order=4)
+
+
+Examining platform_cache_selftest function.
+Loop iteration number is 9.
+Loop iteration number isn't a constant.
+uint32_t platform_cache_selftest ()
+{
+  unsigned int i;
+  uint32_t depth;
+  uint32_t ras;
+  uint32_t pht;
+  uint32_t bits;
+  uint32_t uarch;
+  uint32_t impl;
+  uint32_t misa;
+  uint32_t cfg;
+  uint32_t result;
+  long unsigned int _2;
+  long unsigned int _3;
+  long unsigned int _4;
+  long unsigned int _5;
+  long unsigned int _6;
+  long unsigned int _7;
+  long unsigned int _8;
+  uint32_t _9;
+  long unsigned int _24;
+  long unsigned int _26;
+  long unsigned int _28;
+  long unsigned int _30;
+  long unsigned int _32;
+  long unsigned int _33;
+  long unsigned int _34;
+  long unsigned int _35;
+  long unsigned int _36;
+  long unsigned int _47;
+  long unsigned int _48;
+  long unsigned int _49;
+  long unsigned int _50;
+  long unsigned int _52;
+  long unsigned int _53;
+  _Bool _55;
+  _Bool _56;
+  long unsigned int _57;
+  long unsigned int _58;
+  long unsigned int _59;
+  long unsigned int _60;
+  unsigned int _61;
+  long unsigned int _62;
+  long unsigned int _64;
+  const char * _66;
+  unsigned int _67;
+  unsigned int _68;
+  volatile uint32_t * _69;
+  long unsigned int _70;
+  _Bool _73;
+  int _82;
+  unsigned int _83;
+  unsigned int _84;
+  unsigned int ivtmp_86;
+  unsigned int ivtmp_87;
+  int _91;
+  unsigned int _92;
+  unsigned int _93;
+
+  <bb 2> [local count: 1073741824]:
+  # DEBUG BEGIN_STMT
+  # DEBUG INLINE_ENTRY platform_valid
+  # DEBUG BEGIN_STMT
+  cfg_20 ={v} MEM[(volatile uint32_t *)1073754116B];
+  # DEBUG cfg => cfg_20
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0,misa" : "=r" misa_21);
+  # DEBUG misa => misa_21
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0,mimpid" : "=r" impl_22);
+  # DEBUG impl => impl_22
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("csrr %0,0xfc0" : "=r" uarch_23);
+  # DEBUG uarch => uarch_23
+  # DEBUG BEGIN_STMT
+  _24 = impl_22 >> 8;
+  bits_25 = _24 & 31;
+  # DEBUG bits => bits_25
+  # DEBUG D#6 => uarch_23 >> 4
+  # DEBUG pht => D#6 & 15
+  # DEBUG BEGIN_STMT
+  # DEBUG D#5 => uarch_23 >> 8
+  # DEBUG ras => D#5 & 31
+  # DEBUG D#4 => uarch_23 >> 16
+  # DEBUG depth => D#4 & 15
+  # DEBUG BEGIN_STMT
+  _32 = bits_25 + 4294967294;
+  if (_32 > 6)
+    goto <bb 68>; [34.00%]
+  else
+    goto <bb 3>; [66.00%]
+
+  <bb 3> [local count: 708669600]:
+  _33 = uarch_23 >> 24;
+  if (_33 != 241)
+    goto <bb 68>; [50.00%]
+  else
+    goto <bb 4>; [50.00%]
+
+  <bb 4> [local count: 354334800]:
+  _34 = uarch_23 >> 20;
+  _35 = _34 & 15;
+  if (bits_25 != _35)
+    goto <bb 68>; [50.00%]
+  else
+    goto <bb 5>; [50.00%]
+
+  <bb 5> [local count: 177167400]:
+  _26 = uarch_23 >> 4;
+  pht_27 = _26 & 15;
+  _36 = pht_27 + 4294967294;
+  if (_36 > 10)
+    goto <bb 68>; [34.00%]
+  else
+    goto <bb 6>; [66.00%]
+
+  <bb 6> [local count: 116930483]:
+  _28 = uarch_23 >> 8;
+  ras_29 = _28 & 31;
+  # DEBUG BEGIN_STMT
+  _82 = (int) ras_29;
+  _83 = 65809 >> _82;
+  _84 = _83 & 1;
+  if (_84 == 0)
+    goto <bb 68>; [50.00%]
+  else
+    goto <bb 7>; [50.00%]
+
+  <bb 7> [local count: 97052301]:
+  _30 = uarch_23 >> 16;
+  depth_31 = _30 & 15;
+  _91 = (int) depth_31;
+  _92 = 278 >> _91;
+  _93 = _92 & 1;
+  if (_93 == 0)
+    goto <bb 68>; [25.00%]
+  else
+    goto <bb 8>; [75.00%]
+
+  <bb 8> [local count: 72789226]:
+  # DEBUG BEGIN_STMT
+  _47 = misa_21 >> 12;
+  _48 = cfg_20 >> 5;
+  _49 = _47 ^ _48;
+  _50 = _49 & 1;
+  _55 = cfg_20 > 63;
+  _56 = _50 != 0;
+  _73 = _55 | _56;
+  if (_73 != 0)
+    goto <bb 68>; [56.44%]
+  else
+    goto <bb 9>; [43.56%]
+
+  <bb 9> [local count: 31706986]:
+  # DEBUG BEGIN_STMT
+  # DEBUG cfg => cfg_20 & 4294967263
+  # DEBUG BEGIN_STMT
+  _52 ={v} MEM[(volatile uint32_t *)1073754112B];
+  if (_52 == 1128350515)
+    goto <bb 10>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 10> [local count: 10780375]:
+  _53 ={v} MEM[(volatile uint32_t *)1073754120B];
+  if (_53 == 25000000)
+    goto <bb 11>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 11> [local count: 3665328]:
+  cfg_51 = cfg_20 & 4294967263;
+  switch (cfg_51) <default: <L20> [50.00%], case 23: <L16> [50.00%], case 28: <L16> [50.00%], case 31: <L16> [50.00%]>
+
+  <bb 68> [local count: 1549490230]:
+<L20>:
+  goto <bb 27>; [100.00%]
+
+  <bb 12> [local count: 1832664]:
+<L16>:
+  _57 ={v} MEM[(volatile uint32_t *)1073754124B];
+  if (_57 == 1024)
+    goto <bb 13>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 13> [local count: 623106]:
+  _58 ={v} MEM[(volatile uint32_t *)1073754128B];
+  if (_58 == 16)
+    goto <bb 14>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 14> [local count: 211856]:
+  _59 ={v} MEM[(volatile uint32_t *)1073754132B];
+  if (_59 == 32)
+    goto <bb 15>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 15> [local count: 72031]:
+  _60 ={v} MEM[(volatile uint32_t *)1073754136B];
+  _61 = 1 << bits_25;
+  if (_60 == _61)
+    goto <bb 16>; [34.00%]
+  else
+    goto <bb 68>; [66.00%]
+
+  <bb 16> [local count: 24491]:
+  _62 ={v} MEM[(volatile uint32_t *)1073754140B];
+  if (_62 == 0)
+    goto <bb 17>; [50.00%]
+  else
+    goto <bb 68>; [50.00%]
+
+  <bb 17> [local count: 840525096]:
+  # DEBUG cfg => NULL
+  # DEBUG misa => NULL
+  # DEBUG impl => NULL
+  # DEBUG uarch => NULL
+  # DEBUG bits => NULL
+  # DEBUG pht => NULL
+  # DEBUG ras => NULL
+  # DEBUG depth => NULL
+  _2 ={v} MEM[(volatile uint32_t *)1073754116B];
+  _3 = _2 & 4294967263;
+  if (_3 != 31)
+    goto <bb 68>; [52.23%]
+  else
+    goto <bb 18>; [47.77%]
+
+  <bb 18> [local count: 401518841]:
+  # DEBUG BEGIN_STMT
+  result_14 = cache_probe ();
+  # DEBUG result => result_14
+  # DEBUG BEGIN_STMT
+  if (result_14 != 0)
+    goto <bb 27>; [34.00%]
+  else
+    goto <bb 19>; [66.00%]
+
+  <bb 19> [local count: 265002433]:
+  # DEBUG BEGIN_STMT
+  _4 ={v} MEM[(volatile uint32_t *)1073754368B];
+  if (_4 == 0)
+    goto <bb 27>; [21.72%]
+  else
+    goto <bb 20>; [78.28%]
+
+  <bb 20> [local count: 207443904]:
+  _5 ={v} MEM[(volatile uint32_t *)1073754372B];
+  if (_5 == 0)
+    goto <bb 27>; [21.72%]
+  else
+    goto <bb 21>; [78.28%]
+
+  <bb 21> [local count: 162387087]:
+  # DEBUG BEGIN_STMT
+  _6 ={v} MEM[(volatile uint32_t *)1073754396B];
+  if (_6 == 0)
+    goto <bb 27>; [21.72%]
+  else
+    goto <bb 22>; [78.28%]
+
+  <bb 22> [local count: 127116611]:
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745920B] ={v} 0;
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745940B] ={v} 1;
+  # DEBUG BEGIN_STMT
+  _7 ={v} MEM[(volatile uint32_t *)1073745920B];
+  if (_7 != 1)
+    goto <bb 27>; [35.00%]
+  else
+    goto <bb 23>; [65.00%]
+
+  <bb 23> [local count: 82625797]:
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073745940B] ={v} 1;
+  # DEBUG BEGIN_STMT
+  _8 ={v} MEM[(volatile uint32_t *)1073745920B];
+  if (_8 != 0)
+    goto <bb 27>; [36.03%]
+  else
+    goto <bb 24>; [63.97%]
+
+  <bb 24> [local count: 52855723]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("CACHE_SELFTEST_PASS lru=1 byte_halfword=1 write_through=1 mmio=1 burst=1\n");
+  # DEBUG BEGIN_STMT
+  # DEBUG INLINE_ENTRY platform_stats
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  MEM[(volatile uint32_t *)1073754148B] ={v} 1;
+  # DEBUG BEGIN_STMT
+  uart_puts ("CACHE_STATS scope=cumulative32 seq=");
+  # DEBUG BEGIN_STMT
+  _64 ={v} MEM[(volatile uint32_t *)1073754144B];
+  uart_put_u32 (_64);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+
+  <bb 25> [local count: 528615400]:
+  # i_12 = PHI <i_71(28), 0(24)>
+  # ivtmp_87 = PHI <ivtmp_86(28), 10(24)>
+  # DEBUG i => i_12
+  # DEBUG BEGIN_STMT
+  _66 = names[i_12];
+  uart_puts (_66);
+  # DEBUG BEGIN_STMT
+  _67 = i_12 + 268438560;
+  _68 = _67 * 4;
+  _69 = (volatile uint32_t *) _68;
+  _70 ={v} *_69;
+  uart_put_u32 (_70);
+  # DEBUG BEGIN_STMT
+  i_71 = i_12 + 1;
+  # DEBUG i => i_71
+  # DEBUG BEGIN_STMT
+  ivtmp_86 = ivtmp_87 - 1;
+  if (ivtmp_86 != 0)
+    goto <bb 28>; [90.00%]
+  else
+    goto <bb 26>; [10.00%]
+
+  <bb 28> [local count: 475759676]:
+  goto <bb 25>; [100.00%]
+
+  <bb 26> [local count: 52855723]:
+  # DEBUG BEGIN_STMT
+  uart_putc (10);
+  # DEBUG i => NULL
+  # DEBUG BEGIN_STMT
+
+  <bb 27> [local count: 1073741824]:
+  # _9 = PHI <100(68), result_14(18), 101(20), 102(21), 103(22), 104(23), 0(26), 101(19)>
+<L18>:
+  # DEBUG cfg => NULL
+  # DEBUG misa => NULL
+  # DEBUG impl => NULL
+  # DEBUG uarch => NULL
+  # DEBUG bits => NULL
+  # DEBUG pht => NULL
+  # DEBUG ras => NULL
+  # DEBUG depth => NULL
+  return _9;
+
+}
+
+

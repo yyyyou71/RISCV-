@@ -1,0 +1,23 @@
+Vivado Simulator v2025.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_2025/2025.2/Vivado/bin/unwrapped/win64.o/xelab.exe tb_core -s branch_directed 
+Multi-threading is on. Using 22 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.rv32_predictor_default
+Compiling module work.rv32_fetch_dual(DEPTH=4,BYPASS=1...
+Compiling module work.rv32_fetch(DEPTH=4,BYPASS=1,DUAL...
+Compiling module work.rv32_decode(M_ENABLE=1)
+Compiling module work.rv32_decode
+Compiling module work.rv32_regfile(DUAL_ENABLE=1)
+Compiling module work.rv32_alu
+Compiling module work.rv32_csr(RESET_MTVEC=32'b0111000...
+Compiling module work.rv32_muldiv
+Compiling module work.rv32_core(RESET_MTVEC=32'b011100...
+Compiling module work.tb_core
+Built simulation snapshot branch_directed

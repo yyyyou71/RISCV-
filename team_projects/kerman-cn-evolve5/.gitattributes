@@ -1,0 +1,5 @@
+# Preserve the release bytes and checksum manifest across Windows/Linux clones.
+* -text
+*.sbit binary
+*.elf binary
+*.bin binary

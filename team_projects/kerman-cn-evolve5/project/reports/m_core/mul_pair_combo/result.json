@@ -1,0 +1,302 @@
+{
+  "status": "passed",
+  "hardware_tested": false,
+  "config": "mul_pair_combo",
+  "programs": [
+    {
+      "name": "edges_00",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_01",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_02",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_03",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_04",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_05",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_06",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_07",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_08",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_09",
+      "retirement_packets": 962,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "edges_10",
+      "retirement_packets": 82,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "rd_source_alias",
+      "retirement_packets": 29,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "wrong_path_multiply_divide",
+      "retirement_packets": 7,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "older_load_fault_cancels_divide",
+      "retirement_packets": 6,
+      "cause": 5,
+      "upstream": false
+    },
+    {
+      "name": "older_store_fault_cancels_multiply",
+      "retirement_packets": 6,
+      "cause": 7,
+      "upstream": false
+    },
+    {
+      "name": "reset_during_divide",
+      "retirement_packets": 7,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "reset_during_multiply",
+      "retirement_packets": 7,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "m_encoding_reserved",
+      "retirement_packets": 3,
+      "cause": 2,
+      "upstream": false
+    },
+    {
+      "name": "load_signed_unsigned_use_branch_store_m_x0",
+      "retirement_packets": 116,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "load_to_jalr",
+      "retirement_packets": 9,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_00",
+      "retirement_packets": 575,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_01",
+      "retirement_packets": 569,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_02",
+      "retirement_packets": 569,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_03",
+      "retirement_packets": 575,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_04",
+      "retirement_packets": 579,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_05",
+      "retirement_packets": 578,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_06",
+      "retirement_packets": 575,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_07",
+      "retirement_packets": 571,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_08",
+      "retirement_packets": 575,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_09",
+      "retirement_packets": 579,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_10",
+      "retirement_packets": 578,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "random_mixed_11",
+      "retirement_packets": 580,
+      "cause": 11,
+      "upstream": false
+    },
+    {
+      "name": "upstream_div",
+      "retirement_packets": 57,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_divu",
+      "retirement_packets": 58,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_mul",
+      "retirement_packets": 420,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_mulh",
+      "retirement_packets": 420,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_mulhsu",
+      "retirement_packets": 420,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_mulhu",
+      "retirement_packets": 420,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_rem",
+      "retirement_packets": 57,
+      "cause": 11,
+      "upstream": true
+    },
+    {
+      "name": "upstream_remu",
+      "retirement_packets": 57,
+      "cause": 11,
+      "upstream": true
+    }
+  ],
+  "cases": 160,
+  "instruction_coverage": {
+    "lui": 2898,
+    "addi": 3721,
+    "mul": 631,
+    "add": 1029,
+    "sw": 1138,
+    "lw": 1078,
+    "mulh": 618,
+    "mulhsu": 605,
+    "mulhu": 611,
+    "div": 545,
+    "divu": 573,
+    "rem": 578,
+    "remu": 549,
+    "ecall": 37,
+    "branch_taken": 352,
+    "beq": 81,
+    "load_access_fault": 1,
+    "store_access_fault": 1,
+    "illegal": 1,
+    "lb": 95,
+    "lh": 112,
+    "lbu": 115,
+    "lhu": 92,
+    "jalr": 1,
+    "ori": 179,
+    "sh": 163,
+    "slt": 76,
+    "xori": 188,
+    "jal": 484,
+    "srli": 104,
+    "sb": 181,
+    "andi": 182,
+    "sll": 59,
+    "branch_not_taken": 465,
+    "bltu": 87,
+    "blt": 94,
+    "fence": 209,
+    "bge": 87,
+    "or": 68,
+    "slti": 172,
+    "slli": 176,
+    "srl": 35,
+    "bne": 385,
+    "sltiu": 203,
+    "and": 70,
+    "sub": 32,
+    "bgeu": 83,
+    "sra": 33,
+    "xor": 81,
+    "srai": 100,
+    "sltu": 63
+  },
+  "oracle": "Independent Python arithmetic + complete architectural retirement comparison + eight upstream rv32um tests"
+}

@@ -1,0 +1,166 @@
+
+****** xsim v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 23 23:31:49 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/branch_directed/xsim_script.tcl
+# xsim {branch_directed} -testplusarg MANIFEST=manifest.txt -testplusarg RESULTS=results.csv -testplusarg TRACE=retire.log -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS mul_slot0_00000000_00000000_i0d0 packets=12 cycles=33
+PASS mul_slot0_00000000_00000000_i1d1 packets=12 cycles=36
+PASS mul_slot0_00000000_00000000_i2d2 packets=12 cycles=53
+PASS mul_slot0_00000000_00000000_i0d3 packets=12 cycles=33
+PASS mul_slot0_00000001_ffffffff_i0d0 packets=12 cycles=33
+PASS mul_slot0_00000001_ffffffff_i1d1 packets=12 cycles=36
+PASS mul_slot0_00000001_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot0_00000001_ffffffff_i0d3 packets=12 cycles=33
+PASS mul_slot0_80000000_ffffffff_i0d0 packets=12 cycles=33
+PASS mul_slot0_80000000_ffffffff_i1d1 packets=12 cycles=36
+PASS mul_slot0_80000000_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot0_80000000_ffffffff_i0d3 packets=12 cycles=33
+PASS mul_slot0_80000001_81234567_i0d0 packets=12 cycles=33
+PASS mul_slot0_80000001_81234567_i1d1 packets=12 cycles=36
+PASS mul_slot0_80000001_81234567_i2d2 packets=12 cycles=53
+PASS mul_slot0_80000001_81234567_i0d3 packets=12 cycles=33
+PASS mul_slot0_ffffffff_ffffffff_i0d0 packets=12 cycles=33
+PASS mul_slot0_ffffffff_ffffffff_i1d1 packets=12 cycles=36
+PASS mul_slot0_ffffffff_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot0_ffffffff_ffffffff_i0d3 packets=12 cycles=33
+PASS mul_slot0_7fffffff_7fffffff_i0d0 packets=12 cycles=33
+PASS mul_slot0_7fffffff_7fffffff_i1d1 packets=12 cycles=36
+PASS mul_slot0_7fffffff_7fffffff_i2d2 packets=12 cycles=53
+PASS mul_slot0_7fffffff_7fffffff_i0d3 packets=12 cycles=33
+PASS mul_slot1_00000000_00000000_i0d0 packets=12 cycles=34
+PASS mul_slot1_00000000_00000000_i1d1 packets=12 cycles=37
+PASS mul_slot1_00000000_00000000_i2d2 packets=12 cycles=53
+PASS mul_slot1_00000000_00000000_i0d3 packets=12 cycles=34
+PASS mul_slot1_00000001_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot1_00000001_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot1_00000001_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot1_00000001_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot1_80000000_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot1_80000000_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot1_80000000_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot1_80000000_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot1_80000001_81234567_i0d0 packets=12 cycles=34
+PASS mul_slot1_80000001_81234567_i1d1 packets=12 cycles=37
+PASS mul_slot1_80000001_81234567_i2d2 packets=12 cycles=53
+PASS mul_slot1_80000001_81234567_i0d3 packets=12 cycles=34
+PASS mul_slot1_ffffffff_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot1_ffffffff_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot1_ffffffff_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot1_ffffffff_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot1_7fffffff_7fffffff_i0d0 packets=12 cycles=34
+PASS mul_slot1_7fffffff_7fffffff_i1d1 packets=12 cycles=37
+PASS mul_slot1_7fffffff_7fffffff_i2d2 packets=12 cycles=53
+PASS mul_slot1_7fffffff_7fffffff_i0d3 packets=12 cycles=34
+PASS mul_slot2_00000000_00000000_i0d0 packets=12 cycles=34
+PASS mul_slot2_00000000_00000000_i1d1 packets=12 cycles=37
+PASS mul_slot2_00000000_00000000_i2d2 packets=12 cycles=53
+PASS mul_slot2_00000000_00000000_i0d3 packets=12 cycles=34
+PASS mul_slot2_00000001_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot2_00000001_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot2_00000001_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot2_00000001_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot2_80000000_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot2_80000000_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot2_80000000_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot2_80000000_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot2_80000001_81234567_i0d0 packets=12 cycles=34
+PASS mul_slot2_80000001_81234567_i1d1 packets=12 cycles=37
+PASS mul_slot2_80000001_81234567_i2d2 packets=12 cycles=53
+PASS mul_slot2_80000001_81234567_i0d3 packets=12 cycles=34
+PASS mul_slot2_ffffffff_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot2_ffffffff_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot2_ffffffff_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot2_ffffffff_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot2_7fffffff_7fffffff_i0d0 packets=12 cycles=34
+PASS mul_slot2_7fffffff_7fffffff_i1d1 packets=12 cycles=37
+PASS mul_slot2_7fffffff_7fffffff_i2d2 packets=12 cycles=53
+PASS mul_slot2_7fffffff_7fffffff_i0d3 packets=12 cycles=34
+PASS mul_slot3_00000000_00000000_i0d0 packets=12 cycles=34
+PASS mul_slot3_00000000_00000000_i1d1 packets=12 cycles=37
+PASS mul_slot3_00000000_00000000_i2d2 packets=12 cycles=53
+PASS mul_slot3_00000000_00000000_i0d3 packets=12 cycles=34
+PASS mul_slot3_00000001_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot3_00000001_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot3_00000001_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot3_00000001_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot3_80000000_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot3_80000000_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot3_80000000_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot3_80000000_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot3_80000001_81234567_i0d0 packets=12 cycles=34
+PASS mul_slot3_80000001_81234567_i1d1 packets=12 cycles=37
+PASS mul_slot3_80000001_81234567_i2d2 packets=12 cycles=53
+PASS mul_slot3_80000001_81234567_i0d3 packets=12 cycles=34
+PASS mul_slot3_ffffffff_ffffffff_i0d0 packets=12 cycles=34
+PASS mul_slot3_ffffffff_ffffffff_i1d1 packets=12 cycles=37
+PASS mul_slot3_ffffffff_ffffffff_i2d2 packets=12 cycles=53
+PASS mul_slot3_ffffffff_ffffffff_i0d3 packets=12 cycles=34
+PASS mul_slot3_7fffffff_7fffffff_i0d0 packets=12 cycles=34
+PASS mul_slot3_7fffffff_7fffffff_i1d1 packets=12 cycles=37
+PASS mul_slot3_7fffffff_7fffffff_i2d2 packets=12 cycles=53
+PASS mul_slot3_7fffffff_7fffffff_i0d3 packets=12 cycles=34
+PASS older_load_fault_cancels_mul_slot0_i0d0 packets=9 cycles=30
+PASS older_load_fault_cancels_mul_slot0_i1d1 packets=9 cycles=35
+PASS older_load_fault_cancels_mul_slot0_i2d2 packets=9 cycles=50
+PASS older_load_fault_cancels_mul_slot0_i0d3 packets=9 cycles=42
+PASS older_store_fault_cancels_mul_slot0_i0d0 packets=9 cycles=30
+PASS older_store_fault_cancels_mul_slot0_i1d1 packets=9 cycles=35
+PASS older_store_fault_cancels_mul_slot0_i2d2 packets=9 cycles=50
+PASS older_store_fault_cancels_mul_slot0_i0d3 packets=9 cycles=42
+PASS older_load_fault_cancels_mul_slot1_i0d0 packets=9 cycles=31
+PASS older_load_fault_cancels_mul_slot1_i1d1 packets=9 cycles=36
+PASS older_load_fault_cancels_mul_slot1_i2d2 packets=9 cycles=51
+PASS older_load_fault_cancels_mul_slot1_i0d3 packets=9 cycles=43
+PASS older_store_fault_cancels_mul_slot1_i0d0 packets=9 cycles=31
+PASS older_store_fault_cancels_mul_slot1_i1d1 packets=9 cycles=36
+PASS older_store_fault_cancels_mul_slot1_i2d2 packets=9 cycles=51
+PASS older_store_fault_cancels_mul_slot1_i0d3 packets=9 cycles=43
+PASS older_load_fault_cancels_mul_slot2_i0d0 packets=9 cycles=31
+PASS older_load_fault_cancels_mul_slot2_i1d1 packets=9 cycles=36
+PASS older_load_fault_cancels_mul_slot2_i2d2 packets=9 cycles=51
+PASS older_load_fault_cancels_mul_slot2_i0d3 packets=9 cycles=43
+PASS older_store_fault_cancels_mul_slot2_i0d0 packets=9 cycles=31
+PASS older_store_fault_cancels_mul_slot2_i1d1 packets=9 cycles=36
+PASS older_store_fault_cancels_mul_slot2_i2d2 packets=9 cycles=51
+PASS older_store_fault_cancels_mul_slot2_i0d3 packets=9 cycles=43
+PASS older_load_fault_cancels_mul_slot3_i0d0 packets=9 cycles=31
+PASS older_load_fault_cancels_mul_slot3_i1d1 packets=9 cycles=36
+PASS older_load_fault_cancels_mul_slot3_i2d2 packets=9 cycles=51
+PASS older_load_fault_cancels_mul_slot3_i0d3 packets=9 cycles=43
+PASS older_store_fault_cancels_mul_slot3_i0d0 packets=9 cycles=31
+PASS older_store_fault_cancels_mul_slot3_i1d1 packets=9 cycles=36
+PASS older_store_fault_cancels_mul_slot3_i2d2 packets=9 cycles=51
+PASS older_store_fault_cancels_mul_slot3_i0d3 packets=9 cycles=43
+PASS two_mul_reject_i0d0 packets=7 cycles=32
+PASS two_mul_reject_i1d1 packets=7 cycles=34
+PASS two_mul_reject_i2d2 packets=7 cycles=41
+PASS two_mul_reject_i0d3 packets=7 cycles=32
+PASS div_and_mul_reject_i0d0 packets=7 cycles=31
+PASS div_and_mul_reject_i1d1 packets=7 cycles=33
+PASS div_and_mul_reject_i2d2 packets=7 cycles=41
+PASS div_and_mul_reject_i0d3 packets=7 cycles=31
+PASS mul_raw_reject_i0d0 packets=5 cycles=28
+PASS mul_raw_reject_i1d1 packets=5 cycles=30
+PASS mul_raw_reject_i2d2 packets=5 cycles=37
+PASS mul_raw_reject_i0d3 packets=5 cycles=28
+PASS mul_waw_reject_i0d0 packets=7 cycles=29
+PASS mul_waw_reject_i1d1 packets=7 cycles=32
+PASS mul_waw_reject_i2d2 packets=7 cycles=41
+PASS mul_waw_reject_i0d3 packets=7 cycles=29
+PASS mul_war_allowed_i0d0 packets=11 cycles=32
+PASS mul_war_allowed_i1d1 packets=11 cycles=35
+PASS mul_war_allowed_i2d2 packets=11 cycles=52
+PASS mul_war_allowed_i0d3 packets=11 cycles=32
+MUL_SLOT_COVERAGE mul=14 mulh=12 mulhsu=12 mulhu=12
+REGRESSION_PASS cases=148 packets=1588
+$finish called at time : 63260 ns : File "C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/evolve5_mul_directed/tb.sv" Line 245
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 23:31:52 2026...

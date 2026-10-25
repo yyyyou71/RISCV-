@@ -1,0 +1,196 @@
+{
+  "status": "passed",
+  "hardware_tested": false,
+  "cases": 148,
+  "programs": [
+    {
+      "name": "mul_slot0_00000000_00000000",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot0_00000001_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot0_80000000_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot0_80000001_81234567",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot0_ffffffff_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot0_7fffffff_7fffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_00000000_00000000",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_00000001_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_80000000_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_80000001_81234567",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_ffffffff_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot1_7fffffff_7fffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_00000000_00000000",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_00000001_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_80000000_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_80000001_81234567",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_ffffffff_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot2_7fffffff_7fffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_00000000_00000000",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_00000001_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_80000000_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_80000001_81234567",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_ffffffff_ffffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "mul_slot3_7fffffff_7fffffff",
+      "packets": 12,
+      "cause": 11
+    },
+    {
+      "name": "older_load_fault_cancels_mul_slot0",
+      "packets": 9,
+      "cause": 5
+    },
+    {
+      "name": "older_store_fault_cancels_mul_slot0",
+      "packets": 9,
+      "cause": 7
+    },
+    {
+      "name": "older_load_fault_cancels_mul_slot1",
+      "packets": 9,
+      "cause": 5
+    },
+    {
+      "name": "older_store_fault_cancels_mul_slot1",
+      "packets": 9,
+      "cause": 7
+    },
+    {
+      "name": "older_load_fault_cancels_mul_slot2",
+      "packets": 9,
+      "cause": 5
+    },
+    {
+      "name": "older_store_fault_cancels_mul_slot2",
+      "packets": 9,
+      "cause": 7
+    },
+    {
+      "name": "older_load_fault_cancels_mul_slot3",
+      "packets": 9,
+      "cause": 5
+    },
+    {
+      "name": "older_store_fault_cancels_mul_slot3",
+      "packets": 9,
+      "cause": 7
+    },
+    {
+      "name": "two_mul_reject",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "div_and_mul_reject",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "mul_raw_reject",
+      "packets": 5,
+      "cause": 11
+    },
+    {
+      "name": "mul_waw_reject",
+      "packets": 7,
+      "cause": 11
+    },
+    {
+      "name": "mul_war_allowed",
+      "packets": 11,
+      "cause": 11
+    }
+  ],
+  "packets": 1588,
+  "coverage": [
+    "MUL_SLOT_COVERAGE mul=14 mulh=12 mulhsu=12 mulhu=12"
+  ]
+}

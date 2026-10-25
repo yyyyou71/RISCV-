@@ -1,0 +1,445 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .text          0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .data          0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss           0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.memcpy   0x00000000       0x24 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+ .comment       0x00000000       0x34 C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .text          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+ .data          0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+ .bss           0x00000000        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x00000000         0x00008000         xr
+RAM              0x20000000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\drivers.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+LOAD C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\runtime.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\platform.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\machine.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_portme.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\m_selfcheck.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_check.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_list_join.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_main.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_matrix.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_state.o
+LOAD C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\core_util.o
+
+.text           0x00000000     0x3660
+ *(.text.boot)
+ .text.boot     0x00000000       0x7c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+                0x00000000                _start
+ *(.text .text.*)
+ .text.uart_puts
+                0x0000007c       0x20 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.uart_flush
+                0x0000009c       0x18 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.uart_puthex8
+                0x000000b4       0x30 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.uart_put_u32
+                0x000000e4       0x6c C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.hex32    0x00000150       0x54 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.machine_fatal
+                0x000001a4       0xa4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.div64by32
+                0x00000248       0x78 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.put_unsigned
+                0x000002c0       0xec C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.get_time
+                0x000003ac       0xac C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.cmp_idx  0x00000458       0x54 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.core_list_mergesort
+                0x000004ac      0x1b0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.core_state_transition
+                0x0000065c      0x2e8 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.crcu16   0x00000944      0x228 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.calc_func
+                0x00000b6c      0x7b8 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.cmp_complex
+                0x00001324       0x50 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.core_bench_list
+                0x00001374      0x304 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.iterate.isra.0
+                0x00001678       0x94 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.ee_printf
+                0x0000170c      0x2d8 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.run_case
+                0x000019e4     0x1094 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.menu     0x00002a78       0xa4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .text.memset   0x00002b1c       0x1c C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x00002b1c                memset
+ .text.machine_init
+                0x00002b38       0x20 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x00002b38                machine_init
+ .text.machine_trap_dispatch
+                0x00002b58       0x3c C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x00002b58                machine_trap_dispatch
+ .text.coremark_entry
+                0x00002b94      0x858 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x00002b94                coremark_entry
+ .text.machine_trap_entry
+                0x000033ec      0x15c C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+                0x000033ec                machine_trap_entry
+ *fill*         0x00003548        0x8 13000000
+ .text.dual_smoke_loop
+                0x00003550      0x110 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+                0x00003550                dual_smoke_loop
+                0x00003660                        . = ALIGN (0x4)
+
+.rodata         0x00003660     0x12f0
+ *(.rodata .rodata.* .srodata .srodata.*)
+ .rodata.uart_puthex8.str1.4
+                0x00003660      0xc81 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                 0x11 (size before relaxing)
+ .rodata.machine_fatal.str1.4
+                0x000042e1        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                 0x27 (size before relaxing)
+ .rodata.put_unsigned.str1.4
+                0x000042e1        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                 0x11 (size before relaxing)
+ .rodata.ee_printf.str1.4
+                0x000042e1        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                 0x17 (size before relaxing)
+ *fill*         0x000042e1        0x3 
+ .rodata.ee_printf
+                0x000042e4      0x108 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.run_case.str1.4
+                0x000043ec        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                0x7d8 (size before relaxing)
+ .rodata.menu.str1.4
+                0x000043ec        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                 0xc0 (size before relaxing)
+ .rodata.coremark_entry.str1.4
+                0x000043ec        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                0x287 (size before relaxing)
+ .rodata.coremark_entry
+                0x000043ec       0x58 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.m_vectors
+                0x00004444      0x280 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.str1.4
+                0x000046c4        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                0x10d (size before relaxing)
+ .rodata.names.0
+                0x000046c4       0x28 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.errpat
+                0x000046ec       0x10 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.scipat
+                0x000046fc       0x10 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.floatpat
+                0x0000470c       0x10 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.intpat
+                0x0000471c       0x10 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .rodata.state_known_crc
+                0x0000472c        0xa C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ *fill*         0x00004736        0x2 
+ .rodata.matrix_known_crc
+                0x00004738        0xa C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ *fill*         0x00004742        0x2 
+ .rodata.list_known_crc
+                0x00004744        0xa C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ *fill*         0x0000474e        0x2 
+ .rodata        0x00004750      0x200 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x00004950                        . = ALIGN (0x4)
+
+.rela.dyn       0x00004950        0x0
+ .rela.text.boot
+                0x00004950        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+
+.data           0x20000000        0x8 load address 0x00004950
+                0x20000000                        __data_start = .
+ *(.data .data.* .sdata .sdata.*)
+ .data.seed4_volatile
+                0x20000000        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .data.seed3_volatile
+                0x20000004        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                0x20000008                        . = ALIGN (0x4)
+                0x20000008                        __data_end = .
+                0x00004950                        __data_load_start = LOADADDR (.data)
+                0x00004958                        __rom_image_end = (LOADADDR (.data) + SIZEOF (.data))
+
+.bss            0x20000008      0x7f8 load address 0x00004958
+                0x20000008                        __bss_start = .
+ *(.bss .bss.* .sbss .sbss.*)
+ .bss.static_memblk
+                0x20000008      0x7d0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.seed5_volatile
+                0x200007d8        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.seed2_volatile
+                0x200007dc        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.seed1_volatile
+                0x200007e0        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.mode_validation
+                0x200007e4        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.tick_overflow
+                0x200007e8        0x4 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ *fill*         0x200007ec        0x4 
+ .bss.start_cycles
+                0x200007f0        0x8 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .bss.stop_cycles
+                0x200007f8        0x8 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ *(COMMON)
+                0x20000800                        . = ALIGN (0x4)
+                0x20000800                        __bss_end = .
+                0x20000800                        __global_pointer$ = (ORIGIN (RAM) + 0x800)
+                0x20008000                        __stack_top = (ORIGIN (RAM) + LENGTH (RAM))
+                0x20007000                        __stack_bottom = (__stack_top - 0x1000)
+                0x00000001                        ASSERT ((__bss_end <= __stack_bottom), RAM sections overlap reserved 4 KiB stack)
+                0x00000001                        ASSERT ((__rom_image_end <= (ORIGIN (ROM) + LENGTH (ROM))), ROM overflow)
+
+/DISCARD/
+ *(.comment)
+ *(.eh_frame*)
+ *(.note*)
+OUTPUT(C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\firmware.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x31 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .riscv.attributes
+                0x00000031       0x37 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .riscv.attributes
+                0x00000068       0x35 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .riscv.attributes
+                0x0000009d       0x35 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+.debug_line     0x00000000     0x6c1d
+ .debug_line    0x00000000       0xc6 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .debug_line    0x000000c6     0x6378 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .debug_line    0x0000643e       0x43 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+ .debug_line    0x00006481       0x48 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+ .debug_line    0x000064c9       0x51 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+ .debug_line    0x0000651a       0x51 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+ .debug_line    0x0000656b       0x68 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+ .debug_line    0x000065d3       0x5a C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+ .debug_line    0x0000662d       0x4c C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+ .debug_line    0x00006679       0x51 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+ .debug_line    0x000066ca       0x51 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+ .debug_line    0x0000671b       0x51 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+ .debug_line    0x0000676c       0x51 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+ .debug_line    0x000067bd       0x4c C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+ .debug_line    0x00006809      0x246 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .debug_line    0x00006a4f      0x1ce C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+.debug_line_str
+                0x00000000      0x828
+ .debug_line_str
+                0x00000000      0x828 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+                                 0xbc (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                0x251 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+                                0x193 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+                                0x19c (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+                                0x1fb (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+                                0x208 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+                                0x298 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+                                0x231 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+                                0x1c3 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+                                0x22d (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+                                0x223 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+                                0x227 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+                                0x225 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+                                0x218 (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+                                 0xaf (size before relaxing)
+ .debug_line_str
+                0x00000828        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+                                 0xb5 (size before relaxing)
+
+.debug_info     0x00000000     0x5870
+ .debug_info    0x00000000       0x31 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .debug_info    0x00000031     0x2e78 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .debug_info    0x00002ea9      0x1f1 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+                0x00002ea9                drivers.c.44488b1a
+ .debug_info    0x0000309a      0x337 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+                0x0000309a                runtime.c.086ce281
+ .debug_info    0x000033d1      0x1c6 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+                0x000033d1                platform.c.c1b651f6
+ .debug_info    0x00003597      0x1a3 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+                0x00003597                machine.c.cf968cff
+ .debug_info    0x0000373a      0x763 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+                0x0000373a                core_portme.c.e2527b57
+ .debug_info    0x00003e9d      0x14e C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+                0x00003e9d                m_selfcheck.c.cfe29e92
+ .debug_info    0x00003feb      0x10c C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+                0x00003feb                dual_check.c.3dcc5bdc
+ .debug_info    0x000040f7      0x79d C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+                0x000040f7                core_list_join.c.d7c6a73e
+ .debug_info    0x00004894      0x5d1 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+                0x00004894                core_main.c.02b3b078
+ .debug_info    0x00004e65      0x486 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+                0x00004e65                core_matrix.c.e4dff889
+ .debug_info    0x000052eb      0x2e6 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+                0x000052eb                core_state.c.f236b517
+ .debug_info    0x000055d1      0x239 C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+                0x000055d1                core_util.c.e51233f9
+ .debug_info    0x0000580a       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .debug_info    0x0000583d       0x33 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+.debug_abbrev   0x00000000     0x1091
+ .debug_abbrev  0x00000000       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .debug_abbrev  0x00000028      0x29e C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .debug_abbrev  0x000002c6       0xd6 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+ .debug_abbrev  0x0000039c       0xd3 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+ .debug_abbrev  0x0000046f      0x108 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+ .debug_abbrev  0x00000577       0xf1 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+ .debug_abbrev  0x00000668      0x1e1 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+ .debug_abbrev  0x00000849       0xea C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+ .debug_abbrev  0x00000933       0xc8 C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+ .debug_abbrev  0x000009fb      0x186 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+ .debug_abbrev  0x00000b81      0x189 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+ .debug_abbrev  0x00000d0a      0x12c C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+ .debug_abbrev  0x00000e36      0x11d C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+ .debug_abbrev  0x00000f53       0xee C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+ .debug_abbrev  0x00001041       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .debug_abbrev  0x00001069       0x28 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+.debug_aranges  0x00000000      0x140
+ .debug_aranges
+                0x00000000       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+ .debug_aranges
+                0x00000020       0xe0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+ .debug_aranges
+                0x00000100       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+ .debug_aranges
+                0x00000120       0x20 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+
+.debug_str      0x00000000      0xf75
+ .debug_str     0x00000000      0xf75 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\coremark_crt0.o
+                                 0xcf (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+                                0x219 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccaHk5Jl.debug.temp.o
+                                0x2f9 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\cceRiApn.debug.temp.o
+                                0x28f (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\cciB919o.debug.temp.o
+                                0x2cc (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccmf5RGq.debug.temp.o
+                                0x2f2 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccmFwRgs.debug.temp.o
+                                0x62d (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccc4PB3s.debug.temp.o
+                                0x252 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccQEesUt.debug.temp.o
+                                0x24a (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccY247yu.debug.temp.o
+                                0x53e (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\cckAOrgv.debug.temp.o
+                                0x4e8 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccCbxrkw.debug.temp.o
+                                0x344 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\cc43VZsx.debug.temp.o
+                                0x3a4 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\AppData\Local\Temp\ccsW9zpy.debug.temp.o
+                                0x2f9 (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\trap_entry.o
+                                 0xce (size before relaxing)
+ .debug_str     0x00000f75        0x0 C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\work\evolve1_build_gcc15_O2_lto\firmware\coremark\dual_smoke.o
+                                 0xd1 (size before relaxing)
+
+.debug_loclists
+                0x00000000     0x3d7d
+ .debug_loclists
+                0x00000000     0x3d7d C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+
+.debug_rnglists
+                0x00000000      0x876
+ .debug_rnglists
+                0x00000000      0x876 C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o
+
+.debug_frame    0x00000000      0x3ac
+ .debug_frame   0x00000000      0x3ac C:\Users\LZM\AppData\Local\Temp\ccnjZKgf.ltrans0.ltrans.o

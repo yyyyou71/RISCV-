@@ -1,0 +1,346 @@
+
+;; Function m_selfcheck (m_selfcheck, funcdef_no=1, decl_uid=1601, cgraph_uid=3, symbol_order=2)
+
+
+Examining m_selfcheck function.
+Loop iteration number is chrec_dont_know.
+int m_selfcheck ()
+{
+  uint32_t value;
+  unsigned int op;
+  unsigned int i;
+  unsigned int ivtmp_6;
+  int _7;
+  long unsigned int _14;
+  long unsigned int _28;
+  long unsigned int _39;
+  long unsigned int _55;
+  long unsigned int _59;
+  long unsigned int _71;
+  long unsigned int _75;
+  long unsigned int _87;
+  long unsigned int _91;
+  long unsigned int _103;
+  long unsigned int _107;
+  long unsigned int _119;
+  long unsigned int _123;
+  long unsigned int _135;
+  long unsigned int _138;
+  long unsigned int _139;
+  unsigned int ivtmp_149;
+  long unsigned int _151;
+  long unsigned int _153;
+  long unsigned int _155;
+
+  <bb 2> [local count: 63226850]:
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG i => 0
+  # DEBUG BEGIN_STMT
+  goto <bb 5>; [100.00%]
+
+  <bb 16> [local count: 9448308]:
+  # value_42 = PHI <value_36(5)>
+  # _155 = PHI <_39(5)>
+  # i_15 = PHI <i_44(5)>
+
+  <bb 3> [local count: 52494701]:
+  # _153 = PHI <_139(23), _155(16), _138(17), _59(18), _75(19), _91(20), _107(21), _123(22)>
+  # op_154 = PHI <7(23), 0(16), 1(17), 2(18), 3(19), 4(20), 5(21), 6(22)>
+  # value_156 = PHI <value_124(23), value_42(16), value_122(17), value_8(18), value_60(19), value_76(20), value_92(21), value_108(22)>
+  # i_140 = PHI <i_106(23), i_15(16), i_43(17), i_9(18), i_5(19), i_58(20), i_74(21), i_90(22)>
+  # DEBUG BEGIN_STMT
+  ee_printf ("M_CHECK FAIL vector=%u op=%u expected=%08x actual=%08x\n", i_140, op_154, _153, value_156);
+  # DEBUG BEGIN_STMT
+  goto <bb 14>; [100.00%]
+
+  <bb 4> [local count: 119292720]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 8
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  i_13 = i_44 + 1;
+  # DEBUG i => i_13
+  # DEBUG BEGIN_STMT
+  ivtmp_149 = ivtmp_6 - 1;
+  if (ivtmp_149 != 0)
+    goto <bb 15>; [91.00%]
+  else
+    goto <bb 13>; [9.00%]
+
+  <bb 15> [local count: 108560570]:
+
+  <bb 5> [local count: 171787424]:
+  # i_44 = PHI <i_13(15), 0(2)>
+  # ivtmp_6 = PHI <ivtmp_149(15), 16(2)>
+  # DEBUG i => i_44
+  # DEBUG op => 0
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  _14 = m_vectors[i_44][0];
+  _28 = m_vectors[i_44][1];
+  # DEBUG op => 0
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mul %0,%1,%2" : "=r" value_36 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_36
+  # DEBUG BEGIN_STMT
+  _39 = m_vectors[i_44][2];
+  if (value_36 != _39)
+    goto <bb 16>; [5.50%]
+  else
+    goto <bb 6>; [94.50%]
+
+  <bb 6> [local count: 162339112]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 1
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 1
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulh %0,%1,%2" : "=r" value_51 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_51
+  # DEBUG BEGIN_STMT
+  _55 = m_vectors[i_44][3];
+  if (value_51 != _55)
+    goto <bb 17>; [5.50%]
+  else
+    goto <bb 7>; [94.50%]
+
+  <bb 17> [local count: 8928651]:
+  # i_43 = PHI <i_44(6)>
+  # value_122 = PHI <value_51(6)>
+  # _138 = PHI <_55(6)>
+  goto <bb 3>; [100.00%]
+
+  <bb 7> [local count: 153410464]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 2
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 2
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulhsu %0,%1,%2" : "=r" value_66 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_66
+  # DEBUG BEGIN_STMT
+  _71 = m_vectors[i_44][4];
+  if (value_66 != _71)
+    goto <bb 18>; [5.50%]
+  else
+    goto <bb 8>; [94.50%]
+
+  <bb 18> [local count: 8437575]:
+  # i_9 = PHI <i_44(7)>
+  # value_8 = PHI <value_66(7)>
+  # _59 = PHI <_71(7)>
+  goto <bb 3>; [100.00%]
+
+  <bb 8> [local count: 144972888]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 3
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 3
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("mulhu %0,%1,%2" : "=r" value_81 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_81
+  # DEBUG BEGIN_STMT
+  _87 = m_vectors[i_44][5];
+  if (value_81 != _87)
+    goto <bb 19>; [5.50%]
+  else
+    goto <bb 9>; [94.50%]
+
+  <bb 19> [local count: 7973509]:
+  # i_5 = PHI <i_44(8)>
+  # value_60 = PHI <value_81(8)>
+  # _75 = PHI <_87(8)>
+  goto <bb 3>; [100.00%]
+
+  <bb 9> [local count: 136999376]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 4
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 4
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("div %0,%1,%2" : "=r" value_96 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_96
+  # DEBUG BEGIN_STMT
+  _103 = m_vectors[i_44][6];
+  if (value_96 != _103)
+    goto <bb 20>; [5.50%]
+  else
+    goto <bb 10>; [94.50%]
+
+  <bb 20> [local count: 7534966]:
+  # i_58 = PHI <i_44(9)>
+  # value_76 = PHI <value_96(9)>
+  # _91 = PHI <_103(9)>
+  goto <bb 3>; [100.00%]
+
+  <bb 10> [local count: 129464408]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 5
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 5
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("divu %0,%1,%2" : "=r" value_111 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_111
+  # DEBUG BEGIN_STMT
+  _119 = m_vectors[i_44][7];
+  if (value_111 != _119)
+    goto <bb 21>; [5.50%]
+  else
+    goto <bb 11>; [94.50%]
+
+  <bb 21> [local count: 7120542]:
+  # i_74 = PHI <i_44(10)>
+  # value_92 = PHI <value_111(10)>
+  # _107 = PHI <_119(10)>
+  goto <bb 3>; [100.00%]
+
+  <bb 11> [local count: 122343864]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 6
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 6
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("rem %0,%1,%2" : "=r" value_126 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_126
+  # DEBUG BEGIN_STMT
+  _135 = m_vectors[i_44][8];
+  if (value_126 != _135)
+    goto <bb 22>; [5.50%]
+  else
+    goto <bb 12>; [94.50%]
+
+  <bb 22> [local count: 6728912]:
+  # i_90 = PHI <i_44(11)>
+  # value_108 = PHI <value_126(11)>
+  # _123 = PHI <_135(11)>
+  goto <bb 3>; [100.00%]
+
+  <bb 12> [local count: 115614952]:
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 7
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => 7
+  # DEBUG a => _14
+  # DEBUG b => _28
+  # DEBUG INLINE_ENTRY operation
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  __asm__ __volatile__("remu %0,%1,%2" : "=r" value_141 : "r" _14, "r" _28);
+  # DEBUG BEGIN_STMT
+  # DEBUG BEGIN_STMT
+  # DEBUG op => NULL
+  # DEBUG a => NULL
+  # DEBUG b => NULL
+  # DEBUG value => NULL
+  # DEBUG actual => value_141
+  # DEBUG BEGIN_STMT
+  _151 = m_vectors[i_44][9];
+  if (value_141 != _151)
+    goto <bb 23>; [5.50%]
+  else
+    goto <bb 4>; [94.50%]
+
+  <bb 23> [local count: 6358822]:
+  # i_106 = PHI <i_44(12)>
+  # value_124 = PHI <value_141(12)>
+  # _139 = PHI <_151(12)>
+  goto <bb 3>; [100.00%]
+
+  <bb 13> [local count: 10732150]:
+  # DEBUG BEGIN_STMT
+  uart_puts ("M_CHECK PASS vectors=128 instructions=8\n");
+  # DEBUG BEGIN_STMT
+
+  <bb 14> [local count: 63226851]:
+  # _7 = PHI <0(3), 1(13)>
+  return _7;
+
+}
+
+

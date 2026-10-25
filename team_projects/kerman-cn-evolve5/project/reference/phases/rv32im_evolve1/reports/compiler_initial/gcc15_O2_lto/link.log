@@ -1,0 +1,3 @@
+C:/Users/LZM/Documents/Codex/2026-09-18/ru-h/work/toolchains/gcc15/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/../../../../riscv-none-elf/bin/ld.exe: C:\Users\LZM\AppData\Local\Temp\cczF2w3F.ltrans0.ltrans.o: in function `coremark_entry':
+C:\Users\LZM\Documents\Codex\2026-09-18\ru-h\outputs\rv32im_evolve1\firmware\coremark_port/dual_check.c:6:(.text.coremark_entry+0x534): undefined reference to `memset'
+collect2.exe: error: ld returned 1 exit status
