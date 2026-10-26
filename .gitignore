@@ -35,6 +35,7 @@ digital_sim
 !docs/multiply_adder.md
 !docs/conv2d_ddr_engine.md
 !docs/quantization_int8.md
+!docs/conv2d_w8a16_core.md
 !docs/ai_task_runtime.md
 
 # PC 端模型工具与本机运行产物。

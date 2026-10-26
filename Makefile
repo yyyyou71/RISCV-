@@ -114,6 +114,7 @@ help:
 	@echo 'test-ai-accelerator  验证 4x2 通路、INT8 量化和 CPU 两层 DDR 连续计算'
 	@echo 'test-requant-int8  验证逐通道量化、舍入、饱和和 ReLU'
 	@echo 'test-conv2d-quant  验证 DDR 卷积量化及可直接串层的 HWC INT8 布局'
+	@echo 'test-conv2d-w8a16  使用参考 C 卷积对拍 W8A16 缓存、MAC 和 Q13 量化'
 	@echo 'test-ai-tasks  同一固件读取 DDR 任务表，验证不同网络、错误和恢复'
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
@@ -235,6 +236,10 @@ test-multiply-adder:
 .PHONY: test-conv-mac-tile test-conv2d-ddr test-requant-int8 test-conv2d-quant test-ai-cpu test-ai-tasks test-ai-accelerator
 test-conv-mac-tile:
 	python3 scripts/test_conv_mac_tile.py
+
+.PHONY: test-conv2d-w8a16
+test-conv2d-w8a16:
+	python3 pc_ai/verify_w8a16_rtl.py
 
 test-conv2d-ddr:
 	python3 scripts/test_conv2d_ddr.py
