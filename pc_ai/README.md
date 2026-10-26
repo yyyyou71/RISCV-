@@ -159,6 +159,27 @@ CPU读取DDR中的描述符并配置寄存器，第二层直接使用第一层IN
 仿真时钟可运行不表示相应物理频率已经时序收敛。
 完整寄存器、32字节量化记录及上板边界见 [W8A16 DDR与CPU接口](../docs/conv2d_w8a16_ddr.md)。
 
+## W8A16通用模型包与任务表
+
+```bash
+make test-ai-tasks-w8a16
+python3 pc_ai/verify_w8a16_tasks.py --prepare-only
+# 需要更多时钟组合时，由用户执行等待：
+python3 pc_ai/verify_w8a16_tasks.py --profiles all
+```
+
+`export_w8a16_tasks.c`调用原C卷积导出三种小网络的资产和逐层期望值。
+统一的`pack_ai_model.py`支持`activation_bits=16`，生成版本2模型包、64字节任务和32字节量化记录。
+CPU查询硬件位宽，同一份固件识别版本1/2；模型权重和任务仍全部在DDR。
+Python不计算W8A16卷积期望值，`--reference`只保留给旧W8A8格式。
+
+默认定向测试已通过：一次运行26次模型请求、15次AI提交，核对11403个DDR字；固件3080字节，初始化数据段为0。
+包含两层、三层、两尺度分组、引用较早层输出、22种错误及不复位恢复；另验证原生FAULT停止、8位硬件拒绝16位模型。
+这不是完整YOLO推理。资产由测试台模拟外部加载端预装DDR，SPI和板级时序仍待集成。
+输出集中在`pc_ai/outputs/w8a16_tasks/`：`network*.json`、资产、期望值、模型包、manifest、固件、仿真程序及日志。
+默认只运行CPU25MHz/DDR用户时钟约131.25MHz；扩展组合的执行情况以`result.json`为准。
+字段说明和正式打包命令见 [DDR任务表](../docs/ai_task_runtime.md)。
+
 ## 长任务约定
 
 安装、下载、完整网络推理、训练等预计需要等待的命令，先说明用途，由用户执行。

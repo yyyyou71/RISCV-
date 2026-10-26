@@ -20,6 +20,8 @@
 #define AOW MMIO(0x30234)
 #define APOST MMIO(0x30238)
 #define AQUANT MMIO(0x3023c)
+#define AGROUP MMIO(0x30240)
+#define AFORMAT MMIO(0x30244)
 #define POLL_LIMIT 200000u
 
 /* 64 位范围计算防止尺寸乘法回绕。end 是开区间上界。 */
@@ -66,24 +68,29 @@ uint32_t ai_ddr_write(uint32_t address,const uint32_t *words,uint32_t bytes)
 static uint32_t validate_task(const ai_model_header *h,const ai_task *t)
 {
     if(t->opcode!=AI_OP_CONV2D)return AI_BAD_OPCODE;
+    uint32_t wide=h->version==AI_MODEL_VERSION_W8A16;
     uint32_t ih=t->hw&65535,iw=t->hw>>16,ci=t->channels&65535,co=t->channels>>16;
     uint32_t k=t->conv&3,s=(t->conv>>2)&3,p=(t->conv>>4)&3;
     if(!ih || !iw || !ci || !co || (k!=1 && k!=3) || (s!=1 && s!=2) || p>1 ||
-       t->conv&~127u || t->post&~3u || t->post==2)return AI_BAD_TASK;
-    for(uint32_t n=0;n<4;n++)if(t->reserved[n])return AI_BAD_TASK;
+       t->conv&~127u)return AI_BAD_TASK;
+    if(wide ? ((t->post!=4 && t->post!=6) || (t->group_split &&
+        ((t->group_split&15) || t->group_split>=ci))) :
+        (t->post&~3u || t->post==2 || t->group_split))return AI_BAD_TASK;
+    for(uint32_t n=0;n<3;n++)if(t->reserved[n])return AI_BAD_TASK;
     if(ih+2*p<k || iw+2*p<k)return AI_BAD_TASK;
     uint32_t oh=((ih+2*p-k)>>(s==2))+1,ow=((iw+2*p-k)>>(s==2))+1;
     if(t->out_h!=oh || t->out_w!=ow)return AI_BAD_TASK;
     uint32_t cip=(ci+15)&~15u,cop=(co+3)&~3u;
-    uint64_t in_bytes=(uint64_t)ih*iw*cip,weights=(uint64_t)cop*k*k*cip;
-    uint64_t out_bytes=(uint64_t)oh*ow*((t->post&1) ? ((co+15)&~15u):cop)*((t->post&1) ? 1u:8u);
+    uint32_t quantized=wide || (t->post&1);
+    uint64_t in_bytes=(uint64_t)ih*iw*cip*(wide ? 2u:1u),weights=(uint64_t)cop*k*k*cip;
+    uint64_t out_bytes=(uint64_t)oh*ow*(quantized ? ((co+15)&~15u):cop)*(wide ? 2u:(quantized ? 1u:8u));
     /* 所有权重/偏置/量化表只能在只读区，所有输出只能在工作区。
        因此当前输出也不能覆盖后续任务或其它层尚未使用的模型资产。 */
     if(!region(t->input_addr,in_bytes,h->arena_begin,h->arena_end) ||
        !region(t->weight_addr,weights,h->arena_begin,h->readonly_end) ||
        !region(t->output_addr,out_bytes,h->readonly_end,h->arena_end) ||
        ((t->conv&64) && !region(t->bias_addr,(uint64_t)cop*4,h->arena_begin,h->readonly_end)) ||
-       ((t->post&1) && !region(t->quant_addr,(uint64_t)cop*16,h->arena_begin,h->readonly_end)))return AI_BAD_RANGE;
+       (quantized && !region(t->quant_addr,(uint64_t)cop*(wide ? 32u:16u),h->arena_begin,h->readonly_end)))return AI_BAD_RANGE;
     uint64_t in_end=(uint64_t)t->input_addr+in_bytes,out_end=(uint64_t)t->output_addr+out_bytes;
     if(t->input_addr<out_end && t->output_addr<in_end)return AI_BAD_RANGE;
     return AI_OK;
@@ -98,8 +105,12 @@ uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
     if(!region(header_address,64,AI_MODEL_MIN,AI_DDR_BYTES))return r->code=AI_BAD_RANGE;
     uint32_t code=ai_ddr_read(header_address,(uint32_t *)&h,64);
     if(code){r->hardware_code=ERROR;return r->code=code;}
-    if(h.magic!=AI_MODEL_MAGIC || h.version!=AI_ABI_VERSION || h.header_bytes!=64 || h.task_bytes!=64 ||
-       !h.task_count || h.flags || h.reserved0 || h.reserved1)return r->code=AI_BAD_HEADER;
+    uint32_t wide=h.version==AI_MODEL_VERSION_W8A16;
+    if(h.magic!=AI_MODEL_MAGIC || (wide ? h.flags!=AI_MODEL_FLAG_W8A16 :
+       (h.version!=AI_ABI_VERSION || h.flags)) || h.header_bytes!=64 || h.task_bytes!=64 ||
+       !h.task_count || h.reserved0 || h.reserved1)return r->code=AI_BAD_HEADER;
+    /* 计算位宽是综合配置；同一固件可识别两种包，拒绝在不匹配的硬件上启动。 */
+    if(AFORMAT!=(wide ? 16u:8u))return r->code=AI_FORMAT_ERROR;
     if(h.arena_begin<AI_MODEL_MIN || (h.arena_begin|h.readonly_end|h.arena_end)&15 ||
        h.arena_begin>=h.readonly_end || h.readonly_end>=h.arena_end || h.arena_end>AI_DDR_BYTES ||
        !region(header_address,64,h.arena_begin,h.readonly_end) ||
@@ -121,6 +132,7 @@ uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
         /* CPU 仅配置任务，输入/权重供数和所有特征图写回均由引擎完成。 */
         AINPUT=task.input_addr;AWEIGHT=task.weight_addr;ABIAS=task.bias_addr;AOUTPUT=task.output_addr;
         AHW=task.hw;ACHANNELS=task.channels;ACONV=task.conv;APOST=task.post;AQUANT=task.quant_addr;
+        AGROUP=task.group_split;
         /* 整层计算时间随模型变化，不能套用块搬运的短轮询上限。
            原生 DDR 故障仍由硬件看门狗返回；仿真另有全局超时。 */
         ACTRL=1;code=wait_done(0);
