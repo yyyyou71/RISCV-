@@ -10,7 +10,8 @@ module ddr_cpu_window #(
     parameter integer AXI_ADDR_WIDTH = 28,
     parameter integer COLUMN_WIDTH = 10,
     parameter integer TIMEOUT_CYCLES = 4096,
-    parameter integer ENABLE_AI = 0
+    parameter integer ENABLE_AI = 0,
+    parameter integer AI_ACT_WIDTH = 8
 )(
     input wire clk,
     input wire core_clk,
@@ -52,10 +53,10 @@ module ddr_cpu_window #(
         AI_WEIGHT=32'h3020c, AI_BIAS=32'h30210, AI_OUTPUT=32'h30214,
         AI_HW=32'h30218, AI_CHANNELS=32'h3021c, AI_CONV=32'h30220, AI_ERROR=32'h30224,
         AI_CYCLES=32'h30228, AI_ISSUES=32'h3022c, AI_OH=32'h30230, AI_OW=32'h30234,
-        AI_POST=32'h30238, AI_QUANT=32'h3023c;
+        AI_POST=32'h30238, AI_QUANT=32'h3023c, AI_GROUP=32'h30240, AI_FORMAT=32'h30244;
     reg [31:0] ai_input,ai_weight,ai_bias,ai_output,ai_hw,ai_channels;
     reg [6:0] ai_conv;
-    reg [31:0] ai_post, ai_quant;
+    reg [31:0] ai_post, ai_quant, ai_group;
     reg request_ai;
     reg [31:0] cpu_cycles,cpu_issues,cpu_oh,cpu_ow;
     reg [31:0] response_cycles,response_issues,response_oh,response_ow;
@@ -110,7 +111,7 @@ module ddr_cpu_window #(
             cpu_busy <= 0; cpu_done <= 0; cpu_error <= 0; cpu_fault <= 0; cpu_code <= 0;
             valid_words <= 0;
             ai_input<=0;ai_weight<=0;ai_bias<=0;ai_output<=0;ai_hw<=0;ai_channels<=0;ai_conv<=7'b0000101;
-            ai_post<=0;ai_quant<=0;
+            ai_post<=0;ai_quant<=0;ai_group<=0;
             request_ai<=0;cpu_cycles<=0;cpu_issues<=0;cpu_oh<=0;cpu_ow<=0;
         end else begin
             // 完成位跨域稳定后，结果邮箱也已稳定至少两个 CPU 周期。
@@ -148,6 +149,7 @@ module ddr_cpu_window #(
                     AI_CONV: if(ENABLE_AI!=0) ai_conv<=dev_wdata[6:0];
                     AI_POST: if(ENABLE_AI!=0) ai_post<=dev_wdata;
                     AI_QUANT: if(ENABLE_AI!=0) ai_quant<=dev_wdata;
+                    AI_GROUP: if(ENABLE_AI!=0) ai_group<=dev_wdata;
                     CTRL,AI_CTRL: if(dev_addr_wr==CTRL || ENABLE_AI!=0) begin
                         if (dev_wdata[2]) begin
                             cpu_done <= 0; cpu_error <= 0; cpu_code <= 0;
@@ -186,6 +188,8 @@ module ddr_cpu_window #(
             AI_CONV: if(ENABLE_AI!=0) read_data={25'd0,ai_conv};
             AI_POST: if(ENABLE_AI!=0) read_data=ai_post;
             AI_QUANT: if(ENABLE_AI!=0) read_data=ai_quant;
+            AI_GROUP: if(ENABLE_AI!=0) read_data=ai_group;
+            AI_FORMAT: if(ENABLE_AI!=0) read_data=AI_ACT_WIDTH;
             AI_ERROR: if(ENABLE_AI!=0) read_data={28'd0,cpu_code};
             AI_CYCLES: if(ENABLE_AI!=0) read_data=cpu_cycles;
             AI_ISSUES: if(ENABLE_AI!=0) read_data=cpu_issues;
@@ -218,10 +222,10 @@ module ddr_cpu_window #(
     wire [127:0] ai_dma_wr_data;
     wire unused_ai_busy=ai_busy;
     generate if(ENABLE_AI!=0) begin : g_ai
-        conv2d_ddr_engine u_engine (
+        conv2d_ddr_engine #(.ACT_WIDTH(AI_ACT_WIDTH)) u_engine (
             .clk(core_clk),.rst_n(core_reset_n),.cmd_valid(core_state==C_AI_COMMAND && ddr_init_done),.cmd_ready(ai_ready),
             .cfg_input_addr(ai_input),.cfg_weight_addr(ai_weight),.cfg_bias_addr(ai_bias),.cfg_output_addr(ai_output),
-            .cfg_quant_addr(ai_quant),.cfg_post(ai_post),
+            .cfg_quant_addr(ai_quant),.cfg_post(ai_post),.cfg_group_split(ai_group),
             .cfg_in_h(ai_hw[15:0]),.cfg_in_w(ai_hw[31:16]),.cfg_in_ch(ai_channels[15:0]),.cfg_out_ch(ai_channels[31:16]),
             .cfg_kernel(ai_conv[1:0]),.cfg_stride(ai_conv[3:2]),.cfg_padding(ai_conv[5:4]),.cfg_bias_enable(ai_conv[6]),
             .clear_status(1'b0),.busy(ai_busy),.done(ai_done),.error(ai_error),.error_code(ai_code),

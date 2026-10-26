@@ -134,6 +134,31 @@ Python 只编译、启动、检查退出状态和整理报告，不另写完整 
 参考卷积的输入是合成张量；不能把使用真实权重的算子对拍当成真实图片检测精度测试。
 接口、数值规则及后续集成边界见 [W8A16 计算块说明](../docs/conv2d_w8a16_core.md)。
 
+## W8A16 DDR与CPU连续两层
+
+```bash
+make test-conv2d-w8a16-ddr
+# 增加随机停顿、零读写延迟、不同CPU/DDR频率组合：
+python3 pc_ai/verify_w8a16_ddr.py --profiles all
+# 只准备输入、C期望值、固件和仿真程序：
+python3 pc_ai/verify_w8a16_ddr.py --prepare-only
+```
+
+输出位于 `pc_ai/outputs/w8a16_ddr/`，`engine/` 是12种独立层配置，`cpu/` 是原C网络前两个卷积的连续计算。
+DDR向量由 `w8a16_ddr_vectors.c` 调用原始C卷积生成；不经过Python数学参考。
+12种独立层中的8种使用真实权重/量化记录的输出通道子集，另外4种是补充配置，不是12层连起来的网络。
+CPU测试则保留原 `model.0`、`model.1` 的完整32/64输出通道，输入是5×7合成RGB张量。
+CPU读取DDR中的描述符并配置寄存器，第二层直接使用第一层INT16输出；最终通过CPU窗口及测试台分别核对结果和填充区。
+模型资产由测试台模拟外部传输端预装DDR，尚未接SPI，也不是CPU在做逐元素卷积。
+
+此测试需要 `riscv64-unknown-elf-gcc`；新固件指令区为976字节，没有将参数编入ROM。
+默认DDR模型用户时钟周期7.619ns（约131.25MHz），不是CPU的25MHz时钟。
+`--profiles all` 还验证CPU约71.43MHz/DDR约166.67MHz，以及CPU约166.67MHz/DDR80MHz。
+仅补充这两组时钟检查可用 `--profiles clocks`，结果另存 `clocks_result.json`，不覆盖主要 `result.json`。
+另有 `--grouped-cpu --out pc_ai/outputs/w8a16_ddr_groups`：将第二层变成补充的两尺度配置，检验非零AI_GROUP的跨域传递；它不是原网络第二层的等价替换，输出也独立保存。
+仿真时钟可运行不表示相应物理频率已经时序收敛。
+完整寄存器、32字节量化记录及上板边界见 [W8A16 DDR与CPU接口](../docs/conv2d_w8a16_ddr.md)。
+
 ## 长任务约定
 
 安装、下载、完整网络推理、训练等预计需要等待的命令，先说明用途，由用户执行。

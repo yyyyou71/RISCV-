@@ -5,7 +5,8 @@ module soc #(
     parameter integer BAUD_RATE = 115200,
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
-    parameter integer DDR_TIMEOUT_CYCLES = 4096
+    parameter integer DDR_TIMEOUT_CYCLES = 4096,
+    parameter integer AI_ACT_WIDTH = 8
 )(
     input  wire clk,
     input  wire rst_n,
@@ -59,7 +60,7 @@ module soc #(
 
     peripheral_bus #(
         .CLK_FREQ(CLK_FREQ), .BAUD_RATE(BAUD_RATE),
-        .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES)
+        .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH), .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES)
     ) u_peripheral_bus (
         .clk(clk),
         .rst_n(rst_n),

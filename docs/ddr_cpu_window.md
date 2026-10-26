@@ -21,6 +21,7 @@ CPU 继续使用原来的 ROM/RAM。DDR 地址是相对于 DDR 起点的**字节
 
 默认仍由窗口独占 DDR。可选 `ENABLE_AI=1` 已接入单层卷积引擎，窗口和 AI 分阶段共用同一个邮箱任务槽及块搬运器，详见 [AI 单层接口](conv2d_ddr_engine.md)。
 新增 INT8 层间连接沿用同一所有权规则；跨域约束需覆盖 `ai_post` 和 `ai_quant`，见 [量化配置](quantization_int8.md)。
+可选W8A16路径通过`AI_ACT_WIDTH=16`选择，新增`ai_group`稳定邮箱字段也需要跨域最大延迟约束；默认8位不变，见 [W8A16接口](conv2d_w8a16_ddr.md)。
 
 ## 2. 寄存器与数据窗口
 

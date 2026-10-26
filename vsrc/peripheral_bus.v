@@ -5,7 +5,8 @@ module peripheral_bus #(
     parameter integer BAUD_RATE = 115200,
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
-    parameter integer DDR_TIMEOUT_CYCLES = 4096
+    parameter integer DDR_TIMEOUT_CYCLES = 4096,
+    parameter integer AI_ACT_WIDTH = 8
 )(
     input  wire        clk,
     input  wire        rst_n,
@@ -54,7 +55,7 @@ module peripheral_bus #(
     wire word_access;
     wire [31:0] ddr_read_data;
     generate if (ENABLE_DDR != 0) begin : g_ddr
-        ddr_cpu_window #(.TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES),.ENABLE_AI(ENABLE_AI)) u_window (
+        ddr_cpu_window #(.TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES),.ENABLE_AI(ENABLE_AI),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_window (
             .clk(clk), .core_clk(core_clk), .rst_n(rst_n), .ddr_init_done(ddr_init_done),
             .dev_we(dev_we && word_access), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .read_data(ddr_read_data),

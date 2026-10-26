@@ -4,6 +4,7 @@ module TB_ddr_cpu_window;
     parameter integer CPU_TEST = 0;
     parameter integer WINDOW_ENABLE = 1;
     parameter integer AI_ENABLE = 0;
+    parameter integer AI_ACT_WIDTH = 8;
     reg ref_clk = 0, clk = 0, rst_n = 0;
     integer cpu_half_ns = 20;
     initial if ($value$plusargs("cpu_half_ns=%d", cpu_half_ns)) begin end
@@ -35,7 +36,7 @@ module TB_ddr_cpu_window;
 `endif
     generate if (CPU_TEST != 0) begin : g_cpu
         wire bus_err;
-        soc #(.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE)) u_soc (
+        soc #(.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_soc (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd), .bus_err(bus_err),
             .core_clk(core_clk), .ddr_init_done(ddr_init_done),
             .axi_awaddr(axi_awaddr),
@@ -71,9 +72,11 @@ module TB_ddr_cpu_window;
         always @(posedge core_clk) if(rst_n && u_soc.u_peripheral_bus.g_ddr.u_window.core_state==4 &&
             u_soc.u_peripheral_bus.g_ddr.u_window.ai_done) ai_completed=ai_completed+1;
 `ifdef AI_CHAIN
+`ifndef AI_W8A16
         // 两层之间禁止 CPU 通过窗口搬运特征图；第二层必须直接读取 DDR 中间结果。
         always @(posedge clk) if(rst_n && ai_completed==1 && dev_we && dev_addr_wr==32'h31000 && dev_wdata[0])
             $fatal(1,"CPU copied/intervened between connected layers");
+`endif
 `endif
 `endif
         always @(posedge clk) if (rst_n) begin
@@ -88,6 +91,9 @@ module TB_ddr_cpu_window;
 `ifdef AI_PROGRAM
                 if(ai_completed!=2) $fatal(1,"AI engine not executed twice: %0d",ai_completed);
 `ifdef AI_CHAIN
+`ifdef AI_W8A16
+                wide_check_finish;
+`endif
                 $display("PASS ai_chain layers=%0d aw=%0d ar=%0d",ai_completed,aw_count,ar_count);
 `else
                 $display("PASS ai_cpu layers=%0d aw=%0d ar=%0d",ai_completed,aw_count,ar_count);
@@ -103,7 +109,7 @@ module TB_ddr_cpu_window;
         assign dev_we = host_we; assign dev_re = host_re;
         assign dev_addr_wr = host_wr; assign dev_addr_rd = host_rd;
         assign dev_wdata = host_data; assign dev_size = host_size;
-        peripheral_bus #(.ENABLE_DDR(WINDOW_ENABLE),.ENABLE_AI(AI_ENABLE), .DDR_TIMEOUT_CYCLES(128)) u_bus (
+        peripheral_bus #(.ENABLE_DDR(WINDOW_ENABLE),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH), .DDR_TIMEOUT_CYCLES(128)) u_bus (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd),
             .dev_we(dev_we), .dev_re(dev_re), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .dev_size(dev_size),
@@ -153,6 +159,9 @@ module TB_ddr_cpu_window;
 
 `ifdef AI_TASK_PROGRAM
     `include "ai_task_checks.vh"
+`endif
+`ifdef AI_W8A16
+    `include "w8a16_checks.vh"
 `endif
 
     localparam [31:0] CTRL = 32'h31000, STATUS = 32'h31004,
