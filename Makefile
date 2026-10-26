@@ -118,6 +118,7 @@ help:
 	@echo 'test-conv2d-w8a16-ddr  对拍W8A16 DDR读写及真实RV32I连续两层计算'
 	@echo 'test-ai-tasks  同一固件读取 DDR 任务表，验证不同网络、错误和恢复'
 	@echo 'test-ai-tasks-w8a16  用参考C输出验证W8A16通用任务表、分组量化和错误恢复'
+	@echo 'test-ai-add  验证INT16残差加法、DDR读写和CPU混合卷积/ADD任务'
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
@@ -265,5 +266,9 @@ test-ai-tasks:
 .PHONY: test-ai-tasks-w8a16
 test-ai-tasks-w8a16:
 	python3 pc_ai/verify_w8a16_tasks.py
+
+.PHONY: test-ai-add
+test-ai-add:
+	python3 pc_ai/verify_w8a16_tasks.py --suite add
 
 test-ai-accelerator: test-conv-mac-tile test-requant-int8 test-conv2d-ddr test-conv2d-quant test-ai-cpu test-ai-tasks

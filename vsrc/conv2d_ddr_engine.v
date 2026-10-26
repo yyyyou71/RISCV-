@@ -8,6 +8,7 @@ module conv2d_ddr_engine #(
 )(
     input wire clk, rst_n,
     input wire cmd_valid, output wire cmd_ready,
+    input wire [31:0] cfg_opcode, // 1=卷积，2=INT16残差ADD；ADD的第二输入复用weight_addr
     input wire [31:0] cfg_input_addr, cfg_weight_addr, cfg_bias_addr, cfg_output_addr,
     input wire [31:0] cfg_quant_addr, cfg_post,
     input wire [31:0] cfg_group_split, // W8A16: 0为单尺度，否则为16对齐的组1起始通道
@@ -30,7 +31,9 @@ module conv2d_ddr_engine #(
     localparam [4:0] IDLE=0, B_REQ=1, B_WAIT=2, INIT=3,
         W_REQ=4, W_WAIT=5, P_REQ=6, P_WAIT=7, T_START=8, T_WAIT=9, O_REQ=10, O_WAIT=11,
         QPAR_REQ=12, QPAR_WAIT=13, Q_START=14, Q_WAIT=15, MERGE_REQ=16, MERGE_WAIT=17,
-        PAD_REQ=18, PAD_WAIT=19;
+        PAD_REQ=18, PAD_WAIT=19,
+        ADD_QREQ=20,ADD_QWAIT=21,ADD_AREQ=22,ADD_AWAIT=23,ADD_BREQ=24,ADD_BWAIT=25,
+        ADD_START=26,ADD_WAIT=27,ADD_OREQ=28,ADD_OWAIT=29;
     reg [4:0] state;
     reg [31:0] input_addr, weight_addr, bias_addr, output_addr, quant_addr;
     reg [15:0] height, width, input_channels, output_channels;
@@ -53,6 +56,10 @@ module conv2d_ddr_engine #(
     reg [127:0] biases;
     reg [255:0] partials [0:3];
     reg [255:0] partials1 [0:3];
+    reg [31:0] add_offset,add_bytes,add_channel;
+    reg [31:0] add_mult_a,add_shift_a,add_mult_b,add_shift_b;
+    reg [127:0] add_word_a,add_word_b,add_word_out;
+    reg [2:0] add_lane;
     wire [31:0] cfg_ci_pitch=({16'd0,cfg_in_ch}+32'd15)&32'hfffffff0;
     wire [31:0] cfg_co_pitch=({16'd0,cfg_out_ch}+32'd3)&32'hfffffffc;
     wire [31:0] cfg_output_pitch=cfg_quantized ?
@@ -68,6 +75,13 @@ module conv2d_ddr_engine #(
     wire [63:0] quant_end={32'd0,cfg_quant_addr}+{32'd0,cfg_co_pitch}*(ACT_WIDTH==16 ? 64'd32 : 64'd16);
     wire [63:0] ie={32'd0,cfg_input_addr}+input_size, we={32'd0,cfg_weight_addr}+weight_size;
     wire [63:0] be={32'd0,cfg_bias_addr}+bias_size, oe={32'd0,cfg_output_addr}+output_size;
+    wire [63:0] add_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_ci_pitch}*64'd2;
+    wire [63:0] add_ae={32'd0,cfg_input_addr}+add_size,add_be={32'd0,cfg_weight_addr}+add_size,
+        add_oe={32'd0,cfg_output_addr}+add_size,add_qe={32'd0,cfg_quant_addr}+64'd16;
+    wire add_address_bad=add_ae>64'h20000000 || add_be>64'h20000000 || add_oe>64'h20000000 || add_qe>64'h20000000;
+    wire add_overlap_bad=({32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<add_oe) ||
+        ({32'd0,cfg_output_addr}<add_be && {32'd0,cfg_weight_addr}<add_oe) ||
+        ({32'd0,cfg_output_addr}<add_qe && {32'd0,cfg_quant_addr}<add_oe);
     wire address_bad=ie>64'h20000000 || we>64'h20000000 || oe>64'h20000000 ||
         (cfg_bias_enable && be>64'h20000000) || (cfg_quantized && quant_end>64'h20000000);
     // 只读区域允许相互重叠；输出禁止覆盖任意正在读取的区域。
@@ -96,16 +110,20 @@ module conv2d_ddr_engine #(
     wire [255:0] crsp_data;
     wire creq_valid=(state==B_REQ || (state==W_REQ && lane_valid) ||
         (state==P_REQ && inside_image) || state==O_REQ || state==MERGE_REQ || state==PAD_REQ ||
+        state==ADD_QREQ || state==ADD_AREQ || state==ADD_BREQ || state==ADD_OREQ ||
         (state==QPAR_REQ && co_base+{30'd0,quant_lane}<{16'd0,output_channels}));
     wire [31:0] creq_addr=state==B_REQ ? bias_addr+co_base*4 :
         state==W_REQ ? weight_pointer : state==P_REQ ? input_pointer :
         state==QPAR_REQ ? quant_addr+(co_base+{30'd0,quant_lane})*(ACT_WIDTH==16 ? 32'd32 : 32'd16) :
+        state==ADD_QREQ ? quant_addr:state==ADD_AREQ ? input_addr+add_offset:
+        state==ADD_BREQ ? weight_addr+add_offset:state==ADD_OREQ ? output_addr+add_offset:
         state==PAD_REQ ? output_pointer+32'd16 : output_pointer;
     wire load_ready, tile_start_ready, tile_out_valid, tile_error, tile_busy, issue;
     wire [255:0] tile_result;
     wire tile_load_valid=(state==W_REQ && !lane_valid) || (state==P_REQ && !inside_image) ||
         ((state==W_WAIT || state==P_WAIT) && crsp_valid && !crsp_error);
-    wire crsp_ready=(state==B_WAIT || state==O_WAIT || state==QPAR_WAIT || state==MERGE_WAIT || state==PAD_WAIT) ||
+    wire crsp_ready=(state==B_WAIT || state==O_WAIT || state==QPAR_WAIT || state==MERGE_WAIT || state==PAD_WAIT ||
+        state==ADD_QWAIT || state==ADD_AWAIT || state==ADD_BWAIT || state==ADD_OWAIT) ||
         ((state==W_WAIT || state==P_WAIT) && (crsp_error || load_ready));
     reg [16*ACT_WIDTH-1:0] patch_data;
     integer mask_byte;
@@ -151,11 +169,26 @@ module conv2d_ddr_engine #(
         .out_clamped(unused_clamped)
     );
     end endgenerate
+    wire add_in_ready,add_out_valid,add_error;
+    wire [15:0] add_data;
+    wire add_lane_valid=add_channel+{29'd0,add_lane}<{16'd0,input_channels};
+    generate if(ACT_WIDTH==16)begin : g_add
+        add_int16 u_add (
+            .clk(clk),.rst_n(rst_n),.in_valid(state==ADD_START),.in_ready(add_in_ready),
+            .in_a(add_lane_valid ? add_word_a[add_lane*16 +: 16]:16'd0),
+            .in_b(add_lane_valid ? add_word_b[add_lane*16 +: 16]:16'd0),
+            .mult_a(add_mult_a),.shift_a(add_shift_a),.mult_b(add_mult_b),.shift_b(add_shift_b),
+            .out_valid(add_out_valid),.out_ready(state==ADD_WAIT),.out_data(add_data),.out_error(add_error)
+        );
+    end else begin : g_no_add
+        wire unused_add=add_lane_valid ^ ^add_word_a ^ ^add_word_b ^ ^add_mult_a ^ ^add_shift_a ^ ^add_mult_b ^ ^add_shift_b;
+        assign add_in_ready=0;assign add_out_valid=0;assign add_error=0;assign add_data=0;
+    end endgenerate
     ddr_chunk_client u_client (
         .clk(clk), .rst_n(rst_n), .req_valid(creq_valid), .req_ready(creq_ready),
-        .req_write(state==O_REQ || state==PAD_REQ),
+        .req_write(state==O_REQ || state==PAD_REQ || state==ADD_OREQ),
         .req_two((state==O_REQ && !quantized) || (ACT_WIDTH==16 && (state==P_REQ || state==QPAR_REQ))), .req_addr(creq_addr),
-        .req_data(state==PAD_REQ ? 256'd0 : quantized ? {128'd0,packed_output} : partials[pixel[1:0]]),
+        .req_data(state==ADD_OREQ ? {128'd0,add_word_out}:state==PAD_REQ ? 256'd0 : quantized ? {128'd0,packed_output} : partials[pixel[1:0]]),
         .rsp_valid(crsp_valid), .rsp_ready(crsp_ready),
         .rsp_data(crsp_data), .rsp_error(crsp_error), .rsp_code(crsp_code),
         .dma_cmd_valid(dma_cmd_valid),
@@ -239,6 +272,8 @@ module conv2d_ddr_engine #(
             ci_pitch<=0; co_pitch<=0; ci_base<=0; co_base<=0; y<=0; x_tile<=0;
             stride<=1; padding<=0; weight_lane<=0; taps<=1; tap<=0; bias_enable<=0;
             pixel<=0; tile_width<=0; biases<=0; out_h<=0; out_w<=0; total_cycles<=0; mac_issues<=0;
+            add_offset<=0;add_bytes<=0;add_channel<=0;add_lane<=0;
+            add_mult_a<=0;add_shift_a<=0;add_mult_b<=0;add_shift_b<=0;add_word_a<=0;add_word_b<=0;add_word_out<=0;
             for(i=0;i<4;i=i+1) begin
                 partials[i]<=0;partials1[i]<=0;quant_multiplier[i]<=0;quant_shift[i]<=0;quant_pixels[i]<=0;
                 quant_multiplier1[i]<=0;quant_shift1[i]<=0;quant_multiplier_y[i]<=0;quant_shift_y[i]<=0;
@@ -250,7 +285,20 @@ module conv2d_ddr_engine #(
             case(state)
                 IDLE: if(cmd_valid && cmd_ready) begin
                     done<=0; error<=0; error_code<=0; total_cycles<=0; mac_issues<=0; out_h<=0; out_w<=0;
-                    if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch==0) begin error<=1; error_code<=1; end
+                    if(cfg_opcode==2)begin
+                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_group_split!=0 || cfg_bias_addr!=0 ||
+                            cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
+                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch!=cfg_in_ch)begin error<=1;error_code<=1;end
+                        else if((cfg_input_addr[3:0]|cfg_weight_addr[3:0]|cfg_output_addr[3:0]|cfg_quant_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                        else if(add_address_bad)begin error<=1;error_code<=3;end
+                        else if(add_overlap_bad)begin error<=1;error_code<=5;end
+                        else begin
+                            input_addr<=cfg_input_addr;weight_addr<=cfg_weight_addr;output_addr<=cfg_output_addr;quant_addr<=cfg_quant_addr;
+                            input_channels<=cfg_in_ch;ci_pitch<=cfg_ci_pitch;out_h<={16'd0,cfg_in_h};out_w<={16'd0,cfg_in_w};
+                            add_bytes<=add_size[31:0];add_offset<=0;add_channel<=0;add_lane<=0;add_word_out<=0;state<=ADD_QREQ;
+                        end
+                    end else if(cfg_opcode!=1)begin error<=1;error_code<=7;end
+                    else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch==0) begin error<=1; error_code<=1; end
                     else if((cfg_kernel!=1 && cfg_kernel!=3) || (cfg_stride!=1 && cfg_stride!=2) || cfg_padding>1 ||
                         padded_h<{30'd0,cfg_kernel} || padded_w<{30'd0,cfg_kernel}) begin error<=1; error_code<=2; end
                     else if(cfg_input_addr[3:0]!=0 || cfg_weight_addr[3:0]!=0 || cfg_output_addr[3:0]!=0 ||
@@ -331,6 +379,35 @@ module conv2d_ddr_engine #(
                 end
                 PAD_REQ:if(creq_valid && creq_ready)state<=PAD_WAIT;
                 PAD_WAIT:if(crsp_valid && crsp_ready && !crsp_error)next_output;
+                ADD_QREQ:if(creq_valid && creq_ready)state<=ADD_QWAIT;
+                ADD_QWAIT:if(crsp_valid && !crsp_error)begin
+                    if(crsp_data[31] || crsp_data[95] || crsp_data[63:32]>63 || crsp_data[127:96]>63)begin
+                        error<=1;error_code<=7;state<=IDLE;
+                    end else begin
+                        add_mult_a<=crsp_data[31:0];add_shift_a<=crsp_data[63:32];
+                        add_mult_b<=crsp_data[95:64];add_shift_b<=crsp_data[127:96];state<=ADD_AREQ;
+                    end
+                end
+                ADD_AREQ:if(creq_valid && creq_ready)state<=ADD_AWAIT;
+                ADD_AWAIT:if(crsp_valid && !crsp_error)begin add_word_a<=crsp_data[127:0];state<=ADD_BREQ;end
+                ADD_BREQ:if(creq_valid && creq_ready)state<=ADD_BWAIT;
+                ADD_BWAIT:if(crsp_valid && !crsp_error)begin add_word_b<=crsp_data[127:0];add_lane<=0;add_word_out<=0;state<=ADD_START;end
+                ADD_START:if(add_in_ready)state<=ADD_WAIT;
+                ADD_WAIT:if(add_out_valid)begin
+                    if(add_error)begin error<=1;error_code<=7;state<=IDLE;end
+                    else begin
+                        add_word_out[add_lane*16 +: 16]<=add_lane_valid ? add_data:16'd0;
+                        if(add_lane==7)state<=ADD_OREQ;else begin add_lane<=add_lane+1'b1;state<=ADD_START;end
+                    end
+                end
+                ADD_OREQ:if(creq_valid && creq_ready)state<=ADD_OWAIT;
+                ADD_OWAIT:if(crsp_valid && !crsp_error)begin
+                    if(add_offset+32'd16>=add_bytes)begin state<=IDLE;done<=1;end
+                    else begin
+                        add_offset<=add_offset+32'd16;
+                        add_channel<=add_channel+32'd8>=ci_pitch ? 32'd0:add_channel+32'd8;state<=ADD_AREQ;
+                    end
+                end
                 default: begin state<=IDLE; error<=1; error_code<=6; end
             endcase
             if(crsp_valid && crsp_ready && crsp_error) begin

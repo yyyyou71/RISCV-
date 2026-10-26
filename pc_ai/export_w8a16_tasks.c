@@ -48,6 +48,7 @@ static void add_custom(int ci,int co,int kernel,int stride,int padding,int split
     for(int i=0;i<co*ci*kernel*kernel;i++)r->w[i]=(int8_t)((int)(random_word()%7)-3);
     g_nconv++;
 }
+#ifndef W8A16_EXPORT_LIBRARY
 int main(int argc,char **argv){
     if(argc!=2){fprintf(stderr,"usage: export weights.bin\n");return 2;}
     load_bin(argv[1]);if(g_nconv!=72)return 2;
@@ -76,3 +77,4 @@ int main(int argc,char **argv){
     }
     return 0;
 }
+#endif

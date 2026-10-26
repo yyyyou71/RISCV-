@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 module TB_conv2d_ddr_engine;
     parameter integer QUANT_TEST=0;
+    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD。
     reg ref_clk=0, rst_n=0;
     always #20 ref_clk=~ref_clk;
     wire core_clk, ddr_init_done;
@@ -10,6 +11,7 @@ module TB_conv2d_ddr_engine;
     wire [3:0] error_code;
     reg [31:0] cfg_input_addr=0,cfg_weight_addr=0,cfg_bias_addr=0,cfg_output_addr=0;
     reg [31:0] cfg_quant_addr=0,cfg_post=0,cfg_group_split=0;
+    reg [31:0] cfg_opcode=1;
     reg [15:0] cfg_in_h=0,cfg_in_w=0,cfg_in_ch=0,cfg_out_ch=0;
     reg [1:0] cfg_kernel=1,cfg_stride=1,cfg_padding=0;
     reg cfg_bias_enable=0;
@@ -29,8 +31,9 @@ module TB_conv2d_ddr_engine;
     wire dma_wr_valid,dma_wr_ready,dma_rd_valid,dma_rd_ready;
     wire [127:0] dma_wr_data,dma_rd_data;
     wire dma_initialized=ddr_init_done;
-    conv2d_ddr_engine #(.ACT_WIDTH(QUANT_TEST==2 ? 16:8)) dut (
+    conv2d_ddr_engine #(.ACT_WIDTH(QUANT_TEST>=2 ? 16:8)) dut (
         .clk(clk),.rst_n(rst_n),.cmd_valid(cmd_valid),.cmd_ready(cmd_ready),
+        .cfg_opcode(cfg_opcode),
         .cfg_input_addr(cfg_input_addr),.cfg_weight_addr(cfg_weight_addr),
         .cfg_bias_addr(cfg_bias_addr),.cfg_output_addr(cfg_output_addr),
         .cfg_quant_addr(cfg_quant_addr),.cfg_post(cfg_post),.cfg_group_split(cfg_group_split),
@@ -146,13 +149,13 @@ module TB_conv2d_ddr_engine;
             cfg_bias_addr=jobs[job][191:160];cfg_output_addr=jobs[job][223:192];
             cfg_quant_addr=QUANT_TEST!=0 ? jobs[job][415:384] : 32'hdeadbeef;
             cfg_post=jobs[job][447:416];
-            cfg_group_split=QUANT_TEST==2 ? jobs[job][479:448]:32'd0;
+            cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;cfg_opcode=QUANT_TEST==3 ? 2:1;
             cmd_valid=1;
             do @(posedge clk);while(!cmd_ready);
             @(negedge clk);cmd_valid=0;
             // 后续执行必须使用已锁存配置。
             cfg_in_h=0;cfg_in_w=0;cfg_in_ch=0;cfg_out_ch=0;cfg_input_addr=32'hdeadbeef;
-            cfg_quant_addr=32'hdeadbeef;cfg_post=32'hffffffff;cfg_group_split=32'hffffffff;
+            cfg_quant_addr=32'hdeadbeef;cfg_post=32'hffffffff;cfg_group_split=32'hffffffff;cfg_opcode=32'hffffffff;
         end
     endtask
     task late_bad_quant;
@@ -192,7 +195,7 @@ module TB_conv2d_ddr_engine;
             while(busy) begin @(negedge clk);polls=polls+1;if(polls>2000000)$fatal(1,"engine timeout");end
             checking=0;
             if(!done || error || dma_fault ||
-                writes!=(QUANT_TEST!=0 ? out_h*out_w*((jobs[job][63:48]+3)/4+
+                writes!=(QUANT_TEST==3 ? output_words:QUANT_TEST!=0 ? out_h*out_w*((jobs[job][63:48]+3)/4+
                     (QUANT_TEST==2 ? ((jobs[job][63:48]+7)/8)%2:0)) : output_words) || mac_issues!=expected_issues)
                 $fatal(1,"engine status job=%0d done=%b error=%b code=%d writes=%0d/%0d issues=%0d/%0d",job,done,error,error_code,writes,output_words,mac_issues,expected_issues);
             for(n=0;n<output_words;n=n+1) begin
@@ -216,7 +219,7 @@ module TB_conv2d_ddr_engine;
             cfg_in_h=3;cfg_in_w=3;cfg_in_ch=3;cfg_out_ch=5;
             cfg_kernel=3;cfg_stride=1;cfg_padding=1;cfg_bias_enable=1;
             cfg_input_addr=32'h7f0;cfg_weight_addr=32'h1fff0;cfg_bias_addr=32'h40000;cfg_output_addr=32'h807f0;
-            cfg_post=QUANT_TEST==2 ? 4:0;cfg_quant_addr=QUANT_TEST==2 ? 32'h50000:0;cfg_group_split=0;
+            cfg_post=QUANT_TEST==2 ? 4:0;cfg_quant_addr=QUANT_TEST==2 ? 32'h50000:0;cfg_group_split=0;cfg_opcode=1;
             case(which)
                 0:cfg_in_h=0;
                 1:cfg_kernel=2;
@@ -247,7 +250,7 @@ module TB_conv2d_ddr_engine;
             cfg_in_h=1;cfg_in_w=1;cfg_in_ch=17;cfg_out_ch=1;
             cfg_kernel=1;cfg_stride=1;cfg_padding=0;cfg_bias_enable=0;
             cfg_input_addr=32'h7f0;cfg_weight_addr=32'h1fff0;cfg_output_addr=32'h807f0;
-            cfg_post=4;cfg_quant_addr=32'h50000;cfg_group_split=0;
+            cfg_post=4;cfg_quant_addr=32'h50000;cfg_group_split=0;cfg_opcode=1;
             record_data=256'd1|(256'd1<<128);
             case(which)
                 0:cfg_quant_addr=32'h50001;
@@ -284,7 +287,7 @@ module TB_conv2d_ddr_engine;
             cfg_in_h=1;cfg_in_w=1;cfg_in_ch=1;cfg_out_ch=1;
             cfg_kernel=1;cfg_stride=1;cfg_padding=0;cfg_bias_enable=0;
             cfg_input_addr=32'h7f0;cfg_weight_addr=32'h1fff0;cfg_output_addr=32'h807f0;
-            cfg_post=1;cfg_quant_addr=32'h50000;record_data=128'd1;
+            cfg_post=1;cfg_quant_addr=32'h50000;record_data=128'd1;cfg_opcode=1;
             case(which)
                 0:cfg_quant_addr=32'h50001;
                 1:cfg_quant_addr=32'h1ffffff0;
@@ -301,6 +304,49 @@ module TB_conv2d_ddr_engine;
             polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"bad quant timeout");end
             if(done || !error || error_code!==code || aw_count!=before_writes || dma_fault)
                 $fatal(1,"bad quant status case=%0d code=%0d expected=%0d",which,error_code,code);
+            clear_status=1;@(negedge clk);clear_status=0;
+        end
+    endtask
+    task bad_add;
+        input integer which;
+        input [3:0] code;
+        integer before_writes;
+        reg [127:0] q;
+        begin
+            @(negedge clk);
+            cfg_opcode=2;cfg_in_h=1;cfg_in_w=3;cfg_in_ch=17;cfg_out_ch=17;
+            cfg_kernel=0;cfg_stride=0;cfg_padding=0;cfg_bias_enable=0;cfg_bias_addr=0;
+            cfg_input_addr=32'h7f0;cfg_weight_addr=32'h1fff0;cfg_output_addr=32'h807f0;
+            cfg_post=4;cfg_quant_addr=32'h50000;cfg_group_split=0;q=128'd1|(128'd1<<64);
+            case(which)
+                0:cfg_in_h=0;
+                1:cfg_out_ch=1;
+                2:cfg_input_addr=1;
+                3:cfg_weight_addr=1;
+                4:cfg_output_addr=1;
+                5:cfg_quant_addr=1;
+                6:cfg_input_addr=32'h1ffffff0;
+                7:cfg_weight_addr=32'h1ffffff0;
+                8:cfg_output_addr=32'h1ffffff0;
+                9:cfg_quant_addr=32'h20000000;
+                10:cfg_output_addr=cfg_input_addr;
+                11:cfg_output_addr=cfg_weight_addr;
+                12:cfg_output_addr=cfg_quant_addr;
+                13:cfg_post=6;
+                14:cfg_kernel=1;
+                15:cfg_group_split=16;
+                16:cfg_bias_addr=1;
+                17:cfg_opcode=99;
+                18:q[31]=1;
+                19:q[63:32]=64;
+                20:q[95]=1;
+                21:q[127:96]=64;
+            endcase
+            memory.store_word(28'h28000,q,16'hffff);before_writes=aw_count;
+            cmd_valid=1;@(negedge clk);cmd_valid=0;
+            polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"bad ADD timeout");end
+            if(done || !error || error_code!==code || aw_count!=before_writes || dma_fault)
+                $fatal(1,"bad ADD case=%0d code=%0d expected=%0d",which,error_code,code);
             clear_status=1;@(negedge clk);clear_status=0;
         end
     endtask
@@ -322,8 +368,16 @@ module TB_conv2d_ddr_engine;
         for(job=0;job<job_count;job=job+1) begin
             run_layer(job);
         end
-        bad_config(0,1);bad_config(1,2);bad_config(2,2);bad_config(3,2);
-        bad_config(4,4);bad_config(5,4);bad_config(6,3);bad_config(7,5);bad_config(8,2);bad_config(9,3);
+        if(QUANT_TEST!=3)begin
+            bad_config(0,1);bad_config(1,2);bad_config(2,2);bad_config(3,2);
+            bad_config(4,4);bad_config(5,4);bad_config(6,3);bad_config(7,5);bad_config(8,2);bad_config(9,3);
+        end else begin
+            bad_add(0,1);bad_add(1,1);for(n=2;n<6;n=n+1)bad_add(n,4);
+            for(n=6;n<10;n=n+1)bad_add(n,3);for(n=10;n<13;n=n+1)bad_add(n,5);
+            for(n=13;n<22;n=n+1)bad_add(n,7);
+            for(n=0;n<jobs[0][287:256];n=n+1)
+                memory.store_word(initial_memory[jobs[0][255:224]+n][159:128]>>1,initial_memory[jobs[0][255:224]+n][127:0],16'hffff);
+        end
         if(QUANT_TEST==1)begin
             bad_quant(0,4);bad_quant(1,3);bad_quant(2,5);bad_quant(3,7);bad_quant(4,7);
             bad_quant(5,7);bad_quant(6,7);bad_quant(7,7);bad_quant(8,7);
@@ -342,7 +396,7 @@ module TB_conv2d_ddr_engine;
         end
         // 分别覆盖乘加流水或量化运算尚未完成时的共同复位。
         launch(0);
-        if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
+        if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
         reset_all;run_layer(0);
         // 原生读超时必须传播为错误，且共同复位前不接受新任务。
         force memory.axi_arready=1'b0;launch(0);

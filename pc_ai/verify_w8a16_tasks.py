@@ -15,10 +15,12 @@ from pack_ai_model import pack_model, pack_run_request, words, BOOT_ADDR, align
 
 
 def task_issues(t):
+    if t[0]==2:
+        return 0
     return t[10]*t[11]*(((t[7]&65535)+15)//16)*(((t[7]>>16)+3)//4)*(t[8]&3)**2*8
 
 
-def generate(out):
+def generate(out,add_suite=False):
     specs = [json.loads((out/f'network{n}.json').read_text()) for n in range(3)]
     initial = {}
     expected = {}
@@ -55,12 +57,13 @@ def generate(out):
         masks[address+16] = ((1<<128)-1)^0xffffffff
         launches += completed+(code==6)
         cases.append(dict(name=name,model_addr=p.base,code=code,failed_task=failed,hardware_code=hw,completed=completed))
-    good = [package(n,b) for n,b in enumerate((0x107a0,0x20000,0x30000))]
+    good = [package(n,b) for n,b in enumerate((0x107a0,0x40000,0x60000) if add_suite else (0x107a0,0x20000,0x30000))]
     for n,p in enumerate(good):
-        add(p,('two_real_convolutions','three_real_convolutions','grouped_branch_network')[n])
+        add(p,('real_bottleneck_residual','conv_add_conv_branch','two_add_layers')[n] if add_suite else
+            ('two_real_convolutions','three_real_convolutions','grouped_branch_network')[n])
         (out/f'network{n}.model.bin').write_bytes(p.data)
         (out/f'network{n}.manifest.json').write_text(json.dumps(p.manifest,indent=2)+'\n')
-    base = 0x40000
+    base = 0x80000 if add_suite else 0x40000
     def bad(name,code,index=0xffffffff,hw=0,completed=0,edit=None):
         nonlocal base
         p = package(2,base)
@@ -70,6 +73,46 @@ def generate(out):
         return lambda data,p: struct.pack_into('<I',data,field*4,value)
     def task(n,field,value):
         return lambda data,p: struct.pack_into('<I',data,64+n*64+field*4,value(p) if callable(value) else value)
+    if add_suite:
+        bad('unknown_opcode',3,0,edit=task(0,0,99))
+        bad('wrong_channels',4,0,edit=task(0,7,(5<<16)|17))
+        bad('zero_shape',4,0,edit=task(0,6,0))
+        bad('unexpected_relu',4,0,edit=task(0,9,6))
+        bad('conv_fields_in_add',4,0,edit=task(0,8,1))
+        bad('bias_in_add',4,0,edit=task(0,3,16))
+        bad('group_in_add',4,0,edit=task(0,12,16))
+        bad('later_reserved_preflight',4,1,edit=task(1,13,1))
+        bad('bad_output_shape',4,0,edit=task(0,10,99))
+        bad('input_b_outside_arena',2,0,edit=task(0,2,0))
+        bad('output_overwrites_a',2,1,edit=task(1,4,lambda p:p.tasks[1][1]))
+        bad('output_overwrites_b',2,1,edit=task(1,4,lambda p:p.tasks[1][2]))
+        bad('quant_in_work_area',2,0,edit=task(0,5,lambda p:p.tasks[0][4]))
+        def invalid_add(n,offset,value):
+            return lambda data,p:struct.pack_into('<I',data,p.tasks[n][5]-p.base+offset,value)
+        bad('bad_mult_a',6,0,7,0,invalid_add(0,0,0x80000000))
+        bad('bad_shift_a',6,0,7,0,invalid_add(0,4,64))
+        bad('bad_mult_b',6,0,7,0,invalid_add(0,8,0x80000000))
+        bad('bad_shift_b',6,0,7,0,invalid_add(0,12,64))
+        bad('error_after_completed_add',6,1,7,1,invalid_add(1,4,64))
+    else:
+        add_conv_errors(bad,header,task)
+    add(good[2],'recover_and_repeat_network')
+    request = pack_run_request([c['model_addr'] for c in cases])
+    for address,data in ((BOOT_ADDR,request[BOOT_ADDR:BOOT_ADDR+32]),(0x2000,request[0x2000:0x2000+len(cases)*16])):
+        emit(address,data,initial)
+        emit(address,data,expected)
+    for name,data,digits in (('initial',initial,40),('golden',expected,72)):
+        lines = []
+        for address,value in sorted(data.items()):
+            record = (address<<128)|value if name=='initial' else (address<<256)|(masks.get(address,(1<<128)-1)<<128)|value
+            lines.append(f'{record:0{digits}x}\n')
+        (out/(name+'.mem')).write_text(''.join(lines))
+    (out/'cases.json').write_text(json.dumps(cases,indent=2)+'\n')
+    return dict(initial=len(initial),golden=len(expected),models=len(cases),launches=launches,
+                valid_networks=3,invalid_models=sum(c['code']!=0 for c in cases))
+
+
+def add_conv_errors(bad,header,task):
     bad('bad_magic',1,edit=header(0,0))
     bad('bad_version',1,edit=header(1,3))
     bad('reserved_flags',1,edit=header(13,3))
@@ -97,25 +140,13 @@ def generate(out):
     bad('engine_quant_error',6,0,7,0,invalid_quant(0))
     bad('engine_error_after_completed_layer',6,1,7,1,invalid_quant(1))
     bad('second_group_quant_error',6,0,7,0,invalid_quant(0,8))
-    add(good[2],'recover_and_repeat_grouped_network')
-    request = pack_run_request([c['model_addr'] for c in cases])
-    for address,data in ((BOOT_ADDR,request[BOOT_ADDR:BOOT_ADDR+32]),(0x2000,request[0x2000:0x2000+len(cases)*16])):
-        emit(address,data,initial)
-        emit(address,data,expected)
-    for name,data,digits in (('initial',initial,40),('golden',expected,72)):
-        lines = []
-        for address,value in sorted(data.items()):
-            record = (address<<128)|value if name=='initial' else (address<<256)|(masks.get(address,(1<<128)-1)<<128)|value
-            lines.append(f'{record:0{digits}x}\n')
-        (out/(name+'.mem')).write_text(''.join(lines))
-    (out/'cases.json').write_text(json.dumps(cases,indent=2)+'\n')
-    return dict(initial=len(initial),golden=len(expected),models=len(cases),launches=launches,
-                valid_networks=3,invalid_models=22)
 
 
-def host_checks(out,run):
+def host_checks(out,run,add_suite=False):
     spec = json.loads((out/'network2.json').read_text())
-    changes = [lambda s:s.update(activation_bits=9),lambda s:s['layers'][0].update(op='add'),
+    changes = [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(relu=True),
+               lambda s:s['layers'][0].update(quant_add=[1,0,1]),lambda s:s['layers'][0]['quant_add'].__setitem__(0,1<<31),
+               lambda s:s['layers'][0]['quant_add'].__setitem__(3,64)] if add_suite else [lambda s:s.update(activation_bits=9),lambda s:s['layers'][0].update(op='add'),
                lambda s:s['layers'][0].update(input='missing'),lambda s:s['layers'][0].update(group_split=1),
                lambda s:s['layers'][0].update(group_split=32),lambda s:s['layers'][0].update(quant_q13=[]),
                lambda s:s['layers'][0].update(output_int8=True),lambda s:s['layers'][0].update(quant=[[1,0]]*17),
@@ -130,6 +161,11 @@ def host_checks(out,run):
             pass
         else:
             raise RuntimeError('packer accepted incompatible W8A16 input')
+    if add_suite:
+        bad=json.loads((out/'network1.json').read_text());bad['layers'][4]['input_b']='layer3'
+        try:pack_model(bad,root=out)
+        except ValueError:pass
+        else:raise RuntimeError('ADD accepted different channel shapes')
     try:
         pack_model(spec,root=out,reference=True)
     except ValueError:
@@ -152,29 +188,44 @@ def host_checks(out,run):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--reference',type=Path,default=ROOT.parent/'materials/TridentVision')
-    parser.add_argument('--out',type=Path,default=ROOT/'pc_ai/outputs/w8a16_tasks')
+    parser.add_argument('--out',type=Path)
+    parser.add_argument('--suite',choices=('conv','add'),default='conv',help='add同时验证ADD单元、DDR和残差任务网络')
     parser.add_argument('--prepare-only',action='store_true')
     parser.add_argument('--profiles',choices=('normal','all'),default='normal')
     args = parser.parse_args()
-    out = args.out.resolve()
+    add_suite=args.suite=='add'
+    out = (args.out or ROOT/('pc_ai/outputs/add_tasks' if add_suite else 'pc_ai/outputs/w8a16_tasks')).resolve()
     out.mkdir(parents=True,exist_ok=True)
     ref = args.reference.resolve()
-    def run(command,name):
+    def run(command,name,cwd=None):
+        directory=out if cwd is None else cwd
         try:
-            r = subprocess.run([str(x) for x in command],cwd=out,capture_output=True,text=True,timeout=120)
+            r = subprocess.run([str(x) for x in command],cwd=directory,capture_output=True,text=True,timeout=120)
         except subprocess.TimeoutExpired as error:
-            (out/(name+'.log')).write_bytes((error.stdout or b'')+(error.stderr or b''))
+            (directory/(name+'.log')).write_bytes((error.stdout or b'')+(error.stderr or b''))
             raise RuntimeError(name+' timed out') from error
         content = r.stdout+r.stderr
-        (out/(name+'.log')).write_text(content)
+        (directory/(name+'.log')).write_text(content)
         if r.returncode:
             raise RuntimeError(name+' failed:\n'+content[-5000:])
         return content
+    if add_suite:
+        (out/'ddr').mkdir(exist_ok=True)
     run(['gcc','-O2','-std=c11','-DTRIDENT_SOURCE='+json.dumps(str(ref/'training/export/rearch_fixed.c')),
-         '-I',ref/'c_model',ROOT/'pc_ai/export_w8a16_tasks.c','-lm','-o',out/'export_vectors'],'compile_c')
+         '-I',ref/'c_model',ROOT/('pc_ai/export_add_tasks.c' if add_suite else 'pc_ai/export_w8a16_tasks.c'),
+         '-lm','-o',out/'export_vectors'],'compile_c')
     run([out/'export_vectors',ref/'training/export/rearch_int8.bin'],'export_c')
-    counts = generate(out)
-    host_checks(out,run)
+    counts = generate(out,add_suite)
+    host_checks(out,run,add_suite)
+    add_counts={}
+    if add_suite:
+        add_counts=json.loads((out/'add_counts.json').read_text())
+        run(['iverilog','-g2012','-s','TB_add_int16','-o',out/'unit.vvp',ROOT/'Iverilog/TB_add_int16.v',ROOT/'vsrc/add_int16.v'],'compile_unit')
+        run(['iverilog','-g2012','-s','TB_conv2d_ddr_engine','-y',ROOT/'vsrc','-DDDR3_MODEL_SLOTS=8192',
+             '-PTB_conv2d_ddr_engine.QUANT_TEST=3','-o',out/'ddr/test.vvp',ROOT/'Iverilog/TB_conv2d_ddr_engine.v',ROOT/'vsrc/ddr3.sv'],'compile_ddr')
+        run(['verilator','--lint-only','-Wall','--top-module','add_int16',ROOT/'vsrc/add_int16.v'],'lint_unit')
+        run(['verilator','--lint-only','-Wall','-Wno-TIMESCALEMOD','-Wno-SYNCASYNCNET','--top-module','peripheral_bus',
+             '-GENABLE_DDR=1','-GENABLE_AI=1','-GAI_ACT_WIDTH=16','-y',ROOT/'vsrc',ROOT/'vsrc/peripheral_bus.v'],'lint_add_bus')
     lib = subprocess.check_output(['riscv64-unknown-elf-gcc','-march=rv32i','-mabi=ilp32','-print-libgcc-file-name'],text=True).strip()
     run(['riscv64-unknown-elf-gcc','-march=rv32i','-mabi=ilp32','-msmall-data-limit=0','-ffreestanding',
          '-nostdlib','-nostartfiles','-Os','-Wall','-Wextra','-Werror','-fstack-usage','-T',ROOT/'link.ld',
@@ -199,6 +250,17 @@ def main():
         print('去掉 --prepare-only 开始仿真；--profiles all 增加非整数时钟比和DDR停顿配置。')
         return
     results = {}
+    if add_suite:
+        checks=[('unit',[out/'unit.vvp',f'+COUNT={add_counts["unit_vectors"]}'],out)]
+        for name,options in (('normal',[]),('stalled',['+ddr3_random_stalls=1']),
+                             ('zero_latency',['+ddr3_read_latency=0','+ddr3_write_latency=0'])):
+            checks.append(('ddr_'+name,[out/'ddr/test.vvp',f'+JOBS={add_counts["layers"]}',
+                f'+INITIAL={add_counts["initial"]}',f'+GOLDEN={add_counts["golden"]}',*options],out/'ddr'))
+        for name,command,directory in checks:
+            log=run(['vvp',*command],name,directory)
+            summaries=[line for line in log.splitlines() if line.startswith('PASS ')]
+            if len(summaries)!=1:raise RuntimeError('missing ADD PASS: '+name)
+            print(name+': '+summaries[0],flush=True);results[name]=summaries[0]
     profiles = {'cpu25':[]}
     if args.profiles=='all':
         profiles.update(cpu71_ddr166_stalled=['+cpu_half_ns=7','+ddr3_core_period_ns=6','+ddr3_random_stalls=1'],
@@ -253,7 +315,8 @@ def main():
         (out/'golden.mem').write_text(original)
     (out/'result.json').write_text(json.dumps(dict(passed=True,**counts,rom_bytes=len(code),data_bytes=len(data),
         firmware_sha256=hashlib.sha256(code).hexdigest(),profiles=args.profiles,results=results,
-        golden_source='original C conv_layer',full_detection_network=False,pds_verified=False),indent=2)+'\n')
+        golden_source='original C conv_layer/add_point' if add_suite else 'original C conv_layer',
+        suite=args.suite,add_tests=add_counts,full_detection_network=False,pds_verified=False),indent=2)+'\n')
 
 
 if __name__=='__main__':

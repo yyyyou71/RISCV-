@@ -12,6 +12,7 @@
 #define AI_MODEL_MIN 0x10000u     /* 前 64 KiB 留给运行请求、列表和报告 */
 #define AI_DDR_BYTES 0x20000000u
 #define AI_OP_CONV2D 1u
+#define AI_OP_ADD 2u
 #define AI_MAX_JOBS 64u
 
 enum ai_runtime_code {

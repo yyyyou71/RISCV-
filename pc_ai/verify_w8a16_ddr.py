@@ -57,7 +57,7 @@ def main():
          f'-DPROG_FILE="{cpu / "test.hex"}"', f'-DDATA_FILE="{cpu / "test.data"}"',
          '-o', cpu/'test.vvp', ROOT/'Iverilog/TB_ddr_cpu_window.v', ROOT/'vsrc/ddr3.sv'], cpu, 'compile')
     rtl = [ROOT/'vsrc'/f'{name}.v' for name in ('conv2d_ddr_engine', 'ddr_chunk_client', 'conv_mac_tile',
-           'multiply_adder', 'multiply_adder_w8a16', 'requant_q13', 'requant_int8')]
+           'multiply_adder', 'multiply_adder_w8a16', 'requant_q13', 'requant_int8', 'add_int16')]
     for width in (8,16):
         run(['verilator', '--lint-only', '-Wall', '--top-module', 'ddr_cpu_window', '-GENABLE_AI=1',
              f'-GAI_ACT_WIDTH={width}', ROOT/'vsrc/ddr_cpu_window.v', ROOT/'vsrc/ddr_block_transfer.v', *rtl], out, 'lint_'+str(width))

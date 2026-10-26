@@ -18,6 +18,7 @@ BOOT_ADDR=0x1000
 MODEL_MIN=0x10000
 DDR_BYTES=0x20000000
 OP_CONV2D=1
+OP_ADD=2
 
 
 def align(value,boundary=16):
@@ -83,6 +84,14 @@ def pack_q13_params(params):
     return bytes(records)
 
 
+def pack_add_params(params):
+    if not isinstance(params,(list,tuple)) or len(params)!=4 or any(type(v) is not int for v in params):
+        raise ValueError('quant_add必须为[MA,SA,MB,SB]四个整数')
+    if any(not 0<=params[i]<(1<<31) for i in (0,2)) or any(not 0<=params[i]<=63 for i in (1,3)):
+        raise ValueError('ADD乘数须为非负31位整数，右移须为0..63')
+    return words(params)
+
+
 def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0):
     if base<MODEL_MIN or base%16 or base>=DDR_BYTES:raise ValueError('模型基地址必须在 64 KiB..512 MiB 内且按 16 字节对齐')
     bits=spec.get('activation_bits',8)
@@ -111,6 +120,18 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         if source not in tensors:raise ValueError('输入必须是已存在的张量，任务需按拓扑顺序给出')
         previous=tensors[source]
         if previous['bits']!=bits:raise ValueError('前层输出位宽不能作为当前卷积输入')
+        if layer.get('op')=='add':
+            if not wide:raise ValueError('ADD当前仅支持W8A16版本2')
+            if set(layer)-{'name','op','input','input_b','quant_add'}:raise ValueError('ADD不接受卷积或ReLU配置')
+            source_b=layer.get('input_b')
+            if not isinstance(source_b,str) or source_b not in tensors or tensors[source_b]['shape']!=previous['shape'] or tensors[source_b]['bits']!=16:
+                raise ValueError('ADD第二输入必须已存在且形状、位宽与第一输入相同')
+            ih,iw,ci=previous['shape'];params=layer.get('quant_add')
+            qa=allocate(pack_add_params(params))
+            prepared.append(dict(name=name,source=source,source_b=source_b,op='add',
+                cfg=ConvConfig(ih,iw,ci,ci,1,1,0,False),wa=0,ba=0,qa=qa,int8=False,relu=False,split=0))
+            tensors[name]=dict(shape=previous['shape'],int8=False,bits=16)
+            continue
         if layer.get('op','conv2d')!='conv2d':raise ValueError('当前 ABI 仅支持 conv2d')
         ih,iw,ci=previous['shape'];co=layer['out_channels']
         for field,default in [('out_channels',co),('kernel',3),('stride',1),('padding',1)]:
@@ -156,11 +177,13 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         tensors[name]['address']=out
         control=cfg.kernel|(cfg.stride<<2)|(cfg.padding<<4)|(int(cfg.bias_enable)<<6)
         post=(4 if wide else int(item['int8']))|(int(item['relu'])<<1)
-        task=[OP_CONV2D,tensors[item['source']]['address'],item['wa'],item['ba'],out,item['qa'],
-              cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),control,post,oh,ow,item['split'],0,0,0]
+        is_add=item.get('op')=='add'
+        task=[OP_ADD if is_add else OP_CONV2D,tensors[item['source']]['address'],
+              tensors[item['source_b']]['address'] if is_add else item['wa'],item['ba'],out,item['qa'],
+              cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),0 if is_add else control,post,oh,ow,item['split'],0,0,0]
         tasks.append(task)
         output=dict(name=name,address=out,bytes=size,shape=[oh,ow,co],int8=item['int8'],
-                    guard_before=guard_before,guard_after=guard_after,element_bits=tensors[name]['bits'])
+                    guard_before=guard_before,guard_after=guard_after,element_bits=tensors[name]['bits'],op='add' if is_add else 'conv2d')
         outputs.append(output)
         if reference:
             values=conv2d(cfg,dense[item['source']],item['weights'],item['biases'])

@@ -22,6 +22,7 @@
 #define AQUANT MMIO(0x3023c)
 #define AGROUP MMIO(0x30240)
 #define AFORMAT MMIO(0x30244)
+#define AOPCODE MMIO(0x30248)
 #define POLL_LIMIT 200000u
 
 /* 64 位范围计算防止尺寸乘法回绕。end 是开区间上界。 */
@@ -67,16 +68,29 @@ uint32_t ai_ddr_write(uint32_t address,const uint32_t *words,uint32_t bytes)
 
 static uint32_t validate_task(const ai_model_header *h,const ai_task *t)
 {
-    if(t->opcode!=AI_OP_CONV2D)return AI_BAD_OPCODE;
     uint32_t wide=h->version==AI_MODEL_VERSION_W8A16;
+    if(t->opcode!=AI_OP_CONV2D && !(wide && t->opcode==AI_OP_ADD))return AI_BAD_OPCODE;
     uint32_t ih=t->hw&65535,iw=t->hw>>16,ci=t->channels&65535,co=t->channels>>16;
+    for(uint32_t n=0;n<3;n++)if(t->reserved[n])return AI_BAD_TASK;
+    if(t->opcode==AI_OP_ADD) {
+        if(!ih || !iw || !ci || ci!=co || t->conv || t->post!=4 || t->group_split || t->bias_addr ||
+            t->out_h!=ih || t->out_w!=iw)return AI_BAD_TASK;
+        uint64_t size=(uint64_t)ih*iw*((ci+15)&~15u)*2;
+        if(!region(t->input_addr,size,h->arena_begin,h->arena_end) ||
+           !region(t->weight_addr,size,h->arena_begin,h->arena_end) ||
+           !region(t->output_addr,size,h->readonly_end,h->arena_end) ||
+           !region(t->quant_addr,16,h->arena_begin,h->readonly_end))return AI_BAD_RANGE;
+        uint64_t end=(uint64_t)t->output_addr+size;
+        if((t->input_addr<end && t->output_addr<(uint64_t)t->input_addr+size) ||
+           (t->weight_addr<end && t->output_addr<(uint64_t)t->weight_addr+size))return AI_BAD_RANGE;
+        return AI_OK;
+    }
     uint32_t k=t->conv&3,s=(t->conv>>2)&3,p=(t->conv>>4)&3;
     if(!ih || !iw || !ci || !co || (k!=1 && k!=3) || (s!=1 && s!=2) || p>1 ||
        t->conv&~127u)return AI_BAD_TASK;
     if(wide ? ((t->post!=4 && t->post!=6) || (t->group_split &&
         ((t->group_split&15) || t->group_split>=ci))) :
         (t->post&~3u || t->post==2 || t->group_split))return AI_BAD_TASK;
-    for(uint32_t n=0;n<3;n++)if(t->reserved[n])return AI_BAD_TASK;
     if(ih+2*p<k || iw+2*p<k)return AI_BAD_TASK;
     uint32_t oh=((ih+2*p-k)>>(s==2))+1,ow=((iw+2*p-k)>>(s==2))+1;
     if(t->out_h!=oh || t->out_w!=ow)return AI_BAD_TASK;
@@ -132,7 +146,7 @@ uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
         /* CPU 仅配置任务，输入/权重供数和所有特征图写回均由引擎完成。 */
         AINPUT=task.input_addr;AWEIGHT=task.weight_addr;ABIAS=task.bias_addr;AOUTPUT=task.output_addr;
         AHW=task.hw;ACHANNELS=task.channels;ACONV=task.conv;APOST=task.post;AQUANT=task.quant_addr;
-        AGROUP=task.group_split;
+        AGROUP=task.group_split;AOPCODE=task.opcode;
         /* 整层计算时间随模型变化，不能套用块搬运的短轮询上限。
            原生 DDR 故障仍由硬件看门狗返回；仿真另有全局超时。 */
         ACTRL=1;code=wait_done(0);
