@@ -196,6 +196,22 @@ CPU测试一次处理22次模型请求、18次AI提交，核对6717个DDR字，�
 模型JSON使用`op="add"`、`input`、`input_b`和`quant_add=[MA,SA,MB,SB]`，两输入形状必须相同。
 完整接口与简单数据流见 [ADD说明](../docs/add_int16.md)。
 
+## 通道拼接Concat与完整C3模块
+
+```bash
+make test-ai-concat
+python3 pc_ai/verify_w8a16_tasks.py --suite concat --prepare-only
+```
+
+把A、B每个像素的有效通道接起来，不把输入尾部填充接进结果，不做量化，最终输出尾部补零。
+`export_concat_tasks.c`复用导出工具，期望值直接调用参考C的`concat2`、`add_point`和`conv_layer`。
+输出在`pc_ai/outputs/concat_tasks/`：16种DDR配置、正常/停顿/零延迟及缓存复用检查通过。
+CPU一次运行22次模型请求、19次AI提交、8977个DDR字；包含完整参考C3块的7条任务、5+17通道拼接后接卷积及重复拼接。
+当前统一固件3856字节，仍未运行完整YOLO，也未综合上板。
+更多CPU时钟组合可由用户运行`python3 pc_ai/verify_w8a16_tasks.py --suite concat --profiles all`，以报告记录为准。
+JSON使用`op="concat"`、`input`、`input_b`；两路高宽须相同，通道数可不同。
+两路量化尺度的限制、寄存器语义和缓存数据流见 [Concat说明](../docs/concat_int16.md)。
+
 ## 长任务约定
 
 安装、下载、完整网络推理、训练等预计需要等待的命令，先说明用途，由用户执行。

@@ -15,12 +15,12 @@ from pack_ai_model import pack_model, pack_run_request, words, BOOT_ADDR, align
 
 
 def task_issues(t):
-    if t[0]==2:
+    if t[0] in (2,3):
         return 0
     return t[10]*t[11]*(((t[7]&65535)+15)//16)*(((t[7]>>16)+3)//4)*(t[8]&3)**2*8
 
 
-def generate(out,add_suite=False):
+def generate(out,add_suite=False,concat_suite=False):
     specs = [json.loads((out/f'network{n}.json').read_text()) for n in range(3)]
     initial = {}
     expected = {}
@@ -57,23 +57,45 @@ def generate(out,add_suite=False):
         masks[address+16] = ((1<<128)-1)^0xffffffff
         launches += completed+(code==6)
         cases.append(dict(name=name,model_addr=p.base,code=code,failed_task=failed,hardware_code=hw,completed=completed))
-    good = [package(n,b) for n,b in enumerate((0x107a0,0x40000,0x60000) if add_suite else (0x107a0,0x20000,0x30000))]
+    bases=(0x107a0,0x50000,0x70000) if concat_suite else (0x107a0,0x40000,0x60000) if add_suite else (0x107a0,0x20000,0x30000)
+    good = [package(n,b) for n,b in enumerate(bases)]
     for n,p in enumerate(good):
-        add(p,('real_bottleneck_residual','conv_add_conv_branch','two_add_layers')[n] if add_suite else
+        add(p,('real_c3_module','unaligned_concat_then_conv','repeated_concat')[n] if concat_suite else
+            ('real_bottleneck_residual','conv_add_conv_branch','two_add_layers')[n] if add_suite else
             ('two_real_convolutions','three_real_convolutions','grouped_branch_network')[n])
         (out/f'network{n}.model.bin').write_bytes(p.data)
         (out/f'network{n}.manifest.json').write_text(json.dumps(p.manifest,indent=2)+'\n')
-    base = 0x80000 if add_suite else 0x40000
-    def bad(name,code,index=0xffffffff,hw=0,completed=0,edit=None):
+    base = 0x90000 if concat_suite else 0x80000 if add_suite else 0x40000
+    def bad(name,code,index=0xffffffff,hw=0,completed=0,edit=None,network=2):
         nonlocal base
-        p = package(2,base)
+        p = package(network,base)
         base += 0x10000
         add(p,name,code,index,hw,completed,edit)
     def header(field,value):
         return lambda data,p: struct.pack_into('<I',data,field*4,value)
     def task(n,field,value):
         return lambda data,p: struct.pack_into('<I',data,64+n*64+field*4,value(p) if callable(value) else value)
-    if add_suite:
+    if concat_suite:
+        bad('unknown_opcode',3,0,edit=task(0,0,99))
+        bad('zero_channels_a',4,0,edit=task(0,7,34<<16))
+        bad('zero_channels_b',4,0,edit=task(0,12,0))
+        bad('channels_b_too_large',4,0,edit=task(0,12,65536))
+        bad('wrong_channel_sum',4,0,edit=task(0,7,(35<<16)|17))
+        bad('channel_sum_overflow',4,0,edit=lambda data,p:(task(0,7,65535)(data,p),task(0,12,1)(data,p)))
+        bad('unexpected_conv_fields',4,0,edit=task(0,8,1))
+        bad('unexpected_relu',4,0,edit=task(0,9,6))
+        bad('unexpected_bias',4,0,edit=task(0,3,16))
+        bad('unexpected_quant',4,0,edit=task(0,5,16))
+        bad('later_reserved_preflight',4,1,edit=task(1,13,1))
+        bad('wrong_output_shape',4,0,edit=task(0,11,4))
+        bad('input_b_outside_arena',2,0,edit=task(0,2,0))
+        bad('input_b_allocation_too_small',2,1,edit=task(1,2,lambda p:p.header[7]-16))
+        bad('output_overlaps_a',2,1,edit=task(1,4,lambda p:p.tasks[1][1]))
+        bad('output_overlaps_b',2,1,edit=task(1,4,lambda p:p.tasks[1][2]))
+        bad('output_allocation_too_small',2,0,edit=task(0,4,lambda p:p.header[7]-16))
+        bad('conv_error_after_concat',6,3,7,3,edit=lambda data,p:
+            struct.pack_into('<I',data,p.tasks[3][5]-p.base,0x80000000),network=1)
+    elif add_suite:
         bad('unknown_opcode',3,0,edit=task(0,0,99))
         bad('wrong_channels',4,0,edit=task(0,7,(5<<16)|17))
         bad('zero_shape',4,0,edit=task(0,6,0))
@@ -142,9 +164,10 @@ def add_conv_errors(bad,header,task):
     bad('second_group_quant_error',6,0,7,0,invalid_quant(0,8))
 
 
-def host_checks(out,run,add_suite=False):
+def host_checks(out,run,add_suite=False,concat_suite=False):
     spec = json.loads((out/'network2.json').read_text())
-    changes = [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(relu=True),
+    changes = [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(input_b=[]),
+               lambda s:s['layers'][0].update(quant_add=[1,0,1,0]),lambda s:s['layers'][0].update(relu=True)] if concat_suite else [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(relu=True),
                lambda s:s['layers'][0].update(quant_add=[1,0,1]),lambda s:s['layers'][0]['quant_add'].__setitem__(0,1<<31),
                lambda s:s['layers'][0]['quant_add'].__setitem__(3,64)] if add_suite else [lambda s:s.update(activation_bits=9),lambda s:s['layers'][0].update(op='add'),
                lambda s:s['layers'][0].update(input='missing'),lambda s:s['layers'][0].update(group_split=1),
@@ -166,6 +189,11 @@ def host_checks(out,run,add_suite=False):
         try:pack_model(bad,root=out)
         except ValueError:pass
         else:raise RuntimeError('ADD accepted different channel shapes')
+    if concat_suite:
+        bad=json.loads((out/'network1.json').read_text());bad['layers'][0]['stride']=2
+        try:pack_model(bad,root=out)
+        except ValueError:pass
+        else:raise RuntimeError('Concat accepted different spatial shapes')
     try:
         pack_model(spec,root=out,reference=True)
     except ValueError:
@@ -189,12 +217,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--reference',type=Path,default=ROOT.parent/'materials/TridentVision')
     parser.add_argument('--out',type=Path)
-    parser.add_argument('--suite',choices=('conv','add'),default='conv',help='add同时验证ADD单元、DDR和残差任务网络')
+    parser.add_argument('--suite',choices=('conv','add','concat'),default='conv',help='选择卷积、ADD或Concat的DDR/CPU任务测试')
     parser.add_argument('--prepare-only',action='store_true')
     parser.add_argument('--profiles',choices=('normal','all'),default='normal')
     args = parser.parse_args()
     add_suite=args.suite=='add'
-    out = (args.out or ROOT/('pc_ai/outputs/add_tasks' if add_suite else 'pc_ai/outputs/w8a16_tasks')).resolve()
+    concat_suite=args.suite=='concat'
+    binary_suite=add_suite or concat_suite
+    out = (args.out or ROOT/('pc_ai/outputs/concat_tasks' if concat_suite else 'pc_ai/outputs/add_tasks' if add_suite else 'pc_ai/outputs/w8a16_tasks')).resolve()
     out.mkdir(parents=True,exist_ok=True)
     ref = args.reference.resolve()
     def run(command,name,cwd=None):
@@ -209,21 +239,23 @@ def main():
         if r.returncode:
             raise RuntimeError(name+' failed:\n'+content[-5000:])
         return content
-    if add_suite:
+    if binary_suite:
         (out/'ddr').mkdir(exist_ok=True)
     run(['gcc','-O2','-std=c11','-DTRIDENT_SOURCE='+json.dumps(str(ref/'training/export/rearch_fixed.c')),
-         '-I',ref/'c_model',ROOT/('pc_ai/export_add_tasks.c' if add_suite else 'pc_ai/export_w8a16_tasks.c'),
+         '-I',ref/'c_model',ROOT/('pc_ai/export_concat_tasks.c' if concat_suite else 'pc_ai/export_add_tasks.c' if add_suite else 'pc_ai/export_w8a16_tasks.c'),
          '-lm','-o',out/'export_vectors'],'compile_c')
     run([out/'export_vectors',ref/'training/export/rearch_int8.bin'],'export_c')
-    counts = generate(out,add_suite)
-    host_checks(out,run,add_suite)
+    counts = generate(out,add_suite,concat_suite)
+    host_checks(out,run,add_suite,concat_suite)
     add_counts={}
-    if add_suite:
-        add_counts=json.loads((out/'add_counts.json').read_text())
-        run(['iverilog','-g2012','-s','TB_add_int16','-o',out/'unit.vvp',ROOT/'Iverilog/TB_add_int16.v',ROOT/'vsrc/add_int16.v'],'compile_unit')
+    if binary_suite:
+        add_counts=json.loads((out/('concat_counts.json' if concat_suite else 'add_counts.json')).read_text())
+        if add_suite:
+            run(['iverilog','-g2012','-s','TB_add_int16','-o',out/'unit.vvp',ROOT/'Iverilog/TB_add_int16.v',ROOT/'vsrc/add_int16.v'],'compile_unit')
         run(['iverilog','-g2012','-s','TB_conv2d_ddr_engine','-y',ROOT/'vsrc','-DDDR3_MODEL_SLOTS=8192',
-             '-PTB_conv2d_ddr_engine.QUANT_TEST=3','-o',out/'ddr/test.vvp',ROOT/'Iverilog/TB_conv2d_ddr_engine.v',ROOT/'vsrc/ddr3.sv'],'compile_ddr')
-        run(['verilator','--lint-only','-Wall','--top-module','add_int16',ROOT/'vsrc/add_int16.v'],'lint_unit')
+             f'-PTB_conv2d_ddr_engine.QUANT_TEST={4 if concat_suite else 3}','-o',out/'ddr/test.vvp',ROOT/'Iverilog/TB_conv2d_ddr_engine.v',ROOT/'vsrc/ddr3.sv'],'compile_ddr')
+        if add_suite:
+            run(['verilator','--lint-only','-Wall','--top-module','add_int16',ROOT/'vsrc/add_int16.v'],'lint_unit')
         run(['verilator','--lint-only','-Wall','-Wno-TIMESCALEMOD','-Wno-SYNCASYNCNET','--top-module','peripheral_bus',
              '-GENABLE_DDR=1','-GENABLE_AI=1','-GAI_ACT_WIDTH=16','-y',ROOT/'vsrc',ROOT/'vsrc/peripheral_bus.v'],'lint_add_bus')
     lib = subprocess.check_output(['riscv64-unknown-elf-gcc','-march=rv32i','-mabi=ilp32','-print-libgcc-file-name'],text=True).strip()
@@ -250,8 +282,8 @@ def main():
         print('去掉 --prepare-only 开始仿真；--profiles all 增加非整数时钟比和DDR停顿配置。')
         return
     results = {}
-    if add_suite:
-        checks=[('unit',[out/'unit.vvp',f'+COUNT={add_counts["unit_vectors"]}'],out)]
+    if binary_suite:
+        checks=[('unit',[out/'unit.vvp',f'+COUNT={add_counts["unit_vectors"]}'],out)] if add_suite else []
         for name,options in (('normal',[]),('stalled',['+ddr3_random_stalls=1']),
                              ('zero_latency',['+ddr3_read_latency=0','+ddr3_write_latency=0'])):
             checks.append(('ddr_'+name,[out/'ddr/test.vvp',f'+JOBS={add_counts["layers"]}',
@@ -259,7 +291,7 @@ def main():
         for name,command,directory in checks:
             log=run(['vvp',*command],name,directory)
             summaries=[line for line in log.splitlines() if line.startswith('PASS ')]
-            if len(summaries)!=1:raise RuntimeError('missing ADD PASS: '+name)
+            if len(summaries)!=1:raise RuntimeError('missing tensor operation PASS: '+name)
             print(name+': '+summaries[0],flush=True);results[name]=summaries[0]
     profiles = {'cpu25':[]}
     if args.profiles=='all':
@@ -315,8 +347,8 @@ def main():
         (out/'golden.mem').write_text(original)
     (out/'result.json').write_text(json.dumps(dict(passed=True,**counts,rom_bytes=len(code),data_bytes=len(data),
         firmware_sha256=hashlib.sha256(code).hexdigest(),profiles=args.profiles,results=results,
-        golden_source='original C conv_layer/add_point' if add_suite else 'original C conv_layer',
-        suite=args.suite,add_tests=add_counts,full_detection_network=False,pds_verified=False),indent=2)+'\n')
+        golden_source='original C conv_layer/add_point/concat2' if concat_suite else 'original C conv_layer/add_point' if add_suite else 'original C conv_layer',
+        suite=args.suite,tensor_tests=add_counts,full_detection_network=False,pds_verified=False),indent=2)+'\n')
 
 
 if __name__=='__main__':

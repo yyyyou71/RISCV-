@@ -46,6 +46,7 @@ static void write_add(FILE *f,int layer,int source_a,int source_b,const AddRec *
     fputs("\",\"input_b\":\"",f);if(source_b<0)fputs("input",f);else fprintf(f,"layer%d",source_b);
     fprintf(f,"\",\"quant_add\":[%d,%d,%d,%d]}",r->multA,r->shiftA,r->multB,r->shiftB);
 }
+#ifndef ADD_EXPORT_LIBRARY
 int main(int argc,char **argv){
     if(argc!=2)return 2;load_bin(argv[1]);if(g_nadd!=10 || g_nconv!=72)return 2;
     g_adds=realloc(g_adds,15*sizeof(*g_adds));if(!g_adds)return 2;
@@ -97,3 +98,4 @@ int main(int argc,char **argv){
     }
     return 0;
 }
+#endif

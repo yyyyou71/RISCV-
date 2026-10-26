@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module TB_conv2d_ddr_engine;
     parameter integer QUANT_TEST=0;
-    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD。
+    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat。
     reg ref_clk=0, rst_n=0;
     always #20 ref_clk=~ref_clk;
     wire core_clk, ddr_init_done;
@@ -149,7 +149,7 @@ module TB_conv2d_ddr_engine;
             cfg_bias_addr=jobs[job][191:160];cfg_output_addr=jobs[job][223:192];
             cfg_quant_addr=QUANT_TEST!=0 ? jobs[job][415:384] : 32'hdeadbeef;
             cfg_post=jobs[job][447:416];
-            cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;cfg_opcode=QUANT_TEST==3 ? 2:1;
+            cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;cfg_opcode=QUANT_TEST==4 ? 3:QUANT_TEST==3 ? 2:1;
             cmd_valid=1;
             do @(posedge clk);while(!cmd_ready);
             @(negedge clk);cmd_valid=0;
@@ -180,7 +180,9 @@ module TB_conv2d_ddr_engine;
     endtask
     task run_layer;
         input integer index;
+        integer before_ar;
         begin
+            before_ar=ar_count;
             job=index;
             init_base=jobs[job][255:224];init_words=jobs[job][287:256];
             gold_base=jobs[job][319:288];output_words=jobs[job][351:320];expected_issues=jobs[job][383:352];
@@ -195,9 +197,11 @@ module TB_conv2d_ddr_engine;
             while(busy) begin @(negedge clk);polls=polls+1;if(polls>2000000)$fatal(1,"engine timeout");end
             checking=0;
             if(!done || error || dma_fault ||
-                writes!=(QUANT_TEST==3 ? output_words:QUANT_TEST!=0 ? out_h*out_w*((jobs[job][63:48]+3)/4+
+                writes!=(QUANT_TEST>=3 ? output_words:QUANT_TEST!=0 ? out_h*out_w*((jobs[job][63:48]+3)/4+
                     (QUANT_TEST==2 ? ((jobs[job][63:48]+7)/8)%2:0)) : output_words) || mac_issues!=expected_issues)
                 $fatal(1,"engine status job=%0d done=%b error=%b code=%d writes=%0d/%0d issues=%0d/%0d",job,done,error,error_code,writes,output_words,mac_issues,expected_issues);
+            if(QUANT_TEST==4 && ar_count-before_ar!=jobs[job][95:80])
+                $fatal(1,"Concat cache read count got=%0d expected=%0d",ar_count-before_ar,jobs[job][95:80]);
             for(n=0;n<output_words;n=n+1) begin
                 observed=memory.load_word((output_start+n*16)>>1);
                 if(observed!==golden[gold_base+n])$fatal(1,"DDR readback mismatch");checked=checked+1;
@@ -350,6 +354,45 @@ module TB_conv2d_ddr_engine;
             clear_status=1;@(negedge clk);clear_status=0;
         end
     endtask
+    task bad_concat;
+        input integer which;
+        input [3:0] code;
+        integer before_commands;
+        begin
+            @(negedge clk);
+            cfg_opcode=3;cfg_in_h=1;cfg_in_w=3;cfg_in_ch=5;cfg_out_ch=22;cfg_group_split=17;
+            cfg_kernel=0;cfg_stride=0;cfg_padding=0;cfg_bias_enable=0;cfg_bias_addr=0;cfg_quant_addr=0;cfg_post=4;
+            cfg_input_addr=32'h7f0;cfg_weight_addr=32'h1fff0;cfg_output_addr=32'h807f0;
+            case(which)
+                0:cfg_in_h=0;
+                1:cfg_in_ch=0;
+                2:cfg_group_split=0;
+                3:cfg_group_split=65536;
+                4:cfg_out_ch=21;
+                5:begin cfg_in_ch=65535;cfg_group_split=1;cfg_out_ch=0;end
+                6:cfg_input_addr=1;
+                7:cfg_weight_addr=1;
+                8:cfg_output_addr=1;
+                9:cfg_input_addr=32'h1ffffff0;
+                10:cfg_weight_addr=32'h1ffffff0;
+                11:cfg_output_addr=32'h1ffffff0;
+                12:cfg_output_addr=cfg_input_addr;
+                13:cfg_output_addr=cfg_weight_addr;
+                14:cfg_post=6;
+                15:cfg_kernel=1;
+                16:cfg_quant_addr=16;
+                17:cfg_bias_addr=16;
+                18:cfg_opcode=99;
+                19:begin cfg_in_h=65535;cfg_in_w=65535;end
+                20:cfg_in_w=0;
+            endcase
+            before_commands=aw_count+ar_count;cmd_valid=1;@(negedge clk);cmd_valid=0;
+            polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"bad Concat timeout");end
+            if(done || !error || error_code!==code || aw_count+ar_count!=before_commands || dma_fault)
+                $fatal(1,"bad Concat case=%0d code=%0d expected=%0d",which,error_code,code);
+            clear_status=1;@(negedge clk);clear_status=0;
+        end
+    endtask
     task reset_all;
         begin
             @(negedge clk);rst_n=0;cmd_valid=0;checking=0;
@@ -368,15 +411,19 @@ module TB_conv2d_ddr_engine;
         for(job=0;job<job_count;job=job+1) begin
             run_layer(job);
         end
-        if(QUANT_TEST!=3)begin
+        if(QUANT_TEST<3)begin
             bad_config(0,1);bad_config(1,2);bad_config(2,2);bad_config(3,2);
             bad_config(4,4);bad_config(5,4);bad_config(6,3);bad_config(7,5);bad_config(8,2);bad_config(9,3);
-        end else begin
+        end else if(QUANT_TEST==3)begin
             bad_add(0,1);bad_add(1,1);for(n=2;n<6;n=n+1)bad_add(n,4);
             for(n=6;n<10;n=n+1)bad_add(n,3);for(n=10;n<13;n=n+1)bad_add(n,5);
             for(n=13;n<22;n=n+1)bad_add(n,7);
             for(n=0;n<jobs[0][287:256];n=n+1)
                 memory.store_word(initial_memory[jobs[0][255:224]+n][159:128]>>1,initial_memory[jobs[0][255:224]+n][127:0],16'hffff);
+        end else begin
+            for(n=0;n<6;n=n+1)bad_concat(n,1);for(n=6;n<9;n=n+1)bad_concat(n,4);
+            for(n=9;n<12;n=n+1)bad_concat(n,3);bad_concat(12,5);bad_concat(13,5);
+            for(n=14;n<19;n=n+1)bad_concat(n,7);bad_concat(19,3);bad_concat(20,1);
         end
         if(QUANT_TEST==1)begin
             bad_quant(0,4);bad_quant(1,3);bad_quant(2,5);bad_quant(3,7);bad_quant(4,7);
@@ -396,7 +443,7 @@ module TB_conv2d_ddr_engine;
         end
         // 分别覆盖乘加流水或量化运算尚未完成时的共同复位。
         launch(0);
-        if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
+        if(QUANT_TEST==4)wait(dut.state==33);else if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
         reset_all;run_layer(0);
         // 原生读超时必须传播为错误，且共同复位前不接受新任务。
         force memory.axi_arready=1'b0;launch(0);
