@@ -75,7 +75,7 @@ def main():
         summaries=[s for s in output.splitlines() if s.startswith('PASS ')]
         if len(summaries)!=1: raise RuntimeError('missing PASS')
         print(name+': '+summaries[0],flush=True);results[name]=summaries[0]
-    rtl=[ROOT/('vsrc/'+x+'.v')for x in ('conv2d_ddr_engine','ddr_chunk_client','conv_mac_tile','multiply_adder')]
+    rtl=[ROOT/('vsrc/'+x+'.v')for x in ('conv2d_ddr_engine','ddr_chunk_client','conv_mac_tile','multiply_adder','requant_int8')]
     run(['verilator','--lint-only','-Wall','--top-module','conv2d_ddr_engine',*rtl],'lint.log')
     run(['verilator','--lint-only','-Wall','--top-module','ddr_cpu_window','-GENABLE_AI=1',
          ROOT/'vsrc/ddr_cpu_window.v',ROOT/'vsrc/ddr_block_transfer.v',*rtl],'lint_window.log')

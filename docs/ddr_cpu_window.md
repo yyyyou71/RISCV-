@@ -20,6 +20,7 @@ CPU 继续使用原来的 ROM/RAM。DDR 地址是相对于 DDR 起点的**字节
 访问 DDR 不增加 CPU 的普通访存等待周期：CPU 提交请求后继续执行自己的程序，通过状态寄存器轮询。
 
 默认仍由窗口独占 DDR。可选 `ENABLE_AI=1` 已接入单层卷积引擎，窗口和 AI 分阶段共用同一个邮箱任务槽及块搬运器，详见 [AI 单层接口](conv2d_ddr_engine.md)。
+新增 INT8 层间连接沿用同一所有权规则；跨域约束需覆盖 `ai_post` 和 `ai_quant`，见 [量化配置](quantization_int8.md)。
 
 ## 2. 寄存器与数据窗口
 

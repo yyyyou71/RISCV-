@@ -111,7 +111,10 @@ clean:
 .PHONY:help
 help:
 	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
-	@echo 'test-ai-accelerator  验证 4x2 缓存/IP 通路、DDR 单层闭环及 CPU 调度'
+	@echo 'test-ai-accelerator  验证 4x2 通路、INT8 量化和 CPU 两层 DDR 连续计算'
+	@echo 'test-requant-int8  验证逐通道量化、舍入、饱和和 ReLU'
+	@echo 'test-conv2d-quant  验证 DDR 卷积量化及可直接串层的 HWC INT8 布局'
+	@echo 'test-ai-tasks  同一固件读取 DDR 任务表，验证不同网络、错误和恢复'
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
@@ -229,14 +232,23 @@ test-multiply-adder:
 	python3 scripts/test_multiply_adder.py
 
 # 并行卷积逐层验收：实际实例化 multiply_adder，使用未修改的 DDR 行为模型。
-.PHONY: test-conv-mac-tile test-conv2d-ddr test-ai-cpu test-ai-accelerator
+.PHONY: test-conv-mac-tile test-conv2d-ddr test-requant-int8 test-conv2d-quant test-ai-cpu test-ai-tasks test-ai-accelerator
 test-conv-mac-tile:
 	python3 scripts/test_conv_mac_tile.py
 
 test-conv2d-ddr:
 	python3 scripts/test_conv2d_ddr.py
 
+test-requant-int8:
+	python3 scripts/test_requant_int8.py
+
+test-conv2d-quant:
+	python3 scripts/test_conv2d_quant.py
+
 test-ai-cpu:
 	python3 scripts/test_ai_cpu.py
 
-test-ai-accelerator: test-conv-mac-tile test-conv2d-ddr test-ai-cpu
+test-ai-tasks:
+	python3 scripts/test_ai_tasks.py
+
+test-ai-accelerator: test-conv-mac-tile test-requant-int8 test-conv2d-ddr test-conv2d-quant test-ai-cpu test-ai-tasks

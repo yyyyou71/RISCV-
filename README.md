@@ -61,14 +61,14 @@ make test-conv2d-core
 
 `vsrc/multiply_adder.v` 按本地《简单乘法器.pdf》模拟 `a0*b0 ± a1*b1`，
 支持静态加/减、0～5 级流水线和同步/异步复位。默认有符号 8×8、17 位输出、3 级、同步复位。
-它没有反馈累加，也尚未接入卷积核心。
+它没有反馈累加；并行卷积通路 `conv_mac_tile` 例化 4 个实例，并在外部累加部分和。
 
 ```bash
 make test-multiply-adder
 ```
 
 [IP 配置、替换步骤及下一阶段安排](docs/multiply_adder.md)说明支持范围及验证限制。
-下一步以单层 DDR 闭环为目标，采用小块缓存、连续供数和小规模多 MAC 并行。
+现有 DDR 卷积通路采用小块缓存、连续供数和 4×2 并行归约。
 
 ## 并行卷积与 DDR 单层闭环
 
@@ -82,7 +82,21 @@ make test-ai-accelerator
 ```
 
 [数据布局、寄存器和验证说明](docs/conv2d_ddr_engine.md)。裸机样例为 `csrc/software/conv2d_ddr_test.c`。
-已完成 CPU/DDR 行为仿真闭环，输出是原始 INT64；模型量化/激活、完整 YOLO、PDS 和实板验证尚未完成。
+已完成 CPU/DDR 行为仿真闭环，保留原始 INT64 输出，并新增逐通道重定标、可选 ReLU 和 HWC INT8 输出。
+CPU 可让第二层直接读取第一层在 DDR 中的 INT8 特征图，无需搬运或重排；新增裸机样例为 `csrc/software/conv2d_chain_test.c`。
+[数值规则、量化参数表和两层验证](docs/quantization_int8.md)。完整检测模型、SiLU 等其它算子、PDS 和实板验证尚未完成。
+
+CPU 已支持从 DDR 任务表运行网络。`ai_runtime.c` 每次只缓存一条 64 字节任务，
+PC 工具负责打包输入、权重、量化参数和静态张量地址；同一固件/RTL 可运行不同层数与通道数的网络。
+
+```bash
+make test-ai-tasks
+python3 scripts/pack_ai_model.py examples/ai_tasks/two_layer.json \
+  --output build/ai_example/model.bin --request build/ai_example/request.bin --reference
+```
+
+任务表格式、装载位置、错误报告与验收范围见 [DDR 任务表和 CPU 调度](docs/ai_task_runtime.md)。
+SPI 装载/启动协商尚待接入，当前用测试平台预装载 DDR。
 
 ## CoreMark：Icarus 与 Verilator
 

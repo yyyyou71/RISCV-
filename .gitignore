@@ -34,3 +34,5 @@ digital_sim
 !docs/conv2d_core.md
 !docs/multiply_adder.md
 !docs/conv2d_ddr_engine.md
+!docs/quantization_int8.md
+!docs/ai_task_runtime.md

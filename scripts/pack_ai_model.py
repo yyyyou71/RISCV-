@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""把已有整数卷积网络打包成 AIM1 数据包；不训练、不校准，也不读取 ONNX。"""
+import sys
+sys.dont_write_bytecode = True
+import argparse
+from dataclasses import dataclass
+import json
+from pathlib import Path
+import struct
+from conv2d_reference import ConvConfig, conv2d
+from quant_reference import pack_hwc_int8, pack_quant_params, quantize_hwc
+
+VERSION=1
+MODEL_MAGIC=int.from_bytes(b'AIM1','little')
+RUN_MAGIC=int.from_bytes(b'AIR1','little')
+BOOT_ADDR=0x1000
+MODEL_MIN=0x10000
+DDR_BYTES=0x20000000
+OP_CONV2D=1
+
+
+def align(value,boundary=16):
+    return (value+boundary-1)//boundary*boundary
+
+
+def words(values):
+    return struct.pack('<'+'I'*len(values),*values)
+
+
+def pack_run_request(model_addresses):
+    """前 64 KiB 调度区镜像：AIR1@0x1000、模型列表@0x2000、报告@0x4000。"""
+    if not 1<=len(model_addresses)<=64 or any(type(a) is not int or a%16 or not MODEL_MIN<=a<=DDR_BYTES-64 for a in model_addresses):
+        raise ValueError('请求必须包含 1..64 个合法模型头地址')
+    image=bytearray(MODEL_MIN)
+    image[BOOT_ADDR:BOOT_ADDR+32]=words([RUN_MAGIC,VERSION,len(model_addresses),0x2000,0x4000,0,0,0])
+    for n,address in enumerate(model_addresses):image[0x2000+n*16:0x2010+n*16]=words([address,0,0,0])
+    return bytes(image)
+
+
+def array(item,key,file_key,count,width,root):
+    if (key in item)==(file_key in item):
+        raise ValueError(f'{key} 与 {file_key} 必须且只能提供一个')
+    if file_key in item:
+        raw=(root/item[file_key]).read_bytes()
+        if len(raw)!=count*(width//8):raise ValueError(f'{file_key} 长度错误')
+        values=list(struct.unpack('<'+('b' if width==8 else 'i')*count,raw))
+    else:
+        values=item[key]
+    if not isinstance(values,list) or len(values)!=count or any(type(v) is not int or not -(1<<(width-1))<=v<(1<<(width-1)) for v in values):
+        raise ValueError(f'{key} 长度或 INT{width} 范围错误')
+    return values
+
+
+@dataclass
+class ModelPackage:
+    base: int
+    data: bytes
+    header: list
+    tasks: list
+    manifest: dict
+    golden: dict
+
+
+def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0):
+    if base<MODEL_MIN or base%16 or base>=DDR_BYTES:raise ValueError('模型基地址必须在 64 KiB..512 MiB 内且按 16 字节对齐')
+    image=spec['input'];shape=tuple(image['shape'])
+    if len(shape)!=3 or any(type(v) is not int or not 1<=v<=65535 for v in shape):raise ValueError('输入 shape 必须为 H,W,C，范围 1..65535')
+    layers=spec['layers']
+    if not isinstance(layers,list) or not layers:raise ValueError('网络至少需要一个算子')
+    source_values=array(image,'data','data_file',shape[0]*shape[1]*shape[2],8,root)
+    blob=bytearray(64+64*len(layers))
+    def allocate(data):
+        address=base+len(blob)
+        blob.extend(data);blob.extend(bytes(align(len(blob))-len(blob)))
+        if base+len(blob)>DDR_BYTES:raise ValueError('模型包超出 DDR 容量')
+        return address
+    image_bytes=pack_hwc_int8(source_values,shape[2])
+    image_addr=allocate(image_bytes)
+    tensors={'input':dict(shape=shape,address=image_addr,int8=True)}
+    prepared=[]
+    for index,layer in enumerate(layers):
+        name=layer.get('name',f'layer{index}')
+        source=layer.get('input','input' if index==0 else prepared[-1]['name'])
+        if not isinstance(name,str) or name in tensors:raise ValueError('层名称必须唯一')
+        if source not in tensors:raise ValueError('输入必须是已存在的张量，任务需按拓扑顺序给出')
+        previous=tensors[source]
+        if not previous['int8']:raise ValueError('原始 INT64 输出不能作为下一层 INT8 输入')
+        if layer.get('op','conv2d')!='conv2d':raise ValueError('当前 ABI 仅支持 conv2d')
+        ih,iw,ci=previous['shape'];co=layer['out_channels']
+        for field,default in [('out_channels',co),('kernel',3),('stride',1),('padding',1)]:
+            if type(layer.get(field,default)) is not int:raise ValueError(f'{field} 必须为整数')
+        for field,default in [('bias_enable',True),('output_int8',True),('relu',False)]:
+            if type(layer.get(field,default)) is not bool:raise ValueError(f'{field} 必须为布尔值')
+        cfg=ConvConfig(ih,iw,ci,co,layer.get('kernel',3),layer.get('stride',1),layer.get('padding',1),layer.get('bias_enable',True))
+        oh,ow,_=cfg.output_shape()
+        weights=array(layer,'weights','weights_file',co*cfg.kernel**2*ci,8,root)
+        biases=array(layer,'biases','biases_file',co,32,root) if cfg.bias_enable else [0]*co
+        int8=layer.get('output_int8',True);relu=layer.get('relu',False)
+        if not int8 and relu:raise ValueError('原始 INT64 输出不能开启 ReLU')
+        params=layer.get('quant',[])
+        if int8 and len(params)!=co:raise ValueError('每个输出通道必须提供 [multiplier,shift]')
+        if int8 and any(not isinstance(q,(list,tuple)) or len(q)!=2 or any(type(v) is not int for v in q) for q in params):
+            raise ValueError('quant 必须为整数 [multiplier,shift] 列表')
+        cip=align(ci);cop=align(co,4)
+        wb=bytearray()
+        for o in range(cop):
+            for tap in range(cfg.kernel**2):
+                wb.extend((weights[(o*cfg.kernel**2+tap)*ci+c]&255) if o<co and c<ci else 0 for c in range(cip))
+        wa=allocate(wb)
+        ba=allocate(b''.join(struct.pack('<i',biases[c] if c<co else 0) for c in range(cop))) if cfg.bias_enable else 0
+        qa=allocate(pack_quant_params(params)) if int8 else 0
+        item=dict(name=name,source=source,cfg=cfg,weights=weights,biases=biases,params=params,
+                  wa=wa,ba=ba,qa=qa,int8=int8,relu=relu)
+        prepared.append(item)
+        tensors[name]=dict(shape=(oh,ow,co),int8=int8)
+    readonly_end=base+len(blob)
+    golden={};dense={'input':source_values};tasks=[];outputs=[]
+    for item in prepared:
+        cfg=item['cfg'];name=item['name'];oh,ow,co=tensors[name]['shape']
+        size=oh*ow*(align(co) if item['int8'] else align(co,4)*8)
+        guard_before=allocate(bytes([0xa5])*16)
+        out=allocate(bytes([output_fill])*size)
+        guard_after=allocate(bytes([0x5a])*16)
+        tensors[name]['address']=out
+        control=cfg.kernel|(cfg.stride<<2)|(cfg.padding<<4)|(int(cfg.bias_enable)<<6)
+        post=int(item['int8'])|(int(item['relu'])<<1)
+        task=[OP_CONV2D,tensors[item['source']]['address'],item['wa'],item['ba'],out,item['qa'],
+              cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),control,post,oh,ow,0,0,0,0]
+        tasks.append(task)
+        output=dict(name=name,address=out,bytes=size,shape=[oh,ow,co],int8=item['int8'],
+                    guard_before=guard_before,guard_after=guard_after)
+        outputs.append(output)
+        if reference:
+            values=conv2d(cfg,dense[item['source']],item['weights'],item['biases'])
+            if item['int8']:
+                values=quantize_hwc(values,co,item['params'],item['relu'])
+                data=pack_hwc_int8(values,co)
+            else:
+                data=b''.join(struct.pack('<q',values[p*co+c] if c<co else 0)
+                              for p in range(oh*ow) for c in range(align(co,4)))
+            dense[name]=values;golden[out]=data
+    final=outputs[-1]
+    header=[MODEL_MAGIC,VERSION,64,64,len(tasks),base+64,base,base+len(blob),
+            image_addr,len(image_bytes),final['address'],final['bytes'],readonly_end,0,0,0]
+    blob[:64]=words(header)
+    for n,task in enumerate(tasks):blob[64+n*64:128+n*64]=words(task)
+    manifest=dict(abi=VERSION,base=base,bytes=len(blob),task_count=len(tasks),tasks_addr=base+64,
+                  readonly_end=readonly_end,input=dict(address=image_addr,bytes=len(image_bytes),shape=list(shape)),
+                  outputs=outputs,final_output=final)
+    return ModelPackage(base,bytes(blob),header,tasks,manifest,golden)
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('spec',type=Path,help='整数网络 JSON；相对数据文件路径相对该 JSON')
+    parser.add_argument('--base',type=lambda v:int(v,0),default=MODEL_MIN)
+    parser.add_argument('--output',type=Path,required=True,help='模型二进制包')
+    parser.add_argument('--reference',action='store_true',help='同时用 Python 整数参考计算各层输出')
+    parser.add_argument('--request',type=Path,help='同时生成单模型的 64 KiB 调度区镜像，装入 DDR 地址 0')
+    args=parser.parse_args()
+    try:
+        package=pack_model(json.loads(args.spec.read_text()),args.base,args.spec.parent,args.reference)
+    except (ValueError,KeyError,TypeError,OSError) as error:
+        parser.error(str(error))
+    args.output.parent.mkdir(parents=True,exist_ok=True)
+    args.output.write_bytes(package.data)
+    args.output.with_suffix('.json').write_text(json.dumps(package.manifest,indent=2,ensure_ascii=False)+'\n')
+    if args.request:
+        args.request.parent.mkdir(parents=True,exist_ok=True)
+        args.request.write_bytes(pack_run_request([package.base]))
+    for address,data in package.golden.items():
+        args.output.with_name(args.output.stem+f'.golden_{address:08x}.bin').write_bytes(data)
+    print(f'AIM1: tasks={len(package.tasks)} bytes={len(package.data)} base=0x{package.base:08x}')
+
+
+if __name__=='__main__':main()

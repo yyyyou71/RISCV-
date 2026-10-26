@@ -27,6 +27,9 @@ module TB_ddr_cpu_window;
 
 
     integer aw_count = 0, ar_count = 0;
+`ifdef AI_TASK_PROGRAM
+    integer task_expected_exit=1;
+`endif
 `ifdef AI_PROGRAM
     integer ai_completed=0;
 `endif
@@ -67,17 +70,31 @@ module TB_ddr_cpu_window;
 `ifdef AI_PROGRAM
         always @(posedge core_clk) if(rst_n && u_soc.u_peripheral_bus.g_ddr.u_window.core_state==4 &&
             u_soc.u_peripheral_bus.g_ddr.u_window.ai_done) ai_completed=ai_completed+1;
+`ifdef AI_CHAIN
+        // 两层之间禁止 CPU 通过窗口搬运特征图；第二层必须直接读取 DDR 中间结果。
+        always @(posedge clk) if(rst_n && ai_completed==1 && dev_we && dev_addr_wr==32'h31000 && dev_wdata[0])
+            $fatal(1,"CPU copied/intervened between connected layers");
+`endif
 `endif
         always @(posedge clk) if (rst_n) begin
             if (bus_err) $fatal(1, "CPU bus error");
             if (dev_we && dev_addr_wr == 32'h30000) begin
+`ifdef AI_TASK_PROGRAM
+                if (dev_wdata !== task_expected_exit) $fatal(1,"runtime exit=%h expected=%h",dev_wdata,task_expected_exit);
+                task_check_finish;
+`else
                 if (dev_wdata !== 1) $fatal(1, "CPU test failed code=%h", dev_wdata);
                 if (aw_count < 16 || ar_count < 16) $fatal(1, "CPU did not exercise DDR");
 `ifdef AI_PROGRAM
                 if(ai_completed!=2) $fatal(1,"AI engine not executed twice: %0d",ai_completed);
+`ifdef AI_CHAIN
+                $display("PASS ai_chain layers=%0d aw=%0d ar=%0d",ai_completed,aw_count,ar_count);
+`else
                 $display("PASS ai_cpu layers=%0d aw=%0d ar=%0d",ai_completed,aw_count,ar_count);
+`endif
 `else
                 $display("PASS cpu_mmio aw=%0d ar=%0d", aw_count, ar_count);
+`endif
 `endif
                 $finish;
             end
@@ -134,6 +151,9 @@ module TB_ddr_cpu_window;
         .ck_dly_en(1'b0), .init_ck_dly_step(8'd0)
     );
 
+`ifdef AI_TASK_PROGRAM
+    `include "ai_task_checks.vh"
+`endif
 
     localparam [31:0] CTRL = 32'h31000, STATUS = 32'h31004,
                      ADDRESS = 32'h31008, LENGTH = 32'h3100c,

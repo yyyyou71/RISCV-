@@ -1,12 +1,13 @@
 `timescale 1ns/1ps
 `default_nettype none
-// W8A8 单层 DDR 原始卷积：4 个输出通道 x 2 项归约，4 个相邻输出像素为一小块。
-// HWC 输入的物理通道补齐到 16，输出通道补齐到 4，权重为 O-KY-KX-I。
+// W8A8 DDR 卷积：4 个输出通道 x 2 项归约，4 个相邻输出像素为一小块。
+// 原始 INT64 输出按 4 通道对齐；量化 INT8 输出按 16 通道对齐，可直接连接下一层。
 // 所有内存操作均为 16/32 字节对齐块；部分和跨输入通道块保存在片上。
 module conv2d_ddr_engine (
     input wire clk, rst_n,
     input wire cmd_valid, output wire cmd_ready,
     input wire [31:0] cfg_input_addr, cfg_weight_addr, cfg_bias_addr, cfg_output_addr,
+    input wire [31:0] cfg_quant_addr, cfg_post, // bit0=INT8 输出，bit1=ReLU，其余必须为零
     input wire [15:0] cfg_in_h, cfg_in_w, cfg_in_ch, cfg_out_ch,
     input wire [1:0] cfg_kernel, cfg_stride, cfg_padding,
     input wire cfg_bias_enable, clear_status,
@@ -23,12 +24,19 @@ module conv2d_ddr_engine (
     input wire dma_rd_valid, output wire dma_rd_ready,
     input wire [127:0] dma_rd_data
 );
-    localparam [3:0] IDLE=0, B_REQ=1, B_WAIT=2, INIT=3,
-        W_REQ=4, W_WAIT=5, P_REQ=6, P_WAIT=7, T_START=8, T_WAIT=9, O_REQ=10, O_WAIT=11;
-    reg [3:0] state;
-    reg [31:0] input_addr, weight_addr, bias_addr, output_addr;
+    localparam [4:0] IDLE=0, B_REQ=1, B_WAIT=2, INIT=3,
+        W_REQ=4, W_WAIT=5, P_REQ=6, P_WAIT=7, T_START=8, T_WAIT=9, O_REQ=10, O_WAIT=11,
+        QPAR_REQ=12, QPAR_WAIT=13, Q_START=14, Q_WAIT=15, MERGE_REQ=16, MERGE_WAIT=17;
+    reg [4:0] state;
+    reg [31:0] input_addr, weight_addr, bias_addr, output_addr, quant_addr;
     reg [15:0] height, width, input_channels, output_channels;
     reg [31:0] ci_pitch, co_pitch, ci_base, co_base, y, x_tile;
+    reg [31:0] output_pitch;
+    reg output_int8, relu_enable;
+    reg [1:0] quant_lane;
+    reg [31:0] quant_multiplier[0:3], quant_shift[0:3];
+    reg [31:0] quant_pixels[0:3];
+    reg [127:0] merge_word;
     reg [1:0] stride, padding, weight_lane;
     reg [3:0] taps, tap;
     reg bias_enable;
@@ -37,6 +45,8 @@ module conv2d_ddr_engine (
     reg [255:0] partials [0:3];
     wire [31:0] cfg_ci_pitch=({16'd0,cfg_in_ch}+32'd15)&32'hfffffff0;
     wire [31:0] cfg_co_pitch=({16'd0,cfg_out_ch}+32'd3)&32'hfffffffc;
+    wire [31:0] cfg_output_pitch=cfg_post[0] ?
+        (({16'd0,cfg_out_ch}+32'd15)&32'hfffffff0) : cfg_co_pitch;
     wire [31:0] padded_h={16'd0,cfg_in_h}+({30'd0,cfg_padding}<<1);
     wire [31:0] padded_w={16'd0,cfg_in_w}+({30'd0,cfg_padding}<<1);
     wire [31:0] calc_h=((padded_h-{30'd0,cfg_kernel})>>(cfg_stride==2))+1;
@@ -44,15 +54,17 @@ module conv2d_ddr_engine (
     wire [63:0] input_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_ci_pitch};
     wire [63:0] weight_size={32'd0,cfg_co_pitch}*{62'd0,cfg_kernel}*{62'd0,cfg_kernel}*{32'd0,cfg_ci_pitch};
     wire [63:0] bias_size={32'd0,cfg_co_pitch}*64'd4;
-    wire [63:0] output_size={32'd0,calc_h}*{32'd0,calc_w}*{32'd0,cfg_co_pitch}*64'd8;
+    wire [63:0] output_size={32'd0,calc_h}*{32'd0,calc_w}*{32'd0,cfg_output_pitch}*(cfg_post[0] ? 64'd1 : 64'd8);
+    wire [63:0] quant_end={32'd0,cfg_quant_addr}+{32'd0,cfg_co_pitch}*64'd16;
     wire [63:0] ie={32'd0,cfg_input_addr}+input_size, we={32'd0,cfg_weight_addr}+weight_size;
     wire [63:0] be={32'd0,cfg_bias_addr}+bias_size, oe={32'd0,cfg_output_addr}+output_size;
     wire address_bad=ie>64'h20000000 || we>64'h20000000 || oe>64'h20000000 ||
-        (cfg_bias_enable && be>64'h20000000);
+        (cfg_bias_enable && be>64'h20000000) || (cfg_post[0] && quant_end>64'h20000000);
     // 只读区域允许相互重叠；输出禁止覆盖任意正在读取的区域。
     wire overlap_bad=({32'd0,cfg_output_addr}<ie && {32'd0,cfg_input_addr}<oe) ||
         ({32'd0,cfg_output_addr}<we && {32'd0,cfg_weight_addr}<oe) ||
-        (cfg_bias_enable && {32'd0,cfg_output_addr}<be && {32'd0,cfg_bias_addr}<oe);
+        (cfg_bias_enable && {32'd0,cfg_output_addr}<be && {32'd0,cfg_bias_addr}<oe) ||
+        (cfg_post[0] && {32'd0,cfg_output_addr}<quant_end && {32'd0,cfg_quant_addr}<oe);
     wire [3:0] ty=taps==1 ? 4'd0 : tap/4'd3, tx=taps==1 ? 4'd0 : tap%4'd3;
     wire signed [31:0] iy=$signed(stride==2 ? y<<1 : y)+$signed({28'd0,ty})-$signed({30'd0,padding});
     wire [31:0] ox=x_tile+{29'd0,pixel};
@@ -62,20 +74,23 @@ module conv2d_ddr_engine (
     wire [31:0] weight_pointer=weight_addr+((co_base+{30'd0,weight_lane})*{28'd0,taps}+{28'd0,tap})*ci_pitch+ci_base;
     wire [31:0] input_pointer=input_addr+($unsigned(iy)*{16'd0,width}+$unsigned(ix))*ci_pitch+ci_base;
     wire [31:0] next_tile_remaining=out_w-x_tile-32'd4;
-    wire [31:0] output_pointer=output_addr+((y*out_w+ox)*co_pitch+co_base)*8;
+    wire [31:0] output_pointer=output_addr+(output_int8 ?
+        ((y*out_w+ox)*output_pitch+(co_base&32'hfffffff0)) : ((y*out_w+ox)*co_pitch+co_base)*8);
     wire creq_ready, crsp_valid, crsp_error;
     wire [3:0] crsp_code;
     wire [255:0] crsp_data;
     wire [127:0] unused_read_high=crsp_data[255:128];
     wire creq_valid=(state==B_REQ || (state==W_REQ && lane_valid) ||
-        (state==P_REQ && inside_image) || state==O_REQ);
+        (state==P_REQ && inside_image) || state==O_REQ || state==MERGE_REQ ||
+        (state==QPAR_REQ && co_base+{30'd0,quant_lane}<{16'd0,output_channels}));
     wire [31:0] creq_addr=state==B_REQ ? bias_addr+co_base*4 :
-        state==W_REQ ? weight_pointer : state==P_REQ ? input_pointer : output_pointer;
+        state==W_REQ ? weight_pointer : state==P_REQ ? input_pointer :
+        state==QPAR_REQ ? quant_addr+(co_base+{30'd0,quant_lane})*16 : output_pointer;
     wire load_ready, tile_start_ready, tile_out_valid, tile_error, tile_busy, issue;
     wire [255:0] tile_result;
     wire tile_load_valid=(state==W_REQ && !lane_valid) || (state==P_REQ && !inside_image) ||
         ((state==W_WAIT || state==P_WAIT) && crsp_valid && !crsp_error);
-    wire crsp_ready=(state==B_WAIT || state==O_WAIT) ||
+    wire crsp_ready=(state==B_WAIT || state==O_WAIT || state==QPAR_WAIT || state==MERGE_WAIT) ||
         ((state==W_WAIT || state==P_WAIT) && (crsp_error || load_ready));
     reg [127:0] patch_data;
     integer mask_byte;
@@ -88,10 +103,25 @@ module conv2d_ddr_engine (
         state==P_WAIT ? patch_data : crsp_data[127:0];
     assign cmd_ready=rst_n && state==IDLE && !dma_fault && dma_initialized;
     assign busy=state!=IDLE;
+    // 每 16 通道的第一组从全零字开始；后续 4 通道组读改写已有结果。
+    // 这样无需整图片上缓存，也不要求 CPU 预清输出；代价是额外 DDR 流量。
+    reg [127:0] packed_output;
+    always @* begin
+        packed_output=co_base[3:0]==0 ? 128'd0 : merge_word;
+        packed_output[co_base[3:2]*32 +: 32]=quant_pixels[pixel[1:0]];
+    end
+    wire quant_in_ready, quant_out_valid, quant_error;
+    wire [7:0] quant_data;
+    requant_int8 u_requant (
+        .clk(clk),.rst_n(rst_n),.in_valid(state==Q_START),.in_ready(quant_in_ready),
+        .in_sum(partials[pixel[1:0]][quant_lane*64 +: 64]),
+        .multiplier(quant_multiplier[quant_lane]),.shift(quant_shift[quant_lane]),.relu(relu_enable),
+        .out_valid(quant_out_valid),.out_ready(state==Q_WAIT),.out_data(quant_data),.out_error(quant_error)
+    );
     ddr_chunk_client u_client (
         .clk(clk), .rst_n(rst_n), .req_valid(creq_valid), .req_ready(creq_ready),
-        .req_write(state==O_REQ), .req_two(state==O_REQ), .req_addr(creq_addr),
-        .req_data(partials[pixel[1:0]]), .rsp_valid(crsp_valid), .rsp_ready(crsp_ready),
+        .req_write(state==O_REQ), .req_two(state==O_REQ && !output_int8), .req_addr(creq_addr),
+        .req_data(output_int8 ? {128'd0,packed_output} : partials[pixel[1:0]]), .rsp_valid(crsp_valid), .rsp_ready(crsp_ready),
         .rsp_data(crsp_data), .rsp_error(crsp_error), .rsp_code(crsp_code),
         .dma_cmd_valid(dma_cmd_valid),
         .dma_cmd_ready(dma_cmd_ready),
@@ -132,16 +162,35 @@ module conv2d_ddr_engine (
             else begin tap<=tap+1'b1; state<=P_REQ; end
         end
     endtask
+    task next_quant_param;
+        begin
+            if(quant_lane==3) begin quant_lane<=0; state<=bias_enable ? B_REQ : INIT; end
+            else begin quant_lane<=quant_lane+1'b1; state<=QPAR_REQ; end
+        end
+    endtask
+    task next_quant_value;
+        begin
+            if(quant_lane!=3) begin quant_lane<=quant_lane+1'b1; state<=Q_START; end
+            else begin
+                quant_lane<=0;
+                if(pixel+3'd1<tile_width) begin pixel<=pixel+1'b1; state<=Q_START; end
+                else begin pixel<=0; state<=co_base[3:0]==0 ? O_REQ : MERGE_REQ; end
+            end
+        end
+    endtask
     integer i,j;
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             state<=IDLE; done<=0; error<=0; error_code<=0;
             input_addr<=0; weight_addr<=0; bias_addr<=0; output_addr<=0;
+            quant_addr<=0; output_pitch<=0; output_int8<=0; relu_enable<=0; quant_lane<=0; merge_word<=0;
             height<=0; width<=0; input_channels<=0; output_channels<=0;
             ci_pitch<=0; co_pitch<=0; ci_base<=0; co_base<=0; y<=0; x_tile<=0;
             stride<=1; padding<=0; weight_lane<=0; taps<=1; tap<=0; bias_enable<=0;
             pixel<=0; tile_width<=0; biases<=0; out_h<=0; out_w<=0; total_cycles<=0; mac_issues<=0;
-            for(i=0;i<4;i=i+1) partials[i]<=0;
+            for(i=0;i<4;i=i+1) begin
+                partials[i]<=0; quant_multiplier[i]<=0; quant_shift[i]<=0; quant_pixels[i]<=0;
+            end
         end else begin
             if(busy) total_cycles<=total_cycles+1'b1;
             if(issue) mac_issues<=mac_issues+1'b1;
@@ -153,21 +202,36 @@ module conv2d_ddr_engine (
                     else if((cfg_kernel!=1 && cfg_kernel!=3) || (cfg_stride!=1 && cfg_stride!=2) || cfg_padding>1 ||
                         padded_h<{30'd0,cfg_kernel} || padded_w<{30'd0,cfg_kernel}) begin error<=1; error_code<=2; end
                     else if(cfg_input_addr[3:0]!=0 || cfg_weight_addr[3:0]!=0 || cfg_output_addr[3:0]!=0 ||
-                        (cfg_bias_enable && cfg_bias_addr[3:0]!=0)) begin error<=1; error_code<=4; end
+                        (cfg_bias_enable && cfg_bias_addr[3:0]!=0) ||
+                        (cfg_post[0] && cfg_quant_addr[3:0]!=0)) begin error<=1; error_code<=4; end
+                    else if(cfg_post[31:2]!=0 || (!cfg_post[0] && cfg_post[1])) begin error<=1; error_code<=7; end
                     else if(address_bad) begin error<=1; error_code<=3; end
                     else if(overlap_bad) begin error<=1; error_code<=5; end
                     else begin
                         input_addr<=cfg_input_addr; weight_addr<=cfg_weight_addr; bias_addr<=cfg_bias_addr; output_addr<=cfg_output_addr;
                         height<=cfg_in_h; width<=cfg_in_w; input_channels<=cfg_in_ch; output_channels<=cfg_out_ch;
                         ci_pitch<=cfg_ci_pitch; co_pitch<=cfg_co_pitch; stride<=cfg_stride; padding<=cfg_padding;
+                        quant_addr<=cfg_quant_addr; output_pitch<=cfg_output_pitch;
+                        output_int8<=cfg_post[0]; relu_enable<=cfg_post[1]; quant_lane<=0;
                         bias_enable<=cfg_bias_enable; taps<=cfg_kernel==3 ? 4'd9 : 4'd1;
                         out_h<=calc_h; out_w<=calc_w; ci_base<=0; co_base<=0; y<=0; x_tile<=0; pixel<=0; tap<=0; weight_lane<=0;
                         tile_width<=calc_w>=4 ? 3'd4 : calc_w[2:0]; biases<=0;
-                        state<=cfg_bias_enable ? B_REQ : INIT;
+                        state<=cfg_post[0] ? QPAR_REQ : (cfg_bias_enable ? B_REQ : INIT);
                     end
                 end
                 B_REQ: if(creq_valid && creq_ready) state<=B_WAIT;
                 B_WAIT: if(crsp_valid && crsp_ready && !crsp_error) begin biases<=crsp_data[127:0]; state<=INIT; end
+                QPAR_REQ: if(co_base+{30'd0,quant_lane}>={16'd0,output_channels}) begin
+                        quant_multiplier[quant_lane]<=0; quant_shift[quant_lane]<=0; next_quant_param;
+                    end else if(creq_valid && creq_ready) state<=QPAR_WAIT;
+                QPAR_WAIT: if(crsp_valid && crsp_ready && !crsp_error) begin
+                    if(crsp_data[31] || crsp_data[63:32]>95 || crsp_data[127:64]!=0) begin
+                        error<=1; error_code<=7; state<=IDLE;
+                    end else begin
+                        quant_multiplier[quant_lane]<=crsp_data[31:0];
+                        quant_shift[quant_lane]<=crsp_data[63:32]; next_quant_param;
+                    end
+                end
                 INIT: begin
                     for(i=0;i<4;i=i+1) for(j=0;j<4;j=j+1)
                         partials[i][j*64 +: 64]<=bias_enable && co_base+j<{16'd0,output_channels}
@@ -187,11 +251,25 @@ module conv2d_ddr_engine (
                         if(pixel+3'd1<tile_width) begin pixel<=pixel+1'b1; tap<=0; state<=P_REQ; end
                         else if(ci_base+32'd16<{16'd0,input_channels}) begin
                             ci_base<=ci_base+32'd16; pixel<=0; tap<=0; weight_lane<=0; state<=W_REQ;
-                        end else begin pixel<=0; state<=O_REQ; end
+                        end else begin pixel<=0; quant_lane<=0; state<=output_int8 ? Q_START : O_REQ; end
                     end
+                // 无效通道使用先前装载的零参数，输出阶段仍显式补零。
+                Q_START: if(quant_in_ready) state<=Q_WAIT;
+                Q_WAIT: if(quant_out_valid) begin
+                    if(quant_error) begin error<=1; error_code<=7; state<=IDLE; end
+                    else begin
+                        quant_pixels[pixel[1:0]][quant_lane*8 +: 8]<=
+                            co_base+{30'd0,quant_lane}<{16'd0,output_channels} ? quant_data : 8'd0;
+                        next_quant_value;
+                    end
+                end
+                MERGE_REQ: if(creq_valid && creq_ready) state<=MERGE_WAIT;
+                MERGE_WAIT: if(crsp_valid && crsp_ready && !crsp_error) begin merge_word<=crsp_data[127:0]; state<=O_REQ; end
                 O_REQ: if(creq_valid && creq_ready) state<=O_WAIT;
                 O_WAIT: if(crsp_valid && crsp_ready && !crsp_error) begin
-                    if(pixel+3'd1<tile_width) begin pixel<=pixel+1'b1; state<=O_REQ; end
+                    if(pixel+3'd1<tile_width) begin
+                        pixel<=pixel+1'b1; state<=output_int8 && co_base[3:0]!=0 ? MERGE_REQ : O_REQ;
+                    end
                     else if(x_tile+32'd4<out_w) begin
                         x_tile<=x_tile+32'd4;
                         tile_width<=next_tile_remaining>=4 ? 3'd4 : next_tile_remaining[2:0];
@@ -200,7 +278,8 @@ module conv2d_ddr_engine (
                         x_tile<=0; y<=y+1'b1; tile_width<=out_w>=4 ? 3'd4 : out_w[2:0]; state<=INIT;
                     end else if(co_base+32'd4<{16'd0,output_channels}) begin
                         co_base<=co_base+32'd4; y<=0; x_tile<=0;
-                        tile_width<=out_w>=4 ? 3'd4 : out_w[2:0]; biases<=0; state<=bias_enable ? B_REQ : INIT;
+                        tile_width<=out_w>=4 ? 3'd4 : out_w[2:0]; biases<=0; quant_lane<=0;
+                        state<=output_int8 ? QPAR_REQ : (bias_enable ? B_REQ : INIT);
                     end else begin state<=IDLE; done<=1; end
                 end
                 default: begin state<=IDLE; error<=1; error_code<=6; end
