@@ -36,3 +36,9 @@ digital_sim
 !docs/conv2d_ddr_engine.md
 !docs/quantization_int8.md
 !docs/ai_task_runtime.md
+
+# PC 端模型工具与本机运行产物。
+!pc_ai/README.md
+pc_ai/outputs/
+pc_ai/__pycache__/
+pc_ai/picture/

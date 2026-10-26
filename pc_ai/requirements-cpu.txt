@@ -1,0 +1,10 @@
+# 与 TridentVision 记录的框架版本对齐，先使用 CPU 轮子。
+# +cpu 明确避免顺带安装 CUDA 运行库；不代表本机显卡不能用于后续训练。
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.13.0+cpu
+torchvision==0.28.0+cpu
+ultralytics==8.4.115
+numpy==2.2.6
+Pillow==11.3.0
+opencv-python==4.12.0.88
+scipy==1.16.3

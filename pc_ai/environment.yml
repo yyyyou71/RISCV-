@@ -1,0 +1,9 @@
+# 先用于已有模型推理、整数参考和导出验证；GPU 训练环境待驱动确认后配置。
+name: yolo-fpga
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r requirements-cpu.txt
