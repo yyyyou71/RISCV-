@@ -227,7 +227,23 @@ CPU一次处理23份模型请求、15次AI提交、17020个DDR字；统一固件
 输出位于`pc_ai/outputs/maxpool_tasks/`，更多时钟组合可由用户执行`python3 pc_ai/verify_w8a16_tasks.py --suite maxpool --profiles all`。
 JSON使用`{"name":"pooled","op":"maxpool5","input":"previous_layer"}`，任务操作码4，仅支持版本2。
 接口、数据流与当前重复读取邻域的取舍见 [MaxPool5说明](../docs/maxpool_int16.md)。
-下一步为2倍最近邻上采样；完整检测网络、综合与上板仍待完成。
+随后已完成下节2倍最近邻上采样；完整检测网络、综合与上板仍待完成。
+
+## 2倍最近邻上采样与五类算子混合任务
+
+```bash
+make test-ai-upsample
+python3 pc_ai/verify_w8a16_tasks.py --suite upsample --prepare-only
+```
+
+每个INT16像素复制到2×2区域，H/W各翻倍、C不变；输出占用输入四倍空间。
+每个有效16字节源字只读一次、复用四次写入，片上只保存当前源字；尾部填充显式清零。
+`export_upsample_tasks.c`调用参考C，导出16种DDR配置和三种CPU网络：五类算子混合、上采样后接真实两尺度卷积、连续两次上采样。
+DDR正常/停顿/零延迟、维度/容量/重叠检查、读取或复制中复位、原生读写超时均通过。
+CPU一次处理28份模型请求、14次AI提交、18252个DDR字；统一固件4244字节、初始化数据段0字节。
+输出在`pc_ai/outputs/upsample_tasks/`，默认CPU25MHz、DDR约131.25MHz；扩展组合可由用户运行`python3 pc_ai/verify_w8a16_tasks.py --suite upsample --profiles all`。
+JSON使用`{"name":"up","op":"upsample2x","input":"previous_layer"}`；输入H/W为1..32767、C为1..65535，任务操作码5，仅支持版本2。
+说明见 [上采样接口与验证](../docs/upsample_int16.md)。下一步导出真实全网任务表并分段对拍，检测后处理、综合和上板仍待完成。
 
 ## 长任务约定
 

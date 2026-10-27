@@ -41,6 +41,7 @@ digital_sim
 !docs/add_int16.md
 !docs/concat_int16.md
 !docs/maxpool_int16.md
+!docs/upsample_int16.md
 
 # PC 端模型工具与本机运行产物。
 !pc_ai/README.md

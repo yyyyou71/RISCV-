@@ -21,6 +21,7 @@ OP_CONV2D=1
 OP_ADD=2
 OP_CONCAT=3
 OP_MAXPOOL5=4
+OP_UPSAMPLE2X=5
 
 
 def align(value,boundary=16):
@@ -122,13 +123,16 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         if source not in tensors:raise ValueError('输入必须是已存在的张量，任务需按拓扑顺序给出')
         previous=tensors[source]
         if previous['bits']!=bits:raise ValueError('前层输出位宽不能作为当前卷积输入')
-        if layer.get('op')=='maxpool5':
-            if not wide:raise ValueError('MaxPool5当前仅支持W8A16版本2')
-            if set(layer)-{'name','op','input'}:raise ValueError('MaxPool5固定K5/S1/P2，不接受量化或卷积配置')
+        if layer.get('op') in ('maxpool5','upsample2x'):
+            op=layer['op']
+            if not wide:raise ValueError(f'{op}当前仅支持W8A16版本2')
+            if set(layer)-{'name','op','input'}:raise ValueError(f'{op}为固定规格，不接受量化或卷积配置')
             ih,iw,ci=previous['shape']
-            prepared.append(dict(name=name,source=source,op='maxpool5',
+            up=op=='upsample2x'
+            if up and (ih>32767 or iw>32767):raise ValueError('2倍上采样输出高宽不能超过65535')
+            prepared.append(dict(name=name,source=source,op=op,
                 cfg=ConvConfig(ih,iw,ci,ci,1,1,0,False),wa=0,ba=0,qa=0,int8=False,relu=False,split=0))
-            tensors[name]=dict(shape=previous['shape'],int8=False,bits=16)
+            tensors[name]=dict(shape=(ih*(2 if up else 1),iw*(2 if up else 1),ci),int8=False,bits=16)
             continue
         if layer.get('op')=='concat':
             if not wide:raise ValueError('Concat当前仅支持W8A16版本2')
@@ -154,7 +158,7 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
                 cfg=ConvConfig(ih,iw,ci,ci,1,1,0,False),wa=0,ba=0,qa=qa,int8=False,relu=False,split=0))
             tensors[name]=dict(shape=previous['shape'],int8=False,bits=16)
             continue
-        if layer.get('op','conv2d')!='conv2d':raise ValueError('未知算子；支持conv2d/add/concat/maxpool5')
+        if layer.get('op','conv2d')!='conv2d':raise ValueError('未知算子；支持conv2d/add/concat/maxpool5/upsample2x')
         ih,iw,ci=previous['shape'];co=layer['out_channels']
         for field,default in [('out_channels',co),('kernel',3),('stride',1),('padding',1)]:
             if type(layer.get(field,default)) is not int:raise ValueError(f'{field} 必须为整数')
@@ -200,7 +204,7 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         control=cfg.kernel|(cfg.stride<<2)|(cfg.padding<<4)|(int(cfg.bias_enable)<<6)
         post=(4 if wide else int(item['int8']))|(int(item['relu'])<<1)
         is_binary=item.get('op') in ('add','concat')
-        opcode={'add':OP_ADD,'concat':OP_CONCAT,'maxpool5':OP_MAXPOOL5}.get(item.get('op'),OP_CONV2D)
+        opcode={'add':OP_ADD,'concat':OP_CONCAT,'maxpool5':OP_MAXPOOL5,'upsample2x':OP_UPSAMPLE2X}.get(item.get('op'),OP_CONV2D)
         task=[opcode,tensors[item['source']]['address'],
               tensors[item['source_b']]['address'] if is_binary else item['wa'],item['ba'],out,item['qa'],
               cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),control if opcode==OP_CONV2D else 0,post,oh,ow,item['split'],0,0,0]

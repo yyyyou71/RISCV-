@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module TB_conv2d_ddr_engine;
     parameter integer QUANT_TEST=0;
-    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat，5=MaxPool5。
+    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat，5=MaxPool5，6=Upsample2x。
     reg ref_clk=0, rst_n=0;
     always #20 ref_clk=~ref_clk;
     wire core_clk, ddr_init_done;
@@ -117,6 +117,7 @@ module TB_conv2d_ddr_engine;
     integer aw_count=0,ar_count=0,writes=0;
     reg checking=0;
     reg [31:0] output_start,write_cursor,input_start,input_end;
+    reg seen_words[0:65535];
     reg [127:0] observed;
     reg [127:0] expected_native;
     integer check_byte,check_channel;
@@ -124,8 +125,8 @@ module TB_conv2d_ddr_engine;
         if(axi_awvalid && axi_awready) begin aw_count=aw_count+1;write_cursor={axi_awaddr,1'b0};end
         if(axi_arvalid && axi_arready)begin
             ar_count=ar_count+1;
-            if(checking && QUANT_TEST==5 && ({axi_araddr,1'b0}<input_start ||
-                {axi_araddr,1'b0}>=input_end || axi_arlen!=0))$fatal(1,"pool read outside input tensor");
+            if(checking && QUANT_TEST>=5 && ({axi_araddr,1'b0}<input_start ||
+                {axi_araddr,1'b0}>=input_end || axi_arlen!=0))$fatal(1,"unary operation read outside input tensor");
         end
         if(checking && axi_wready) begin
             expected_native=golden[gold_base+(write_cursor-output_start)/16];
@@ -140,6 +141,10 @@ module TB_conv2d_ddr_engine;
             if(write_cursor<output_start || write_cursor>=output_start+output_words*16 ||
                 axi_wstrb!==16'hffff || axi_wdata!==expected_native)
                 $fatal(1,"native output mismatch job=%0d byte=%h data=%h",job,write_cursor,axi_wdata);
+            if(QUANT_TEST>=3)begin
+                if(seen_words[(write_cursor-output_start)/16])$fatal(1,"tensor output word written twice");
+                seen_words[(write_cursor-output_start)/16]=1;
+            end
             write_cursor=write_cursor+16;writes=writes+1;
         end
     end
@@ -154,7 +159,7 @@ module TB_conv2d_ddr_engine;
             cfg_quant_addr=QUANT_TEST!=0 ? jobs[job][415:384] : 32'hdeadbeef;
             cfg_post=jobs[job][447:416];
             cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;
-            cfg_opcode=QUANT_TEST==5 ? 4:QUANT_TEST==4 ? 3:QUANT_TEST==3 ? 2:1;
+            cfg_opcode=QUANT_TEST==6 ? 5:QUANT_TEST==5 ? 4:QUANT_TEST==4 ? 3:QUANT_TEST==3 ? 2:1;
             cmd_valid=1;
             do @(posedge clk);while(!cmd_ready);
             @(negedge clk);cmd_valid=0;
@@ -196,8 +201,9 @@ module TB_conv2d_ddr_engine;
             input_end=input_start+jobs[job][15:0]*jobs[job][31:16]*((jobs[job][47:32]+15)&32'hfffffff0)*2;
             for(n=0;n<init_words;n=n+1)
                 memory.store_word(initial_memory[init_base+n][159:128]>>1,initial_memory[init_base+n][127:0],16'hffff);
-            if(QUANT_TEST!=0) for(n=0;n<output_words;n=n+1)
-                memory.store_word((output_start+n*16)>>1,{16{8'ha7}},16'hffff);
+            if(QUANT_TEST!=0) for(n=0;n<output_words;n=n+1)begin
+                memory.store_word((output_start+n*16)>>1,{16{8'ha7}},16'hffff);seen_words[n]=0;
+            end
             checking=1;writes=0;
             launch(job);
             polls=0;
@@ -210,6 +216,8 @@ module TB_conv2d_ddr_engine;
             if(QUANT_TEST>=4 && ar_count-before_ar!=jobs[job][95:80])
                 $fatal(1,"tensor read count got=%0d expected=%0d",ar_count-before_ar,jobs[job][95:80]);
             if(QUANT_TEST==5 && (out_h!=jobs[job][15:0] || out_w!=jobs[job][31:16]))$fatal(1,"pool output shape mismatch");
+            if(QUANT_TEST==6 && (out_h!=({16'd0,jobs[job][15:0]}<<1) || out_w!=({16'd0,jobs[job][31:16]}<<1)))
+                $fatal(1,"upsample output shape mismatch");
             for(n=0;n<output_words;n=n+1) begin
                 observed=memory.load_word((output_start+n*16)>>1);
                 if(observed!==golden[gold_base+n])$fatal(1,"DDR readback mismatch");checked=checked+1;
@@ -401,13 +409,13 @@ module TB_conv2d_ddr_engine;
             clear_status=1;@(negedge clk);clear_status=0;
         end
     endtask
-    task bad_pool;
+    task bad_unary;
         input integer which;
         input [3:0] code;
         integer before_commands;
         begin
             @(negedge clk);
-            cfg_opcode=4;cfg_in_h=1;cfg_in_w=3;cfg_in_ch=17;cfg_out_ch=17;
+            cfg_opcode=QUANT_TEST==6 ? 5:4;cfg_in_h=1;cfg_in_w=3;cfg_in_ch=17;cfg_out_ch=17;
             cfg_kernel=0;cfg_stride=0;cfg_padding=0;cfg_bias_enable=0;
             cfg_bias_addr=0;cfg_weight_addr=0;cfg_quant_addr=0;cfg_group_split=0;cfg_post=4;
             cfg_input_addr=32'h7f0;cfg_output_addr=32'h807f0;
@@ -432,11 +440,15 @@ module TB_conv2d_ddr_engine;
                 17:cfg_padding=1;
                 18:cfg_bias_enable=1;
                 19:cfg_opcode=99;
-                20:begin cfg_in_h=65535;cfg_in_w=65535;cfg_in_ch=65535;cfg_out_ch=65535;end
+                20:begin cfg_in_h=32767;cfg_in_w=32767;cfg_in_ch=65535;cfg_out_ch=65535;end
+                21:cfg_in_h=32768;
+                22:cfg_in_w=32768;
+                23:cfg_output_addr=cfg_input_addr-256;
+                24:cfg_output_addr=32'h1fffff00;
             endcase
             before_commands=aw_count+ar_count;cmd_valid=1;@(negedge clk);cmd_valid=0;
             if(busy || done || !error || error_code!==code || aw_count+ar_count!=before_commands || dma_fault)
-                $fatal(1,"bad MaxPool5 case=%0d code=%0d expected=%0d",which,error_code,code);
+                $fatal(1,"bad unary operation case=%0d code=%0d expected=%0d",which,error_code,code);
             clear_status=1;@(negedge clk);clear_status=0;
         end
     endtask
@@ -472,9 +484,10 @@ module TB_conv2d_ddr_engine;
             for(n=9;n<12;n=n+1)bad_concat(n,3);bad_concat(12,5);bad_concat(13,5);
             for(n=14;n<19;n=n+1)bad_concat(n,7);bad_concat(19,3);bad_concat(20,1);
         end else begin
-            for(n=0;n<4;n=n+1)bad_pool(n,1);bad_pool(4,4);bad_pool(5,4);
-            bad_pool(6,3);bad_pool(7,3);bad_pool(8,5);bad_pool(9,5);
-            for(n=10;n<20;n=n+1)bad_pool(n,7);bad_pool(20,3);
+            for(n=0;n<4;n=n+1)bad_unary(n,1);bad_unary(4,4);bad_unary(5,4);
+            bad_unary(6,3);bad_unary(7,3);bad_unary(8,5);bad_unary(9,5);
+            for(n=10;n<20;n=n+1)bad_unary(n,7);bad_unary(20,3);
+            if(QUANT_TEST==6)begin bad_unary(21,1);bad_unary(22,1);bad_unary(23,5);bad_unary(24,3);end
         end
         if(QUANT_TEST==1)begin
             bad_quant(0,4);bad_quant(1,3);bad_quant(2,5);bad_quant(3,7);bad_quant(4,7);
@@ -494,19 +507,22 @@ module TB_conv2d_ddr_engine;
         end
         // 分别覆盖乘加流水或量化运算尚未完成时的共同复位。
         launch(0);
-        if(QUANT_TEST==5)wait(dut.state==39);else if(QUANT_TEST==4)wait(dut.state==33);else if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
+        if(QUANT_TEST==6)wait(dut.state==44);else if(QUANT_TEST==5)wait(dut.state==39);else if(QUANT_TEST==4)wait(dut.state==33);else if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
         reset_all;run_layer(0);
+        if(QUANT_TEST==6)begin
+            launch(0);wait(dut.state==45 && dut.up_copy==2);reset_all;run_layer(0);
+        end
         // 原生读超时必须传播为错误，且共同复位前不接受新任务。
         force memory.axi_arready=1'b0;launch(0);
         polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"fault propagation timeout");end
         if(!error || error_code!=12 || !dma_fault || cmd_ready)$fatal(1,"engine fault status mismatch");
         @(negedge ref_clk);rst_n=0;repeat(6)@(negedge ref_clk);release memory.axi_arready;
         rst_n=1;wait(ddr_init_done);repeat(3)@(negedge clk);run_layer(0);
-        if(QUANT_TEST==5)begin
+        if(QUANT_TEST>=5)begin
             // 计算完成但写地址通道超时，也不能提前报告DONE或继续接收任务。
             force memory.axi_awready=1'b0;launch(0);
-            polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"pool write fault timeout");end
-            if(done || !error || error_code!=12 || !dma_fault || cmd_ready)$fatal(1,"pool write fault status mismatch");
+            polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"unary write fault timeout");end
+            if(done || !error || error_code!=12 || !dma_fault || cmd_ready)$fatal(1,"unary write fault status mismatch");
             @(negedge ref_clk);rst_n=0;repeat(6)@(negedge ref_clk);release memory.axi_awready;
             rst_n=1;wait(ddr_init_done);repeat(3)@(negedge clk);run_layer(0);
         end

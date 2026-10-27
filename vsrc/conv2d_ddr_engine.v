@@ -2,13 +2,13 @@
 `default_nettype none
 // W8A8/W8A16 DDR 卷积：4 个输出通道 x 2 项归约，4 个相邻输出像素为一小块。
 // W8A8原始INT64按4通道对齐；量化INT8/INT16按16通道对齐，可直接连接下一层。
-// 亦处理INT16 ADD、Concat和5x5最大池化。所有内存操作均为16/32字节块。
+// 亦处理INT16 ADD、Concat、5x5最大池化和2倍最近邻上采样。
 module conv2d_ddr_engine #(
     parameter integer ACT_WIDTH=8 // 综合配置：8保留原ABI，16使用两级Q13量化
 )(
     input wire clk, rst_n,
     input wire cmd_valid, output wire cmd_ready,
-    input wire [31:0] cfg_opcode, // 1=卷积，2=ADD，3=Concat，4=MaxPool5；2/3复用weight_addr为输入B
+    input wire [31:0] cfg_opcode, // 1=卷积，2=ADD，3=Concat，4=MaxPool5，5=Upsample2x
     input wire [31:0] cfg_input_addr, cfg_weight_addr, cfg_bias_addr, cfg_output_addr,
     input wire [31:0] cfg_quant_addr, cfg_post,
     input wire [31:0] cfg_group_split, // 卷积：尺度组边界；Concat：B输入通道数
@@ -35,7 +35,8 @@ module conv2d_ddr_engine #(
         ADD_QREQ=20,ADD_QWAIT=21,ADD_AREQ=22,ADD_AWAIT=23,ADD_BREQ=24,ADD_BWAIT=25,
         ADD_START=26,ADD_WAIT=27,ADD_OREQ=28,ADD_OWAIT=29,
         CAT_PREP=30,CAT_REQ=31,CAT_WAIT=32,CAT_COPY=33,CAT_OREQ=34,CAT_OWAIT=35,
-        POOL_INIT=36,POOL_PREP=37,POOL_REQ=38,POOL_WAIT=39,POOL_OREQ=40,POOL_OWAIT=41;
+        POOL_INIT=36,POOL_PREP=37,POOL_REQ=38,POOL_WAIT=39,POOL_OREQ=40,POOL_OWAIT=41,
+        UP_PREP=42,UP_REQ=43,UP_WAIT=44,UP_OREQ=45,UP_OWAIT=46;
     reg [5:0] state;
     reg [31:0] input_addr, weight_addr, bias_addr, output_addr, quant_addr;
     reg [15:0] height, width, input_channels, output_channels;
@@ -72,6 +73,10 @@ module conv2d_ddr_engine #(
     reg [31:0] pool_tap_row_addr,pool_tap_addr;
     reg [2:0] pool_kx,pool_ky;
     reg [127:0] pool_max;
+    // 源字读一次，保留到对应2x2区域的四笔写入全部完成。
+    reg [31:0] up_x,up_y,up_channel,up_row_bytes;
+    reg [1:0] up_copy;
+    reg [127:0] up_word;
     wire [31:0] cfg_ci_pitch=({16'd0,cfg_in_ch}+32'd15)&32'hfffffff0;
     wire [31:0] cfg_co_pitch=({16'd0,cfg_out_ch}+32'd3)&32'hfffffffc;
     wire [31:0] cfg_output_pitch=cfg_quantized ?
@@ -103,6 +108,11 @@ module conv2d_ddr_engine #(
         ({32'd0,cfg_output_addr}<cat_be && {32'd0,cfg_weight_addr}<cat_oe);
     wire pool_address_bad=add_ae>64'h20000000 || add_oe>64'h20000000;
     wire pool_overlap_bad={32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<add_oe;
+    wire [63:0] up_oe={32'd0,cfg_output_addr}+(add_size<<2);
+    wire up_address_bad=add_ae>64'h20000000 || up_oe>64'h20000000;
+    wire up_overlap_bad={32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<up_oe;
+    wire [31:0] up_write_addr=output_addr+(up_channel<<1)+
+        (up_copy[0] ? (ci_pitch<<1):32'd0)+(up_copy[1] ? up_row_bytes:32'd0);
     wire signed [31:0] pool_iy=$signed(pool_y)+$signed({29'd0,pool_ky})-32'sd2;
     wire signed [31:0] pool_ix=$signed(pool_x)+$signed({29'd0,pool_kx})-32'sd2;
     wire pool_inside=pool_iy>=0 && pool_ix>=0 && pool_iy<$signed({16'd0,height}) && pool_ix<$signed({16'd0,width});
@@ -145,10 +155,17 @@ module conv2d_ddr_engine #(
     wire creq_ready, crsp_valid, crsp_error;
     wire [3:0] crsp_code;
     wire [255:0] crsp_data;
+    reg [127:0] up_input;
+    integer up_lane;
+    always @* begin
+        up_input=crsp_data[127:0];
+        for(up_lane=0;up_lane<8;up_lane=up_lane+1)
+            if(up_channel+up_lane>={16'd0,input_channels})up_input[up_lane*16 +: 16]=0;
+    end
     wire creq_valid=(state==B_REQ || (state==W_REQ && lane_valid) ||
         (state==P_REQ && inside_image) || state==O_REQ || state==MERGE_REQ || state==PAD_REQ ||
         state==ADD_QREQ || state==ADD_AREQ || state==ADD_BREQ || state==ADD_OREQ || state==CAT_REQ || state==CAT_OREQ ||
-        state==POOL_REQ || state==POOL_OREQ ||
+        state==POOL_REQ || state==POOL_OREQ || state==UP_REQ || state==UP_OREQ ||
         (state==QPAR_REQ && co_base+{30'd0,quant_lane}<{16'd0,output_channels}));
     wire [31:0] creq_addr=state==B_REQ ? bias_addr+co_base*4 :
         state==W_REQ ? weight_pointer : state==P_REQ ? input_pointer :
@@ -157,6 +174,7 @@ module conv2d_ddr_engine #(
         state==ADD_BREQ ? weight_addr+add_offset:state==ADD_OREQ ? output_addr+add_offset:
         state==CAT_REQ ? cat_read_addr:state==CAT_OREQ ? cat_output_addr:
         state==POOL_REQ ? pool_tap_addr:state==POOL_OREQ ? output_addr:
+        state==UP_REQ ? input_addr+(up_channel<<1):state==UP_OREQ ? up_write_addr:
         state==PAD_REQ ? output_pointer+32'd16 : output_pointer;
     wire load_ready, tile_start_ready, tile_out_valid, tile_error, tile_busy, issue;
     wire [255:0] tile_result;
@@ -164,7 +182,7 @@ module conv2d_ddr_engine #(
         ((state==W_WAIT || state==P_WAIT) && crsp_valid && !crsp_error);
     wire crsp_ready=(state==B_WAIT || state==O_WAIT || state==QPAR_WAIT || state==MERGE_WAIT || state==PAD_WAIT ||
         state==ADD_QWAIT || state==ADD_AWAIT || state==ADD_BWAIT || state==ADD_OWAIT || state==CAT_WAIT || state==CAT_OWAIT) ||
-        state==POOL_WAIT || state==POOL_OWAIT ||
+        state==POOL_WAIT || state==POOL_OWAIT || state==UP_WAIT || state==UP_OWAIT ||
         ((state==W_WAIT || state==P_WAIT) && (crsp_error || load_ready));
     reg [16*ACT_WIDTH-1:0] patch_data;
     integer mask_byte;
@@ -227,9 +245,10 @@ module conv2d_ddr_engine #(
     end endgenerate
     ddr_chunk_client u_client (
         .clk(clk), .rst_n(rst_n), .req_valid(creq_valid), .req_ready(creq_ready),
-        .req_write(state==O_REQ || state==PAD_REQ || state==ADD_OREQ || state==CAT_OREQ || state==POOL_OREQ),
+        .req_write(state==O_REQ || state==PAD_REQ || state==ADD_OREQ || state==CAT_OREQ || state==POOL_OREQ || state==UP_OREQ),
         .req_two((state==O_REQ && !quantized) || (ACT_WIDTH==16 && (state==P_REQ || state==QPAR_REQ))), .req_addr(creq_addr),
-        .req_data(state==POOL_OREQ ? {128'd0,pool_output}:state==CAT_OREQ ? {128'd0,cat_word}:state==ADD_OREQ ? {128'd0,add_word_out}:
+        .req_data(state==UP_OREQ ? {128'd0,up_word}:state==POOL_OREQ ? {128'd0,pool_output}:
+            state==CAT_OREQ ? {128'd0,cat_word}:state==ADD_OREQ ? {128'd0,add_word_out}:
             state==PAD_REQ ? 256'd0 : quantized ? {128'd0,packed_output} : partials[pixel[1:0]]),
         .rsp_valid(crsp_valid), .rsp_ready(crsp_ready),
         .rsp_data(crsp_data), .rsp_error(crsp_error), .rsp_code(crsp_code),
@@ -337,6 +356,7 @@ module conv2d_ddr_engine #(
             cat_cache_valid<=0;cat_cache<=0;cat_word<=0;
             pool_x<=0;pool_y<=0;pool_channel<=0;pool_pixel_addr<=0;pool_row_bytes<=0;
             pool_tap_row_addr<=0;pool_tap_addr<=0;pool_kx<=0;pool_ky<=0;pool_max<=0;
+            up_x<=0;up_y<=0;up_channel<=0;up_row_bytes<=0;up_copy<=0;up_word<=0;
             for(i=0;i<4;i=i+1) begin
                 partials[i]<=0;partials1[i]<=0;quant_multiplier[i]<=0;quant_shift[i]<=0;quant_pixels[i]<=0;
                 quant_multiplier1[i]<=0;quant_shift1[i]<=0;quant_multiplier_y[i]<=0;quant_shift_y[i]<=0;
@@ -348,7 +368,23 @@ module conv2d_ddr_engine #(
             case(state)
                 IDLE: if(cmd_valid && cmd_ready) begin
                     done<=0; error<=0; error_code<=0; total_cycles<=0; mac_issues<=0; out_h<=0; out_w<=0;
-                    if(cfg_opcode==4)begin
+                    if(cfg_opcode==5)begin
+                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_weight_addr!=0 || cfg_bias_addr!=0 || cfg_quant_addr!=0 ||
+                            cfg_group_split!=0 || cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
+                        // 倍增后的高宽仍要能装进下一条任务的16位尺寸字段。
+                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_h>32767 || cfg_in_w>32767 ||
+                            cfg_in_ch==0 || cfg_out_ch!=cfg_in_ch)begin error<=1;error_code<=1;end
+                        else if((cfg_input_addr[3:0]|cfg_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                        else if(up_address_bad)begin error<=1;error_code<=3;end
+                        else if(up_overlap_bad)begin error<=1;error_code<=5;end
+                        else begin
+                            input_addr<=cfg_input_addr;output_addr<=cfg_output_addr;ci_pitch<=cfg_ci_pitch;
+                            height<=cfg_in_h;width<=cfg_in_w;input_channels<=cfg_in_ch;
+                            out_h<=({16'd0,cfg_in_h}<<1);out_w<=({16'd0,cfg_in_w}<<1);
+                            up_x<=0;up_y<=0;up_channel<=0;up_copy<=0;up_word<=0;
+                            up_row_bytes<={16'd0,cfg_in_w}*(cfg_ci_pitch<<2);state<=UP_PREP;
+                        end
+                    end else if(cfg_opcode==4)begin
                         // 固定K5/S1/P2；不用卷积位域表达5，未使用的字段必须清零。
                         if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_weight_addr!=0 || cfg_bias_addr!=0 || cfg_quant_addr!=0 ||
                             cfg_group_split!=0 || cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
@@ -552,6 +588,26 @@ module conv2d_ddr_engine #(
                         if(pool_x+32'd1<out_w)pool_x<=pool_x+32'd1;
                         else begin pool_x<=0;pool_y<=pool_y+32'd1;end
                         state<=POOL_INIT;
+                    end else begin state<=IDLE;done<=1;end
+                end
+                UP_PREP:begin
+                    up_copy<=0;
+                    if(up_channel>={16'd0,input_channels})begin up_word<=0;state<=UP_OREQ;end
+                    else state<=UP_REQ;
+                end
+                UP_REQ:if(creq_valid && creq_ready)state<=UP_WAIT;
+                UP_WAIT:if(crsp_valid && !crsp_error)begin up_word<=up_input;state<=UP_OREQ;end
+                UP_OREQ:if(creq_valid && creq_ready)state<=UP_OWAIT;
+                UP_OWAIT:if(crsp_valid && !crsp_error)begin
+                    if(up_copy!=3)begin up_copy<=up_copy+1'b1;state<=UP_OREQ;end
+                    else if(up_channel+32'd8<ci_pitch)begin up_channel<=up_channel+32'd8;state<=UP_PREP;end
+                    else if(up_x+32'd1<{16'd0,width} || up_y+32'd1<{16'd0,height})begin
+                        input_addr<=input_addr+(ci_pitch<<1);up_channel<=0;
+                        // 横向跨两个输出像素；换输入行时额外跳过一个输出行。
+                        output_addr<=output_addr+(ci_pitch<<2)+(up_x+32'd1<{16'd0,width} ? 32'd0:up_row_bytes);
+                        if(up_x+32'd1<{16'd0,width})up_x<=up_x+32'd1;
+                        else begin up_x<=0;up_y<=up_y+32'd1;end
+                        state<=UP_PREP;
                     end else begin state<=IDLE;done<=1;end
                 end
                 default: begin state<=IDLE; error<=1; error_code<=6; end

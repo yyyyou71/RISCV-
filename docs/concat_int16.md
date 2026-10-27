@@ -101,4 +101,4 @@ python3 pc_ai/verify_w8a16_tasks.py --suite concat --profiles all
 - 默认CPU任务配置为25MHz/DDR用户时钟约131.25MHz，其他时钟组合以报告为准；受影响的ADD和W8A8任务检查也通过。
 
 完整C3通过不等于完整YOLO通过，合成小特征图不用于检测精度评价。
-随后已完成 [5×5最大池化与SPPF](maxpool_int16.md)；下一步是最近邻上采样。仍先完成功能，不扩大阵列，脉动阵列实施前先解释数据组织。
+随后已完成 [5×5最大池化与SPPF](maxpool_int16.md) 和 [最近邻上采样](upsample_int16.md)；下一步连接完整网络。仍先完成功能，不扩大阵列，脉动阵列实施前先解释数据组织。

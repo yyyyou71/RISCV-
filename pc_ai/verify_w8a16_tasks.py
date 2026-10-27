@@ -15,12 +15,12 @@ from pack_ai_model import pack_model, pack_run_request, words, BOOT_ADDR, align
 
 
 def task_issues(t):
-    if t[0] in (2,3,4):
+    if t[0] in (2,3,4,5):
         return 0
     return t[10]*t[11]*(((t[7]&65535)+15)//16)*(((t[7]>>16)+3)//4)*(t[8]&3)**2*8
 
 
-def generate(out,add_suite=False,concat_suite=False,pool_suite=False):
+def generate(out,add_suite=False,concat_suite=False,pool_suite=False,up_suite=False):
     specs = [json.loads((out/f'network{n}.json').read_text()) for n in range(3)]
     initial = {}
     expected = {}
@@ -57,16 +57,17 @@ def generate(out,add_suite=False,concat_suite=False,pool_suite=False):
         masks[address+16] = ((1<<128)-1)^0xffffffff
         launches += completed+(code==6)
         cases.append(dict(name=name,model_addr=p.base,code=code,failed_task=failed,hardware_code=hw,completed=completed))
-    bases=(0x107a0,0x60000,0x80000) if pool_suite else (0x107a0,0x50000,0x70000) if concat_suite else (0x107a0,0x40000,0x60000) if add_suite else (0x107a0,0x20000,0x30000)
+    bases=(0x107a0,0x30000,0x60000) if up_suite else (0x107a0,0x60000,0x80000) if pool_suite else (0x107a0,0x50000,0x70000) if concat_suite else (0x107a0,0x40000,0x60000) if add_suite else (0x107a0,0x20000,0x30000)
     good = [package(n,b) for n,b in enumerate(bases)]
     for n,p in enumerate(good):
-        add(p,('real_sppf_module','conv_pool_conv','repeated_pool')[n] if pool_suite else
+        add(p,('all_five_operators','upsample_then_real_grouped_conv','repeated_upsample')[n] if up_suite else
+            ('real_sppf_module','conv_pool_conv','repeated_pool')[n] if pool_suite else
             ('real_c3_module','unaligned_concat_then_conv','repeated_concat')[n] if concat_suite else
             ('real_bottleneck_residual','conv_add_conv_branch','two_add_layers')[n] if add_suite else
             ('two_real_convolutions','three_real_convolutions','grouped_branch_network')[n])
         (out/f'network{n}.model.bin').write_bytes(p.data)
         (out/f'network{n}.manifest.json').write_text(json.dumps(p.manifest,indent=2)+'\n')
-    base = 0xa0000 if pool_suite else 0x90000 if concat_suite else 0x80000 if add_suite else 0x40000
+    base = 0x80000 if up_suite else 0xa0000 if pool_suite else 0x90000 if concat_suite else 0x80000 if add_suite else 0x40000
     def bad(name,code,index=0xffffffff,hw=0,completed=0,edit=None,network=2):
         nonlocal base
         p = package(network,base)
@@ -76,7 +77,7 @@ def generate(out,add_suite=False,concat_suite=False,pool_suite=False):
         return lambda data,p: struct.pack_into('<I',data,field*4,value)
     def task(n,field,value):
         return lambda data,p: struct.pack_into('<I',data,64+n*64+field*4,value(p) if callable(value) else value)
-    if pool_suite:
+    if pool_suite or up_suite:
         bad('unknown_opcode',3,0,edit=task(0,0,99))
         bad('zero_height',4,0,edit=task(0,6,3<<16))
         bad('zero_width',4,0,edit=task(0,6,1))
@@ -88,15 +89,25 @@ def generate(out,add_suite=False,concat_suite=False,pool_suite=False):
         bad('unexpected_bias',4,0,edit=task(0,3,16))
         bad('unexpected_quant',4,0,edit=task(0,5,16))
         bad('unexpected_group',4,0,edit=task(0,12,16))
-        bad('wrong_output_shape',4,0,edit=task(0,10,2))
+        bad('wrong_output_shape',4,0,edit=task(0,10,1 if up_suite else 2))
         bad('later_reserved_preflight',4,1,edit=task(1,13,1))
         bad('input_outside_arena',2,0,edit=task(0,1,0))
         bad('input_allocation_too_small',2,1,edit=task(1,1,lambda p:p.header[7]-16))
         bad('output_overwrites_assets',2,0,edit=task(0,4,lambda p:p.header[8]))
         bad('output_allocation_too_small',2,0,edit=task(0,4,lambda p:p.header[7]-16))
         bad('output_overlaps_input',2,1,edit=task(1,4,lambda p:p.tasks[1][1]))
-        bad('conv_error_after_pool',6,2,7,2,edit=lambda data,p:
-            struct.pack_into('<I',data,p.tasks[2][5]-p.base,0x80000000),network=1)
+        if up_suite:
+            bad('input_height_doubles_outside_abi',4,0,edit=task(0,6,(3<<16)|32768))
+            bad('input_width_doubles_outside_abi',4,0,edit=task(0,6,(32768<<16)|1))
+            bad('output_width_not_doubled',4,0,edit=task(0,11,3))
+            bad('output_only_input_size_available',2,0,edit=task(0,4,lambda p:p.header[7]-96))
+            bad('overlap_only_in_expanded_output',2,2,edit=lambda data,p:
+                (task(2,1,lambda q:q.header[12]+1024)(data,p),task(2,4,lambda q:q.header[12])(data,p)),network=0)
+            bad('conv_error_after_upsample',6,1,7,1,edit=lambda data,p:
+                struct.pack_into('<I',data,p.tasks[1][5]-p.base,0x80000000),network=1)
+        else:
+            bad('conv_error_after_pool',6,2,7,2,edit=lambda data,p:
+                struct.pack_into('<I',data,p.tasks[2][5]-p.base,0x80000000),network=1)
     elif concat_suite:
         bad('unknown_opcode',3,0,edit=task(0,0,99))
         bad('zero_channels_a',4,0,edit=task(0,7,34<<16))
@@ -186,12 +197,12 @@ def add_conv_errors(bad,header,task):
     bad('second_group_quant_error',6,0,7,0,invalid_quant(0,8))
 
 
-def host_checks(out,run,add_suite=False,concat_suite=False,pool_suite=False):
+def host_checks(out,run,add_suite=False,concat_suite=False,pool_suite=False,up_suite=False):
     spec = json.loads((out/'network2.json').read_text())
     changes = [lambda s:s['layers'][0].update(input='missing'),lambda s:s['layers'][0].update(input_b='input'),
                lambda s:s['layers'][0].update(relu=True),lambda s:s['layers'][0].update(quant_q13=[]),
                lambda s:s['layers'][0].update(kernel=5),lambda s:s['layers'][0].update(stride=1),
-               lambda s:s['layers'][0].update(padding=2)] if pool_suite else [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(input_b=[]),
+               lambda s:s['layers'][0].update(padding=2)] if pool_suite or up_suite else [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(input_b=[]),
                lambda s:s['layers'][0].update(quant_add=[1,0,1,0]),lambda s:s['layers'][0].update(relu=True)] if concat_suite else [lambda s:s['layers'][0].update(input_b='missing'),lambda s:s['layers'][0].update(relu=True),
                lambda s:s['layers'][0].update(quant_add=[1,0,1]),lambda s:s['layers'][0]['quant_add'].__setitem__(0,1<<31),
                lambda s:s['layers'][0]['quant_add'].__setitem__(3,64)] if add_suite else [lambda s:s.update(activation_bits=9),lambda s:s['layers'][0].update(op='add'),
@@ -219,10 +230,19 @@ def host_checks(out,run,add_suite=False,concat_suite=False,pool_suite=False):
         try:pack_model(bad,root=out)
         except ValueError:pass
         else:raise RuntimeError('Concat accepted different spatial shapes')
-    if pool_suite:
-        try:pack_model(dict(activation_bits=8,input=dict(shape=[1,1,1],data=[-1]),layers=[dict(op='maxpool5')]))
+    if pool_suite or up_suite:
+        op='upsample2x' if up_suite else 'maxpool5'
+        try:pack_model(dict(activation_bits=8,input=dict(shape=[1,1,1],data=[-1]),layers=[dict(op=op)]))
         except ValueError:pass
-        else:raise RuntimeError('MaxPool5 accepted W8A8')
+        else:raise RuntimeError(op+' accepted W8A8')
+    if up_suite:
+        for shape in ([32768,1,1],[1,32768,1]):
+            try:pack_model(dict(activation_bits=16,input=dict(shape=shape,data=[0]*32768),layers=[dict(op='upsample2x')]))
+            except ValueError:pass
+            else:raise RuntimeError('upsample accepted output dimension overflow')
+        p=pack_model(dict(activation_bits=16,input=dict(shape=[32767,1,1],data=[0]*32767),layers=[dict(op='upsample2x')]))
+        if p.tasks[0][10:12]!=[65534,2] or p.header[11]!=32767*4*32:
+            raise RuntimeError('upsample upper dimension/size packing mismatch')
     try:
         pack_model(spec,root=out,reference=True)
     except ValueError:
@@ -246,15 +266,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--reference',type=Path,default=ROOT.parent/'materials/TridentVision')
     parser.add_argument('--out',type=Path)
-    parser.add_argument('--suite',choices=('conv','add','concat','maxpool'),default='conv',help='选择卷积、ADD、Concat或MaxPool5的DDR/CPU任务测试')
+    parser.add_argument('--suite',choices=('conv','add','concat','maxpool','upsample'),default='conv',help='选择卷积、ADD、Concat、MaxPool5或Upsample2x的DDR/CPU任务测试')
     parser.add_argument('--prepare-only',action='store_true')
     parser.add_argument('--profiles',choices=('normal','all'),default='normal')
     args = parser.parse_args()
     add_suite=args.suite=='add'
     concat_suite=args.suite=='concat'
     pool_suite=args.suite=='maxpool'
-    tensor_suite=add_suite or concat_suite or pool_suite
-    out = (args.out or ROOT/('pc_ai/outputs/maxpool_tasks' if pool_suite else 'pc_ai/outputs/concat_tasks' if concat_suite else 'pc_ai/outputs/add_tasks' if add_suite else 'pc_ai/outputs/w8a16_tasks')).resolve()
+    up_suite=args.suite=='upsample'
+    tensor_suite=add_suite or concat_suite or pool_suite or up_suite
+    out = (args.out or ROOT/('pc_ai/outputs/upsample_tasks' if up_suite else 'pc_ai/outputs/maxpool_tasks' if pool_suite else 'pc_ai/outputs/concat_tasks' if concat_suite else 'pc_ai/outputs/add_tasks' if add_suite else 'pc_ai/outputs/w8a16_tasks')).resolve()
     out.mkdir(parents=True,exist_ok=True)
     ref = args.reference.resolve()
     def run(command,name,cwd=None):
@@ -272,18 +293,18 @@ def main():
     if tensor_suite:
         (out/'ddr').mkdir(exist_ok=True)
     run(['gcc','-O2','-std=c11','-DTRIDENT_SOURCE='+json.dumps(str(ref/'training/export/rearch_fixed.c')),
-         '-I',ref/'c_model',ROOT/('pc_ai/export_maxpool_tasks.c' if pool_suite else 'pc_ai/export_concat_tasks.c' if concat_suite else 'pc_ai/export_add_tasks.c' if add_suite else 'pc_ai/export_w8a16_tasks.c'),
+         '-I',ref/'c_model',ROOT/('pc_ai/export_upsample_tasks.c' if up_suite else 'pc_ai/export_maxpool_tasks.c' if pool_suite else 'pc_ai/export_concat_tasks.c' if concat_suite else 'pc_ai/export_add_tasks.c' if add_suite else 'pc_ai/export_w8a16_tasks.c'),
          '-lm','-o',out/'export_vectors'],'compile_c')
     run([out/'export_vectors',ref/'training/export/rearch_int8.bin'],'export_c')
-    counts = generate(out,add_suite,concat_suite,pool_suite)
-    host_checks(out,run,add_suite,concat_suite,pool_suite)
+    counts = generate(out,add_suite,concat_suite,pool_suite,up_suite)
+    host_checks(out,run,add_suite,concat_suite,pool_suite,up_suite)
     add_counts={}
     if tensor_suite:
-        add_counts=json.loads((out/('maxpool_counts.json' if pool_suite else 'concat_counts.json' if concat_suite else 'add_counts.json')).read_text())
+        add_counts=json.loads((out/('upsample_counts.json' if up_suite else 'maxpool_counts.json' if pool_suite else 'concat_counts.json' if concat_suite else 'add_counts.json')).read_text())
         if add_suite:
             run(['iverilog','-g2012','-s','TB_add_int16','-o',out/'unit.vvp',ROOT/'Iverilog/TB_add_int16.v',ROOT/'vsrc/add_int16.v'],'compile_unit')
         run(['iverilog','-g2012','-s','TB_conv2d_ddr_engine','-y',ROOT/'vsrc','-DDDR3_MODEL_SLOTS=8192',
-             f'-PTB_conv2d_ddr_engine.QUANT_TEST={5 if pool_suite else 4 if concat_suite else 3}','-o',out/'ddr/test.vvp',ROOT/'Iverilog/TB_conv2d_ddr_engine.v',ROOT/'vsrc/ddr3.sv'],'compile_ddr')
+             f'-PTB_conv2d_ddr_engine.QUANT_TEST={6 if up_suite else 5 if pool_suite else 4 if concat_suite else 3}','-o',out/'ddr/test.vvp',ROOT/'Iverilog/TB_conv2d_ddr_engine.v',ROOT/'vsrc/ddr3.sv'],'compile_ddr')
         if add_suite:
             run(['verilator','--lint-only','-Wall','--top-module','add_int16',ROOT/'vsrc/add_int16.v'],'lint_unit')
         run(['verilator','--lint-only','-Wall','-Wno-TIMESCALEMOD','-Wno-SYNCASYNCNET','--top-module','peripheral_bus',
@@ -377,7 +398,8 @@ def main():
         (out/'golden.mem').write_text(original)
     (out/'result.json').write_text(json.dumps(dict(passed=True,**counts,rom_bytes=len(code),data_bytes=len(data),
         firmware_sha256=hashlib.sha256(code).hexdigest(),profiles=args.profiles,results=results,
-        golden_source='original C conv_layer/maxpool5/concat2/add_point and sppf_fwd' if pool_suite else
+        golden_source='original C upsample2x/conv_layer/maxpool5/concat2/add_point' if up_suite else
+            'original C conv_layer/maxpool5/concat2/add_point and sppf_fwd' if pool_suite else
             'original C conv_layer/add_point/concat2' if concat_suite else 'original C conv_layer/add_point' if add_suite else 'original C conv_layer',
         suite=args.suite,tensor_tests=add_counts,full_detection_network=False,pds_verified=False),indent=2)+'\n')
 

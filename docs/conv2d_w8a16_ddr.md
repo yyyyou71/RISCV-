@@ -33,7 +33,7 @@ DDR引擎复用已验证的 `conv_mac_tile(ACT_WIDTH=16)` 和 `requant_q13`，�
 | 0x3023c | AI_QUANT | W8A16逐输出通道32字节量化表基地址，16字节对齐 |
 | 0x30240 | AI_GROUP | 0=单尺度；否则为第二组起始输入通道，须16对齐且小于Cin |
 | 0x30244 | AI_FORMAT | 只读8或16，表示综合时选择的激活位宽 |
-| 0x30248 | AI_OPCODE | 复位1=卷积；2=INT16 ADD；3=通道Concat；4=MaxPool5 |
+| 0x30248 | AI_OPCODE | 复位1=卷积；2=INT16 ADD；3=通道Concat；4=MaxPool5；5=Upsample2x |
 
 W8A16不接受旧的POST模式，也不提供未经量化的原始INT64输出模式；错误码7用于数值格式/分组配置错误。
 W8A8忽略AI_GROUP；W8A16的输入、输出都为INT16。不能在同一个固定实例中逐层切换8/16位。
@@ -116,6 +116,6 @@ python3 pc_ai/verify_w8a16_ddr.py --prepare-only
 ## 6. 剩余工作
 
 上述976字节程序是最初的两层独立描述符测试；随后已增加AIM1版本2和统一3080字节固件，通用W8A16任务表验收见 [任务表与打包](ai_task_runtime.md)。
-随后已完成 [残差ADD](add_int16.md)、[通道Concat](concat_int16.md) 和 [MaxPool5](maxpool_int16.md)；下一步补齐上采样，逐步连接完整网络。
+随后已完成 [残差ADD](add_int16.md)、[通道Concat](concat_int16.md)、[MaxPool5](maxpool_int16.md) 和 [Upsample2x](upsample_int16.md)；下一步逐步连接完整网络。
 SPI加载、完整检测网络、后处理、真实乘法IP替换、板级DDR接线、PDS和实板性能均待后续集成。
 保留供数、计算、量化、写回边界；先完成功能并测量资源，准备实现脉动阵列前先解释数据组织。

@@ -15,6 +15,7 @@
 #define AI_OP_ADD 2u
 #define AI_OP_CONCAT 3u
 #define AI_OP_MAXPOOL5 4u
+#define AI_OP_UPSAMPLE2X 5u
 #define AI_MAX_JOBS 64u
 
 enum ai_runtime_code {
