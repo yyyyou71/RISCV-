@@ -6,7 +6,9 @@ module peripheral_bus #(
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
     parameter integer DDR_TIMEOUT_CYCLES = 4096,
-    parameter integer AI_ACT_WIDTH = 8
+    parameter integer AI_ACT_WIDTH = 8,
+    parameter integer ENABLE_VIDEO = 0,
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9
 )(
     input  wire        clk,
     input  wire        rst_n,
@@ -25,6 +27,8 @@ module peripheral_bus #(
     // ENABLE_DDR=1 时接紫光 DDR IP 用户接口；CPU/DDR 时钟无需同源。
     input wire core_clk,
     input wire ddr_init_done,
+    input wire pixclk_in, vs_in, de_in,
+    input wire [23:0] rgb_in,
     output wire [27:0]                  axi_awaddr,
     output wire                         axi_awuser_ap,
     output wire [3:0]                   axi_awuser_id,
@@ -55,8 +59,10 @@ module peripheral_bus #(
     wire word_access;
     wire [31:0] ddr_read_data;
     generate if (ENABLE_DDR != 0) begin : g_ddr
-        ddr_cpu_window #(.TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES),.ENABLE_AI(ENABLE_AI),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_window (
+        ddr_cpu_window #(.TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES),.ENABLE_AI(ENABLE_AI),.AI_ACT_WIDTH(AI_ACT_WIDTH),
+            .ENABLE_VIDEO(ENABLE_VIDEO),.VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS)) u_window (
             .clk(clk), .core_clk(core_clk), .rst_n(rst_n), .ddr_init_done(ddr_init_done),
+            .pixclk_in(pixclk_in),.vs_in(vs_in),.de_in(de_in),.rgb_in(rgb_in),
             .dev_we(dev_we && word_access), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .read_data(ddr_read_data),
             .axi_awaddr(axi_awaddr),

@@ -42,6 +42,9 @@ module TB_ddr_cpu_window;
         soc #(.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_soc (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd), .bus_err(bus_err),
             .core_clk(core_clk), .ddr_init_done(ddr_init_done),
+            // 已有CPU/AI测试不提供视频，顶层新增输入保持空闲。
+            .pixclk_in(1'b0),.vs_in(1'b0),.hs_in(1'b0),.de_in(1'b0),
+            .r_in(8'd0),.g_in(8'd0),.b_in(8'd0),
             .axi_awaddr(axi_awaddr),
             .axi_awuser_ap(axi_awuser_ap),
             .axi_awuser_id(axi_awuser_id),
@@ -117,6 +120,7 @@ module TB_ddr_cpu_window;
             .dev_we(dev_we), .dev_re(dev_re), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .dev_size(dev_size),
             .dev_rdata(dev_rdata), .core_clk(core_clk), .ddr_init_done(ddr_init_done),
+            .pixclk_in(1'b0),.vs_in(1'b0),.de_in(1'b0),.rgb_in(24'd0),
             .axi_awaddr(axi_awaddr),
             .axi_awuser_ap(axi_awuser_ap),
             .axi_awuser_id(axi_awuser_id),

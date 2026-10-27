@@ -128,6 +128,8 @@ help:
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
+	@echo 'test-video-capture  验证CPU按需抓帧、异步FIFO、DDR原图写入及异常恢复'
+	@echo 'test-video-fifo  验证紫光FIFO接口模型、标准读时序及预读封装'
 	@echo 'test-ddr-block-transfer  验证指定地址/长度的 DDR 块搬运、跨列拆分及异常恢复'
 	@echo 'test-divide     check divider arithmetic, pipeline integration and hardware switch'
 	@echo 'coremark-verilator  run CoreMark on Verilator (100 iterations per seed set by default)'
@@ -230,6 +232,13 @@ test-ddr-block-transfer:
 .PHONY: test-ddr-cpu-window
 test-ddr-cpu-window:
 	python3 scripts/test_ddr_cpu_window.py
+
+.PHONY: test-video-capture test-video-fifo
+test-video-capture:
+	python3 -B scripts/test_video_capture.py
+
+test-video-fifo:
+	python3 -B scripts/test_video_capture.py --fifo-only
 
 # 模型无关的原始卷积：不含 DDR 和模型量化语义。
 .PHONY: test-conv2d-core

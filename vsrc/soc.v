@@ -6,7 +6,9 @@ module soc #(
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
     parameter integer DDR_TIMEOUT_CYCLES = 4096,
-    parameter integer AI_ACT_WIDTH = 8
+    parameter integer AI_ACT_WIDTH = 8,
+    parameter integer ENABLE_VIDEO = 0,
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9
 )(
     input  wire clk,
     input  wire rst_n,
@@ -14,6 +16,16 @@ module soc #(
     output wire bus_err,
     input wire core_clk,
     input wire ddr_init_done,
+    // 来自ziguang-fpga2顶层的HDMI并行像素输入。假定板上接收端已配置完成，
+    // RGB/VS/HS/DE均属于pixclk_in域；de_in有效时，每拍输入一个RGB888像素。
+    // ENABLE_VIDEO=1 时，由CPU请求抓取下一完整帧到DDR。
+    input wire pixclk_in,
+    input wire vs_in,
+    input wire hs_in,
+    input wire de_in,
+    input wire [7:0] r_in,
+    input wire [7:0] g_in,
+    input wire [7:0] b_in,
     output wire [27:0]                  axi_awaddr,
     output wire                         axi_awuser_ap,
     output wire [3:0]                   axi_awuser_id,
@@ -45,6 +57,9 @@ module soc #(
     wire [31:0] dev_rdata;
     wire [1:0]  dev_size;
 
+    // 行边界使用DE的下降沿；HS保留在顶层，供后续视频功能使用。
+    wire unused_hdmi_hs = hs_in;
+
     Acore u_core (
         .clk(clk),
         .rst_n(rst_n),
@@ -60,7 +75,8 @@ module soc #(
 
     peripheral_bus #(
         .CLK_FREQ(CLK_FREQ), .BAUD_RATE(BAUD_RATE),
-        .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH), .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES)
+        .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI),
+        .ENABLE_VIDEO(ENABLE_VIDEO), .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS), .AI_ACT_WIDTH(AI_ACT_WIDTH), .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES)
     ) u_peripheral_bus (
         .clk(clk),
         .rst_n(rst_n),
@@ -72,6 +88,7 @@ module soc #(
         .dev_size(dev_size),
         .dev_rdata(dev_rdata),
         .uart_txd(uart_txd), .core_clk(core_clk), .ddr_init_done(ddr_init_done),
+        .pixclk_in(pixclk_in),.vs_in(vs_in),.de_in(de_in),.rgb_in({r_in,g_in,b_in}),
         .axi_awaddr(axi_awaddr),
         .axi_awuser_ap(axi_awuser_ap),
         .axi_awuser_id(axi_awuser_id),
