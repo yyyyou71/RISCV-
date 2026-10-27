@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module TB_conv2d_ddr_engine;
     parameter integer QUANT_TEST=0;
-    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat。
+    // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat，5=MaxPool5。
     reg ref_clk=0, rst_n=0;
     always #20 ref_clk=~ref_clk;
     wire core_clk, ddr_init_done;
@@ -116,13 +116,17 @@ module TB_conv2d_ddr_engine;
     integer init_base,init_words,gold_base,output_words,expected_issues;
     integer aw_count=0,ar_count=0,writes=0;
     reg checking=0;
-    reg [31:0] output_start,write_cursor;
+    reg [31:0] output_start,write_cursor,input_start,input_end;
     reg [127:0] observed;
     reg [127:0] expected_native;
     integer check_byte,check_channel;
     always @(posedge clk) if(rst_n) begin
         if(axi_awvalid && axi_awready) begin aw_count=aw_count+1;write_cursor={axi_awaddr,1'b0};end
-        if(axi_arvalid && axi_arready) ar_count=ar_count+1;
+        if(axi_arvalid && axi_arready)begin
+            ar_count=ar_count+1;
+            if(checking && QUANT_TEST==5 && ({axi_araddr,1'b0}<input_start ||
+                {axi_araddr,1'b0}>=input_end || axi_arlen!=0))$fatal(1,"pool read outside input tensor");
+        end
         if(checking && axi_wready) begin
             expected_native=golden[gold_base+(write_cursor-output_start)/16];
             if(QUANT_TEST==2 || dut.output_int8)begin
@@ -149,7 +153,8 @@ module TB_conv2d_ddr_engine;
             cfg_bias_addr=jobs[job][191:160];cfg_output_addr=jobs[job][223:192];
             cfg_quant_addr=QUANT_TEST!=0 ? jobs[job][415:384] : 32'hdeadbeef;
             cfg_post=jobs[job][447:416];
-            cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;cfg_opcode=QUANT_TEST==4 ? 3:QUANT_TEST==3 ? 2:1;
+            cfg_group_split=QUANT_TEST>=2 ? jobs[job][479:448]:32'd0;
+            cfg_opcode=QUANT_TEST==5 ? 4:QUANT_TEST==4 ? 3:QUANT_TEST==3 ? 2:1;
             cmd_valid=1;
             do @(posedge clk);while(!cmd_ready);
             @(negedge clk);cmd_valid=0;
@@ -187,6 +192,8 @@ module TB_conv2d_ddr_engine;
             init_base=jobs[job][255:224];init_words=jobs[job][287:256];
             gold_base=jobs[job][319:288];output_words=jobs[job][351:320];expected_issues=jobs[job][383:352];
             output_start=jobs[job][223:192];
+            input_start=jobs[job][127:96];
+            input_end=input_start+jobs[job][15:0]*jobs[job][31:16]*((jobs[job][47:32]+15)&32'hfffffff0)*2;
             for(n=0;n<init_words;n=n+1)
                 memory.store_word(initial_memory[init_base+n][159:128]>>1,initial_memory[init_base+n][127:0],16'hffff);
             if(QUANT_TEST!=0) for(n=0;n<output_words;n=n+1)
@@ -200,8 +207,9 @@ module TB_conv2d_ddr_engine;
                 writes!=(QUANT_TEST>=3 ? output_words:QUANT_TEST!=0 ? out_h*out_w*((jobs[job][63:48]+3)/4+
                     (QUANT_TEST==2 ? ((jobs[job][63:48]+7)/8)%2:0)) : output_words) || mac_issues!=expected_issues)
                 $fatal(1,"engine status job=%0d done=%b error=%b code=%d writes=%0d/%0d issues=%0d/%0d",job,done,error,error_code,writes,output_words,mac_issues,expected_issues);
-            if(QUANT_TEST==4 && ar_count-before_ar!=jobs[job][95:80])
-                $fatal(1,"Concat cache read count got=%0d expected=%0d",ar_count-before_ar,jobs[job][95:80]);
+            if(QUANT_TEST>=4 && ar_count-before_ar!=jobs[job][95:80])
+                $fatal(1,"tensor read count got=%0d expected=%0d",ar_count-before_ar,jobs[job][95:80]);
+            if(QUANT_TEST==5 && (out_h!=jobs[job][15:0] || out_w!=jobs[job][31:16]))$fatal(1,"pool output shape mismatch");
             for(n=0;n<output_words;n=n+1) begin
                 observed=memory.load_word((output_start+n*16)>>1);
                 if(observed!==golden[gold_base+n])$fatal(1,"DDR readback mismatch");checked=checked+1;
@@ -393,6 +401,45 @@ module TB_conv2d_ddr_engine;
             clear_status=1;@(negedge clk);clear_status=0;
         end
     endtask
+    task bad_pool;
+        input integer which;
+        input [3:0] code;
+        integer before_commands;
+        begin
+            @(negedge clk);
+            cfg_opcode=4;cfg_in_h=1;cfg_in_w=3;cfg_in_ch=17;cfg_out_ch=17;
+            cfg_kernel=0;cfg_stride=0;cfg_padding=0;cfg_bias_enable=0;
+            cfg_bias_addr=0;cfg_weight_addr=0;cfg_quant_addr=0;cfg_group_split=0;cfg_post=4;
+            cfg_input_addr=32'h7f0;cfg_output_addr=32'h807f0;
+            case(which)
+                0:cfg_in_h=0;
+                1:cfg_in_w=0;
+                2:cfg_in_ch=0;
+                3:cfg_out_ch=16;
+                4:cfg_input_addr=1;
+                5:cfg_output_addr=1;
+                6:cfg_input_addr=32'h1ffffff0;
+                7:cfg_output_addr=32'h1ffffff0;
+                8:cfg_output_addr=cfg_input_addr;
+                9:cfg_output_addr=cfg_input_addr+16;
+                10:cfg_post=6;
+                11:cfg_weight_addr=16;
+                12:cfg_bias_addr=16;
+                13:cfg_quant_addr=16;
+                14:cfg_group_split=16;
+                15:cfg_kernel=1;
+                16:cfg_stride=1;
+                17:cfg_padding=1;
+                18:cfg_bias_enable=1;
+                19:cfg_opcode=99;
+                20:begin cfg_in_h=65535;cfg_in_w=65535;cfg_in_ch=65535;cfg_out_ch=65535;end
+            endcase
+            before_commands=aw_count+ar_count;cmd_valid=1;@(negedge clk);cmd_valid=0;
+            if(busy || done || !error || error_code!==code || aw_count+ar_count!=before_commands || dma_fault)
+                $fatal(1,"bad MaxPool5 case=%0d code=%0d expected=%0d",which,error_code,code);
+            clear_status=1;@(negedge clk);clear_status=0;
+        end
+    endtask
     task reset_all;
         begin
             @(negedge clk);rst_n=0;cmd_valid=0;checking=0;
@@ -420,10 +467,14 @@ module TB_conv2d_ddr_engine;
             for(n=13;n<22;n=n+1)bad_add(n,7);
             for(n=0;n<jobs[0][287:256];n=n+1)
                 memory.store_word(initial_memory[jobs[0][255:224]+n][159:128]>>1,initial_memory[jobs[0][255:224]+n][127:0],16'hffff);
-        end else begin
+        end else if(QUANT_TEST==4)begin
             for(n=0;n<6;n=n+1)bad_concat(n,1);for(n=6;n<9;n=n+1)bad_concat(n,4);
             for(n=9;n<12;n=n+1)bad_concat(n,3);bad_concat(12,5);bad_concat(13,5);
             for(n=14;n<19;n=n+1)bad_concat(n,7);bad_concat(19,3);bad_concat(20,1);
+        end else begin
+            for(n=0;n<4;n=n+1)bad_pool(n,1);bad_pool(4,4);bad_pool(5,4);
+            bad_pool(6,3);bad_pool(7,3);bad_pool(8,5);bad_pool(9,5);
+            for(n=10;n<20;n=n+1)bad_pool(n,7);bad_pool(20,3);
         end
         if(QUANT_TEST==1)begin
             bad_quant(0,4);bad_quant(1,3);bad_quant(2,5);bad_quant(3,7);bad_quant(4,7);
@@ -443,7 +494,7 @@ module TB_conv2d_ddr_engine;
         end
         // 分别覆盖乘加流水或量化运算尚未完成时的共同复位。
         launch(0);
-        if(QUANT_TEST==4)wait(dut.state==33);else if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
+        if(QUANT_TEST==5)wait(dut.state==39);else if(QUANT_TEST==4)wait(dut.state==33);else if(QUANT_TEST==3)wait(dut.state==27);else if(QUANT_TEST!=0)wait(dut.state==15);else wait(dut.u_tile.issue_valid);
         reset_all;run_layer(0);
         // 原生读超时必须传播为错误，且共同复位前不接受新任务。
         force memory.axi_arready=1'b0;launch(0);
@@ -451,6 +502,14 @@ module TB_conv2d_ddr_engine;
         if(!error || error_code!=12 || !dma_fault || cmd_ready)$fatal(1,"engine fault status mismatch");
         @(negedge ref_clk);rst_n=0;repeat(6)@(negedge ref_clk);release memory.axi_arready;
         rst_n=1;wait(ddr_init_done);repeat(3)@(negedge clk);run_layer(0);
+        if(QUANT_TEST==5)begin
+            // 计算完成但写地址通道超时，也不能提前报告DONE或继续接收任务。
+            force memory.axi_awready=1'b0;launch(0);
+            polls=0;while(busy)begin @(negedge clk);polls=polls+1;if(polls>10000)$fatal(1,"pool write fault timeout");end
+            if(done || !error || error_code!=12 || !dma_fault || cmd_ready)$fatal(1,"pool write fault status mismatch");
+            @(negedge ref_clk);rst_n=0;repeat(6)@(negedge ref_clk);release memory.axi_awready;
+            rst_n=1;wait(ddr_init_done);repeat(3)@(negedge clk);run_layer(0);
+        end
         $display("PASS conv_ddr layers=%0d words=%0d AW=%0d AR=%0d",job_count,checked,aw_count,ar_count);
         $finish;
     end

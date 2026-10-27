@@ -40,6 +40,7 @@ digital_sim
 !docs/ai_task_runtime.md
 !docs/add_int16.md
 !docs/concat_int16.md
+!docs/maxpool_int16.md
 
 # PC 端模型工具与本机运行产物。
 !pc_ai/README.md

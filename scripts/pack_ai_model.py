@@ -20,6 +20,7 @@ DDR_BYTES=0x20000000
 OP_CONV2D=1
 OP_ADD=2
 OP_CONCAT=3
+OP_MAXPOOL5=4
 
 
 def align(value,boundary=16):
@@ -121,6 +122,14 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         if source not in tensors:raise ValueError('输入必须是已存在的张量，任务需按拓扑顺序给出')
         previous=tensors[source]
         if previous['bits']!=bits:raise ValueError('前层输出位宽不能作为当前卷积输入')
+        if layer.get('op')=='maxpool5':
+            if not wide:raise ValueError('MaxPool5当前仅支持W8A16版本2')
+            if set(layer)-{'name','op','input'}:raise ValueError('MaxPool5固定K5/S1/P2，不接受量化或卷积配置')
+            ih,iw,ci=previous['shape']
+            prepared.append(dict(name=name,source=source,op='maxpool5',
+                cfg=ConvConfig(ih,iw,ci,ci,1,1,0,False),wa=0,ba=0,qa=0,int8=False,relu=False,split=0))
+            tensors[name]=dict(shape=previous['shape'],int8=False,bits=16)
+            continue
         if layer.get('op')=='concat':
             if not wide:raise ValueError('Concat当前仅支持W8A16版本2')
             if set(layer)-{'name','op','input','input_b'}:raise ValueError('Concat只搬运数据，不接受量化或卷积配置')
@@ -145,7 +154,7 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
                 cfg=ConvConfig(ih,iw,ci,ci,1,1,0,False),wa=0,ba=0,qa=qa,int8=False,relu=False,split=0))
             tensors[name]=dict(shape=previous['shape'],int8=False,bits=16)
             continue
-        if layer.get('op','conv2d')!='conv2d':raise ValueError('当前 ABI 仅支持 conv2d')
+        if layer.get('op','conv2d')!='conv2d':raise ValueError('未知算子；支持conv2d/add/concat/maxpool5')
         ih,iw,ci=previous['shape'];co=layer['out_channels']
         for field,default in [('out_channels',co),('kernel',3),('stride',1),('padding',1)]:
             if type(layer.get(field,default)) is not int:raise ValueError(f'{field} 必须为整数')
@@ -191,10 +200,10 @@ def pack_model(spec,base=MODEL_MIN,root=Path('.'),reference=False,output_fill=0)
         control=cfg.kernel|(cfg.stride<<2)|(cfg.padding<<4)|(int(cfg.bias_enable)<<6)
         post=(4 if wide else int(item['int8']))|(int(item['relu'])<<1)
         is_binary=item.get('op') in ('add','concat')
-        opcode=OP_CONCAT if item.get('op')=='concat' else OP_ADD if item.get('op')=='add' else OP_CONV2D
+        opcode={'add':OP_ADD,'concat':OP_CONCAT,'maxpool5':OP_MAXPOOL5}.get(item.get('op'),OP_CONV2D)
         task=[opcode,tensors[item['source']]['address'],
               tensors[item['source_b']]['address'] if is_binary else item['wa'],item['ba'],out,item['qa'],
-              cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),0 if is_binary else control,post,oh,ow,item['split'],0,0,0]
+              cfg.height|(cfg.width<<16),cfg.in_channels|(co<<16),control if opcode==OP_CONV2D else 0,post,oh,ow,item['split'],0,0,0]
         tasks.append(task)
         output=dict(name=name,address=out,bytes=size,shape=[oh,ow,co],int8=item['int8'],
                     guard_before=guard_before,guard_after=guard_after,element_bits=tensors[name]['bits'],op=item.get('op','conv2d'))

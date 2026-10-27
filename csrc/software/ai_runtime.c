@@ -69,9 +69,18 @@ uint32_t ai_ddr_write(uint32_t address,const uint32_t *words,uint32_t bytes)
 static uint32_t validate_task(const ai_model_header *h,const ai_task *t)
 {
     uint32_t wide=h->version==AI_MODEL_VERSION_W8A16;
-    if(t->opcode!=AI_OP_CONV2D && !(wide && (t->opcode==AI_OP_ADD || t->opcode==AI_OP_CONCAT)))return AI_BAD_OPCODE;
+    if(t->opcode!=AI_OP_CONV2D && !(wide && (t->opcode==AI_OP_ADD || t->opcode==AI_OP_CONCAT || t->opcode==AI_OP_MAXPOOL5)))return AI_BAD_OPCODE;
     uint32_t ih=t->hw&65535,iw=t->hw>>16,ci=t->channels&65535,co=t->channels>>16;
     for(uint32_t n=0;n<3;n++)if(t->reserved[n])return AI_BAD_TASK;
+    if(t->opcode==AI_OP_MAXPOOL5) {
+        if(!ih || !iw || !ci || ci!=co || t->conv || t->post!=4 || t->group_split ||
+            t->weight_addr || t->bias_addr || t->quant_addr || t->out_h!=ih || t->out_w!=iw)return AI_BAD_TASK;
+        uint64_t size=(uint64_t)ih*iw*((ci+15)&~15u)*2;
+        if(!region(t->input_addr,size,h->arena_begin,h->arena_end) ||
+           !region(t->output_addr,size,h->readonly_end,h->arena_end))return AI_BAD_RANGE;
+        if(t->input_addr<(uint64_t)t->output_addr+size && t->output_addr<(uint64_t)t->input_addr+size)return AI_BAD_RANGE;
+        return AI_OK;
+    }
     if(t->opcode==AI_OP_CONCAT) {
         uint32_t cb=t->group_split;
         if(!ih || !iw || !ci || !cb || cb>65535 || ci+cb!=co || t->conv || t->post!=4 ||

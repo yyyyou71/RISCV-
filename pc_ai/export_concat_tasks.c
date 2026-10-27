@@ -31,6 +31,7 @@ static void write_concat(FILE *f,int layer,int source_a,int source_b){
     if(source_a<0)fputs("input",f);else fprintf(f,"layer%d",source_a);
     fputs("\",\"input_b\":\"",f);if(source_b<0)fputs("input",f);else fprintf(f,"layer%d",source_b);fputs("\"}",f);
 }
+#ifndef CONCAT_EXPORT_LIBRARY
 int main(int argc,char **argv){
     if(argc!=2)return 2;load_bin(argv[1]);if(g_nconv!=72)return 2;
     initial_file=open_file("ddr/initial.mem","w");golden_file=open_file("ddr/golden.mem","w");job_file=open_file("ddr/jobs.mem","w");
@@ -69,3 +70,4 @@ int main(int argc,char **argv){
     }
     return 0;
 }
+#endif

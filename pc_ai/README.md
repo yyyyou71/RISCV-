@@ -207,12 +207,29 @@ python3 pc_ai/verify_w8a16_tasks.py --suite concat --prepare-only
 `export_concat_tasks.c`复用导出工具，期望值直接调用参考C的`concat2`、`add_point`和`conv_layer`。
 输出在`pc_ai/outputs/concat_tasks/`：16种DDR配置、正常/停顿/零延迟及缓存复用检查通过。
 CPU一次运行22次模型请求、19次AI提交、8977个DDR字；包含完整参考C3块的7条任务、5+17通道拼接后接卷积及重复拼接。
-当前统一固件3856字节，仍未运行完整YOLO，也未综合上板。
+当时统一固件3856字节，仍未运行完整YOLO，也未综合上板。
 更多CPU时钟组合可由用户运行`python3 pc_ai/verify_w8a16_tasks.py --suite concat --profiles all`，以报告记录为准。
 JSON使用`op="concat"`、`input`、`input_b`；两路高宽须相同，通道数可不同。
 两路量化尺度的限制、寄存器语义和缓存数据流见 [Concat说明](../docs/concat_int16.md)。
 
+## 5×5最大池化与完整SPPF模块
+
+```bash
+make test-ai-maxpool
+python3 pc_ai/verify_w8a16_tasks.py --suite maxpool --prepare-only
+```
+
+固定5×5、步长1、填充2，逐通道取有符号INT16最大值，输出形状和尺度不变。
+每次处理一个DDR字的8通道，只保存当前窗口最大值；不需要整图片上缓存或RAM IP。
+`export_maxpool_tasks.c`调用参考`maxpool5`等原C函数，生成16种DDR配置及完整SPPF/卷积前后连接/连续池化三种CPU网络。
+正常、随机停顿、零延迟、边界/填充、复位和读写故障测试通过。
+CPU一次处理23份模型请求、15次AI提交、17020个DDR字；统一固件4104字节、初始化数据段0字节。
+输出位于`pc_ai/outputs/maxpool_tasks/`，更多时钟组合可由用户执行`python3 pc_ai/verify_w8a16_tasks.py --suite maxpool --profiles all`。
+JSON使用`{"name":"pooled","op":"maxpool5","input":"previous_layer"}`，任务操作码4，仅支持版本2。
+接口、数据流与当前重复读取邻域的取舍见 [MaxPool5说明](../docs/maxpool_int16.md)。
+下一步为2倍最近邻上采样；完整检测网络、综合与上板仍待完成。
+
 ## 长任务约定
 
 安装、下载、完整网络推理、训练等预计需要等待的命令，先说明用途，由用户执行。
-代理处理短检查、脚本准备、结果分析与修复；当前不启动训练、不修改 AI RTL。
+代理处理短检查、脚本准备、结果分析与已授权的RTL修改；当前不启动训练。

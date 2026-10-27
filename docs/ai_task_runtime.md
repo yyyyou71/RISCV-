@@ -1,6 +1,6 @@
 # DDR 任务表与通用 CPU 调度
 
-日期：2026-10-26。状态：W8A8版本1与W8A16版本2均已完成通用任务表行为仿真；完整检测网络和上板待完成。
+更新：2026-10-27。状态：W8A8版本1与W8A16版本2均已完成通用任务表行为仿真；完整检测网络和上板待完成。
 
 ## 1. 本阶段完成的工作
 
@@ -12,13 +12,13 @@ PC 整数网络描述
   → DDR 中的最终输出与运行报告
 ```
 
-最初任务表阶段未修改生产RTL；随后增加了硬件ADD、Concat和操作码寄存器。CPU固件仍不包含测试权重、测试输出或网络专用计算。
+最初任务表阶段未修改生产RTL；随后增加了硬件ADD、Concat、MaxPool5和操作码寄存器。CPU固件仍不包含测试权重、测试输出或网络专用计算。
 `ai_runtime.c` 提供 DDR 窗口驱动和 `ai_run_model(header_addr, &result)`，`ai_task_runner.c` 是预装载仿真的请求列表入口。
 SPI 的传输与启动协商尚未接入。测试平台预装载 DDR，正式固件应在外部装载完成后调用运行接口，不能据此认为全套实板装载流程已验证。
 
 同一份固件、同一套 RTL，在一次运行中执行不同网络和恢复测试，中途没有重新编译、复位或修改位宽。
 这满足当前支持算子集合内的任务表通用性，不代表任意模型都能导入。
-当前支持CONV2D，以及版本2的INT16 ADD、通道Concat；卷积支持K=1/3、stride=1/2、padding=0/1、偏置、逐通道量化及可选ReLU。
+当前支持CONV2D，以及版本2的INT16 ADD、通道Concat、MaxPool5；卷积支持K=1/3、stride=1/2、padding=0/1、偏置、逐通道量化及可选ReLU。
 模型版本1使用 [INT8 ABI](quantization_int8.md)，可输出原始INT64；版本2使用 [W8A16/Q13 ABI](conv2d_w8a16_ddr.md)，固定输出INT16。
 CPU查询AI_FORMAT确认模型与综合时选择的硬件位宽一致，不在运行时切换乘法器位宽。
 
@@ -65,17 +65,18 @@ CPU 对所有任务做一次预检查，然后再次逐条读取、执行。输�
 
 | 字 | 字段 | 内容 |
 | --- | --- | --- |
-| 0 | opcode | 1=CONV2D，2=ADD、3=Concat（后二者仅版本2） |
+| 0 | opcode | 1=CONV2D，2=ADD、3=Concat、4=MaxPool5（后三者仅版本2） |
 | 1～5 | input、weight、bias、output、quant 地址 | ADD/Concat的weight字段改作第二输入地址 |
 | 6 | hw | 低 16 位 H，高 16 位 W |
 | 7 | channels | 低 16 位 Cin，高 16 位 Cout |
-| 8 | conv | K[1:0]、stride[3:2]、padding[5:4]、bias_enable[6] |
+| 8 | conv | 卷积：K[1:0]、stride[3:2]、padding[5:4]、bias_enable[6]；其他算子为0 |
 | 9 | post | 版本1为0/1/3；版本2为4=INT16/Q13、6=INT16/Q13+ReLU |
 | 10、11 | out_h、out_w | 预期输出高宽；预检查公式，完成后核对硬件返回值 |
-| 12 | group_split | 卷积：量化组边界；ADD：0；Concat：B通道数；版本1必须为0 |
+| 12 | group_split | 卷积：量化组边界；ADD/MaxPool5：0；Concat：B通道数；版本1必须为0 |
 | 13～15 | reserved | 必须为零 |
 
 原始INT64模式仅用于版本1最终输出或保留数学结果，不能作为后续卷积输入。
+MaxPool5固定K5/S1/P2，Cin=Cout、输出H/W等于输入，POST=4，weight/bias/quant/group/conv全0；详见 [池化说明](maxpool_int16.md)。
 CPU 只读取头和任务记录，不读取图像、权重或中间图来完成运算。
 
 ## 5. AIR1 运行请求与报告
@@ -170,7 +171,7 @@ make test-ai-tasks
 另外运行 7 种请求/列表格式错误，确认零 AI 提交、零报告写入、DDR 内容不变；原生读超时注入确认故障后停止，未假装输出报告或运行后续网络。
 打包工具检查不支持算子、错误引用、错误位宽、缺失量化参数、INT64→INT8 错接、非法基地址/请求列表，以及命令行输出与直接打包结果一致。
 
-最初版本1固件指令段2792字节；加入版本2后为3080字节、ADD后3444字节、Concat后3856字节；初始化数据段0字节，不分配随层数增长的CPU数组。
+最初版本1固件指令段2792字节；加入版本2后为3080字节、ADD后3444字节、Concat后3856字节、MaxPool5后4104字节；初始化数据段0字节，不分配随层数增长的CPU数组。
 GCC 栈报告中 `ai_run_model` 自身栈帧为 240 字节；完整调用栈还包括入口、DDR 驱动和编译器辅助函数，不将单函数栈帧冒充整体峰值。
 产物保存在 `build/ai_tasks/`：固件 ELF/map/镜像、网络包、布局清单、用例表、黄金内存及各组日志。
 
@@ -226,4 +227,4 @@ python3 scripts/pack_ai_model.py pc_ai/outputs/w8a16_tasks/network0.json \
 版本2不支持`--reference`，期望输出是C导出的各层`expected.bin`；训练、量化校准、ONNX解析和检测后处理仍不在工具范围内。
 测试依赖`../materials/TridentVision`资产，因此该目标独立提供，没有加入不依赖外部模型的旧聚合测试。
 上述纯卷积任务表测试不包含ADD；新增ADD的规则、DDR接口、残差网络测试及复现命令见 [ADD说明](add_int16.md)。
-随后已完成 [Concat与完整C3任务验证](concat_int16.md)；后续设计池化、上采样，再连接完整网络和板级加载流程。
+随后已完成 [Concat与完整C3任务验证](concat_int16.md) 和 [MaxPool5与完整SPPF任务验证](maxpool_int16.md)；后续设计上采样，再连接完整网络和板级加载流程。
