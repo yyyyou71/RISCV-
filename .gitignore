@@ -43,6 +43,7 @@ digital_sim
 !docs/maxpool_int16.md
 !docs/upsample_int16.md
 !docs/trident_network_tasks.md
+!docs/ai_postprocess.md
 
 # PC 端模型工具与本机运行产物。
 !pc_ai/README.md

@@ -301,4 +301,11 @@ test-ai-network-smoke:
 test-ai-network-backends:
 	python3 pc_ai/verify_network_backends.py
 
+.PHONY: test-ai-postprocess prepare-ai-detection
+test-ai-postprocess:
+	python3 pc_ai/verify_ai_postprocess.py
+
+prepare-ai-detection:
+	python3 pc_ai/prepare_trident_network.py --segment 0:99 --postprocess --simulator verilator
+
 test-ai-accelerator: test-conv-mac-tile test-requant-int8 test-conv2d-ddr test-conv2d-quant test-ai-cpu test-ai-tasks

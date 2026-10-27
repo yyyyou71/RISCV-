@@ -90,7 +90,7 @@ def save_layout(out,package,graph,summary):
         heads.append(entry)
     dump(out/'heads.json',dict(schema=1,format='HWC-align16(C), signed little-endian INT16',
         engine_input_shape=graph['input_shape'],heads=heads,sigmoid_y=graph['sigmoid_y'],sigmoid_dy=graph['sigmoid_dy'],
-        postprocess_implemented_in_cpu=False,header_final_output_is_only_last_cls=True))
+        postprocess_implemented_in_cpu=True,postprocess_config_format='AIP1 v1',header_final_output_is_only_last_cls=True))
     with (out/'tasks.csv').open('w',newline='') as f:
         writer=csv.writer(f);writer.writerow(['index','name','op','source_a','source_b','H','W','C','input_addr','input_b_or_weight','output_addr','output_bytes'])
         for n,t,o in zip(graph['nodes'],package.tasks,package.manifest['outputs']):
@@ -113,7 +113,7 @@ def golden_status(out,current):
     except (OSError,ValueError,KeyError):return None
 
 
-def sparse_segment(out,package,graph,assets,start,count,current):
+def sparse_segment(out,package,graph,assets,start,count,current,suffix=''):
     """保留全网绝对地址，只装载该区间确实读取的资产和外部依赖。"""
     checked(start>=0 and count>0 and start+count<=99,'任务区间超出0..98')
     status=golden_status(out,current)
@@ -154,7 +154,7 @@ def sparse_segment(out,package,graph,assets,start,count,current):
         for k in range(0,len(raw),16):expected[address+k]=int.from_bytes(raw[k:k+16],'little')
     report=words([0,0xffffffff,0,count,0,sum(task_issues(t) for t in selected)&0xffffffff,selected[-1][10],selected[-1][11]])
     for off in (0,16):expected[0x4000+off]=int.from_bytes(report[off:off+16],'little')
-    directory=out/'segments'/f'{start:03d}_{count:03d}';directory.mkdir(parents=True,exist_ok=True)
+    directory=out/'segments'/(f'{start:03d}_{count:03d}'+suffix);directory.mkdir(parents=True,exist_ok=True)
     with (directory/'initial.mem').open('w') as f:
         for a,v in sorted(initial.items()):f.write(f'{(a<<128)|v:040x}\n')
     with (directory/'golden.mem').open('w') as f:
@@ -203,16 +203,27 @@ def build_verilator(directory,slots,jobs):
     return str(binary),dict(verilator_version=version,model_key=key,model_reused=reused,compile_log=str(cache/'compile.log'))
 
 
-def build_sim(directory,info,simulator='verilator',jobs=4,model_slots=None,sim_args=()):
+def build_sim(directory,info,simulator='verilator',jobs=4,model_slots=None,sim_args=(),firmware_kind='tasks'):
     started=time.perf_counter()
     lib=subprocess.check_output(['riscv64-unknown-elf-gcc','-march=rv32i','-mabi=ilp32','-print-libgcc-file-name'],text=True).strip()
+    checked(firmware_kind in ('tasks','detection','post_only'),'未知固件类型')
+    sources=[ROOT/'csrc/software/ai_task_runner.c'] if firmware_kind=='tasks' else [
+        ROOT/'csrc/software/ai_detection_runner.c',ROOT/'csrc/software/ai_postprocess.c']
     run(['riscv64-unknown-elf-gcc','-march=rv32i','-mabi=ilp32','-msmall-data-limit=0','-ffreestanding','-nostdlib','-nostartfiles',
-         '-Os','-Wall','-Wextra','-Werror','-T',ROOT/'link.ld','-o','runner.elf',ROOT/'asm/start.s',
-         ROOT/'csrc/software/ai_task_runner.c',ROOT/'csrc/software/ai_runtime.c',lib],directory,'firmware')
+         '-Os','-Wall','-Wextra','-Werror','-fstack-usage',*(['-DAI_POST_ONLY'] if firmware_kind=='post_only' else []),
+         '-T',ROOT/'link.ld','-Wl,-Map=runner.map','-o','runner.elf',ROOT/'asm/start.s',
+         *sources,ROOT/'csrc/software/ai_runtime.c',lib],directory,'firmware')
     for section,name in (('.text','runner.bin'),('.data','runner.data.bin')):
         run(['riscv64-unknown-elf-objcopy','-j',section,'-O','binary','runner.elf',name],directory,name)
     code=(directory/'runner.bin').read_bytes();data=(directory/'runner.data.bin').read_bytes()
     checked(len(code)<=32768 and len(data)<=65536,'固件超过ROM/RAM容量')
+    sizes=subprocess.check_output(['riscv64-unknown-elf-size','-A','runner.elf'],cwd=directory,text=True)
+    match=re.search(r'^\.bss\s+(\d+)',sizes,re.M);bss=int(match[1]) if match else 0
+    stack_reserve=16384 if firmware_kind!='tasks' else 4096
+    checked(len(data)+bss+stack_reserve<=65536,'数据/BSS没有给CPU栈留够空间')
+    if firmware_kind!='tasks':
+        symbols=subprocess.check_output(['riscv64-unknown-elf-nm','runner.elf'],cwd=directory,text=True)
+        checked(not re.search(r'\b(__\w*(?:sf|df)\w*|malloc|calloc|free|qsort)\b',symbols),'检测固件意外引入浮点或动态分配')
     (directory/'runner.hex').write_text(''.join(f'{int.from_bytes(code[n:n+4],"little"):08x}\n' for n in range(0,len(code),4)))
     (directory/'runner.data').write_text(''.join(f'{v:02x}\n' for v in data) or '00\n')
     backend={}
@@ -232,7 +243,8 @@ def build_sim(directory,info,simulator='verilator',jobs=4,model_slots=None,sim_a
                     f'+NETWORK_TASKS={info["count"]}',f'+NETWORK_START={info["start"]}',*sim_args])
     script='#!/usr/bin/env bash\nset -euo pipefail\ncd -- "$(dirname -- "$0")"\n'+shlex.join(command)+' "$@" | tee run_'+simulator+'.log\n'
     (directory/('run_'+simulator+'.sh')).write_text(script);(directory/'run.sh').write_text(script)
-    return command,dict(rom_bytes=len(code),data_bytes=len(data),firmware_sha256=sha(code),simulator=simulator,
+    return command,dict(rom_bytes=len(code),data_bytes=len(data),bss_bytes=bss,stack_reserve_bytes=stack_reserve,
+        firmware_sha256=sha(code),firmware_kind=firmware_kind,simulator=simulator,
         simulator_slots=slots,build_wall_seconds=time.perf_counter()-started,sim_args=list(sim_args),**backend)
 
 
@@ -241,6 +253,9 @@ def check_sim_log(log,info):
     checked(len(lines)==1,'需要且只能有一条有效的ai_network PASS')
     start,count,words_count,cycles,issues=map(int,lines[0])
     checked((start,count,words_count,issues)==(info['start'],info['count'],info['golden'],info['expected_issues']),'RTL报告与区间配置不符')
+    if 'postprocess' in info:
+        post=re.findall(r'^PASS ai_postprocess records=(\d+)$',log,re.M)
+        checked(post==[str(info['postprocess']['count'])],'CPU后处理报告缺失或数量不符')
     return dict(cycles=cycles,issues=issues,checked_words=words_count)
 
 
@@ -254,12 +269,16 @@ def main():
     g.add_argument('--golden-limit',type=int,default=0,help='只计算前N个C输出，供前段定向测试')
     p.add_argument('--segment',help='准备start:count任务区间的稀疏DDR/CPU仿真；索引从0开始')
     p.add_argument('--run',action='store_true',help='长任务：执行--segment对应的CPU/RTL仿真')
+    p.add_argument('--postprocess',action='store_true',help='0:99整网后由RV32I解码/稳定Top-K，独立目录保存')
+    p.add_argument('--score-threshold',type=int,default=16384,help='后处理Q0.16阈值，默认16384即0.25')
     p.add_argument('--simulator',choices=('verilator','iverilog'),default='verilator',help='区间仿真后端，默认Verilator')
     p.add_argument('--jobs',type=int,default=min(4,os.cpu_count() or 1),help='Verilator首次C++编译并行数')
     p.add_argument('--sim-arg',action='append',default=[],help='传给仿真的plusarg，例如--sim-arg=+ddr3_random_stalls=1')
     args=p.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=True);ref=args.reference.resolve()
     (out/'prepared.json').unlink(missing_ok=True)
     checked(not args.run or args.segment is not None,'--run须配合--segment')
+    checked(not args.postprocess or args.segment=='0:99','--postprocess须配合完整--segment 0:99')
+    checked(0<=args.score_threshold<=65535,'score-threshold须为0..65535的Q0.16码')
     checked(args.jobs>0,'jobs必须为正数')
     checked(all(v.startswith('+') and len(v)>1 for v in args.sim_arg),'sim-arg必须是非空plusarg')
     checked(32<=args.size<=256 and args.size%32==0,'size须为32..256且为32的倍数')
@@ -297,29 +316,40 @@ def main():
         dump(out/'reference_binding.json',dict(binding=current,outputs=hashes))
     status=golden_status(out,current)
     result=dict(prepared=True,**summary,binding=current,golden_tensors=0 if status is None else status[1]['golden_tensors'],
-        original_forward_compared=False if status is None else status[1]['original_forward_compared'],rtl_verified=False,pds_verified=False)
+        original_forward_compared=False if status is None else status[1]['original_forward_compared'],rtl_verified=False,
+        cpu_postprocess_requested=args.postprocess,cpu_postprocess_verified=False,pds_verified=False)
     if args.segment:
         fields=args.segment.split(':');checked(len(fields)==2,'segment格式为start:count')
-        directory,info=sparse_segment(out,package,graph,assets,int(fields[0]),int(fields[1]),current)
+        directory,info=sparse_segment(out,package,graph,assets,int(fields[0]),int(fields[1]),current,
+            '_detection' if args.postprocess else '')
+        extra=[]
+        if args.postprocess:
+            from postprocess_tools import add_real_postprocess
+            extra=add_real_postprocess(out,directory,info,ref,threshold=args.score_threshold)
         (directory/'result.json').unlink(missing_ok=True)
         (directory/('result_'+args.simulator+'.json')).unlink(missing_ok=True)
         model_words=len(package.data)//16+16
         model_slots=1<<max(8,(2*model_words-1).bit_length())
-        command,firmware=build_sim(directory,info,args.simulator,args.jobs,model_slots,args.sim_arg)
+        command,firmware=build_sim(directory,info,args.simulator,args.jobs,model_slots,[*extra,*args.sim_arg],
+            'detection' if args.postprocess else 'tasks')
         info.update(firmware);dump(directory/'fixtures.json',info);dump(directory/('fixtures_'+args.simulator+'.json'),info)
         if args.run:
             started=time.perf_counter();log=run(command,directory,'run_'+args.simulator)
             elapsed=time.perf_counter()-started;metrics=check_sim_log(log,info)
+            if args.postprocess:
+                from postprocess_tools import save_cpu_detections
+                save_cpu_detections(directory,info)
             report=dict(passed=True,**info,**metrics,simulation_wall_seconds=elapsed,full_tensor_graph=int(fields[0])==0 and int(fields[1])==99,
-                full_detection_network=False,
-                postprocess_in_cpu=False,pds_verified=False)
+                full_detection_network=args.postprocess,
+                postprocess_in_cpu=args.postprocess,pds_verified=False)
             dump(directory/'result.json',report);dump(directory/('result_'+args.simulator+'.json'),report)
             result['rtl_verified']=dict(start=info['start'],count=info['count'],input_shape=graph['input_shape'])
+            result['cpu_postprocess_verified']=args.postprocess
             print(f'{args.simulator}主机运行时间（不含编译）：{elapsed:.3f}秒',flush=True)
         print('区间仿真入口：bash '+str(directory/'run.sh'),flush=True)
     dump(out/'prepared.json',result)
     print(f'已导出99条任务、6张检测输出；模型{len(package.data)}字节，C黄金覆盖{result["golden_tensors"]}条。')
-    print('本次RTL验证：'+str(result['rtl_verified'])+'；完整网络推理/仿真须显式启用。')
+    print('本次RTL验证：'+str(result['rtl_verified'])+'；CPU检测后处理验证：'+str(result['cpu_postprocess_verified'])+'。')
 
 
 if __name__=='__main__':main()

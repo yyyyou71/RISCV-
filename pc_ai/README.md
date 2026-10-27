@@ -262,18 +262,40 @@ python3 pc_ai/prepare_trident_network.py --segment 0:99 --simulator verilator --
 默认产物在`pc_ai/outputs/trident_network/`：`model.bin/model.json`、`tasks.csv`、`graph.json`、`heads.json`、`layout.json`和`prepared.json`。
 输入为诊断渐变图；已有CHW INT16 `.npy`或小端HWC INT16 `.bin`可以通过`--input 路径`替换，同一目录后续命令须保持相同输入。
 完整96图的模型包含全部中间图和调试哨兵，为13,307,184字节，约12.69MiB；不占用CPU ROM，仍复用4244字节固件。
-六张检测头的地址和后处理参数单独列入`heads.json`，`final_output`只指最后一张分类图；CPU尚未做检测解码/排序/画框。
+六张检测头的地址和后处理参数单独列入`heads.json`，`final_output`只指最后一张分类图；CPU解码/稳定Top-K现已实现并通过专项检查，显示画框待集成。
 分段格式为`start:count`，允许从C黄金值预装必要的区间外输入，区间内部数据继续通过DDR直接连接。
 `make test-ai-network-smoke`使用32×32输入，覆盖真实第一层、双输入ADD、Concat后接卷积；不会计算96×96整网。
-三个32×32短区间0:1、5:1、7:2已通过；用户随后完成96×96全网C黄金生成，72卷积/10ADD检查点与原始前向一致，Q13钳位0。99份黄金输出长度、哈希与零填充复核通过，完整99任务RTL仍待执行。源码/权重/输入/图哈希防止误用旧黄金结果。
+三个32×32短区间0:1、5:1、7:2已通过；用户随后完成96×96全网C黄金生成，72卷积/10ADD检查点与原始前向一致，Q13钳位0。99份黄金输出长度、哈希与零填充复核通过，随后完整99任务RTL也已通过。源码/权重/输入/图哈希防止误用旧黄金结果。
 仿真现默认Verilator，同一SV测试台保留CPU/DDR独立时钟与完整黄金比较；可用`--simulator iverilog`切回四态检查。
 Verilator按源码/选项/版本缓存编译模型，切换区间和32/96输入可复用；首次C++编译用`--jobs`设置并行数，默认最多4。
 真实96×96前两层已由Verilator通过：33,933字、14,345,032个DDR用户时钟周期、主机约6.63秒（不含编译）。完整C3区间2:7也已通过：53,142字、39,193,418周期、7,077,888个MAC issue，主机约18秒。
-这两个区间分别验证，C3输入来自C黄金值；下一步的0:99才从原图连续计算全部张量。入口已准备在`segments/000_099/`，尚未运行，预计需要数分钟。
+这两个区间分别验证，C3输入来自C黄金值；随后用户已通过0:99从原图连续计算全部张量：831,704字、279,538,589周期、51,495,120个MAC issue，主机约128.04秒。记录保存在`segments/000_099/`。
 两后端分别保存`result_verilator.json/result_iverilog.json`和对应运行脚本/日志，`result.json/run.sh`指最近一次。
 `make test-ai-network-backends`核对短区间输出/计数、模型复用，并验证错误数据和未初始化DDR读取在两后端均被拒绝。
-更长仿真仍由用户显式启动；完整99任务、检测后处理和上板均尚未验收。
+更长仿真仍由用户显式启动；完整99任务加CPU后处理的连续仿真和上板仍待验收。
 流程和产物解释见 [整网任务导出说明](../docs/trident_network_tasks.md)；分段日志位于`segments/起点_数量/`。
+
+## RV32I检测后处理
+
+```bash
+# 原C规则/定点结果/异常检查，加小检测头的真实CPU与DDR定向仿真：
+make test-ai-postprocess
+# 准备完整99任务加CPU后处理，不运行长仿真：
+make prepare-ai-detection
+# 用户运行完整检测仿真：
+python3 pc_ai/prepare_trident_network.py --segment 0:99 --postprocess --simulator verilator --run
+```
+
+CPU通过DDR窗口流式扫描分类头，用两个最大300项的有界堆执行原C的两次稳定Top-K，查表得到分数，再定点解码坐标。
+每条32字节结果含Q16坐标、Q0.16分数、类别和anchor索引；无NMS，不裁剪越界框。
+完整检测固件8956字节、data/bss为0，后处理自身栈帧5824字节；构建为栈预留16KiB，保持32KiB ROM/64KiB RAM限制。
+真实头图的原始300条结果与生产后处理逐项核对；分数/类别/排序一致，坐标最大误差约0.00000768像素。
+默认0.25阈值在诊断图上留下6条，这不表示识别到6个正确物体。
+
+专项结果在`outputs/ai_postprocess/verification.json`；整网加后处理用独立`segments/000_099_detection/`，不覆盖旧整网记录。
+运行通过后`cpu_detections.json/bin`来自测试台读取的CPU实际DDR输出；`detections.json`为主机期望值。
+`request_detection.bin`为后续加载到DDR地址0的64KiB启动/后处理数据；原model.bin仍在0x10000，不将主机用ddr_image.bin装到板上。
+范围、协议与验证边界见[CPU后处理说明](../docs/ai_postprocess.md)。显示画框、真实图片效果和板级集成仍待完成。
 
 ## 长任务约定
 
