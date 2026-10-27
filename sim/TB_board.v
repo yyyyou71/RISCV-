@@ -12,11 +12,15 @@ module TB_board;
     wire uart_tx;
     wire led0;
     wire led1;
+    tri1 iic_sda;
     reg [7:0] received_byte;
     integer bit_index;
     integer character_count = 0;
     integer completed_runs = 0;
-    string expected = "RV32I FPGA 25MHz 115200\015\nRAM INIT/BSS/BYTE/HALF/WORD PASS\015\nSELFTEST PASS\015\n";
+    // Explicit CR/LF bytes keep the expected transcript portable across simulators.
+    string expected = {"RV32I FPGA 25MHz 115200", 8'h0d, 8'h0a,
+                       "RAM INIT/BSS/BYTE/HALF/WORD PASS", 8'h0d, 8'h0a,
+                       "SELFTEST PASS", 8'h0d, 8'h0a};
 
     always #20 sys_clk = ~sys_clk;
 
@@ -25,7 +29,9 @@ module TB_board;
         .key0_n(key0_n),
         .uart_tx(uart_tx),
         .led0(led0),
-        .led1(led1)
+        .led1(led1),
+        .iic_scl(1'b1),
+        .iic_sda(iic_sda)
     );
 
     always begin

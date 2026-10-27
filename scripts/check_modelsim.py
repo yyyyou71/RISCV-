@@ -40,6 +40,7 @@ def main():
     execute([args.modelsim / "vmap.exe", "-modelsimini", configuration, "work", library],
             output / "mapping.log")
     sources = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
+    sources += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     includes = []
     for name in ("pango_rom", "pango_ram"):
         directory = ROOT / "ipcore" / name

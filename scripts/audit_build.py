@@ -44,6 +44,7 @@ def main():
     bitstream = build / "generate_bitstream/board_top.sbit"
     require(bitstream.is_file() and bitstream.stat().st_size > 0, "No nonempty bitstream")
     inputs = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*"))
+    inputs += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     inputs += [ROOT / "firmware/rom.hex", ROOT / "firmware/ram.hex"]
     for name in ("pango_rom", "pango_ram"):
         directory = ROOT / "ipcore" / name
