@@ -7,7 +7,10 @@ module TB_ddr_cpu_window;
     parameter integer AI_ACT_WIDTH = 8;
     reg ref_clk = 0, clk = 0, rst_n = 0;
     integer cpu_half_ns = 20;
-    initial if ($value$plusargs("cpu_half_ns=%d", cpu_half_ns)) begin end
+    initial begin
+        if ($value$plusargs("cpu_half_ns=%d", cpu_half_ns)) begin end
+        if(cpu_half_ns<=0)$fatal(1,"invalid CPU clock period");
+    end
     always #20 ref_clk = ~ref_clk;
     always #(cpu_half_ns) clk = ~clk;
     wire core_clk, ddr_init_done, uart_txd;
@@ -137,6 +140,8 @@ module TB_ddr_cpu_window;
             .axi_rvalid(axi_rvalid)
         );
     end endgenerate
+    // 本测试只连接DDR用户口；物理引脚和调试输出刻意不接。
+    /* verilator lint_off PINMISSING */
     ddr3 memory (
         .ref_clk(ref_clk), .resetn(rst_n), .core_clk(core_clk), .ddr_init_done(ddr_init_done),
         .axi_awaddr(axi_awaddr), .axi_awuser_ap(axi_awuser_ap), .axi_awuser_id(axi_awuser_id),
@@ -156,9 +161,14 @@ module TB_ddr_cpu_window;
         .debug_cpd_offset_dir(1'b0), .debug_cpd_offset(10'd0),
         .ck_dly_en(1'b0), .init_ck_dly_step(8'd0)
     );
+    /* verilator lint_on PINMISSING */
 
 `ifdef AI_TASK_PROGRAM
+`ifdef AI_NETWORK_PROGRAM
+    `include "ai_network_checks.vh"
+`else
     `include "ai_task_checks.vh"
+`endif
 `endif
 `ifdef AI_W8A16
     `include "w8a16_checks.vh"
@@ -183,9 +193,9 @@ module TB_ddr_cpu_window;
             segment = 2048 - cursor % 2048;
             if (segment > remaining) segment = remaining;
             if (writing) begin
-                if (!axi_awvalid || axi_awaddr !== (cursor >> 1) || axi_awlen !== (segment/16-1))
+                if (!axi_awvalid || {4'd0,axi_awaddr} !== (cursor >> 1) || {28'd0,axi_awlen} !== (segment/16-1))
                     $fatal(1, "AW address mismatch");
-            end else if (!axi_arvalid || axi_araddr !== (cursor >> 1) || axi_arlen !== (segment/16-1))
+            end else if (!axi_arvalid || {4'd0,axi_araddr} !== (cursor >> 1) || {28'd0,axi_arlen} !== (segment/16-1))
                 $fatal(1, "AR address mismatch");
             cursor = cursor + segment; remaining = remaining - segment;
         end
@@ -239,8 +249,15 @@ module TB_ddr_cpu_window;
             if ((value & 15) != 0) $fatal(1, "clear failed");
         end
     endtask
+`ifdef AI_NETWORK_PROGRAM
+    real global_timeout_ns=1000000000000.0;
+`else
+    real global_timeout_ns=200000000.0;
+`endif
     initial begin
-        #200000000;
+        if($value$plusargs("global_timeout_ns=%f",global_timeout_ns))begin end
+        if(global_timeout_ns<=0)$fatal(1,"invalid global timeout");
+        #(global_timeout_ns);
         $fatal(1, "global timeout");
     end
     initial begin

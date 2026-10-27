@@ -245,6 +245,36 @@ CPU一次处理28份模型请求、14次AI提交、18252个DDR字；统一固件
 JSON使用`{"name":"up","op":"upsample2x","input":"previous_layer"}`；输入H/W为1..32767、C为1..65535，任务操作码5，仅支持版本2。
 说明见 [上采样接口与验证](../docs/upsample_int16.md)。下一步导出真实全网任务表并分段对拍，检测后处理、综合和上板仍待完成。
 
+## 真实全网99任务导出与分段对拍
+
+```bash
+# 只导出96x96全网任务/资产/地址，默认不执行推理：
+make prepare-ai-network
+# 完整C黄金生成及原始forward_fixed核对，由用户执行等待：
+python3 pc_ai/prepare_trident_network.py --golden
+# 黄金值完成后，先验证真实尺寸的前两层，由用户执行等待：
+python3 pc_ai/prepare_trident_network.py --segment 0:2 --run
+# 前两层与完整C3已通过；下一步连续验证全部99条任务，由用户执行等待：
+python3 pc_ai/prepare_trident_network.py --segment 0:99 --simulator verilator --run
+```
+
+`export_trident_network.c`展开72卷积、10ADD、14Concat、1池化、2上采样；数值仍调用原C五类算子。
+默认产物在`pc_ai/outputs/trident_network/`：`model.bin/model.json`、`tasks.csv`、`graph.json`、`heads.json`、`layout.json`和`prepared.json`。
+输入为诊断渐变图；已有CHW INT16 `.npy`或小端HWC INT16 `.bin`可以通过`--input 路径`替换，同一目录后续命令须保持相同输入。
+完整96图的模型包含全部中间图和调试哨兵，为13,307,184字节，约12.69MiB；不占用CPU ROM，仍复用4244字节固件。
+六张检测头的地址和后处理参数单独列入`heads.json`，`final_output`只指最后一张分类图；CPU尚未做检测解码/排序/画框。
+分段格式为`start:count`，允许从C黄金值预装必要的区间外输入，区间内部数据继续通过DDR直接连接。
+`make test-ai-network-smoke`使用32×32输入，覆盖真实第一层、双输入ADD、Concat后接卷积；不会计算96×96整网。
+三个32×32短区间0:1、5:1、7:2已通过；用户随后完成96×96全网C黄金生成，72卷积/10ADD检查点与原始前向一致，Q13钳位0。99份黄金输出长度、哈希与零填充复核通过，完整99任务RTL仍待执行。源码/权重/输入/图哈希防止误用旧黄金结果。
+仿真现默认Verilator，同一SV测试台保留CPU/DDR独立时钟与完整黄金比较；可用`--simulator iverilog`切回四态检查。
+Verilator按源码/选项/版本缓存编译模型，切换区间和32/96输入可复用；首次C++编译用`--jobs`设置并行数，默认最多4。
+真实96×96前两层已由Verilator通过：33,933字、14,345,032个DDR用户时钟周期、主机约6.63秒（不含编译）。完整C3区间2:7也已通过：53,142字、39,193,418周期、7,077,888个MAC issue，主机约18秒。
+这两个区间分别验证，C3输入来自C黄金值；下一步的0:99才从原图连续计算全部张量。入口已准备在`segments/000_099/`，尚未运行，预计需要数分钟。
+两后端分别保存`result_verilator.json/result_iverilog.json`和对应运行脚本/日志，`result.json/run.sh`指最近一次。
+`make test-ai-network-backends`核对短区间输出/计数、模型复用，并验证错误数据和未初始化DDR读取在两后端均被拒绝。
+更长仿真仍由用户显式启动；完整99任务、检测后处理和上板均尚未验收。
+流程和产物解释见 [整网任务导出说明](../docs/trident_network_tasks.md)；分段日志位于`segments/起点_数量/`。
+
 ## 长任务约定
 
 安装、下载、完整网络推理、训练等预计需要等待的命令，先说明用途，由用户执行。

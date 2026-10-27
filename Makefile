@@ -122,6 +122,9 @@ help:
 	@echo 'test-ai-concat  验证通道拼接、DDR字缓存和完整C3模块任务'
 	@echo 'test-ai-maxpool  验证INT16最大池化、DDR读写和完整SPPF模块任务'
 	@echo 'test-ai-upsample  验证INT16上采样、DDR源字复用和五类算子混合任务'
+	@echo 'prepare-ai-network  导出真实96x96全网任务/资产/六张检测头，不执行推理'
+	@echo 'test-ai-network-smoke  用32x32输入验证全网导出器及三个短任务区间'
+	@echo 'test-ai-network-backends  核对Verilator/Icarus结果、模型复用和漏装载拒绝'
 	@echo 'test-multiply-adder  验证紫光双乘积加/减行为模型、流水线和复位'
 	@echo 'test-conv2d-core  验证可配置单层整数卷积、位宽和握手'
 	@echo 'test-ddr-cpu-window  验证 CPU DDR 窗口、跨时钟握手及裸机读写'
@@ -285,5 +288,17 @@ test-ai-maxpool:
 .PHONY: test-ai-upsample
 test-ai-upsample:
 	python3 pc_ai/verify_w8a16_tasks.py --suite upsample
+
+.PHONY: prepare-ai-network test-ai-network-smoke test-ai-network-backends
+prepare-ai-network:
+	python3 pc_ai/prepare_trident_network.py
+
+test-ai-network-smoke:
+	python3 pc_ai/prepare_trident_network.py --out pc_ai/outputs/trident_network_smoke --size 32 --golden-limit 9 --segment 0:1 --run
+	python3 pc_ai/prepare_trident_network.py --out pc_ai/outputs/trident_network_smoke --size 32 --segment 5:1 --run
+	python3 pc_ai/prepare_trident_network.py --out pc_ai/outputs/trident_network_smoke --size 32 --segment 7:2 --run
+
+test-ai-network-backends:
+	python3 pc_ai/verify_network_backends.py
 
 test-ai-accelerator: test-conv-mac-tile test-requant-int8 test-conv2d-ddr test-conv2d-quant test-ai-cpu test-ai-tasks

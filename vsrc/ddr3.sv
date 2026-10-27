@@ -190,7 +190,14 @@ module ddr3 #(
         begin
             slot = find_slot(address);
             if (slot >= 0 && occupied[slot]) load_word = contents[slot];
-            else load_word = (zero_init != 0) ? {DATA_BITS{1'b0}} : {DATA_BITS{1'bx}};
+            else begin
+                // 网络对拍可启用严格模式；Verilator两态仿真不能靠X值发现漏装载。
+                // 只检查整个字未曾写入的情况；部分字节有效性仍须四态仿真检查。
+`ifdef DDR3_MODEL_STRICT_READS
+                $fatal(1, "DDR3: read of uninitialized word at native address %h", address);
+`endif
+                load_word = (zero_init != 0) ? {DATA_BITS{1'b0}} : {DATA_BITS{1'bx}};
+            end
         end
     endfunction
 
