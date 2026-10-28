@@ -1,6 +1,6 @@
 // CPU 外设接口适配：地址译码、UART 写请求和同步读数据返回。
 module peripheral_bus #(
-    parameter integer CLK_FREQ  = 50_000_000,
+    parameter integer CLK_FREQ  = 25_000_000,
     parameter integer BAUD_RATE = 115200
 )(
     input  wire        clk,

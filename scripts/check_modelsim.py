@@ -1,8 +1,11 @@
 import argparse
+import hashlib
+import json
 import os
 from pathlib import Path
 import subprocess
 import xml.etree.ElementTree as ET
+from validate_coremark import validate
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -10,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def execute(arguments, log, directory=ROOT):
     result = subprocess.run([argument.as_posix() if isinstance(argument, Path) else str(argument)
                              for argument in arguments], cwd=directory,
-                            capture_output=True, text=True, errors="replace", timeout=180)
+                            capture_output=True, text=True, errors="replace", timeout=1800)
     report = result.stdout + result.stderr
     log.write_text(report, encoding="utf-8")
     if result.returncode or "** Error" in report or "** Fatal" in report:
@@ -24,6 +27,7 @@ def main():
     parser.add_argument("--modelsim", type=Path, default=Path(r"C:\diskE\modelsim\win64"))
     parser.add_argument("--pds-root", type=Path,
                         default=Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1"))
+    parser.add_argument("--tests", nargs="+", default=["TB_storage_images", "TB_memory_core", "TB_mem", "TB_multiplier_ip", "TB_coremark"])
     args = parser.parse_args()
     if os.name == "nt" and not os.environ.get("MGLS_LICENSE_FILE"):
         import winreg
@@ -42,16 +46,16 @@ def main():
     sources = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
     sources += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     includes = []
-    for name in ("pango_rom", "pango_ram"):
+    for name in ("pango_rom", "pango_ram", "pango_multiplier_ip"):
         directory = ROOT / "ipcore" / name
         document = ET.parse(directory / (name + ".idf"))
         sources += [directory / item.attrib["pathname"]
                     for item in document.findall("file_list/source/file")]
         includes.append("+incdir+" + str(directory / "rtl"))
     vendor = args.pds_root / "arch/vendor/pango/verilog/simulation"
-    sources += [vendor / "GTP_DRM36K_E1.v", vendor / "GTP_GRS.v"]
+    sources += [vendor / "GTP_DRM36K_E1.v", vendor / "GTP_APM_E2.v", vendor / "GTP_GRS.v"]
     benches = [ROOT / "sim" / (name + ".v")
-               for name in ("TB_storage_images", "TB_memory_core", "TB_mem", "TB_board")]
+               for name in args.tests]
     execute([args.modelsim / "vlog.exe", "-sv", "-modelsimini", configuration,
              "-work", "work", "+define+PANGO_IP+NO_WAVES",
              *includes, *sources, *benches], output / "compile.log")
@@ -66,6 +70,17 @@ def main():
                         if "PASS" in line or "Errors:" in line), flush=True)
         if "PASS" not in report or "Fatal:" in report:
             raise RuntimeError(f"No successful result for {bench.stem}")
+        if bench.stem == "TB_coremark":
+            manifest = json.loads((ROOT / "build/firmware/manifest.json").read_text())
+            result = validate(report, manifest)
+            result["simulator"] = "ModelSim official memory and multiplier IP"
+            result["rtl_sha256"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                                    for path in sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))}
+            destination = ROOT / "reports/coremark" / (manifest["mode"] + f"-{manifest['iterations']}-modelsim.json")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(json.dumps(result, indent=2) + "\n")
+            destination.with_suffix(".log").write_text(report, encoding="utf-8")
+            print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

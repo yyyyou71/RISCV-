@@ -13,9 +13,9 @@ module GPR_matrix(
 );
 
     // 5-32 译码器
-    /* verilator lint_off UNUSEDSIGNAL */
+    /* verilator lint_off UNUSED */
     wire [31:0] we;
-    /* verilator lint_on UNUSEDSIGNAL */
+    /* verilator lint_on UNUSED */
     assign we = wr_en ? (32'b1 << wr_addr) : 32'b0;
 
     wire [31:0] dout [0:31];

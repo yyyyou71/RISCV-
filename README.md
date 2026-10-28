@@ -1,105 +1,107 @@
-# RV32I：PG2L100H FPGA 移植
+# PG2L100H：Acore 与 CoreMark 上板工程
 
-DDR3 后续开发的独立行为模型、Linux 仿真命令与接口分析见 [DDR3 使用报告](docs/ddr3_usage_report.md)。当前 CPU RAM 接口保持原实现；该模型仅用于仿真，不加入 PDS 综合源文件。
+当前分支为 `ziguang_rv32i`。目标沿用已经确认的 RK3568_MES2L100H：
+**Logos2 / PG2L100H / FBG484 / -6，25 MHz，PDS 2022.2-SP6.1**。
 
-本目录在 WSL `~/mycore/vsrc` 源码基础上建立 Windows 移植副本。目标板卡按用户确认采用桌面 `rv32i_optimized` 的 RK3568_MES2L100H 配置：**Logos2 / PG2L100H / FBG484 / -6，25 MHz**。WSL 原工程未修改。
+## 本次移植范围
 
-第一阶段使用串口和 RAM 自检固件。PDS 实现与仿真结果保存在 `reports/migration.json`；实物上板验收仍需通过下述串口输出确认。
+CPU 基于 `origin/main` 的 `9bd2479b0ce167a77bfa4ca22e1969984f06a236`，导入到 `rtl/`。
+保留五级单发射、分支预测、CSR、定时器中断进入和 MRET；本板级版本将 `timer_irq` 接零。
+默认硬件乘法、软件除法，即 RV32I + Zmmul；`ENABLE_DIV=0`。
+处理器的 33×33 有符号乘法使用官方 Simple Multiplier IP，三拍，四个 Logos2 APM。
+ROM/RAM 同样使用官方 IP，不把仿真数组加入 PDS。
 
-## 相对 WSL 源码的改动
+DDR、AI/YOLO、视频和 IIC 不接入当前上板顶层。原有 `rtl/rk_iic`、`csrc/rk_iic`、
+相关文档及仿真文件保留；不要把原 `TB_board_iic` 当作当前顶层的测试。
+`origin/main` 的 AI/DDR 软件和 RTL 在原分支中保留，本次没有合并或改写它们。
 
-本次导入基线为 WSL `~/mycore` 的提交 `f535e1ba6439cc5105935f210463b816ccec200e`。2026-10-22 逐文件对照：原有 16 个 RTL 文件中，11 个与 `rtl/` 中的副本内容相同，5 个存在下列改动。WSL 工作区保持干净。
+## 下载及上板现象
 
-| 原文件 / 当前文件 | 本次改动 |
+- 当前可编辑入口：`rv32I.pds`；批处理工程：`build/pds/rv32I.pds`。
+- 审计通过的下载文件：`download/coremark_single_25mhz.sbit`。
+- 使用 3.3 V USB-TTL，RX 接扩展口第 3 脚（FPGA TX，AB21），并接 GND。
+- 终端为 **115200 / 8N1 / 无流控**。板载 CH340 连接 RK3568，不是本软核的发送口。
+- 先打开终端再下载；也可按下并释放 KEY0，约 10 ms 后重新启动。
+
+默认 firmware 是 CoreMark performance，2000 字节工作集，单上下文，1000 次迭代。
+启动先打印 `Acore single issue / RV32I+Zmmul / 25000000 Hz / UART 115200`，
+等待运算后打印计时、编译参数和 CRC，最后为 `COREMARK DONE`。
+正式有效运行必须有 `Correct operation validated.`，且 `Total time (secs)` 不小于 10。
+performance 的 seed/list/matrix/state CRC 应为 `e9f5/e714/1fd7/8e3a`；
+validation 为 `18f2/e3c1/0747/8d84`。
+
+LED3（J16）表示程序已经结束，**不独立证明 CRC 正确**；LED4（M17）指示总线错误。
+程序结束后不反复打印，也不闪灯。实板成绩以实际串口输出为准；离线验证不等于实板验收。
+
+## 程序及存储器
+
+| 内容 | 路径或配置 |
 |---|---|
-| `ROM_core.v` / `rtl/ROM_core.v` | 将行为数组替换为 `pango_rom` IP 适配层，保留同步读和地址保持接口 |
-| `memory_core.v` / `rtl/memory_core.v` | 将行为数组替换为 `pango_ram` IP 适配层；复位时禁止写入，B 口写使能关闭 |
-| `soc.v` / `rtl/soc.v` | 增加 25 MHz 时钟、115200 波特率参数并传递给外设，引出两位 GPIO |
-| `peripheral_bus.v` / `rtl/peripheral_bus.v` | 增加两位 GPIO 寄存器和 32-bit 周期计数器，保留原 UART 寄存器接口 |
-| `branch_predictor.v` / `rtl/branch_predictor.v` | 将 `i++` 改成显式加法并重命名循环变量，以兼容 PDS Verilog-2001；预测算法保持原实现 |
+| 未修改的 CoreMark 算法源码 | `third_party/coremark/`，保留原许可证和 MD5 清单 |
+| 裸机移植、发送函数、计时 | `csrc/coremark_port/` |
+| 启动入口及链接脚本 | `csrc/coremark_port/start.S`、`link.ld` |
+| 原 RAM/串口自检 C | `firmware/selftest.c`，仍可单独构建 |
+| 程序 ROM | 0x00000000–0x00007FFF，32 KiB，8 个 DRM36K |
+| 数据 RAM | 0x00010000–0x0001FFFF，64 KiB，16 个 DRM36K |
+| ROM/RAM 镜像 | `firmware/rom.hex`、`ram.hex`，每行一个小端 32-bit 字 |
+| 编译结果 | `build/firmware/coremark-<mode>-<iterations>/`，含 ELF、map、反汇编和清单 |
 
-`Acore.v`、`ALU.v`、`GPR_matrix.v`、`MuxKeyInternal.v`、`PC.v`、`ROM.v`、`Reg.v`、`decoder.v`、`hazard_detection_unit.v`、`memory.v` 和 `uart_tx.v` 的内容相同。流水线、译码、运算、前递及停顿/冲刷逻辑沿用原工程。
+CPU 数据总线不能读指令 ROM，因此常量、字符串和初始化数据放 RAM。
+IP 将镜像转换成 HDL 的 INIT 参数；改 C 或 hex 后必须重新生成 IP 再实现，不能只重新下载旧位流。
+RAM 是真双口 `TRANSPARENT_WRITE`，当前 CPU 只用 A 口；同步读取一拍，额外输出寄存器关闭。
+启动清 BSS，预留至少 8 KiB 栈；按键复位不擦除 RAM，也不自动还原任意已修改的 `.data`。
 
-另外新增了板级顶层、按键复位电路、引脚/时序约束、自检 C 程序、启动代码、链接脚本，以及固件构建、IP 生成、仿真、PDS 实现和工程入口验证脚本。原 ROM/RAM 行为模型保存在 `sim/models/`，用于不依赖紫光 IP 的仿真；硬件工程使用新的 `ipcore/pango_rom/` 和 `ipcore/pango_ram/`。原来的 IP 目录与 `legacy/rv32I.pds` 保留作参考。
-
-## 上板操作
-
-1. 在 PDS 配置工具中选择 `download/selftest_25mhz.sbit`，下载至 FPGA 的 SRAM。
-2. USB-TTL 的 RX 接 FPGA 扩展口第 3 脚（FPGA TX，AB21），并共地；使用 3.3 V TTL 电平。当前设计只有串口发送，无需连接 USB-TTL TX。
-3. 串口设置 **115200、8 数据位、无校验、1 停止位**，关闭硬件流控。板载 CH340C 调试串口连接 RK3568；本软核使用上述扩展口。
-4. 先打开串口终端，再下载程序；或者下载后按下并释放 KEY0，以重新打印自检结果。
-5. 预期输出：
-
-```text
-RV32I FPGA 25MHz 115200
-RAM INIT/BSS/BYTE/HALF/WORD PASS
-SELFTEST PASS
-```
-
-通过后 LED3（`led0`，J16）亮，LED4（`led1`，M17）灭。程序自检失败或 CPU 访问未映射内存时 LED4 亮。KEY0（M15，低有效）释放稳定约 10 ms 后重新启动。
-
-`rv32I.pds` 是可编辑工程入口；`build/pds/rv32I.pds` 是批处理生成并完成实现的工程。根目录入口从 PDS 自动生成的工程导出，保留完整的文件格式、时间戳、顶层及约束设置，并单独通过 PDS 加载和编译验证。若 PDS 已打开原工程，请关闭后重新打开以载入新的器件和源文件列表。原工程设置备份在 `legacy/rv32I.pds`。
-
-## 存储器接入
-
-| 项目 | 程序 ROM | 数据 RAM |
-|---|---|---|
-| CPU 地址范围 | 0x00000000–0x00007FFF | 0x00010000–0x0001FFFF |
-| 物理容量 | 8192 × 32 bit，32 KiB | 16384 × 32 bit，64 KiB |
-| 当前 IP | `ipcore/pango_rom` | `ipcore/pango_ram` |
-| DRM36K 数量 | 8 | 16 |
-| 读取延迟 | 同步读取一拍 | 同步读取一拍 |
-| 额外输出寄存器 | 关闭 | A/B 均关闭 |
-| 其他配置 | `ADDR_STROBE_EN=1`，高电平保持地址 | 真双口，4 个 8-bit 字节使能，A/B 均为 `TRANSPARENT_WRITE` |
-
-原来的 IP 配置为 **Logos / PGL100H / FBG900**，因此保留原文件并另外生成正确系列的 IP。新 IP 命名为 `pango_rom` / `pango_ram`，避免与 CPU 的 `ROM` / `memory_core` 模块重名。
-
-`rtl/ROM_core.v` 和 `rtl/memory_core.v` 是硬件适配层。RAM 当前只使用 A 口，B 口地址和写数据固定为零、写使能及字节使能为零，与 A 口使用同一时钟。后续可在适配层引出 B 口。适配层在复位时禁止 A 口写入；复位不擦除 RAM 内容。
-
-`TRANSPARENT_WRITE` 在写入当拍返回新值；未使能的字节保持原值。CPU 外层仍只发出一个字地址，当前接口不支持同一拍访问两个不同的 RAM 字。保留 IP 的 B 口并不会自动增加 CPU 的并行访存能力。
-
-RAM 需要硬件初值：现有 C 程序的常量和初始化数据放在 RAM 中，不能只初始化 ROM。`firmware/rom.hex` 和 `firmware/ram.hex` 均为**每行一个 32-bit 十六进制字**，字节按小端排列；ROM 未用部分填 NOP，RAM 未用部分填零。`firmware/start.S` 每次启动清 BSS 并设置栈，按键复位不会恢复程序修改过的 `.data`。
-
-## 时钟、外设与约束
-
-板级仿真为 ``always #20 sys_clk = ~sys_clk``（`timescale 1ns/1ps`），对应 25 MHz。原 Linux testbench 的 `#10` 对应 50 MHz；纯功能通过不能证明板上 50 MHz 时序或串口参数正确。新 `soc` 将时钟与波特率参数传递给外设，UART 分频为 217 个时钟/bit，约 115207 bit/s。
-
-| 地址 | 用途 |
+| MMIO 地址 | 功能 |
 |---|---|
-| 0x00030100 | UART TX，32-bit 写，最低字节为发送字符 |
-| 0x00030104 | UART STATUS，bit0=1 表示可发送 |
-| 0x00030108 | 两位 GPIO，可读写，连接 LED3/LED4 |
-| 0x0003000C | 只读 32-bit CPU 周期计数器 |
-| 0x00030000 | 程序退出标记，仿真检查使用，硬件忽略 |
+| 0x00030000 | 程序结束标记，供仿真判断退出 |
+| 0x0003000C | 只读 32-bit 周期计数器，25 MHz 下约 171.8 秒回绕 |
+| 0x00030100 | UART TXDATA，32-bit 写，低八位发送 |
+| 0x00030104 | UART STATUS，bit0=1 可发送 |
+| 0x00030108 | 两位 GPIO |
 
-引脚和电平来自用户指定的桌面参考工程：V4/1.5V 时钟、M15/1.8V 按键、J16/M17/1.8V LED、AB21/3.3V UART。`board/timing.fdc` 约束为 40 ns、0.2 ns 不确定度。按键输入和异步 UART/LED 输出设置时序例外，内部 CPU、UART 分频器和存储器路径继续检查。PDS 对这些异步端口的 IO delay 提示需结合时序例外理解。
+`uart_tx.v` 原本就存在；本次补齐 CoreMark 的轮询发送适配和 CR/LF，不依赖 TB 的 0x30008 字符口。
+软件浮点和软件除法来自 RV32I 的 libgcc，不要求 F/D 或硬件除法器。
 
-## 重新构建
+## 构建与验证
 
-在工程目录下运行 PowerShell：
+Windows 需要 Python、PDS 和 ModelSim 及各自有效许可证；交叉编译和快速仿真使用 WSL Ubuntu-22.04。
+只运行 Windows 工程目录下的脚本，不读取或修改原 `~/mycore` 源码。
+WSL 需要 `riscv64-unknown-elf-gcc`、G++、make、Icarus 和 Verilator。
+GCC 10 使用 `-march=rv32im -mno-div`，显式链接 RV32I libgcc，并检查最终 ELF 不含 DIV/REM。
 
 ```powershell
-./scripts/build_fpga.ps1
+./scripts/build_fpga.ps1 -Python python -ModelsimBin 'C:\diskE\modelsim\win64'
+./scripts/build_fpga.ps1 -Application selftest
 ```
 
-脚本复用 WSL 的 `riscv64-unknown-elf-*` 工具链，按 `-march=rv32i -mabi=ilp32` 编译；依次生成固件镜像、重新生成两个官方 IP、运行 ModelSim 检查、执行 PDS 全流程、审计时序和复位初值，最后生成下载文件。Python、PDS 安装位置、WSL 发行版可通过脚本参数指定。许可证沿用 Windows 用户环境中的 `PANGO_LICENSE_FILE` / `MGLS_LICENSE_FILE`。
+默认流程先用官方 ROM/RAM/乘法 IP 分别验证 performance/validation 单次迭代 CRC，
+然后构建最终 1000 次固件，用 Verilator 检查真实 UART 比特流及至少十秒的目标计时，
+再生成最终 IP、全地址初值遍历、71 项 RAM 检查和乘法专项，最后完成 PDS 全流程及审计。
+单次短仿真里的十秒警告是预期的，不是正式成绩；最终固件不可忽略此警告。
+最终长跑使用行为存储器/乘法模型；短跑已与官方 IP 的 CRC、周期和 UART 输出交叉验证。
 
-修改 C 程序后必须重新生成 IP：PDS 的初始化数据已转成 IP RTL 中的 `INIT_*` 参数，仅修改 hex 文件并不会更新旧比特流。
+本机缺少系统 Verilator 时，可在 WSL 中执行以下命令，仅解压到忽略目录，不安装到系统：
 
-独立检查：
-
-```powershell
-python scripts/check_modelsim.py
-python scripts/audit_build.py
-python scripts/export_project.py
+```bash
+mkdir -p build/tools && cd build/tools
+apt-get download verilator=4.038-1
+dpkg-deb -x verilator_4.038-1_amd64.deb verilator-4.038
 ```
 
-ModelSim 使用未经修改的 PDS 官方 IP 和 `GTP_DRM36K_E1` 仿真模型，检查全部 ROM/RAM 初值、ROM 地址保持、71 项 RAM 检查、字节/半字扩展、完整 115200 UART 输出、上电启动与按键重启。厂商 ROM 模板中未选中的地址宽度分支会产生 ModelSim 越界提示；完整地址遍历与串口测试均检查实际选中的配置。保留这些提示，没有修改厂商生成文件。
+也可直接使用 PATH 中的 Verilator。详细证据见 `reports/coremark/` 和 `reports/migration.json`；
+`scripts/test_interrupt.py` 回归 CSR、完整 GPR 保存/恢复、分支、访存、乘除等待期间的中断。
+`scripts/check_sim.py` 使用行为模型进行基础回归；`scripts/check_modelsim.py --tests TB_coremark`
+运行当前固件的官方 IP 测试（1000 次固件用 ModelSim 会很慢）。
 
-Linux 行为模型回归可运行 `python3 scripts/check_sim.py`，使用 `sim/models`，无需紫光 IP。硬件工程只加入 `rtl`、`board` 和两个新 IP；不要同时把 `sim/models` 加入综合源文件。原分支预测器中的 `i++` 已等价改为 Verilog-2001 的显式加法，以适配 PDS ADS。
+## Git 与多人协作
 
-## CoreMark 后续
+提交 RTL、board 约束、脚本、C/汇编/链接脚本、CoreMark 源码和许可证、IP IDF/HDL/INIT 数据、
+固件 hex 和验证报告。忽略 build、实现中间文件、下载位流、仿真波形、缓存及个人日志。
+`.gitattributes` 统一文本 LF；批处理为 CRLF，二进制不作行尾转换。
+不要提交许可证、个人绝对路径配置或编译器安装包；发布位流可用 Release/团队网盘另行分发。
 
-先完成上述实物串口验收，再切换 CoreMark 固件。现有 WSL CoreMark 的打印依赖 TB 的 `0x00030008`，需要改为轮询硬件 UART STATUS 后写 TXDATA；计时地址 `0x0003000C` 已在硬件实现。编译时需设置 `CPU_CLOCK_HZ=25000000`，重新生成 ROM 和 RAM IP。
-
-赛题一要求 CoreMark 测量时间不少于 10 秒，并提供资源、时序及流水线分析。32-bit 周期计数器在 25 MHz 下约 171.8 秒回绕，测量区间应小于一个回绕周期。当前自检通过不代表已取得 CoreMark 实物成绩。
+IP IDF 的 INIT_FILE 是本机绝对路径，换目录后先运行 `prepare_ips.py` 再构建；
+PDS 版本保持一致，同步 IP 参数改动时避免多人同时重新生成同一个 IP。
+根 PDS 由 `export_project.py` 从原生工程导出并重新加载验证，不手写简化格式。
+GUI 会更新 PDS 元数据，提交前检查是否只有时间戳和状态抖动。
+`legacy/rv32I.pds` 是早期错误器件配置的历史参考，不是当前工程入口。

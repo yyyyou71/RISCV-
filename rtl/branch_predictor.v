@@ -35,15 +35,15 @@ module branch_predictor#(
 
 
     // 更新预测矩阵
-    integer entry_index;
+    integer i;
     always @(posedge clk) begin
         if(!rst_n)begin
-            for(entry_index=0;entry_index<IDX_NUM;entry_index=entry_index+1)begin
-                tag[entry_index] <= 0;
-                B_type[entry_index] <= 0;
-                PC_N[entry_index] <= 0;
-                strength_cnt[entry_index] <= WEAK_NJ;
-                valid[entry_index] <= 0;
+            for(i=0;i<IDX_NUM;i = i + 1)begin
+                tag[i] <= 0;
+                B_type[i] <= 0;
+                PC_N[i] <= 0;
+                strength_cnt[i] <= WEAK_NJ;
+                valid[i] <= 0;
             end
         end
 

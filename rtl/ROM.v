@@ -3,7 +3,7 @@
 `endif
 
 module ROM(
-    /* verilator lint_off UNUSEDSIGNAL */
+    /* verilator lint_off UNUSED */
     input clk,
     input rst_n,
 
@@ -64,4 +64,4 @@ module ROM(
     end
     assign pc_4_out = pc_out + 32'h4;
 endmodule
-/* verilator lint_on UNUSEDSIGNAL */
+/* verilator lint_on UNUSED */
