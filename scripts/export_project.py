@@ -11,7 +11,7 @@ DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
-    parser.add_argument("--source", type=Path, default=ROOT / "build/pds/rv32I.pds")
+    parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--destination", type=Path, default=ROOT / "rv32I.pds")
     args = parser.parse_args()
     source = args.source.resolve()

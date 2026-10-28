@@ -44,7 +44,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual PDS failed; see build/pds-acore-dual/console.log' }
     & $Python scripts/audit_acore_dual.py
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual signoff audit failed' }
-    & $Python scripts/export_project.py --pds-root $PdsRoot --source build/pds-acore-dual/rv32I_acore_dual.pds --destination projects/acore_dual/acore_dual.pds
+    & $Python scripts/export_project.py --pds-root $PdsRoot --source build/pds-acore-dual/rv32I_acore_dual.pds --destination rv32I.pds
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual exported project validation failed' }
 }
 finally { Pop-Location }

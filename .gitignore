@@ -10,8 +10,6 @@
 /constraint_check/
 /temp_projects/
 /download/
-/projects/acore_dual/*
-!/projects/acore_dual/acore_dual.pds
 /bak/
 logbackup/
 

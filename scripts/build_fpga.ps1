@@ -3,6 +3,7 @@ param(
     [string]$Python = 'python',
     [string]$ModelsimBin = 'C:\diskE\modelsim\win64',
     [string]$Distro = 'Ubuntu-22.04',
+    [ValidateSet('single', 'acore_dual')][string]$Core = 'acore_dual',
     [ValidateSet('coremark', 'selftest')][string]$Application = 'coremark',
     [ValidateSet('performance', 'validation')][string]$SeedMode = 'performance',
     [int]$Iterations = 1000,
@@ -10,6 +11,13 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Core -eq 'acore_dual') {
+    if ($Application -ne 'coremark') {
+        throw 'Dual issue currently supports CoreMark; use -Core single -Application selftest for the original selftest.'
+    }
+    & "$PSScriptRoot/build_acore_dual.ps1" -PdsRoot $PdsRoot -Python $Python -ModelsimBin $ModelsimBin -Distro $Distro -SeedMode $SeedMode -Iterations $Iterations -SkipSmokeTests:$SkipSmokeTests
+    return
+}
 $projectRoot = Split-Path -Parent $PSScriptRoot
 Push-Location -LiteralPath $projectRoot
 try {
@@ -47,7 +55,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'PDS implementation failed; see build/pds/console.log' }
     & $Python scripts/audit_build.py
     if ($LASTEXITCODE -ne 0) { throw 'Implementation audit failed' }
-    & $Python scripts/export_project.py --pds-root $PdsRoot
+    & $Python scripts/export_project.py --pds-root $PdsRoot --source build/pds/rv32I.pds --destination rv32I.pds
     if ($LASTEXITCODE -ne 0) { throw 'Root PDS project validation failed' }
 }
 finally {

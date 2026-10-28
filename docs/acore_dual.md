@@ -116,7 +116,7 @@ PDS 路由修复日志包含 `Hold violation fix failed`，并打印最终 slow/
 本次配置的修复目标为 200 ps；修复后摘要和最终独立 STA 均明确给出正 slack 与 `All Constraints Met`。
 审计同时检查两份报告的四组结果，不依据“成功生成位流”判断时序通过；原始日志保留在 build 下。
 
-可编辑入口 `projects/acore_dual/acore_dual.pds`，顶层 `acore_dual_top`；
+唯一维护的可编辑入口是根目录 `rv32I.pds`，顶层 `acore_dual_top`；
 下载文件 `download/coremark_acore_dual_25mhz.sbit`，SHA256：
 `4973a422695b30c45bae84d0b564cd8064ff19802799403d0aabe75ef32be06b`。
 尚未实板验收。完整审计记录为 `reports/acore_dual/implementation.json`。
