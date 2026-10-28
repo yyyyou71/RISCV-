@@ -21,10 +21,25 @@ def main():
             "addi s3,zero,19", "resume: fence"]
     check("paired-load-use-wait", body + irq.check("s2",124) + irq.check("s3",19),
           stalled=1, min_wait=1, paired=1)
-    body = ["li t0,123", "sw t0,0(s0)", "lw s1,0(s0)", "inject: addi s2,zero,19",
+    body = ["li t0,123", "sw t0,0(s0)", "fence", "addi s4,zero,11", "lw s1,0(s0)", "inject: addi s2,zero,19",
             "addi s3,s1,1", "resume: fence"]
     check("secondary-load-use-wait", body + irq.check("s2",19) + irq.check("s3",124),
           stalled=1, min_wait=1, paired=1)
+    body = ["li t0,123", "sw t0,0(s0)", "fence", "inject: addi s2,zero,19", "lw s1,0(s0)", "resume: fence"]
+    check("secondary-load-irq", body + irq.check("s1",123) + irq.check("s2",19), paired=1)
+    body = ["li t0,0x55", "fence", "inject: addi s1,zero,7", "sw t0,20(t6)", "resume: sw t0,24(t6)"]
+    check("secondary-mmio-store-irq", body + irq.check("s1",7), paired=1, stores=1)
+    for taken in (0,1):
+        body = [f"li s2,{1-taken}", "fence", "inject: addi s1,zero,7", "beq s2,zero,target",
+                "resume: fence", "j done", "target: fence", "done:"]
+        check(f"secondary-branch-{taken}-irq", body + irq.check("s1",7),
+              resume="target" if taken else "resume", paired=1, taken=taken)
+    body = ["fence", "inject: addi s1,zero,7", "jal s3,resume", "link: j fail", "resume: fence",
+            "la t0,link", "bne s3,t0,fail"]
+    check("secondary-jal-irq", body + irq.check("s1",7), paired=1, taken=1)
+    body = ["la s2,resume", "fence", "inject: addi s1,zero,7", "jalr s3,0(s2)", "link: j fail",
+            "resume: fence", "la t0,link", "bne s3,t0,fail"]
+    check("secondary-jalr-irq", body + irq.check("s1",7), paired=1, taken=1)
     for operation, enabled, expected, wait in (("mul",0,861,2), ("divu",1,17,30)):
         body = ["li t0,123", "li t1,7", f"inject: {operation} s1,t0,t1", "resume: fence", "addi s2,s1,1"]
         check(operation + "-wait", body + irq.check("s1",expected) + irq.check("s2",expected+1),

@@ -84,7 +84,14 @@ module Acore #(
     reg [31:0]pc_EX;
     wire second_valid_IF, head_prediction, pair_IF;
     wire [31:0] instruction_b, head_prediction_pc;
+    wire candidate_prediction;
+    wire [31:0] candidate_prediction_pc;
+    reg b_prediction_ID;
+    reg [31:0] b_prediction_pc_ID;
+    wire b_branch_ID, b_jump_ID;
+    wire [2:0] b_branch_type_ID;
     wire b_valid_ID;
+    wire b_control_ID = b_valid_ID && (b_branch_ID || b_jump_ID);
     wire [4:0] b_rs1_ID, b_rs2_ID, b_rd_ID;
     wire [31:0] b_immediate_ID, b_gpr1, b_gpr2, b_forward1, b_forward2;
     wire b_src1_ID, b_src2_ID, b_hit1, b_hit2;
@@ -93,7 +100,14 @@ module Acore #(
     wire [31:0] b_alu_comb;
     reg b_valid_EX, b_valid_MEM;
     reg [4:0] b_rd_EX, b_rd_MEM;
-    reg [31:0] b_result_EX, b_result_MEM;
+    reg [31:0] b_result_EX, b_alu_MEM;
+    wire [31:0] b_result_MEM;
+    wire b_load_ID, b_store_ID, b_unsigned_ID;
+    wire [1:0] b_size_ID;
+    reg b_load_EX, b_store_EX, b_unsigned_EX, b_load_MEM, b_dev_MEM;
+    reg [1:0] b_size_EX;
+    reg [31:0] b_store_data_EX;
+    wire b_memory_EX = b_load_EX || b_store_EX;
     reg retire_a_EX, retire_a_MEM;
     reg [31:0] instruction_ID, instruction_EX, instruction_MEM, b_instruction_ID;
     reg [31:0] b_instruction_EX, b_instruction_MEM, b_pc_EX, b_pc_MEM, retire_pc_MEM;
@@ -108,10 +122,11 @@ module Acore #(
             .clk(clk), .rst_n(rst_n), .instruction(instruction_b),
             .valid_in(stall_ID ? b_valid_ID : pair_IF), .flush(flush_ID), .stall(stall_ID),
             .rs1_addr(b_rs1_ID), .rs2_addr(b_rs2_ID), .rd_addr(b_rd_ID),
-            .RegWrite(), .MemRead(), .MemWrite(), .MemSize(), .MemUnsigned(),
+            .RegWrite(), .MemRead(b_load_ID), .MemWrite(b_store_ID), .MemSize(b_size_ID), .MemUnsigned(b_unsigned_ID),
             .wb_type(b_wb_ID), .ALUen(), .ALUSrc1(b_src1_ID), .ALUSrc2(b_src2_ID),
             .ALUOp(b_op_ID), .DivOp(), .CSR_en(), .CSR_op(), .CSR_addr(), .Mret(),
-            .Branch(), .Branch_type(), .Jump(), .immediate(b_immediate_ID), .valid_out(b_valid_ID)
+            .Branch(b_branch_ID), .Branch_type(b_branch_type_ID), .Jump(b_jump_ID),
+            .immediate(b_immediate_ID), .valid_out(b_valid_ID)
         );
         ALU u_alu_b (
             .clk(clk), .opcode(b_op_ID),
@@ -131,6 +146,13 @@ module Acore #(
         assign b_src2_ID = 1'b0;
         assign b_op_ID = 4'b0;
         assign b_wb_ID = 2'b0;
+        assign b_load_ID = 1'b0;
+        assign b_store_ID = 1'b0;
+        assign b_size_ID = 2'b0;
+        assign b_unsigned_ID = 1'b0;
+        assign b_branch_ID = 1'b0;
+        assign b_jump_ID = 1'b0;
+        assign b_branch_type_ID = 3'b0;
         assign b_alu_comb = 32'b0;
         assign b_hit1 = 1'b0;
         assign b_hit2 = 1'b0;
@@ -145,7 +167,14 @@ module Acore #(
             b_rd_EX <= 0;
             b_rd_MEM <= 0;
             b_result_EX <= 0;
-            b_result_MEM <= 0;
+            b_alu_MEM <= 0;
+            b_load_EX <= 0;
+            b_store_EX <= 0;
+            b_size_EX <= 0;
+            b_unsigned_EX <= 0;
+            b_store_data_EX <= 0;
+            b_load_MEM <= 0;
+            b_dev_MEM <= 0;
             retire_a_EX <= 0;
             retire_a_MEM <= 0;
             retired_count <= 0;
@@ -159,19 +188,31 @@ module Acore #(
             b_pc_EX <= 0;
             b_pc_MEM <= 0;
             retire_pc_MEM <= 0;
+            b_prediction_ID <= 0;
+            b_prediction_pc_ID <= 0;
         end else begin
             b_valid_EX <= b_valid_ID && !stall;
             b_rd_EX <= (b_valid_ID && !stall) ? b_rd_ID : 5'd0;
             if (b_valid_ID && !stall)
-                b_result_EX <= (b_wb_ID == 2'b10) ? b_immediate_ID : b_alu_comb;
+                b_result_EX <= (b_wb_ID == 2'b10) ? b_immediate_ID :
+                               (b_wb_ID == 2'b11) ? pc_ID + 32'd8 : b_alu_comb;
             b_valid_MEM <= b_valid_EX;
             b_rd_MEM <= b_rd_EX;
-            b_result_MEM <= b_result_EX;
+            b_alu_MEM <= b_result_EX;
+            b_load_EX <= b_valid_ID && !stall && b_load_ID;
+            b_store_EX <= b_valid_ID && !stall && b_store_ID;
+            b_size_EX <= b_size_ID;
+            b_unsigned_EX <= b_unsigned_ID;
+            b_store_data_EX <= b_hit2 ? b_forward2 : b_gpr2;
+            b_load_MEM <= b_load_EX;
+            b_dev_MEM <= b_load_EX && b_result_EX[31:16] == 3;
             retire_a_EX <= valid_out_ID && !stall;
             retire_a_MEM <= retire_a_EX;
             if (!stall) begin
                 instruction_ID <= instruction;
                 b_instruction_ID <= instruction_b;
+                b_prediction_ID <= candidate_prediction;
+                b_prediction_pc_ID <= candidate_prediction_pc;
             end
             instruction_EX <= instruction_ID;
             instruction_MEM <= instruction_EX;
@@ -274,6 +315,8 @@ module Acore #(
     //-------------branch_predictor---------------
     wire J_predict;
     wire [31:0]pc_predict;
+    wire J_predict_second;
+    wire [31:0] pc_predict_second;
     wire [31:0]upd_pc;
     wire [1:0]upd_type;
     wire upd_en;            // 是否为跳转/分支指令
@@ -375,10 +418,12 @@ module Acore #(
         acore_fetch_queue u_fetch (
             .clk(clk), .rst_n(rst_n), .redirect(flush_IF), .redirect_pc(load_pc),
             .prediction(J_predict), .prediction_pc(pc_predict), .request_pc(pc),
+            .second_prediction(J_predict_second), .second_prediction_pc(pc_predict_second),
             .consume((stall_ID || flush_ID || !valid_out_IF) ? 2'd0 : (pair_IF ? 2'd2 : 2'd1)),
             .valid(valid_out_IF), .second_valid(second_valid_IF),
             .head_pc(pc_IF), .head_instruction(instruction), .second_instruction(instruction_b),
-            .head_prediction(head_prediction), .head_prediction_pc(head_prediction_pc)
+            .head_prediction(head_prediction), .head_prediction_pc(head_prediction_pc),
+            .candidate_prediction(candidate_prediction), .candidate_prediction_pc(candidate_prediction_pc)
         );
         assign pc_4_IF = pc_IF + 32'd4;
     end endgenerate
@@ -403,16 +448,22 @@ module Acore #(
 
     // 跳转无条件
     wire jump_taken = Jump_ID & ~stall;
+    wire b_taken = b_control_ID && !stall &&
+                   (b_jump_ID || (b_branch_ID && (b_alu_comb[0] ^ b_branch_type_ID[0])));
+    wire [31:0] b_target = b_jump_ID ? {b_alu_comb[31:1], 1'b0} : pc_ID + 32'd4 + b_immediate_ID;
 
     // 分支目标地址
     wire [31:0] branch_target = pc_ID + immediate_ID;
 
     // 表示真实跳转
-    assign J_taken = branch_taken | jump_taken;
-    assign J_pc = jump_taken ? {out_comb_EX[31:1], 1'b0} : branch_target;
+    assign J_taken = branch_taken | jump_taken | b_taken;
+    assign J_pc = b_control_ID ? b_target : jump_taken ? {out_comb_EX[31:1], 1'b0} : branch_target;
 
     // 判断预测是否正确
-    assign predict_correct = (J_taken == if_predict_IF) & ((J_pc == pc_predict_IF) | !if_predict_IF);
+    wire packet_prediction = b_control_ID ? b_prediction_ID : if_predict_IF;
+    wire [31:0] packet_prediction_pc = b_control_ID ? b_prediction_pc_ID : pc_predict_IF;
+    assign predict_correct = (J_taken == packet_prediction) &&
+                             (!packet_prediction || J_pc == packet_prediction_pc);
 
     // 送到 PC
     // 
@@ -420,7 +471,7 @@ module Acore #(
     assign load_pc    = mret_commit ? mret_target_pc :
                         irq_accept ? irq_entry_pc :
                         predict_correct ? pc_predict :
-                        ~J_taken ? pc_4_ID : J_pc;
+                        ~J_taken ? actual_next_pc : J_pc;
 
     // 预测结果IF
     always @(posedge clk) begin
@@ -445,6 +496,8 @@ module Acore #(
     assign instruction_b = 32'h00000013;
     assign head_prediction = 1'b0;
     assign head_prediction_pc = 32'b0;
+    assign candidate_prediction = 1'b0;
+    assign candidate_prediction_pc = 32'b0;
     ROM u_ROM(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
@@ -673,11 +726,12 @@ module Acore #(
     
 
     //--------------------IO port(MEM同级)-------------------------
-    assign addr_EX = out_EX;
+    assign b_result_MEM = b_load_MEM ? (b_dev_MEM ? dev_rdata : rd_data_MEM) : b_alu_MEM;
+    assign addr_EX = b_memory_EX ? b_result_EX : out_EX;
     assign sel_dev = (addr_EX[31:16] == 3); // 选择外设
-    assign dev_size = MemSize_EX;           // 数据大小
-    assign dev_we = sel_dev & MemWrite_EX;  // 写外设使能
-    assign dev_re = sel_dev & MemRead_EX;   // 读外设使能
+    assign dev_size = b_memory_EX ? b_size_EX : MemSize_EX;
+    assign dev_we = sel_dev & (MemWrite_EX | b_store_EX);
+    assign dev_re = sel_dev & (MemRead_EX | b_load_EX);
 
     // 外设地址32位输出
     assign dev_addr_wr = addr_EX;            
@@ -685,14 +739,14 @@ module Acore #(
 
     // 外设数据
     
-    assign dev_wdata = rd_data2_EX;
+    assign dev_wdata = b_memory_EX ? b_store_data_EX : rd_data2_EX;
 
     always @(posedge clk) begin
         if(!rst_n)begin
             sel_dev_MEM <= 0;
         end
         else begin
-            sel_dev_MEM <= dev_re;
+            sel_dev_MEM <= dev_re && !b_memory_EX;
         end
     end
 
@@ -728,19 +782,19 @@ module Acore #(
 
     assign sel_ram = (addr_EX[31:16] == 1);     // 选择内存
 
-    assign MemSize_MEM = MemSize_EX;
-    assign MemUnsigned_MEM = MemUnsigned_EX;
+    assign MemSize_MEM = b_memory_EX ? b_size_EX : MemSize_EX;
+    assign MemUnsigned_MEM = b_memory_EX ? b_unsigned_EX : MemUnsigned_EX;
 
     // 内存读写使能
-    assign wr_en_MEM = MemWrite_EX & sel_ram;
-    assign rd_en_MEM = MemRead_EX & sel_ram;
+    assign wr_en_MEM = (MemWrite_EX | b_store_EX) & sel_ram;
+    assign rd_en_MEM = (MemRead_EX | b_load_EX) & sel_ram;
 
     // 内存读写地址
     assign wr_addr_MEM = addr_EX[15:0];
     assign rd_addr_MEM = addr_EX[15:0];
 
     // 内存写数据
-    assign wr_data_MEM = rd_data2_EX;
+    assign wr_data_MEM = b_memory_EX ? b_store_data_EX : rd_data2_EX;
 
     // 64KB内存,addr:0-65535 
     memory #(
@@ -760,7 +814,7 @@ module Acore #(
         .rd_data     (rd_data_MEM     )
     );
 
-    assign bus_err = (!(sel_dev | sel_ram)) & (MemRead_EX | MemWrite_EX);  // 即没有映射内存也没有映射外设
+    assign bus_err = (!(sel_dev | sel_ram)) & (MemRead_EX | MemWrite_EX | b_load_EX | b_store_EX);
 
     //-------------------state5-WB---------------------
 
@@ -830,7 +884,7 @@ module Acore #(
             .a_ex_we(RegWrite_EX), .a_ex_rd(rd_addr_EX_reg),
             .a_ex_ready(wb_type_EX != WB_MEM),
             .a_ex_data((wb_type_EX == WB_IMM) ? imm_EX : (wb_type_EX == WB_PC4) ? pc_4_EX : out_EX),
-            .b_ex_we(b_valid_EX), .b_ex_rd(b_rd_EX), .b_ex_data(b_result_EX),
+            .b_ex_we(b_valid_EX), .b_ex_ready(!b_load_EX), .b_ex_rd(b_rd_EX), .b_ex_data(b_result_EX),
             .a_wb_we(wr_en_WB), .a_wb_rd(wr_addr_WB), .a_wb_data(wr_data_WB),
             .b_wb_we(b_valid_MEM), .b_wb_rd(b_rd_MEM), .b_wb_data(b_result_MEM),
             .rs1(rs1_addr_ID), .rs2(rs2_addr_ID), .rs3(b_valid_ID ? b_rs1_ID : 5'd0),
@@ -842,13 +896,13 @@ module Acore #(
     end endgenerate
 
     //---------------branch_predictor---------------
-    assign upd_pc = pc_ID;
-    assign upd_type = {Jump_ID, ALUSrc1_ID};
-    assign upd_en = (Branch_ID | Jump_ID) & ~stall;
-    assign upd_taken = branch_taken | jump_taken;
-    assign upd_target_pc = jump_taken ? out_comb_EX : branch_target;
+    assign upd_pc = b_control_ID ? pc_ID + 32'd4 : pc_ID;
+    assign upd_type = b_control_ID ? {b_jump_ID, b_src1_ID} : {Jump_ID, ALUSrc1_ID};
+    assign upd_en = (Branch_ID | Jump_ID | b_control_ID) & ~stall;
+    assign upd_taken = J_taken;
+    assign upd_target_pc = b_control_ID ? b_target : jump_taken ? out_comb_EX : branch_target;
 
-    branch_predictor u_branch_predictor(
+    branch_predictor #(.SECOND_LOOKUP(ENABLE_DUAL)) u_branch_predictor(
         .clk           (clk           ),
         .rst_n         (rst_n         ),
         .stall         (stall         ),
@@ -861,17 +915,20 @@ module Acore #(
         .upd_type      (upd_type      ),
         .upd_en        (upd_en        ),
         .upd_taken     (upd_taken     ),
-        .upd_target_pc (upd_target_pc )
+        .upd_target_pc (upd_target_pc ),
+        .pc2(pc + 32'd4), .if_predict2(J_predict_second), .pc_predict2(pc_predict_second)
     );
     
 
     // synthesis translate_off
     always @(posedge clk) if (rst_n && ENABLE_DUAL != 0) begin
-        if (b_valid_ID && (!valid_out_ID || MemRead_ID || MemWrite_ID || Branch_ID || Jump_ID ||
+        if (b_valid_ID && (!valid_out_ID || Branch_ID || Jump_ID ||
                           CSR_en_ID || Mret_ID || mul_instruction || div_instruction))
             $fatal(1, "Invalid dual-issue packet");
         if (b_valid_ID && rd_addr_ID != 0 && rd_addr_ID == b_rd_ID)
             $fatal(1, "Same-packet WAW conflict");
+        if ((MemRead_ID || MemWrite_ID) && b_valid_ID && (b_load_ID || b_store_ID))
+            $fatal(1, "Two memory operations in one packet");
     end
     // synthesis translate_on
     //===============================================================

@@ -111,6 +111,10 @@ void
 portable_fini(core_portable *p)
 {
     p->portable_id = 0;
+    if (get_time() != 0) {
+        ee_printf("CoreMark        : %f\n", (secs_ret)default_num_contexts * seed4_volatile / time_in_secs(get_time()));
+        ee_printf("CoreMark/MHz    : %f\n", (secs_ret)default_num_contexts * seed4_volatile * 1000000.0 / get_time());
+    }
     ee_printf("COREMARK DONE\n");
     while ((*(volatile ee_u32 *)COREMARK_UART_STATUS & 1u) == 0u) {}
     *(volatile ee_u32 *)COREMARK_GPIO_DATA = 1;

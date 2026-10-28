@@ -6,8 +6,9 @@ param(
     [ValidateSet('single', 'acore_dual')][string]$Core = 'acore_dual',
     [ValidateSet('coremark', 'selftest')][string]$Application = 'coremark',
     [ValidateSet('performance', 'validation')][string]$SeedMode = 'performance',
-    [int]$Iterations = 1000,
-    [switch]$SkipSmokeTests
+    [int]$Iterations = 2700,
+    [switch]$SkipSmokeTests,
+    [switch]$RunLongSimulation
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,7 +16,7 @@ if ($Core -eq 'acore_dual') {
     if ($Application -ne 'coremark') {
         throw 'Dual issue currently supports CoreMark; use -Core single -Application selftest for the original selftest.'
     }
-    & "$PSScriptRoot/build_acore_dual.ps1" -PdsRoot $PdsRoot -Python $Python -ModelsimBin $ModelsimBin -Distro $Distro -SeedMode $SeedMode -Iterations $Iterations -SkipSmokeTests:$SkipSmokeTests
+    & "$PSScriptRoot/build_acore_dual.ps1" -PdsRoot $PdsRoot -Python $Python -ModelsimBin $ModelsimBin -Distro $Distro -SeedMode $SeedMode -Iterations $Iterations -SkipSmokeTests:$SkipSmokeTests -RunLongSimulation:$RunLongSimulation
     return
 }
 $projectRoot = Split-Path -Parent $PSScriptRoot

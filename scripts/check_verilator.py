@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--verilator", default=shutil.which("verilator"))
     parser.add_argument("--require-duration", action="store_true")
+    parser.add_argument("--allow-long-run", action="store_true")
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     args = parser.parse_args()
     environment = os.environ.copy()
@@ -24,6 +25,8 @@ def main():
         environment["VERILATOR_ROOT"] = str(local / "share/verilator")
     manifest_name = "manifest.json" if args.core == "single" else "manifest_" + args.core + ".json"
     manifest = json.loads((ROOT / "build/firmware" / manifest_name).read_text())
+    if manifest["iterations"] != 1 and not (args.require_duration or args.allow_long_run):
+        parser.error("Only one-iteration checks run by default; a longer run requires an explicit duration or allow-long-run option")
     output = ROOT / "build/sim" / ("verilator" if args.core == "single" else "verilator-" + args.core)
     output.mkdir(parents=True, exist_ok=True)
     sources = [path for path in sorted((ROOT / "rtl").glob("*.v"))

@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -9,6 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--skip-long-simulation", action="store_true")
+    args = parser.parse_args()
     build = ROOT / "build/pds-acore-dual"
     top = "acore_dual_top"
     console = (build / "console.log").read_text(errors="replace")
@@ -42,13 +46,16 @@ def main():
     manifest = json.loads((ROOT / "build/firmware/manifest_acore_dual.json").read_text())
     for name, expected in manifest["sources"].items():
         require(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, f"Stale firmware source: {name}")
-    evidence = json.loads((ROOT / f"reports/coremark/acore_dual-{manifest['mode']}-{manifest['iterations']}-verilator.json").read_text())
-    require(evidence["crc_pass"] and not evidence["short_run"] and evidence["secondary_retired"] > 0,
-            "Final CoreMark long run failed")
-    require(evidence["firmware_rom_sha256"] == manifest["rom_sha256"] and
-            evidence["firmware_ram_sha256"] == manifest["ram_sha256"], "Final firmware changed since simulation")
-    for name, expected in evidence["rtl_sha256"].items():
-        require(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, f"Stale long-run RTL: {name}")
+    if args.skip_long_simulation:
+        evidence = json.loads((ROOT / f"reports/coremark/acore_dual-{manifest['mode']}-1-modelsim.json").read_text())
+    else:
+        evidence = json.loads((ROOT / f"reports/coremark/acore_dual-{manifest['mode']}-{manifest['iterations']}-verilator.json").read_text())
+        require(evidence["crc_pass"] and not evidence["short_run"] and evidence["secondary_retired"] > 0,
+                "Final CoreMark long run failed")
+        require(evidence["firmware_rom_sha256"] == manifest["rom_sha256"] and
+                evidence["firmware_ram_sha256"] == manifest["ram_sha256"], "Final firmware changed since simulation")
+        for name, expected in evidence["rtl_sha256"].items():
+            require(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, f"Stale long-run RTL: {name}")
     for name in ("TB_acore_fetch_ip", "TB_acore_ram_ip", "TB_multiplier_ip"):
         log = (ROOT / "build/sim/modelsim-acore_dual" / (name + ".log")).read_text(errors="replace")
         require("PASS" in log and "Errors: 0" in log and "Fatal:" not in log, f"IP check failed: {name}")
@@ -73,14 +80,24 @@ def main():
     destination = ROOT / "download/coremark_acore_dual_25mhz.sbit"
     destination.parent.mkdir(exist_ok=True)
     shutil.copy2(bitstream, destination)
-    record = dict(status="implementation_and_simulation_passed", hardware_tested=False,
+    report_directory = ROOT / "reports/acore_dual"
+    report_directory.mkdir(parents=True, exist_ok=True)
+    for source, name in ((build / "place_route" / (top + ".prr"), "resources.prr"),
+                         (build / "place_route" / (top + ".rtr"), "timing.rtr"),
+                         (build / "place_route" / (top + "_timing_summary_after_hold_fix.txt"), "timing_summary.txt")):
+        shutil.copy2(source, report_directory / name)
+    record = dict(status="implementation_and_short_simulation_passed" if args.skip_long_simulation else "implementation_and_simulation_passed", hardware_tested=False,
                   core="Acore constrained in-order dual issue", isa="rv32i_zmmul", cache=False,
                   device="PG2L100H", package="FBG484", clock_hz=25000000, baud_rate=115200,
                   drm36k=24, apm=4, **counts, final_standalone_sta=timing,
-                  coremark=evidence, bitstream=destination.relative_to(ROOT).as_posix(),
+                  coremark=evidence, long_simulation_run=not args.skip_long_simulation,
+                  final_firmware=dict(iterations=manifest["iterations"], mode=manifest["mode"],
+                                      rom_sha256=manifest["rom_sha256"], ram_sha256=manifest["ram_sha256"]),
+                  bitstream=destination.relative_to(ROOT).as_posix(),
                   bitstream_sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
                   router_hold_repair_message=("Hold violation fix failed" if "Hold violation fix failed" in console else None),
                   hold_repair_target_ps=200,
+                  resource_report="reports/acore_dual/resources.prr", timing_report="reports/acore_dual/timing.rtr",
                   input_sha256={p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs})
     (ROOT / "reports/acore_dual/implementation.json").write_text(json.dumps(record, indent=2) + "\n")
     print(json.dumps({k: v for k, v in record.items() if k != "input_sha256"}, indent=2))

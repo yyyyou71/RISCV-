@@ -3,7 +3,7 @@ Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
 # 10.4
 
 # vsim -c -quiet -onfinish exit -l C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/TB_coremark_transcript.log -wlf C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/TB_coremark.wlf -modelsimini C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/modelsim.ini work.TB_coremark -do "onerror {quit -code 1}; run -all; quit -code 1" 
-# Start time: 17:41:15 on Oct 28,2026
+# Start time: 21:01:54 on Oct 28,2026
 # ** Note: (vsim-3812) Design is being optimized...
 # 
 # //  ModelSim SE-64 10.4 Dec  3 2014 
@@ -29,11 +29,11 @@ Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
 # 
 # CoreMark Size    : 666
 # 
-# Total ticks      : 353858
+# Total ticks      : 281844
 # 
-# Total time (secs): 0.014154
+# Total time (secs): 0.011274
 # 
-# Iterations/Sec   : 70.649809
+# Iterations/Sec   : 88.701551
 # 
 # ERROR! Must execute for at least 10 secs for a valid result!
 # 
@@ -59,9 +59,9 @@ Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
 # 
 # COREMARK DONE
 # 
-# PASS: CoreMark board exit_code=0; 813 UART characters; 2171224 cycles
-# BENCH COUNTERS: cycles=353858 retired=309808 second=57886
+# PASS: CoreMark board exit_code=0; 813 UART characters; 2082060 cycles
+# BENCH COUNTERS: cycles=281844 retired=309808 second=96695
 # ** Note: $finish    : C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/TB_coremark.v(76)
-#    Time: 86848980 ns  Iteration: 1  Instance: /TB_coremark
-# End time: 17:41:50 on Oct 28,2026, Elapsed time: 0:00:35
+#    Time: 83282420 ns  Iteration: 1  Instance: /TB_coremark
+# End time: 21:02:31 on Oct 28,2026, Elapsed time: 0:00:37
 # Errors: 0, Warnings: 0

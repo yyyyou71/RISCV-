@@ -13,6 +13,7 @@ def main():
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--destination", type=Path, default=ROOT / "rv32I.pds")
+    parser.add_argument("--no-compile", action="store_true")
     args = parser.parse_args()
     source = args.source.resolve()
     destination = args.destination.resolve()
@@ -37,6 +38,9 @@ def main():
 
     project = re.sub(r'(\(_(?:file|ip|ip_source_item)\s+")([^"]+)(")', rebase, project)
     destination.write_text(project, encoding="utf-8")
+    if args.no_compile:
+        print(f"PROJECT_EXPORTED_NOT_COMPILED {destination}")
+        return
 
     if os.name == "nt" and not os.environ.get("PANGO_LICENSE_FILE"):
         import winreg

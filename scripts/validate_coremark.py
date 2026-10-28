@@ -49,6 +49,12 @@ def validate(report, manifest):
             "coremark_per_mhz": iterations * 1000000 / ticks,
             "firmware_rom_sha256": manifest["rom_sha256"],
             "firmware_ram_sha256": manifest["ram_sha256"]}
+    if "CoreMark/MHz" in report:
+        for name, expected in (("CoreMark", iterations * frequency / ticks),
+                               ("CoreMark/MHz", iterations * 1000000 / ticks)):
+            values = re.findall(rf"^{re.escape(name)}\s*:\s*(\d+\.\d+)\s*$", report, re.MULTILINE)
+            if len(values) != 1 or not math.isclose(float(values[0]), expected, rel_tol=1e-8, abs_tol=1e-6):
+                raise ValueError(f"Incorrect normalized score: {name}")
     if manifest.get("core") == "acore_dual":
         counters = re.findall(r"^BENCH COUNTERS: cycles=(\d+) retired=(\d+) second=(\d+)\s*$", report, re.MULTILINE)
         if len(counters) != 1:

@@ -21,6 +21,12 @@ module TB_interrupt #(
     );
 
     wire [31:0] gpr [0:31];
+    wire [31:0] entry_fetch_pc;
+    generate if (ENABLE_DUAL != 0) begin : g_entry_dual
+        assign entry_fetch_pc = dut.g_dual_fetch.u_fetch.pending_pc;
+    end else begin : g_entry_single
+        assign entry_fetch_pc = dut.pc;
+    end endgenerate
     assign gpr[0] = 0;
     genvar g;
     generate for (g = 1; g < 32; g = g + 1) begin : peek
@@ -129,9 +135,12 @@ module TB_interrupt #(
             if (expected_taken >= 0 && dut.J_taken !== (expected_taken != 0))
                 $fatal(1, "test did not cover the expected actual branch direction");
             #1;
-            if (dut.pc !== entry_at_accept || dut.u_CSR.mepc !== resume_pc)
+            if (entry_fetch_pc !== entry_at_accept ||
+                dut.u_CSR.mepc !== resume_pc)
                 $fatal(1, "entry redirect/save were not atomic");
-            if (dut.valid_out_ID !== 0 || dut.valid_out_IF !== 0)
+            if (dut.valid_out_ID !== 0 ||
+                ((ENABLE_DUAL == 0) && dut.valid_out_IF !== 0) ||
+                ((ENABLE_DUAL != 0) && dut.pc_IF !== entry_at_accept))
                 $fatal(1, "younger instructions were not flushed");
             if (dut.u_CSR.mcause !== 32'h80000007 || dut.u_CSR.mstatus[3] !== 0)
                 $fatal(1, "incorrect trap state");

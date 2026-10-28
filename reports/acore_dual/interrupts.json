@@ -2,92 +2,128 @@
   "cases": [
     {
       "name": "csr-instructions",
-      "summary": "PASS interrupt div=0 entries=0 returns=0 contexts=0 wait=-100 cycles=139",
+      "summary": "PASS interrupt div=0 entries=0 returns=0 contexts=0 wait=-100 cycles=136",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "paired-alu-boundary",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=171",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=158",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "load-completes",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=171",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=158",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "paired-load-use-wait",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=2 cycles=173",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=2 cycles=160",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "secondary-load-use-wait",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=2 cycles=173",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=2 cycles=161",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-load-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=159",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-mmio-store-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=155",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-branch-0-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=158",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-branch-1-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=156",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-jal-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=158",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "secondary-jalr-irq",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=160",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "mul-wait",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=4 cycles=173",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=4 cycles=160",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "divu-wait",
-      "summary": "PASS interrupt div=1 entries=1 returns=1 contexts=1 wait=34 cycles=203",
+      "summary": "PASS interrupt div=1 entries=1 returns=1 contexts=1 wait=34 cycles=190",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "branch-cold-taken",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=186",
-      "dual": 1,
-      "result": "pass"
-    },
-    {
-      "name": "branch-trained-taken",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=186",
-      "dual": 1,
-      "result": "pass"
-    },
-    {
-      "name": "branch-not-taken",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=189",
-      "dual": 1,
-      "result": "pass"
-    },
-    {
-      "name": "mmio-store",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=166",
-      "dual": 1,
-      "result": "pass"
-    },
-    {
-      "name": "jal-link",
       "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=167",
       "dual": 1,
       "result": "pass"
     },
     {
+      "name": "branch-trained-taken",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=167",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "branch-not-taken",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=168",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "mmio-store",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=153",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
+      "name": "jal-link",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=154",
+      "dual": 1,
+      "result": "pass"
+    },
+    {
       "name": "jalr-changing-target",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=179",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=1 cycles=161",
       "dual": 1,
       "result": "pass"
     },
     {
       "name": "masked-pending-pair",
-      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=3 cycles=171",
+      "summary": "PASS interrupt div=0 entries=1 returns=1 contexts=1 wait=3 cycles=158",
       "dual": 1,
       "result": "pass"
     }
   ],
   "source_sha256": {
     "rtl/ALU.v": "ac19f295fc1a7fbe177c82c913a4123c799069fff7a13b62f948d6336407d541",
-    "rtl/Acore.v": "82a9b2cd83c914c814061b4a8e0923da016d476aef79e7996343f29d1413a056",
+    "rtl/Acore.v": "cd7eef7827e4b7eb30408aa19f7a24ef8725152e9d5bd97aa9ef7d369a9e9a6c",
     "rtl/CSR.v": "3f6aa82deab134118f6578678870d8a97f0a398fcf2577459ad71566f7d78445",
     "rtl/GPR_matrix.v": "f0921cfe29610b8e3b0587e9a5c49e06da5d47a14256b1a6d3e68c7528559db2",
     "rtl/MuxKeyInternal.v": "5c76292cf3de8bf6075ebcb9b06290d1b42dafce73acca6af1a5d6c8ea658412",
@@ -96,10 +132,10 @@
     "rtl/ROM_core.v": "c98d0b78cec8e72897a2f6011280a73bee7fd14a292bcf57f4fa4d3693292d68",
     "rtl/Reg.v": "d9d3cadac23f52000a85f5d612182b6cbb4d3f0fe93071bc38c7ce4f10d7309c",
     "rtl/acore_fetch_memory.v": "469c67444ca7da5a5a6f1f4fe064ed266f6eadf194f3a6a8365bc0c7e8a8d55d",
-    "rtl/acore_fetch_queue.v": "02448a322057582a705c8d840fbb4f29b561970c7908c912d3683e3dff1a9fc1",
-    "rtl/acore_forward.v": "42357fd3fe8e9de21d0915b4a3d42f7bfda9d3504e3f1fd81386ed4c4e9389f5",
-    "rtl/acore_pair.v": "61cbcfc6286dad2f19b866bae6cef66a5ee75c0ba28036f2f09981ddfb29ce62",
-    "rtl/branch_predictor.v": "07828be131fe9e4911cb02954902ce881e069dc422e98aef70dec116717eac6c",
+    "rtl/acore_fetch_queue.v": "875a281e0b25c0cac0391827addc604b95b5dd843c00d9dcca7cd5459c794c0c",
+    "rtl/acore_forward.v": "544bc9564eb00466987d79e6fdeebd96fe20bc34d56a3b361056d406e854632e",
+    "rtl/acore_pair.v": "2e75f61253491397e81c8316491bb766b03c22347196faf01c1928f18fc28c11",
+    "rtl/branch_predictor.v": "bb406a5bc78751fa1bd74d16523e780aed00ebf956c7916558007d1bd713bbb0",
     "rtl/decoder.v": "7488431d347ade162af2b63b3341795f9050ff0b4cf643dd3a30fdffd82dd063",
     "rtl/divide_unit.v": "6b79fce9559823d485981685bf60ac5ddf37b75e945d2e3c7df2f5275cd3fef5",
     "rtl/divider_core.v": "b2981039b71dc2b0846907f4397a0edc792ae900f0ac0c7ca6d36d8b07dfca49",
@@ -115,8 +151,8 @@
     "sim/models/acore_fetch_memory.v": "0bd8d11395b1911ca80e21daf619ec295dfa8f27e5b6a800952c4fb626e973a8",
     "sim/models/memory_core.v": "8f6e155733ea57550ffc8ed3d826173a6cbe802c3e3026ab161f4c600cf3242c",
     "sim/models/multiplier_core.v": "cb4c827b470e525919b3b86b65b0e992639fdae7aacf177aa033b307016e6307",
-    "sim/TB_interrupt.v": "c17bef0381f542717df45a7d7a6de2baea61c0447b415570614924769290f35c",
-    "scripts/test_acore_dual_interrupt.py": "2919233c98c59ef167af76ac821bf0c7a7302fc8175752a0a76ba98be8d5e458",
+    "sim/TB_interrupt.v": "d4f45565be810d6a330867544776de7fe59d6079f73d8ce55f33811718cce236",
+    "scripts/test_acore_dual_interrupt.py": "c08cbfdfd3fe78fb33acafa2906a0060100a4ebd8ddada9088f9dd3ba391324f",
     "scripts/test_interrupt.py": "a66f71e74f3651e7a23c498308673f2b8287208ded436e39f35d963b5f6e12bd"
   }
 }

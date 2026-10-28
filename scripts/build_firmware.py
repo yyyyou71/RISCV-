@@ -48,7 +48,7 @@ def main():
     parser.add_argument("--iterations", type=int)
     args = parser.parse_args()
     if args.iterations is None:
-        args.iterations = 1000
+        args.iterations = 2700 if args.core == "acore_dual" else 1000
     if not 1 <= args.iterations <= 8000:
         parser.error("iterations must be in [1, 8000]; keep timing below the 32-bit counter wrap")
     output = ROOT / "build/firmware" / (args.application + f"-{args.mode}-{args.iterations}")

@@ -18,7 +18,7 @@ PDS 在 `build/`、`compile/` 下自动产生的内部 `.pds` 属于忽略的中
 | RTL | `rtl/`，`ENABLE_DUAL=0` | 同一套 `rtl/`，`ENABLE_DUAL=1` |
 | 程序镜像 | `firmware/rom.hex`、`ram.hex` | `firmware/acore_dual_rom.hex`、`acore_dual_ram.hex` |
 | ROM / RAM | 32 KiB / 64 KiB | 32 KiB / 64 KiB |
-| 默认迭代数 | 1000 | 1000 |
+| 迭代数 | 历史基线 1000 | 当前默认 2700（约30秒） |
 
 单发射的独立 Git 基线为 `e20bb3cae859de74291d5222d49fac3062fb8368`。
 双发射直接扩展 `rtl/Acore.v`，复用原有译码器、ALU、CSR、分支预测和多周期乘法单元。
@@ -40,10 +40,12 @@ PDS 顶层分别为 `board_top` 和 `acore_dual_top`；仿真行为模型不加�
 两版均为 GCC 10.2.0、O2、2000-byte 工作集、25 MHz、硬件乘法与软件除法。
 验证数据见 `reports/coremark/`；双发射逐指令对比、中断与实现审计见 `reports/acore_dual/`。
 历史单发射基线为 2.643300 CoreMark/MHz（1000 次仿真）。
-当前双发射成绩以 `acore_dual-performance-1000-verilator.json` 为准。
-本机本版为 2.825921 CoreMark/MHz（1000 次、14.154679 秒仿真），
-实现为 5551 LUT / 5442 FF / 4 APM / 24 DRM36K，25 MHz 四角 setup/hold 通过。
-离线验证与时序通过不能代替实板验收。
+用户已报告优化 RTL 的 1000 次 O2 实板结果：281873350 周期、11.274934 秒，
+88.692315 CoreMark，即 3.547692607 CoreMark/MHz，CRC 正确。
+相同 RTL 上一次完成的实现为 6958 LUT / 5558 FF / 4 APM / 24 DRM36K，四角 setup/hold 通过；
+完整原始报告在 `reports/acore_dual/resources.prr` 与 `timing.rtr`。
+本次交付最终改为 O2、2700 次和精简 UART，初值已更新，按用户要求留待用户重新编译 Verilog 和烧录。
+`reports/acore_dual/implementation.json` 标明这两种状态；不得把上一次资源快照当作最终固件已重新实现的证明。
 
 ## 本次移植范围
 
@@ -61,14 +63,15 @@ DDR、AI/YOLO、视频和 IIC 不接入当前上板顶层。原有 `rtl/rk_iic`�
 ## 下载及上板现象
 
 - 当前可编辑入口：根目录 `rv32I.pds`，顶层 `acore_dual_top`。
-- 审计通过的下载文件：`download/coremark_acore_dual_25mhz.sbit`。
+- 在 PDS 中重新编译后，使用新生成的 `generate_bitstream/acore_dual_top.sbit`。
 - 使用 3.3 V USB-TTL，RX 接扩展口第 3 脚（FPGA TX，AB21），并接 GND。
 - 终端为 **115200 / 8N1 / 无流控**。板载 CH340 连接 RK3568，不是本软核的发送口。
 - 先打开终端再下载；也可按下并释放 KEY0，约 10 ms 后重新启动。
 
-默认 firmware 是 CoreMark performance，2000 字节工作集，单上下文，1000 次迭代。
+默认 firmware 是 CoreMark performance，O2、2000 字节工作集、单上下文、2700 次迭代，预计约30.4秒。
 启动先打印 `Acore in-order dual issue / RV32I+Zmmul / 25000000 Hz / UART 115200`，
-等待运算后打印计时、编译参数和 CRC，最后为 `COREMARK DONE`。
+等待运算后打印计时、CRC、CoreMark 和 CoreMark/MHz，最后为 `COREMARK DONE`。
+不再打印冗长编译参数；编译信息仍保存在 firmware manifest 中。
 正式有效运行必须有 `Correct operation validated.`，且 `Total time (secs)` 不小于 10。
 performance 的 seed/list/matrix/state CRC 应为 `e9f5/e714/1fd7/8e3a`；
 validation 为 `18f2/e3c1/0747/8d84`。
@@ -118,10 +121,11 @@ GCC 10 使用 `-march=rv32im -mno-div`，显式链接 RV32I libgcc，并检查�
 ```
 
 默认流程先用官方 ROM/RAM/乘法 IP 分别验证 performance/validation 单次迭代 CRC，
-然后构建最终 1000 次固件，用 Verilator 检查真实 UART 比特流及至少十秒的目标计时，
+然后构建最终 2700 次固件，默认跳过长程仿真，留给实板运行，
 再生成最终 IP、全地址初值遍历、字节写掩码检查和乘法专项，最后完成 PDS 全流程及审计。
 单次短仿真里的十秒警告是预期的，不是正式成绩；最终固件不可忽略此警告。
-最终长跑使用行为存储器/乘法模型；短跑已与官方 IP 的 CRC、周期和 UART 输出交叉验证。
+只有显式传入 `-RunLongSimulation` 才运行长程仿真；本次未对最终2700次版本执行该步骤。
+最终交付只更新了固件初值和根工程，后续 HDL 编译、布局布线及烧录由用户完成。
 
 本机缺少系统 Verilator 时，可在 WSL 中执行以下命令，仅解压到忽略目录，不安装到系统：
 

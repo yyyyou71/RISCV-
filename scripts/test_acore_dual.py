@@ -25,6 +25,11 @@ def program(seed):
               "addi x10,x0,1", "addi x11,x0,2", "lw x10,0(x31)", "add x12,x10,x11",
               "mul x13,x12,x11", "addi x14,x0,19", "add x15,x13,x14",
               "addi x0,x1,1", "add x16,x0,x2", "auipc x17,0", "lui x18,0x81234"]
+    lines += ["fence", "addi x11,zero,77", "fence", "addi x10,zero,5", "lw x11,0(x31)",
+              "add x12,x11,x10", "addi x13,zero,9", "fence", "addi x14,zero,8", "sw x12,4(x31)",
+              "fence", "addi x15,zero,7", "lw x16,4(x31)", "add x17,x16,x14", "addi x18,zero,6",
+              "fence", "addi x20,zero,0", "addi x21,zero,1", "addi x22,zero,2", "fence",
+              "addi x20,zero,3", "addi x21,zero,4", "addi x20,zero,5", "addi x23,zero,6", "add x24,x20,x21"]
     for n in range(24):
         lines += [f"li x30, {rng.randrange(2, 8)}", f"loop{n}:"]
         for _ in range(45):

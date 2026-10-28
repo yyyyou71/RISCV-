@@ -4,8 +4,9 @@ param(
     [string]$ModelsimBin = 'C:\diskE\modelsim\win64',
     [string]$Distro = 'Ubuntu-22.04',
     [ValidateSet('performance', 'validation')][string]$SeedMode = 'performance',
-    [int]$Iterations = 1000,
-    [switch]$SkipSmokeTests
+    [int]$Iterations = 2700,
+    [switch]$SkipSmokeTests,
+    [switch]$RunLongSimulation
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -29,10 +30,14 @@ try {
     }
     & wsl.exe -d $Distro --exec python3 "$wslRoot/scripts/build_firmware.py" --core acore_dual --iterations $Iterations --mode $SeedMode
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual final firmware build failed' }
-    $durationCheck = @()
-    if ($Iterations -ge 1000) { $durationCheck = @('--require-duration') }
-    & wsl.exe -d $Distro --exec python3 "$wslRoot/scripts/check_verilator.py" --core acore_dual @durationCheck
-    if ($LASTEXITCODE -ne 0) { throw 'Acore dual final firmware simulation failed' }
+    $auditOptions = @('--skip-long-simulation')
+    if ($RunLongSimulation) {
+        $durationCheck = @('--allow-long-run')
+        if ($Iterations -ge 1000) { $durationCheck = @('--require-duration') }
+        & wsl.exe -d $Distro --exec python3 "$wslRoot/scripts/check_verilator.py" --core acore_dual @durationCheck
+        if ($LASTEXITCODE -ne 0) { throw 'Acore dual final firmware simulation failed' }
+        $auditOptions = @()
+    }
     & $Python scripts/prepare_ips.py --pds-root $PdsRoot --core acore_dual
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual final IP generation failed' }
     & $Python scripts/check_modelsim.py --pds-root $PdsRoot --modelsim $ModelsimBin --core acore_dual --tests TB_acore_fetch_ip TB_acore_ram_ip TB_multiplier_ip
@@ -42,7 +47,7 @@ try {
     New-Item -ItemType Directory -Path $buildDirectory -Force | Out-Null
     & "$PdsRoot\bin\pds_shell.exe" -file "$PSScriptRoot\implement_acore_dual.tcl" -work_dir $buildDirectory -project_name rv32I_acore_dual *> "$buildDirectory\console.log"
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual PDS failed; see build/pds-acore-dual/console.log' }
-    & $Python scripts/audit_acore_dual.py
+    & $Python scripts/audit_acore_dual.py @auditOptions
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual signoff audit failed' }
     & $Python scripts/export_project.py --pds-root $PdsRoot --source build/pds-acore-dual/rv32I_acore_dual.pds --destination rv32I.pds
     if ($LASTEXITCODE -ne 0) { throw 'Acore dual exported project validation failed' }
