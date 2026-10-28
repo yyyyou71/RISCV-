@@ -12,6 +12,20 @@ def require(condition, message):
         raise RuntimeError(message)
 
 
+def final_timing(build):
+    report = (build / "place_route/board_top.rtr").read_text(errors="replace")
+    paths = re.findall(r"Path Type\s+: (max|min) \((slow|fast) corner\).*?"
+                       r"Slack\s+\((MET|VIOLATED)\)\s+(-?[\d.]+)", report, re.DOTALL)
+    expected = {(kind, corner) for kind in ("max", "min") for corner in ("slow", "fast")}
+    require({(kind, corner) for kind, corner, status, slack in paths} == expected,
+            "Final standalone STA is missing a setup/hold corner")
+    require(all(status == "MET" and float(slack) >= 0 for kind, corner, status, slack in paths),
+            "Final standalone STA has violated paths")
+    return {("setup" if kind == "max" else "hold") + "_" + corner + "_slack_ns":
+            min(float(slack) for path_kind, path_corner, status, slack in paths
+                if path_kind == kind and path_corner == corner) for kind, corner in sorted(expected)}
+
+
 def main():
     build = ROOT / "build/pds"
     console = (build / "console.log").read_text(encoding="utf-8", errors="replace")
@@ -23,6 +37,7 @@ def main():
     require(len(clocks) == 4, "Expected setup/hold reports for slow and fast corners")
     require(all(float(slack) >= 0 and float(total) == 0 and int(failing) == 0
                 for slack, total, failing in clocks), "Timing has failing endpoints")
+    standalone_timing = final_timing(build)
     netlist = (build / "synthesize/board_top_syn.vm").read_text(errors="replace")
     require(len(re.findall(r"^\s+GTP_DRM36K_E1\s", netlist, re.MULTILINE)) == 24,
             "Expected 8 ROM and 16 RAM DRM36K instances")
@@ -80,6 +95,7 @@ def main():
     flip_flops = sum(map(int, re.findall(r"\|\s+FF\s+\|\s+(\d+)\s+\|", utilization)))
     record = {
         "status": "implementation_and_simulation_passed", "hardware_tested": False,
+        "final_standalone_sta": standalone_timing,
         "upstream_commit": "9bd2479b0ce167a77bfa4ca22e1969984f06a236",
         "application": manifest["application"], "core": "Acore", "isa": "rv32i_zmmul",
         "iterations": manifest["iterations"], "seed_mode": manifest["mode"], "apm": 4,

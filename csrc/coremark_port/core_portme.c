@@ -17,6 +17,7 @@ Original Author: Shay Gal-on
 */
 #include "coremark.h"
 #include "core_portme.h"
+#include "platform.h"
 
 #ifndef ITERATIONS
 #define ITERATIONS 1000
@@ -39,7 +40,7 @@ volatile ee_s32 seed3_volatile = 0x8;
 #endif
 volatile ee_s32 seed4_volatile = ITERATIONS;
 volatile ee_s32 seed5_volatile = 0;
-#define CYCLE_COUNT (*(volatile ee_u32 *)0x0003000C)
+#define CYCLE_COUNT (*(volatile ee_u32 *)COREMARK_CYCLE_COUNT)
 
 static CORE_TICKS start_cycles;
 static CORE_TICKS stop_cycles;
@@ -81,8 +82,17 @@ portable_init(core_portable *p, int *argc, char *argv[])
 {
     start_cycles = 0;
     stop_cycles = 0;
-    *(volatile ee_u32 *)0x00030108 = 0;
+    *(volatile ee_u32 *)COREMARK_GPIO_DATA = 0;
+#ifdef COREMARK_EVOLVE5
+    *(volatile ee_u32 *)0x40001004u = 3;
+    *(volatile ee_u32 *)0x40002010u = 0;
+    *(volatile ee_u32 *)0x40002000u = 0;
+    *(volatile ee_u32 *)0x40002004u = 0;
+    *(volatile ee_u32 *)0x40002010u = 1;
+    ee_printf("EVOLVE5 dual issue / RV32I+Zmmul / %u Hz / UART 115200\n", CPU_CLOCK_HZ);
+#else
     ee_printf("Acore single issue / RV32I+Zmmul / %u Hz / UART 115200\n", CPU_CLOCK_HZ);
+#endif
 
     (void)argc; // prevent unused warning
     (void)argv; // prevent unused warning
@@ -107,6 +117,6 @@ portable_fini(core_portable *p)
 {
     p->portable_id = 0;
     ee_printf("COREMARK DONE\n");
-    while ((*(volatile ee_u32 *)0x00030104 & 1u) == 0u) {}
-    *(volatile ee_u32 *)0x00030108 = 1;
+    while ((*(volatile ee_u32 *)COREMARK_UART_STATUS & 1u) == 0u) {}
+    *(volatile ee_u32 *)COREMARK_GPIO_DATA = 1;
 }

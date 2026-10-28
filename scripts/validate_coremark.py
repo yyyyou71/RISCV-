@@ -42,13 +42,22 @@ def validate(report, manifest):
         raise ValueError("CoreMark reported validation errors")
     if "Cannot validate" in report or "COREMARK DONE" not in report or "PASS: CoreMark board exit_code=0" not in report:
         raise ValueError("CoreMark did not complete cleanly")
-    return {"mode": manifest["mode"], "iterations": iterations, "cycles": ticks,
+    record = {"mode": manifest["mode"], "iterations": iterations, "cycles": ticks,
             "clock_hz": frequency, "seconds": ticks / frequency, "crc_pass": True,
             "short_run": short, "hardware_tested": False,
             "iterations_per_second": iterations * frequency / ticks,
             "coremark_per_mhz": iterations * 1000000 / ticks,
             "firmware_rom_sha256": manifest["rom_sha256"],
             "firmware_ram_sha256": manifest["ram_sha256"]}
+    if manifest.get("core") == "evolve5":
+        counters = re.findall(r"^BENCH COUNTERS: cycles=(\d+) retired=(\d+) second=(\d+)\s*$", report, re.MULTILINE)
+        if len(counters) != 1:
+            raise ValueError("Missing measured retirement counters")
+        measured, retired, secondary = map(int, counters[0])
+        if measured != ticks or not secondary or secondary >= retired:
+            raise ValueError("Invalid EVOLVE5 measurement window or no secondary retirement")
+        record.update(retired_instructions=retired, secondary_retired=secondary, ipc=retired/ticks)
+    return record
 
 
 def main():

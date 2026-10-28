@@ -40,7 +40,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
     parser.add_argument("--prepare-only", action="store_true")
-    parser.add_argument("--only", choices=("pango_rom", "pango_ram", "pango_multiplier_ip"))
+    parser.add_argument("--only", choices=("pango_rom", "pango_ram", "pango_multiplier_ip", "pango_evolve_rom", "pango_evolve_ram", "pango_evolve_mul"))
+    parser.add_argument("--core", choices=("single", "evolve5"), default="single")
     args = parser.parse_args()
     if os.name == "nt" and not os.environ.get("PANGO_LICENSE_FILE"):
         import winreg
@@ -60,9 +61,17 @@ def main():
                       INREG_EN="0", PIPEREG_EN_1="1", PIPEREG_EN_2="1",
                       PIPEREG_EN_3="1", OUTREG_EN="0", OPTIMAL_TIMING="0",
                       OPTIMAL_TIMING_BOOL="0", ADVANCED_BOOL="0")
-    for kind, name, configuration in [("ipm2l_rom", "pango_rom", rom),
-                                       ("ipm2l_dpram", "pango_ram", ram),
-                                       ("ipm2l_mult", "pango_multiplier_ip", multiplier)]:
+    configurations = [("ipm2l_rom", "pango_rom", rom), ("ipm2l_dpram", "pango_ram", ram),
+                      ("ipm2l_mult", "pango_multiplier_ip", multiplier)]
+    if args.core == "evolve5":
+        rom["INIT_FILE"] = (ROOT / "firmware/evolve5_rom.hex").as_posix()
+        ram.update(A_ADDR_WIDTH="13", B_ADDR_WIDTH="13",
+                   INIT_FILE=(ROOT / "firmware/evolve5_ram.hex").as_posix())
+        multiplier.update(ASIZE="32", BSIZE="32", A_SIGNED="0", B_SIGNED="0", PIPE_STATUS="0",
+                          PIPEREG_EN_1="0", PIPEREG_EN_2="0", PIPEREG_EN_3="0")
+        configurations = [("ipm2l_rom", "pango_evolve_rom", rom), ("ipm2l_dpram", "pango_evolve_ram", ram),
+                          ("ipm2l_mult", "pango_evolve_mul", multiplier)]
+    for kind, name, configuration in configurations:
         if args.only and args.only != name:
             continue
         if "INIT_FILE" in configuration and not Path(configuration["INIT_FILE"]).is_file():

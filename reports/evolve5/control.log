@@ -1,0 +1,2 @@
+PASS: EVOLVE5 control, RAW/WAW, multiply, memory, illegal DIV, timer IRQ/MRET; pairs=168 cycles=695
+/mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/TB_evolve5_control.v:34: $finish called at 27820000 (1ps)

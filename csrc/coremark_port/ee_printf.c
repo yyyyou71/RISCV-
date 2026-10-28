@@ -16,6 +16,7 @@ limitations under the License.
 
 #include <coremark.h>
 #include <stdarg.h>
+#include "platform.h"
 
 #define ZEROPAD   (1 << 0) /* Pad with zero */
 #define SIGN      (1 << 1) /* Unsigned/signed long */
@@ -664,8 +665,8 @@ uart_send_char(char c)
 {
     if (c == '\n')
         uart_send_char('\r');
-    while ((*(volatile ee_u32 *)0x00030104 & 1u) == 0u) {}
-    *(volatile ee_u32 *)0x00030100 = (ee_u8)c;
+    while ((*(volatile ee_u32 *)COREMARK_UART_STATUS & 1u) == 0u) {}
+    *(volatile ee_u32 *)COREMARK_UART_DATA = (ee_u8)c;
 }
 
 int

@@ -1,6 +1,12 @@
 {
   "status": "implementation_and_simulation_passed",
   "hardware_tested": false,
+  "final_standalone_sta": {
+    "setup_fast_slack_ns": 26.834,
+    "setup_slow_slack_ns": 18.616,
+    "hold_fast_slack_ns": 0.012,
+    "hold_slow_slack_ns": 0.107
+  },
   "upstream_commit": "9bd2479b0ce167a77bfa4ca22e1969984f06a236",
   "application": "coremark",
   "core": "Acore",

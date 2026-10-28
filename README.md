@@ -1,7 +1,50 @@
-# PG2L100H：Acore 与 CoreMark 上板工程
+# PG2L100H：Acore / EVOLVE5 与 CoreMark
 
 当前分支为 `ziguang_rv32i`。目标沿用已经确认的 RK3568_MES2L100H：
 **Logos2 / PG2L100H / FBG484 / -6，25 MHz，PDS 2022.2-SP6.1**。
+
+## 选择内核
+
+| 项目 | Acore 单发射（默认） | EVOLVE5 可选双发射 |
+|---|---|---|
+| 可编辑工程 | `rv32I.pds` | `cores/evolve5/pds/evolve5.pds` |
+| 一键构建 | `scripts/build_fpga.ps1` | `scripts/build_evolve5.ps1` |
+| 下载文件 | `download/coremark_single_25mhz.sbit` | `download/coremark_evolve5_25mhz.sbit` |
+| RTL | `rtl/` | `cores/evolve5/rtl/`、`fpga/` |
+| 程序镜像 | `firmware/rom.hex`、`ram.hex` | `firmware/evolve5_rom.hex`、`evolve5_ram.hex` |
+| ROM / RAM | 32 KiB / 64 KiB | 32 KiB / 32 KiB |
+| 默认迭代数 | 1000 | 2048 |
+
+单发射的独立 Git 基线为 `e20bb3cae859de74291d5222d49fac3062fb8368`。
+EVOLVE5 是另一套可选核，不是把你的 `Acore.v` 改成双发射；两套工程、IP、镜像和输出相互隔离。
+GUI 工程位于不同目录，避免同名顶层的中间文件互相覆盖；双发射 GUI 工作文件由 `.gitignore` 单独排除。
+均按 RV32I+Zmmul 编译，使用硬件乘法和软件除法。详细适配与限制见 [EVOLVE5 说明](cores/evolve5/README.md)。
+
+```powershell
+./scripts/build_evolve5.ps1 -Python python -ModelsimBin 'C:\diskE\modelsim\win64'
+```
+
+双发射版沿用相同的五个板级引脚与串口参数，LED3 仍只表示程序结束，LED4 表示异常。
+不要同时把两套 `board_top`、两套存储器模型或两套核的源文件加入一个 PDS 工程。
+以下章节描述默认 Acore 工程；双发射版有不同的 RAM/MMIO 地址。
+
+## 本机离线验证结果
+
+两版均为 GCC 10.2.0、O2、2000-byte 工作集、25 MHz、硬件乘法与软件除法。
+
+| 项目 | Acore 单发射 | EVOLVE5 双发射 + Cache |
+|---|---:|---:|
+| performance 迭代数 | 1000 | 2048 |
+| 目标计时 / 秒 | 15.132597 | 20.385616 |
+| CoreMark/MHz（仿真） | 2.643300 | 4.018520 |
+| 计时窗口 IPC | 未测 | 1.245147 |
+| LUT / FF | 2812 / 4520 | 9960 / 7834 |
+| APM / DRM36K | 4 / 24 | 4 / 16 |
+| 25 MHz slow/fast setup/hold | 全部通过 | 全部通过 |
+
+两组标准 CRC、长跑及最终独立 STA 均通过；证据见 `reports/coremark/`。
+上述约 52% 提升是两套核与存储层次的整体仿真对比，不是同一内核只开关双发射的对比。
+**两套新位流均尚未进行实板验收，不能把上述数字当作实板正式成绩。**
 
 ## 本次移植范围
 

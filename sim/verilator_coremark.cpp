@@ -19,12 +19,39 @@ int main(int argc, char **argv) {
     unsigned int characters = 0;
     bool receiving = false;
     bool previous_tx = true;
+#ifdef EVOLVE5
+    std::uint64_t first_retired = 0;
+    std::uint64_t second_retired = 0;
+    std::uint64_t start_cycle = 0;
+    std::uint64_t start_retired = 0;
+    std::uint64_t start_second = 0;
+    std::uint64_t measured_cycles = 0;
+    std::uint64_t measured_retired = 0;
+    std::uint64_t measured_second = 0;
+    unsigned int samples = 0;
+#endif
     for (std::uint64_t cycle = 0; cycle < limit; ++cycle) {
         simulation_time = static_cast<double>(cycle) * 40;
         model.sys_clk = 0;
         model.eval();
         const bool exit_write = model.dev_we && model.dev_addr == 0x30000;
         const std::uint32_t exit_code = model.dev_data;
+#ifdef EVOLVE5
+        if (model.cycle_sample) {
+            if (samples == 0) {
+                start_cycle = cycle;
+                start_retired = first_retired + second_retired;
+                start_second = second_retired;
+            } else if (samples == 1) {
+                measured_cycles = cycle - start_cycle;
+                measured_retired = first_retired + second_retired - start_retired;
+                measured_second = second_retired - start_second;
+            }
+            ++samples;
+        }
+        first_retired += model.retire_first;
+        second_retired += model.retire_second;
+#endif
         simulation_time += 20;
         model.sys_clk = 1;
         model.eval();
@@ -62,6 +89,13 @@ int main(int argc, char **argv) {
             }
             std::cout << "PASS: CoreMark board exit_code=0; " << characters
                       << " UART characters; " << cycle << " cycles\n";
+#ifdef EVOLVE5
+            std::cout << "DUAL RETIRED: " << first_retired << " first, " << second_retired << " second\n";
+            std::cout << "BENCH COUNTERS: cycles=" << measured_cycles << " retired=" << measured_retired
+                      << " second=" << measured_second << '\n';
+            if (second_retired == 0 || samples != 2)
+                return 1;
+#endif
             model.final();
             return 0;
         }

@@ -11,9 +11,12 @@ DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
+    parser.add_argument("--source", type=Path, default=ROOT / "build/pds/rv32I.pds")
+    parser.add_argument("--destination", type=Path, default=ROOT / "rv32I.pds")
     args = parser.parse_args()
-    source = ROOT / "build/pds/rv32I.pds"
-    destination = ROOT / "rv32I.pds"
+    source = args.source.resolve()
+    destination = args.destination.resolve()
+    destination.parent.mkdir(parents=True, exist_ok=True)
     project = source.read_text(encoding="utf-8")
     project = re.sub(r"(?ms)^([ \t]*)\(_(?:db_)?output\b.*?^\1\)[ \t]*\n", "", project)
     project = re.sub(
@@ -27,6 +30,11 @@ def main():
         path = Path(match.group(2))
         if not path.is_absolute():
             path = source.parent / path
+        if path.resolve() == (ROOT / "build/pds-evolve5/evolve5_design.v").resolve():
+            portable = ROOT / "cores/evolve5/generated/evolve5_design.v"
+            if not portable.is_file() or portable.read_bytes() != path.read_bytes():
+                raise RuntimeError("EVOLVE5 portable design snapshot is missing or stale; run evolve5_sources.py")
+            path = portable
         if not path.is_file():
             raise FileNotFoundError(f"PDS project references a missing file: {path}")
         relative = Path(os.path.relpath(path.resolve(), destination.parent)).as_posix()
@@ -41,9 +49,10 @@ def main():
             os.environ["PANGO_LICENSE_FILE"] = winreg.QueryValueEx(key, "PANGO_LICENSE_FILE")[0]
     result = subprocess.run([str(args.pds_root / "bin/pds_shell.exe"),
                              "-project", str(destination), "-run", "compile"],
-                            cwd=ROOT, capture_output=True, text=True, errors="replace", timeout=120)
+                            cwd=destination.parent, capture_output=True, text=True, errors="replace", timeout=120)
     output = result.stdout + result.stderr
-    log = ROOT / "build/project_check/root_compile.log"
+    name = "root" if destination.name == "rv32I.pds" else destination.stem
+    log = ROOT / "build/project_check" / (name + "_compile.log")
     log.parent.mkdir(parents=True, exist_ok=True)
     log.write_text(output, encoding="utf-8")
     if result.returncode or re.search(r"^E:", output, re.MULTILINE) or 'Process "Compile" done.' not in output:

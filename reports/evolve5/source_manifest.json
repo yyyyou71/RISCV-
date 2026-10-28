@@ -1,0 +1,184 @@
+{
+  "upstream_commit": "a16b6e331226726ad01c6e96197e16d351577ab6",
+  "scope": "Optional EVOLVE5 core, not a replacement of Acore",
+  "upstream_ref": "origin/kerman-cn-evolve5",
+  "single_baseline_commit": "e20bb3cae859de74291d5222d49fac3062fb8368",
+  "files": [
+    {
+      "upstream_blob": "21a9a2572b0323c2836f3a86859e0f123b1d8483",
+      "local": "cores/evolve5/rtl/cache/rv32_burst_arbiter.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "13bc6efa41ee024d1eb9cd3bc739991644d2c4cea1e0dd11db789a97cdeb859b",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_burst_arbiter.v"
+    },
+    {
+      "upstream_blob": "a7303d366b8aad8a5b4a1e782039f15a532fba11",
+      "local": "cores/evolve5/rtl/cache/rv32_burst_cache_2way.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "015cf511f8d647f065399a3db1d1cee227b38baf16bf8f77feb8f686f7e8d802",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_burst_cache_2way.v"
+    },
+    {
+      "upstream_blob": "e78bcf29327610e1927be4f61c353cf0978a8f04",
+      "local": "cores/evolve5/rtl/cache/rv32_cache_2way.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "9a0151209b16522f2c2fd34a2be4d81e0b42b0371f0fe847fcd733f5a4e1fda4",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_cache_2way.v"
+    },
+    {
+      "upstream_blob": "35b460a2e6392ed73fb3250595d3f2faf17eac91",
+      "local": "cores/evolve5/rtl/cache/rv32_dcache.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "053af7e219fec507ee41f1c85e38a844c47a6e3c67af73b802b07320b77d57b4",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_dcache.v"
+    },
+    {
+      "upstream_blob": "6cc73b91be5c4f9c03d463c05a26098334c21154",
+      "local": "cores/evolve5/rtl/cache/rv32_icache.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "80583d6bb43700deb02a4c84f1b51b5af7008b053a2a619f3c29bad29f4501bc",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_icache.v"
+    },
+    {
+      "upstream_blob": "8341e8fba59dedd4fc8117e4d1e685bceb6d8100",
+      "local": "cores/evolve5/rtl/cache/rv32_word_to_burst.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "33f5aaca2640614383bfaeb8b3a35d2decc0ad7d6bafecc8d8ee053b6876c55f",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/cache/rv32_word_to_burst.v"
+    },
+    {
+      "upstream_blob": "0ff18d1e47724db0f47e2b31e292edcaaba73d6d",
+      "local": "cores/evolve5/rtl/rv32_alu.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "67f9cd95b22c36a87f5bec1745fbc7df4fd26b9025873423ea984062bd561f28",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_alu.v"
+    },
+    {
+      "upstream_blob": "2bcab488a33357f91d0e33e70b40856df07c7157",
+      "local": "cores/evolve5/rtl/rv32_core.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "eecefd48717b59d02772219659fcd619a080086cbaff2fcb511826b89f1663d3",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_core.v"
+    },
+    {
+      "upstream_blob": "3af0d247288129381ced802e9fb5a8da9cc63d57",
+      "local": "cores/evolve5/rtl/rv32_csr.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "aa22952cec5c9ad9fa1092a5e881536fdcef5290ea4d19037549f0333fc5a441",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_csr.v"
+    },
+    {
+      "upstream_blob": "869438952a5e3c7b626484b4d711e35831f62a5e",
+      "local": "cores/evolve5/rtl/rv32_decode.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "9972e701d41ad4568910ed10134fb29ffc5018fc1950af4475f11e1ae67e2030",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_decode.v"
+    },
+    {
+      "upstream_blob": "6182bba44f9e8392b5c6fbf9c20d89ea0d76cfbb",
+      "local": "cores/evolve5/rtl/rv32_defs.vh",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "f7c3c5656df9450b14d38eeef92768226d2fac1380e9acc2e617d5ffe9b37bdf",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_defs.vh"
+    },
+    {
+      "upstream_blob": "af80095e6deda0746c1f6e1b648c18357528ca14",
+      "local": "cores/evolve5/rtl/rv32_fetch.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "4ac89d90f0099b4d026ca2fc1e959d36c9357e8feba26f8375890e1a610cee87",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_fetch.v"
+    },
+    {
+      "upstream_blob": "5f812efc515795d0408f13f874335845c36c2a80",
+      "local": "cores/evolve5/rtl/rv32_muldiv.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "68bb93d17ddaa71ac3f6cd959ff0dba458f2e7f2a8aea3ea7ef4f4dba997bbd2",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_muldiv.v"
+    },
+    {
+      "upstream_blob": "cb86267dc4c58729dd1d23fa023a5ed55ccd634d",
+      "local": "cores/evolve5/rtl/rv32_predictor.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "00f0f41d7fb4b975533460289706908aa6592ab4d2a27c90b3cb4d738ea5c45b",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_predictor.v"
+    },
+    {
+      "upstream_blob": "37dbdaf70214d925305ea31fdeaaa26a7d87ca56",
+      "local": "cores/evolve5/rtl/rv32_regfile.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "9be568e8782b36687d5372e113e7e801827e0f0c13bcb9bf5dfbf8af7f1c2fe1",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/rv32_regfile.v"
+    },
+    {
+      "upstream_blob": "a2ca333f280b7a15021713167d644fca8e8d72f8",
+      "local": "cores/evolve5/rtl/soc/rv32_gpio.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "c556542875d5ce943c4af420ccdbc40d96ce2fbb452b9f3e90c609ea03ade161",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_gpio.v"
+    },
+    {
+      "upstream_blob": "b01e722cb5ccabf7e8e667afdca17886193b02bc",
+      "local": "cores/evolve5/rtl/soc/rv32_monitor.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "4d573c49996ef12ca407ab58534561df1d3dd62018578c442cbb80229b4f81ff",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_monitor.v"
+    },
+    {
+      "upstream_blob": "de51c7a0a57cca53044239c42e7be7802252ed82",
+      "local": "cores/evolve5/rtl/soc/rv32_soc.v",
+      "modified_relative_to_upstream": true,
+      "compiled_source": true,
+      "sha256": "d48c6e50b7febb04fb4861c6a53db7a3b395e72b78a201d61e29d2fcf190bdee",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_soc.v"
+    },
+    {
+      "upstream_blob": "14d99d5f67029b5e0779dee50708ce3d89a92603",
+      "local": "cores/evolve5/rtl/soc/rv32_soc_fabric.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "4a5ef16673394725f85d3ffd94026ef3c3f7a425cd7560756ac8455401a82804",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_soc_fabric.v"
+    },
+    {
+      "upstream_blob": "c95a4400f098b3c8f1509b2d1b52b4acc545e00d",
+      "local": "cores/evolve5/rtl/soc/rv32_soc_memory.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": false,
+      "sha256": "8b6bdc636a9e426e71c7514aca576af3e42075e63cdf0a54d7375d51ddcbfcec",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_soc_memory.v"
+    },
+    {
+      "upstream_blob": "cdd4fcb98c07190fb9e708e5f7930fa92ea92a65",
+      "local": "cores/evolve5/rtl/soc/rv32_timer.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "14332dc37e0cb5b6d955c6f47710402eeb0ce3ef5f84296c588f42f430ed1a53",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_timer.v"
+    },
+    {
+      "upstream_blob": "3a3692e8745168374351ce6383a44cd87bfe8a28",
+      "local": "cores/evolve5/rtl/soc/rv32_uart.v",
+      "modified_relative_to_upstream": false,
+      "compiled_source": true,
+      "sha256": "49295d75ca468b13181dc70a6fb7077b79d95805191d6ef0a00fac6583260797",
+      "upstream": "team_projects/kerman-cn-evolve5/project/rtl/soc/rv32_uart.v"
+    }
+  ]
+}
