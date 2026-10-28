@@ -15,6 +15,7 @@ module TB_testMem();
     Acore u_Acore(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
+        .timer_irq   (1'b0        ),
         .dev_we      (dev_we      ),
         .dev_re      (dev_re      ),
         .bus_err     (bus_err     ),

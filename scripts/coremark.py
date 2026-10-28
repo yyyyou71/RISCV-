@@ -146,11 +146,11 @@ def check_report(report, mode, iterations):
     return result
 
 
-def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i", enable_div=1):
+def simulate(out, mode, iterations, max_cycles, simulator="iverilog", isa="rv32i", enable_div=0):
     common = ["-DNO_WAVES", f'-DPROG_FILE="{out / "coremark.hex"}"',
               f'-DDATA_FILE="{out / "coremark.data"}"']
     # 仅编译现有 Acore 测试台和处理器依赖，不解析无关的 SoC。
-    names = ["Acore", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
+    names = ["Acore", "CSR", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
              "multiplier_core", "divide_unit", "divider_core", "memory", "memory_core", "GPR_matrix", "Reg",
              "hazard_detection_unit", "branch_predictor"]
     rtl = [ROOT / "Iverilog/TB_Acore.v", *[ROOT / f"vsrc/{name}.v" for name in names]]
@@ -205,7 +205,7 @@ def main():
     parser.add_argument("--mode", choices=["both", "performance", "validation"], default="both")
     parser.add_argument("--simulator", choices=["iverilog", "verilator"], default="iverilog")
     parser.add_argument("--isa", choices=["rv32i", "rv32i_zmmul", "rv32im"], default="rv32i")
-    parser.add_argument("--enable-div", type=int, choices=[0, 1], default=1)
+    parser.add_argument("--enable-div", type=int, choices=[0, 1], default=0)
     parser.add_argument("--iterations", type=int, default=1)
     parser.add_argument("--max-cycles", type=int, default=20_000_000)
     parser.add_argument("--sources", nargs="+", required=True)

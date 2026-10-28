@@ -4,7 +4,7 @@ module TB_Acore #(
     parameter [63:0] MAX_CYCLES = 500000,
     parameter [31:0] EXPECT_EXIT = 1,
     parameter integer MUL_PIPE_STAGES = 3,
-    parameter integer ENABLE_DIV = 1
+    parameter integer ENABLE_DIV = 0
 )();
     reg clk;
     reg rst_n;
@@ -49,6 +49,7 @@ module TB_Acore #(
     Acore #(.MUL_PIPE_STAGES(MUL_PIPE_STAGES), .ENABLE_DIV(ENABLE_DIV)) u_Acore(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
+        .timer_irq   (1'b0        ),
         .dev_we      (dev_we      ),
         .dev_re      (dev_re      ),
         .bus_err     (bus_err     ),

@@ -11,7 +11,7 @@ sys.dont_write_bytecode = True
 from test_multiply import ROOT, PREFIX, MASK, run
 
 OUT = ROOT / "build/divide"
-CPU_NAMES = ["Acore", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
+CPU_NAMES = ["Acore", "CSR", "PC", "ROM", "ROM_core", "decoder", "ALU", "multiply_unit",
              "multiplier_core", "memory", "memory_core", "GPR_matrix", "Reg",
              "hazard_detection_unit", "branch_predictor"]
 

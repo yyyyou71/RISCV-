@@ -10,12 +10,12 @@ WAVE = waveform.vcd
 
 # -----------Acore模块测试(之后会用来长期跑测试)------------------------
 # Acore 回归只编译处理器及其依赖，不包含 SoC 和外设顶层。
-ACORE_RTL = $(addprefix vsrc/,Acore.v PC.v ROM.v ROM_core.v decoder.v ALU.v \
+ACORE_RTL = $(addprefix vsrc/,Acore.v CSR.v PC.v ROM.v ROM_core.v decoder.v ALU.v \
             multiply_unit.v multiplier_core.v divide_unit.v divider_core.v memory.v memory_core.v \
             GPR_matrix.v Reg.v hazard_detection_unit.v branch_predictor.v)
 IVSRC = ./Iverilog/TB_Acore.v $(ACORE_RTL)
 # 同一开关同时控制硬件实例和默认编译 ISA，避免关闭除法器后仍生成除法指令。
-ENABLE_DIV ?= 1
+ENABLE_DIV ?= 0
 ISA ?= $(if $(filter 1,$(ENABLE_DIV)),rv32im,rv32i_zmmul)
 ifeq ($(filter $(ENABLE_DIV),0 1),)
 $(error ENABLE_DIV 只能设为 0 或 1)
@@ -110,7 +110,8 @@ clean:
 # help
 .PHONY:help
 help:
-	@echo 'ENABLE_DIV=1    enable hardware divide (default RV32IM); 0 selects Zmmul'
+	@echo 'ENABLE_DIV=0    default: disable divide, use Zmmul; 1 restores RV32IM'
+	@echo 'test-interrupt  verify CSR, interrupt boundaries, C handler and stalls (divide off/on)'
 	@echo 'test-ai-accelerator  验证 4x2 通路、INT8 量化和 CPU 两层 DDR 连续计算'
 	@echo 'test-requant-int8  验证逐通道量化、舍入、饱和和 ReLU'
 	@echo 'test-conv2d-quant  验证 DDR 卷积量化及可直接串层的 HWC INT8 布局'
@@ -221,6 +222,10 @@ test-multiply:
 .PHONY: test-divide
 test-divide:
 	python3 scripts/test_divide.py
+
+.PHONY: test-interrupt
+test-interrupt:
+	python3 scripts/test_interrupt.py
 
 # 独立 DDR 搬运回归：使用 ddr3.sv 行为模型，不包含 CPU 或 SoC。
 .PHONY: test-ddr-block-transfer

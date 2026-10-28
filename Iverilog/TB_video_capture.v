@@ -39,7 +39,7 @@ module TB_video_capture;
         wire bus_err;
         soc #(.ENABLE_DDR(1),.ENABLE_AI(1),.ENABLE_VIDEO(1),.VIDEO_FIFO_ADDR_BITS(FIFO_BITS),
               .DDR_TIMEOUT_CYCLES(256)) u_soc (
-            .clk(clk),.rst_n(rst_n),.bus_err(bus_err),.uart_txd(uart_txd),
+            .clk(clk),.rst_n(rst_n),.timer_irq(1'b0),.bus_err(bus_err),.uart_txd(uart_txd),
             .core_clk(core_clk),.ddr_init_done(ddr_init_done),
             .pixclk_in(pixel_clk),.vs_in(vs),.hs_in(1'b0),.de_in(de),
             .r_in(rgb[23:16]),.g_in(rgb[15:8]),.b_in(rgb[7:0]),

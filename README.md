@@ -216,13 +216,13 @@ Zmmul 的结果目录是 `build/coremark/rv32i_zmmul/`，与 RV32I 基线分开�
 增加 33 拍停顿。期间前级保持、后级排空，数据从原有前递通道采样，结果复用 ALU 写回。
 当前一次处理一条除法，连续的 DIV 和 REM 分别计算，不进行商/余数指令合并。
 
-总开关在 `Acore` 的参数中，默认开启：
+总开关在 `Acore` 和 `soc` 的参数中，默认关闭：
 
 ```verilog
-parameter integer ENABLE_DIV = 1
+parameter integer ENABLE_DIV = 0
 ```
 
-在例化 Acore 时设置 `.ENABLE_DIV(0)` 即可关闭。
+在例化 Acore/soc 时设置 `.ENABLE_DIV(1)` 即可重新开启。
 该参数同时传给译码器，并用 `generate` 控制除法单元是否实例化。
 关闭后会移除除法运算硬件。当前尚无非法指令异常，关闭时的除法编码不写寄存器，
 也不产生除法等待；关闭模式下的软件需要重新按 Zmmul/RV32I 编译，使用软件除法。
@@ -231,8 +231,8 @@ Makefile 提供同名参数，自动同时选择仿真硬件和默认软件 ISA�
 
 | 开关 | 默认 ISA | 软件库 | 除法实现 |
 | --- | --- | --- | --- |
-| `ENABLE_DIV=1`（默认） | `rv32im` | RV32IM libgcc | 硬件除法 |
-| `ENABLE_DIV=0` | `rv32i_zmmul` | RV32I libgcc | 软件除法 |
+| `ENABLE_DIV=1` | `rv32im` | RV32IM libgcc | 硬件除法 |
+| `ENABLE_DIV=0`（默认） | `rv32i_zmmul` | RV32I libgcc | 软件除法 |
 
 只需切换一个 Makefile 参数，即可对比 CoreMark，每组只运行一次迭代：
 
@@ -257,6 +257,51 @@ RV32IM 的 CoreMark 结果保存在 `build/coremark/rv32im/`，Zmmul 结果仍�
 关闭时核对 576 个结果，开启时核对 586 个结果；关闭测试完全不编译两个除法器源文件，
 证明处理器不依赖除法实例。乘法 1～5 级回归仍通过。
 日志、定向程序和小型基准在 `build/divide/`，专项测试入口为 `make test-divide`。
+
+## 机器模式定时器中断与 C 服务函数
+
+CPU 现已接入 `CSR.v`，支持六条 Zicsr 指令和 `mret`。当前只支持 M-mode、
+Direct 统一入口和机器定时器中断；尚未实现通用同步异常、非法指令异常和嵌套中断。
+可访问 CSR：`mstatus=0x300`、`mie=0x304`、`mtvec=0x305`、`mepc=0x341`、
+`mcause=0x342`、`mip=0x344`。MIE/MPIE 分别为 mstatus bit3/bit7，MPP 固定为 M-mode；
+mie/mip 只实现 bit7。mtvec 仅支持 Direct，mepc 保持 4 字节对齐。
+
+`Acore` 和 `soc` 增加同 CPU 时钟域的 `timer_irq` 电平输入。请求源需要保持请求，
+直到服务程序操作外设使其撤销；未使用时连接 `1'b0`。外部异步信号需要先同步。
+这次没有增加真实定时器外设；测试台在指定指令处提供电平请求和一个模拟 ACK 地址。
+
+接受边界位于当前 EX 指令之后：当前 EX、MEM、WB 指令继续执行，
+`irq_accept` 使下一拍 ID/EX 和 IF/ID 成为空泡，同时 PC 加载 mtvec。
+预测正确且 IF/ID 有效时保存 pc_IF；预测错误或前端为空泡时，
+使用当前 EX 的实际跳转目标或 pc_ID+4。请求只在无 stall、EX 有效且非 CSR/MRET 拍接受。
+load-use、乘法和启用后的除法等待期间均不接受中断，结果就绪可推进后再进入。
+CSR 配置和 MRET 拍先完成自身操作，后续按更新后的使能状态重新判断申请。
+
+进入时硬件保存 mepc/mcause，并将 MIE 保存到 MPIE 后清零 MIE。
+MRET 将 PC 恢复至 mepc、MIE 恢复至 MPIE，再将 MPIE 置 1。
+CSR 旧值复用已有的结果前递和写回路径，支持 CSR 与通用寄存器间的数据依赖。
+
+`asm/trap_entry.S` 用 128 字节对齐栈帧保护 x1-x31，调用普通的 `trap_handler()`，
+返回后恢复寄存器并执行 MRET。普通 C 函数返回仍使用 ret，不能直接用它替代汇编入口。
+程序初始化需先设置栈与数据，再将 trap_entry 地址写入 mtvec、打开 mie.MTIE，
+最后打开 mstatus.MIE。链接时应包含 `asm/trap_entry.S`，并提供 `trap_handler`。
+GCC 10 的旧 ISA 命名已允许这些 CSR 汇编；较新工具链需要在 `-march` 中启用 Zicsr。
+
+```bash
+make test-interrupt
+```
+
+回归独立使用 `build/interrupt/`，不改普通程序的启动桩。包含六条 CSR 指令、
+CSR/算术/load-use 前递、普通指令与 load/store 的边界、正确和错误分支预测、
+JAL/JALR 链接值、年轻分支重执行、屏蔽期间保持请求，以及真实 C 服务函数。
+它检查接受时的 PC/CSR/冲刷、停顿期间无接受、每次仅一次进入/返回，
+并在原有指令写回后拍摄全部 GPR 状态，与 MRET 后的恢复状态比较。
+`csrc/software/interrupt_demo.c` 展示 C 初始化与处理函数；其中 `0x30010` 是此测试台的
+模拟 ACK，板上使用时必须替换成真实定时器的重设/清除操作。
+
+除法默认关闭，但该回归另以 ENABLE_DIV=1 注入除法等待期间的请求，检查它等到
+结果可推进后才被接受。普通程序仍可用 `make build PROG=sort` / `make iv PROG=sort`；
+更改 CPU 执行路径后，使用 CoreMark 的 performance/validation CRC 做原有程序回归。
 
 按 `sort` 后接 Verilator 单次 CoreMark 的顺序完成整机回归，均通过；
 CoreMark 两种开关下的 performance/validation CRC 都匹配。

@@ -40,7 +40,7 @@ module TB_ddr_cpu_window;
     generate if (CPU_TEST != 0) begin : g_cpu
         wire bus_err;
         soc #(.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_soc (
-            .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd), .bus_err(bus_err),
+            .clk(clk), .rst_n(rst_n), .timer_irq(1'b0), .uart_txd(uart_txd), .bus_err(bus_err),
             .core_clk(core_clk), .ddr_init_done(ddr_init_done),
             // 已有CPU/AI测试不提供视频，顶层新增输入保持空闲。
             .pixclk_in(1'b0),.vs_in(1'b0),.hs_in(1'b0),.de_in(1'b0),

@@ -34,6 +34,8 @@ module CSR(
     // 掩码
     localparam [31:0] MIE_WRITE_MASK     = 32'h0000_0080;
     localparam [31:0] MSTATUS_WRITE_MASK = 32'h0000_0088;
+    // 只实现 M-mode，MPP[12:11] 固定为 11；其余未实现字段读零。
+    localparam [31:0] MSTATUS_FIXED = 32'h0000_1800;
 
     // CSR寄存器
     /*
@@ -75,7 +77,7 @@ module CSR(
     // mstatus:处理器中断总状态
     always @(posedge clk) begin
         if(!rst_n)begin
-            mstatus <= 32'b0; 
+            mstatus <= MSTATUS_FIXED;
         end
 
         else if(mret_commit)begin
@@ -92,7 +94,7 @@ module CSR(
         end
 
         else if(CSR_we && CSR_addr == ADDR_MSTATUS)begin
-            mstatus <= CSR_in & MSTATUS_WRITE_MASK;
+            mstatus <= (CSR_in & MSTATUS_WRITE_MASK) | MSTATUS_FIXED;
         end      
     end
 
@@ -103,14 +105,14 @@ module CSR(
         end
 
         else if(irq_accept)begin
-            mepc <= irq_resume_pc;
+            mepc <= {irq_resume_pc[31:2], 2'b00};
         end
 
         else if(stall)begin            
         end
 
         else if(CSR_we && CSR_addr == ADDR_MEPC)begin
-            mepc <= CSR_in;
+            mepc <= {CSR_in[31:2], 2'b00};
         end
     end
 
@@ -120,7 +122,7 @@ module CSR(
             mcause <= 0;
         end
 
-        else if(timer_irq & irq_accept & irq_request)begin
+        else if(irq_accept)begin
             mcause <= {1'b1,31'h7};
         end
 
@@ -135,7 +137,7 @@ module CSR(
 
 
     // 硬件触发中断(组合逻辑)
-    assign mip[7] = timer_irq;
+    assign mip = {24'b0, timer_irq, 7'b0};
 
     // CSR寄存器输出
     assign CSR_out = (CSR_addr == ADDR_MTVEC)   ? mtvec :
@@ -151,7 +153,7 @@ module CSR(
 
     // 对流水线中断请求
     always @(*) begin
-        if(mstatus[3] & mie[7] & mip[7])begin
+        if(rst_n & mstatus[3] & mie[7] & mip[7])begin
             irq_request = 1'b1;
         end
         else

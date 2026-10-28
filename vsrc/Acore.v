@@ -2,10 +2,12 @@ module Acore #(
     // 必须与真实乘法 IP 的 Pipeline Stages 配置一致，默认 3 级。
     parameter integer MUL_PIPE_STAGES = 3,
     // 除法总开关：1=完整 RV32IM；0=裁掉除法硬件，保留 Zmmul 乘法。
-    parameter integer ENABLE_DIV = 1
+    parameter integer ENABLE_DIV = 0
 )(
     input clk,
     input rst_n,
+    // 同 clk 域的电平请求；中断源负责保持和撤销。跨时钟域需在源端同步。
+    input timer_irq,
 
     // 设备总线（内存映射外设）
     output     dev_we,       // 写选通
@@ -65,6 +67,10 @@ module Acore #(
     wire ALUSrc2_ID;
     wire [3:0]ALUOp_ID;
     wire [1:0]DivOp_ID;
+    wire CSR_en_ID;
+    wire [2:0] CSR_op_ID;
+    wire [11:0] CSR_addr_ID;
+    wire Mret_ID;
     wire Branch_ID;
     wire [2:0]Branch_type_ID;
     wire Jump_ID;
@@ -157,6 +163,8 @@ module Acore #(
     wire [31:0]div_result;
     reg div_select_EX;
     reg [31:0]div_result_EX;
+    reg csr_select_EX;
+    reg [31:0] csr_result_EX;
     wire [31:0]rs1_data_hazard;
     wire [31:0]rs2_data_hazard;
 
@@ -181,6 +189,49 @@ module Acore #(
     reg [31:0]pc_predict_PC;
     reg if_predict_IF;
     reg [31:0]pc_predict_IF;
+
+    // CSR/中断接口：_ID 信号实际属于 ID/EX 中正在 EX 执行的指令。
+    wire irq_request;
+    wire irq_accept;
+    wire mret_commit;
+    wire [31:0] irq_entry_pc;
+    wire [31:0] mret_target_pc;
+    wire [31:0] irq_resume_pc;
+    wire [31:0] csr_rdata;
+    wire [31:0] csr_src = CSR_op_ID[2] ? immediate_ID :
+                         (hazard_rs1 ? rs1_data_hazard : rd_data1_GPR);
+    reg [31:0] csr_wdata;
+    // RS/RC 的无写入条件由 rs1 编号/zimm 决定，不能只看操作数是否为零。
+    wire csr_has_source = CSR_op_ID[2] ? (immediate_ID[4:0] != 0) : (rs1_addr_ID != 0);
+    wire csr_we = rst_n && valid_out_ID && CSR_en_ID && !stall &&
+                  ((CSR_op_ID[1:0] == 2'b01) || csr_has_source);
+
+    always @(*) begin
+        case (CSR_op_ID[1:0])
+            2'b01: csr_wdata = csr_src;
+            2'b10: csr_wdata = csr_rdata | csr_src;
+            2'b11: csr_wdata = csr_rdata & ~csr_src;
+            default: csr_wdata = csr_rdata;
+        endcase
+    end
+
+    // 只在当前 EX 指令有效且可以推进时接受。EX 指令本身继续完成，
+    // 年轻指令由 flush_ID/flush_IF 取消。CSR 配置及 MRET 拍不同时进入中断，
+    // 下一条指令即可观察新使能配置，避免两个不同的状态更新在同沿竞争。
+    assign irq_accept = rst_n && irq_request && !stall && valid_out_ID &&
+                        !CSR_en_ID && !Mret_ID;
+    assign mret_commit = rst_n && valid_out_ID && Mret_ID && !stall;
+    wire [31:0] actual_next_pc = J_taken ? J_pc : pc_4_ID;
+    assign irq_resume_pc = (predict_correct && valid_out_IF) ? pc_IF : actual_next_pc;
+
+    CSR u_CSR (
+        .clk(clk), .rst_n(rst_n), .stall(stall),
+        .mret_commit(mret_commit), .CSR_addr(CSR_addr_ID),
+        .CSR_we(csr_we), .CSR_in(csr_wdata), .timer_irq(timer_irq),
+        .irq_accept(irq_accept), .irq_resume_pc(irq_resume_pc),
+        .irq_entry_pc(irq_entry_pc), .mret_target_pc(mret_target_pc),
+        .irq_request(irq_request), .CSR_out(csr_rdata)
+    );
 
     //========================================================================
 
@@ -241,15 +292,17 @@ module Acore #(
 
     // 表示真实跳转
     assign J_taken = branch_taken | jump_taken;
-    assign J_pc = jump_taken ? out_comb_EX : branch_target;
+    assign J_pc = jump_taken ? {out_comb_EX[31:1], 1'b0} : branch_target;
 
     // 判断预测是否正确
     assign predict_correct = (J_taken == if_predict_IF) & ((J_pc == pc_predict_IF) | !if_predict_IF);
 
     // 送到 PC
     // 
-    assign load_pc_en = J_predict | !predict_correct; 
-    assign load_pc    = predict_correct ? pc_predict : 
+    assign load_pc_en = mret_commit | irq_accept | J_predict | !predict_correct;
+    assign load_pc    = mret_commit ? mret_target_pc :
+                        irq_accept ? irq_entry_pc :
+                        predict_correct ? pc_predict :
                         ~J_taken ? pc_4_ID : J_pc;
 
     // 预测结果IF
@@ -324,6 +377,10 @@ module Acore #(
         .ALUSrc2     (ALUSrc2_ID     ),  
         .ALUOp       (ALUOp_ID       ),  
         .DivOp       (DivOp_ID       ),
+        .CSR_en      (CSR_en_ID      ),
+        .CSR_op      (CSR_op_ID      ),
+        .CSR_addr    (CSR_addr_ID    ),
+        .Mret        (Mret_ID        ),
         .Branch      (Branch_ID      ),  
         .Branch_type (Branch_type_ID ),  
         .Jump        (Jump_ID        ),  
@@ -457,9 +514,14 @@ module Acore #(
             mul_result_EX <= 0;
             div_select_EX <= 0;
             div_result_EX <= 0;
+            csr_select_EX <= 0;
+            csr_result_EX <= 0;
         end else begin
             mul_select_EX <= mul_instruction && !stall_ID;
             div_select_EX <= div_instruction && !stall_ID;
+            csr_select_EX <= valid_out_ID && CSR_en_ID && !stall_ID;
+            if (valid_out_ID && CSR_en_ID && !stall_ID)
+                csr_result_EX <= csr_rdata;
             if (mul_instruction && !stall_ID)
                 mul_result_EX <= mul_result;
             if (div_instruction && !stall_ID)
@@ -467,7 +529,8 @@ module Acore #(
         end
     end
     // 乘除法结果复用已有的 ALU 结果前递和 WB_ALU 写回通道。
-    assign out_EX = div_select_EX ? div_result_EX : mul_select_EX ? mul_result_EX : alu_out_EX;
+    assign out_EX = csr_select_EX ? csr_result_EX :
+                    div_select_EX ? div_result_EX : mul_select_EX ? mul_result_EX : alu_out_EX;
     assign en_EX = ALUen_ID && !mul_instruction && !div_instruction;
     assign opcode_EX = ALUOp_ID;
     assign valid_in_EX = valid_out_ID; 
@@ -607,8 +670,8 @@ module Acore #(
     );
 
     // --------------flush / stall Logic--------------
-    assign flush_ID = !predict_correct & ~stall;       //  !predict_correct & ~stall; // 预测错误：冲刷
-    assign flush_IF = !predict_correct & ~stall;      //  !predict_correct & ~stall;  // 预测错误：冲刷
+    assign flush_ID = (!predict_correct | irq_accept | mret_commit) & ~stall;
+    assign flush_IF = (!predict_correct | irq_accept | mret_commit) & ~stall;
 
     assign flush_EX = 1'b0;         // ALU 不需要冲刷：错路径指令在 ID/EX 就已变成 NOP
 

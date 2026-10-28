@@ -8,10 +8,12 @@ module soc #(
     parameter integer DDR_TIMEOUT_CYCLES = 4096,
     parameter integer AI_ACT_WIDTH = 8,
     parameter integer ENABLE_VIDEO = 0,
-    parameter integer VIDEO_FIFO_ADDR_BITS = 9
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9,
+    parameter integer ENABLE_DIV = 0
 )(
     input  wire clk,
     input  wire rst_n,
+    input  wire timer_irq,
     output wire uart_txd,
     output wire bus_err,
     input wire core_clk,
@@ -60,9 +62,10 @@ module soc #(
     // 行边界使用DE的下降沿；HS保留在顶层，供后续视频功能使用。
     wire unused_hdmi_hs = hs_in;
 
-    Acore u_core (
+    Acore #(.ENABLE_DIV(ENABLE_DIV)) u_core (
         .clk(clk),
         .rst_n(rst_n),
+        .timer_irq(timer_irq),
         .dev_we(dev_we),
         .dev_re(dev_re),
         .bus_err(bus_err),
