@@ -49,13 +49,13 @@ def validate(report, manifest):
             "coremark_per_mhz": iterations * 1000000 / ticks,
             "firmware_rom_sha256": manifest["rom_sha256"],
             "firmware_ram_sha256": manifest["ram_sha256"]}
-    if manifest.get("core") == "evolve5":
+    if manifest.get("core") == "acore_dual":
         counters = re.findall(r"^BENCH COUNTERS: cycles=(\d+) retired=(\d+) second=(\d+)\s*$", report, re.MULTILINE)
         if len(counters) != 1:
             raise ValueError("Missing measured retirement counters")
         measured, retired, secondary = map(int, counters[0])
         if measured != ticks or not secondary or secondary >= retired:
-            raise ValueError("Invalid EVOLVE5 measurement window or no secondary retirement")
+            raise ValueError("Invalid Acore measurement window or no secondary retirement")
         record.update(retired_instructions=retired, secondary_retired=secondary, ipc=retired/ticks)
     return record
 

@@ -2,7 +2,8 @@ module Acore #(
     // 必须与真实乘法 IP 的 Pipeline Stages 配置一致，默认 3 级。
     parameter integer MUL_PIPE_STAGES = 3,
     // 除法总开关：1=完整 RV32IM；0=裁掉除法硬件，保留 Zmmul 乘法。
-    parameter integer ENABLE_DIV = 0
+    parameter integer ENABLE_DIV = 0,
+    parameter integer ENABLE_DUAL = 0
 )(
     input clk,
     input rst_n,
@@ -79,6 +80,110 @@ module Acore #(
 
     reg [31:0]pc_ID;
     reg [31:0]pc_4_ID;
+    wire stall;
+    reg [31:0]pc_EX;
+    wire second_valid_IF, head_prediction, pair_IF;
+    wire [31:0] instruction_b, head_prediction_pc;
+    wire b_valid_ID;
+    wire [4:0] b_rs1_ID, b_rs2_ID, b_rd_ID;
+    wire [31:0] b_immediate_ID, b_gpr1, b_gpr2, b_forward1, b_forward2;
+    wire b_src1_ID, b_src2_ID, b_hit1, b_hit2;
+    wire [3:0] b_op_ID;
+    wire [1:0] b_wb_ID;
+    wire [31:0] b_alu_comb;
+    reg b_valid_EX, b_valid_MEM;
+    reg [4:0] b_rd_EX, b_rd_MEM;
+    reg [31:0] b_result_EX, b_result_MEM;
+    reg retire_a_EX, retire_a_MEM;
+    reg [31:0] instruction_ID, instruction_EX, instruction_MEM, b_instruction_ID;
+    reg [31:0] b_instruction_EX, b_instruction_MEM, b_pc_EX, b_pc_MEM, retire_pc_MEM;
+    reg [63:0] retired_count, secondary_count;
+
+    generate if (ENABLE_DUAL != 0) begin : g_secondary
+        acore_pair u_pair (
+            .first(instruction), .second(instruction_b),
+            .available(valid_out_IF && second_valid_IF && !head_prediction), .pair(pair_IF)
+        );
+        decoder #(.ENABLE_DIV(0)) u_decoder_b (
+            .clk(clk), .rst_n(rst_n), .instruction(instruction_b),
+            .valid_in(stall_ID ? b_valid_ID : pair_IF), .flush(flush_ID), .stall(stall_ID),
+            .rs1_addr(b_rs1_ID), .rs2_addr(b_rs2_ID), .rd_addr(b_rd_ID),
+            .RegWrite(), .MemRead(), .MemWrite(), .MemSize(), .MemUnsigned(),
+            .wb_type(b_wb_ID), .ALUen(), .ALUSrc1(b_src1_ID), .ALUSrc2(b_src2_ID),
+            .ALUOp(b_op_ID), .DivOp(), .CSR_en(), .CSR_op(), .CSR_addr(), .Mret(),
+            .Branch(), .Branch_type(), .Jump(), .immediate(b_immediate_ID), .valid_out(b_valid_ID)
+        );
+        ALU u_alu_b (
+            .clk(clk), .opcode(b_op_ID),
+            .oprand1(b_src1_ID ? pc_ID + 32'd4 : (b_hit1 ? b_forward1 : b_gpr1)),
+            .oprand2(b_src2_ID ? (b_hit2 ? b_forward2 : b_gpr2) : b_immediate_ID),
+            .en(b_valid_ID), .flush(1'b0), .valid_in(b_valid_ID), .stall(stall),
+            .out(), .out_comb(b_alu_comb), .valid_out()
+        );
+    end else begin : g_no_secondary
+        assign pair_IF = 1'b0;
+        assign b_valid_ID = 1'b0;
+        assign b_rs1_ID = 5'b0;
+        assign b_rs2_ID = 5'b0;
+        assign b_rd_ID = 5'b0;
+        assign b_immediate_ID = 32'b0;
+        assign b_src1_ID = 1'b0;
+        assign b_src2_ID = 1'b0;
+        assign b_op_ID = 4'b0;
+        assign b_wb_ID = 2'b0;
+        assign b_alu_comb = 32'b0;
+        assign b_hit1 = 1'b0;
+        assign b_hit2 = 1'b0;
+        assign b_forward1 = 32'b0;
+        assign b_forward2 = 32'b0;
+    end endgenerate
+
+    always @(posedge clk) begin
+        if (!rst_n) begin
+            b_valid_EX <= 0;
+            b_valid_MEM <= 0;
+            b_rd_EX <= 0;
+            b_rd_MEM <= 0;
+            b_result_EX <= 0;
+            b_result_MEM <= 0;
+            retire_a_EX <= 0;
+            retire_a_MEM <= 0;
+            retired_count <= 0;
+            secondary_count <= 0;
+            instruction_ID <= 0;
+            b_instruction_ID <= 0;
+            instruction_EX <= 0;
+            instruction_MEM <= 0;
+            b_instruction_EX <= 0;
+            b_instruction_MEM <= 0;
+            b_pc_EX <= 0;
+            b_pc_MEM <= 0;
+            retire_pc_MEM <= 0;
+        end else begin
+            b_valid_EX <= b_valid_ID && !stall;
+            b_rd_EX <= (b_valid_ID && !stall) ? b_rd_ID : 5'd0;
+            if (b_valid_ID && !stall)
+                b_result_EX <= (b_wb_ID == 2'b10) ? b_immediate_ID : b_alu_comb;
+            b_valid_MEM <= b_valid_EX;
+            b_rd_MEM <= b_rd_EX;
+            b_result_MEM <= b_result_EX;
+            retire_a_EX <= valid_out_ID && !stall;
+            retire_a_MEM <= retire_a_EX;
+            if (!stall) begin
+                instruction_ID <= instruction;
+                b_instruction_ID <= instruction_b;
+            end
+            instruction_EX <= instruction_ID;
+            instruction_MEM <= instruction_EX;
+            b_instruction_EX <= b_instruction_ID;
+            b_instruction_MEM <= b_instruction_EX;
+            b_pc_EX <= pc_ID + 32'd4;
+            b_pc_MEM <= b_pc_EX;
+            retire_pc_MEM <= pc_EX;
+            retired_count <= retired_count + {63'b0, retire_a_MEM} + {63'b0, b_valid_MEM};
+            secondary_count <= secondary_count + {63'b0, b_valid_MEM};
+        end
+    end
 
     //------------stage3-EX-----------------
     wire [3:0]opcode_EX;
@@ -101,7 +206,6 @@ module Acore #(
     reg MemUnsigned_EX;
     reg [1:0]wb_type_EX;
     reg [31:0]imm_EX;
-    reg [31:0]pc_EX;
     reg [31:0]pc_4_EX;
     reg [31:0]rd_data2_EX;  // s-type指令提前采样rs2，给MEM准备
 
@@ -149,7 +253,6 @@ module Acore #(
     // ------------冒险检测/前递--------------------
     wire hazard_rs1;
     wire hazard_rs2;
-    wire stall;
     wire load_stall;
     wire mul_instruction = valid_out_ID && ALUen_ID && (ALUOp_ID[3:2] == 2'b11);
     wire mul_busy;
@@ -221,7 +324,8 @@ module Acore #(
     assign irq_accept = rst_n && irq_request && !stall && valid_out_ID &&
                         !CSR_en_ID && !Mret_ID;
     assign mret_commit = rst_n && valid_out_ID && Mret_ID && !stall;
-    wire [31:0] actual_next_pc = J_taken ? J_pc : pc_4_ID;
+    wire [31:0] actual_next_pc = J_taken ? J_pc :
+                               ((ENABLE_DUAL != 0 && b_valid_ID) ? pc_ID + 32'd8 : pc_4_ID);
     assign irq_resume_pc = (predict_correct && valid_out_IF) ? pc_IF : actual_next_pc;
 
     CSR u_CSR (
@@ -256,6 +360,7 @@ module Acore #(
         end
     end
 
+    generate if (ENABLE_DUAL == 0) begin : g_single_fetch
     PC u_PC(
         .clk        (clk        ),
         .rst_n      (rst_n      ),
@@ -265,6 +370,18 @@ module Acore #(
         .valid_out  (valid_out_pc  ),
         .pc         (pc         )
     );
+    end else begin : g_dual_fetch
+        assign valid_out_pc = rst_n;
+        acore_fetch_queue u_fetch (
+            .clk(clk), .rst_n(rst_n), .redirect(flush_IF), .redirect_pc(load_pc),
+            .prediction(J_predict), .prediction_pc(pc_predict), .request_pc(pc),
+            .consume((stall_ID || flush_ID || !valid_out_IF) ? 2'd0 : (pair_IF ? 2'd2 : 2'd1)),
+            .valid(valid_out_IF), .second_valid(second_valid_IF),
+            .head_pc(pc_IF), .head_instruction(instruction), .second_instruction(instruction_b),
+            .head_prediction(head_prediction), .head_prediction_pc(head_prediction_pc)
+        );
+        assign pc_4_IF = pc_IF + 32'd4;
+    end endgenerate
     
     //-------------------state1-IF-----------------------
     // PC.valid_out 现在是**组合**信号（与 PC 同拍）：复位/冲刷时为 0，其余为 1。
@@ -318,11 +435,16 @@ module Acore #(
         end
 
         else begin
-            if_predict_IF <= if_predict_PC;
-            pc_predict_IF <= pc_predict_PC;
+            if_predict_IF <= (ENABLE_DUAL != 0) ? (valid_out_IF && head_prediction) : if_predict_PC;
+            pc_predict_IF <= (ENABLE_DUAL != 0) ? head_prediction_pc : pc_predict_PC;
         end        
     end
 
+    generate if (ENABLE_DUAL == 0) begin : g_single_rom
+    assign second_valid_IF = 1'b0;
+    assign instruction_b = 32'h00000013;
+    assign head_prediction = 1'b0;
+    assign head_prediction_pc = 32'b0;
     ROM u_ROM(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
@@ -335,6 +457,7 @@ module Acore #(
         .valid_out   (valid_out_IF   ),
         .instruction (instruction )
     );
+    end endgenerate
     
     
     //------------------state2-ID-----------------------
@@ -359,7 +482,7 @@ module Acore #(
         .instruction (instruction ),
         .clk         (clk         ),
         .rst_n       (rst_n       ),
-        .valid_in    (valid_in_ID    ),
+        .valid_in    ((ENABLE_DUAL != 0 && stall_ID) ? valid_out_ID : valid_in_ID),
         .flush       (flush_ID       ),
         .stall       (stall_ID       ),
         
@@ -622,7 +745,8 @@ module Acore #(
     // 64KB内存,addr:0-65535 
     memory #(
         .DATA_WIDTH(8),
-        .ADDR_WIDTH(16)
+        .ADDR_WIDTH(16),
+        .DUAL_IMAGE(ENABLE_DUAL)
     ) u_memory(
         .clk         (clk         ),
         .rst_n       (rst_n       ),
@@ -657,7 +781,7 @@ module Acore #(
     assign wr_en_WB = RegWrite_MEM;
     assign wr_addr_WB = rd_addr_MEM_reg;
 
-    GPR_matrix u_GPR_matrix(
+    GPR_matrix #(.ENABLE_DUAL(ENABLE_DUAL)) u_GPR_matrix(
         .clk      (clk      ),
         .rst_n    (rst_n    ),
         .wr_en    (wr_en_WB    ),
@@ -666,7 +790,10 @@ module Acore #(
         .rd_addr1 (rd_addr1_GPR ),
         .rd_addr2 (rd_addr2_GPR ),
         .rd_data1 (rd_data1_GPR ),
-        .rd_data2 (rd_data2_GPR )
+        .rd_data2 (rd_data2_GPR ),
+        .wr_en_b(b_valid_MEM), .wr_addr_b(b_rd_MEM), .wr_data_b(b_result_MEM),
+        .rd_addr3(b_rs1_ID), .rd_addr4(b_rs2_ID),
+        .rd_data3(b_gpr1), .rd_data4(b_gpr2)
     );
 
     // --------------flush / stall Logic--------------
@@ -681,6 +808,7 @@ module Acore #(
     assign stall_ID = stall;
     assign stall_EX = 1'b0;
 
+    generate if (ENABLE_DUAL == 0) begin : g_single_hazard
     hazard_detection_unit u_hazard_detection_unit(
         .wb_type_EX      (wb_type_EX      ),
         .rs1_addr_ID     (rs1_addr_ID     ),
@@ -697,6 +825,21 @@ module Acore #(
         .rs1_data        (rs1_data_hazard        ),
         .rs2_data        (rs2_data_hazard        )
     );
+    end else begin : g_dual_hazard
+        acore_forward u_forward (
+            .a_ex_we(RegWrite_EX), .a_ex_rd(rd_addr_EX_reg),
+            .a_ex_ready(wb_type_EX != WB_MEM),
+            .a_ex_data((wb_type_EX == WB_IMM) ? imm_EX : (wb_type_EX == WB_PC4) ? pc_4_EX : out_EX),
+            .b_ex_we(b_valid_EX), .b_ex_rd(b_rd_EX), .b_ex_data(b_result_EX),
+            .a_wb_we(wr_en_WB), .a_wb_rd(wr_addr_WB), .a_wb_data(wr_data_WB),
+            .b_wb_we(b_valid_MEM), .b_wb_rd(b_rd_MEM), .b_wb_data(b_result_MEM),
+            .rs1(rs1_addr_ID), .rs2(rs2_addr_ID), .rs3(b_valid_ID ? b_rs1_ID : 5'd0),
+            .rs4(b_valid_ID ? b_rs2_ID : 5'd0),
+            .hit1(hazard_rs1), .hit2(hazard_rs2), .hit3(b_hit1), .hit4(b_hit2),
+            .data1(rs1_data_hazard), .data2(rs2_data_hazard), .data3(b_forward1), .data4(b_forward2),
+            .stall(load_stall)
+        );
+    end endgenerate
 
     //---------------branch_predictor---------------
     assign upd_pc = pc_ID;
@@ -722,5 +865,14 @@ module Acore #(
     );
     
 
+    // synthesis translate_off
+    always @(posedge clk) if (rst_n && ENABLE_DUAL != 0) begin
+        if (b_valid_ID && (!valid_out_ID || MemRead_ID || MemWrite_ID || Branch_ID || Jump_ID ||
+                          CSR_en_ID || Mret_ID || mul_instruction || div_instruction))
+            $fatal(1, "Invalid dual-issue packet");
+        if (b_valid_ID && rd_addr_ID != 0 && rd_addr_ID == b_rd_ID)
+            $fatal(1, "Same-packet WAW conflict");
+    end
+    // synthesis translate_on
     //===============================================================
 endmodule

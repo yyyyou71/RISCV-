@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 // 真正执行程序的中断回归。只在测试台模拟请求源，CPU/CSR/ROM/RAM 均为真实 RTL。
 module TB_interrupt #(
-    parameter integer ENABLE_DIV = 0
+    parameter integer ENABLE_DIV = 0,
+    parameter integer ENABLE_DUAL = 0
 );
     reg clk = 0;
     reg rst_n = 0;
@@ -12,7 +13,7 @@ module TB_interrupt #(
     reg [31:0] dev_rdata = 0;
     always #5 clk = ~clk;
 
-    Acore #(.ENABLE_DIV(ENABLE_DIV)) dut (
+    Acore #(.ENABLE_DIV(ENABLE_DIV), .ENABLE_DUAL(ENABLE_DUAL)) dut (
         .clk(clk), .rst_n(rst_n), .timer_irq(timer_irq),
         .dev_we(dev_we), .dev_re(dev_re), .bus_err(bus_err),
         .dev_addr_wr(dev_addr_wr), .dev_addr_rd(dev_addr_rd),
@@ -30,6 +31,7 @@ module TB_interrupt #(
     reg [31:0] inject_pc = 0, resume_pc = 0;
     integer expected_irqs = 1, skip_hits = 0, require_stall = 0, min_wait = 0;
     integer expected_stores = 0, expected_prediction = -1, expected_taken = -1;
+    integer expected_paired = -1;
     integer cycles = 0, hits = 0, accepts = 0, returns = 0, comparisons = 0;
     integer accept_cycle = -100, return_cycle = -100, inject_cycle = 0;
     integer writes_before = 0, writes_after = 0;
@@ -38,6 +40,7 @@ module TB_interrupt #(
     reg [31:0] entry_at_accept;
 
     initial begin
+        i = $value$plusargs("paired=%d", expected_paired);
         if ($value$plusargs("inject=%h", inject_pc)) begin end
         if ($value$plusargs("resume=%h", resume_pc)) begin end
         if ($value$plusargs("irqs=%d", expected_irqs)) begin end
@@ -112,6 +115,8 @@ module TB_interrupt #(
             return_cycle = cycles;
         end
         if (dut.irq_accept) begin
+            if (expected_paired >= 0 && dut.b_valid_ID !== (expected_paired != 0))
+                $fatal(1, "Unexpected interrupt packet width");
             accepts = accepts + 1;
             accept_cycle = cycles;
             entry_at_accept = dut.irq_entry_pc;

@@ -15,9 +15,17 @@ module TB_coremark #(
     integer bit_index;
     integer characters = 0;
     reg [7:0] received_byte;
+    integer counter_samples = 0;
+    integer start_cycle = 0;
+    integer measured_cycles = 0;
+    reg [63:0] start_retired = 0, start_second = 0, measured_retired = 0, measured_second = 0;
     always #20 sys_clk = ~sys_clk;
 
-    board_top #(.RESET_HOLD_CYCLES(8)) dut (
+    board_top #(.RESET_HOLD_CYCLES(8)
+`ifdef ACORE_DUAL
+        , .ENABLE_DUAL(1)
+`endif
+    ) dut (
         .sys_clk(sys_clk), .key0_n(key0_n), .uart_tx(uart_tx), .led0(led0), .led1(led1)
     );
 
@@ -39,6 +47,20 @@ module TB_coremark #(
 
     always @(posedge sys_clk) begin
         cycles <= cycles + 1;
+`ifdef ACORE_DUAL
+        if (dut.rst_n && dut.u_soc.dev_re && dut.u_soc.dev_addr_rd == 32'h3000c) begin
+            if (counter_samples == 0) begin
+                start_cycle = cycles;
+                start_retired = dut.u_soc.u_core.retired_count;
+                start_second = dut.u_soc.u_core.secondary_count;
+            end else if (counter_samples == 1) begin
+                measured_cycles = cycles - start_cycle;
+                measured_retired = dut.u_soc.u_core.retired_count - start_retired;
+                measured_second = dut.u_soc.u_core.secondary_count - start_second;
+            end
+            counter_samples = counter_samples + 1;
+        end
+`endif
         if (cycles >= MAX_CYCLES)
             $fatal(1, "CoreMark board simulation timed out");
         if (dut.rst_n && (dut.bus_err || led1))
@@ -47,6 +69,10 @@ module TB_coremark #(
             if (dut.u_soc.dev_wdata !== 0 || led0 !== 1 || characters < 100)
                 $fatal(1, "CoreMark exit/LED/UART failed");
             $display("PASS: CoreMark board exit_code=0; %0d UART characters; %0d cycles", characters, cycles);
+`ifdef ACORE_DUAL
+            if (counter_samples != 2 || measured_second == 0) $fatal(1, "No dual issue in measured interval");
+            $display("BENCH COUNTERS: cycles=%0d retired=%0d second=%0d", measured_cycles, measured_retired, measured_second);
+`endif
             $finish;
         end
     end

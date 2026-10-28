@@ -1,6 +1,7 @@
 module soc #(
     parameter integer CLK_FREQ = 25000000,
-    parameter integer BAUD_RATE = 115200
+    parameter integer BAUD_RATE = 115200,
+    parameter integer ENABLE_DUAL = 0
 ) (
     input wire clk,
     input wire rst_n,
@@ -16,7 +17,7 @@ module soc #(
     wire [31:0] dev_rdata;
     wire [1:0] dev_size;
 
-    Acore u_core (
+    Acore #(.ENABLE_DUAL(ENABLE_DUAL)) u_core (
         .clk(clk),
         .rst_n(rst_n),
         .timer_irq(1'b0),

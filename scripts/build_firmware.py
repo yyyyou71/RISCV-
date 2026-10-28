@@ -42,20 +42,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
     parser.add_argument("--application", choices=("coremark", "selftest"), default="coremark")
-    parser.add_argument("--core", choices=("single", "evolve5"), default="single")
+    parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     parser.add_argument("--verify-existing", action="store_true")
     parser.add_argument("--mode", choices=("performance", "validation"), default="performance")
     parser.add_argument("--iterations", type=int)
     args = parser.parse_args()
     if args.iterations is None:
-        args.iterations = 2048 if args.core == "evolve5" else 1000
-    if args.core == "evolve5" and args.application != "coremark":
-        parser.error("EVOLVE5 currently builds CoreMark only")
+        args.iterations = 1000
     if not 1 <= args.iterations <= 8000:
         parser.error("iterations must be in [1, 8000]; keep timing below the 32-bit counter wrap")
     output = ROOT / "build/firmware" / (args.application + f"-{args.mode}-{args.iterations}")
-    if args.core == "evolve5":
-        output = output.parent / ("evolve5-" + output.name)
+    if args.core == "acore_dual":
+        output = output.parent / ("acore-dual-" + output.name)
     output.mkdir(parents=True, exist_ok=True)
     elf = output / (args.application + ".elf")
     flags = ["-march=rv32im", "-mno-div", "-mabi=ilp32", "-O2", "-mno-relax",
@@ -65,7 +63,7 @@ def main():
     if args.application == "coremark":
         check_coremark_sources()
         port = ROOT / "csrc/coremark_port"
-        sources = [ROOT / "cores/evolve5/start.S" if args.core == "evolve5" else port / "start.S"]
+        sources = [port / "start.S"]
         sources += [ROOT / "third_party/coremark" / name for name in
                     ("core_main.c", "core_list_join.c", "core_matrix.c", "core_state.c", "core_util.c")]
         sources += [port / name for name in ("core_portme.c", "ee_printf.c", "cvt.c")]
@@ -73,12 +71,9 @@ def main():
                    f"-D{args.mode.upper()}_RUN=1", "-DCPU_CLOCK_HZ=25000000u"]
         options = [*defines, '-DFLAGS_STR="' + " ".join(flags + defines) + '"',
                    "-I", port, "-I", ROOT / "third_party/coremark"]
+        if args.core == "acore_dual":
+            options.append("-DCOREMARK_ACORE_DUAL=1")
         linker = port / "link.ld"
-        if args.core == "evolve5":
-            defines.append("-DCOREMARK_EVOLVE5=1")
-            options = [*defines, '-DFLAGS_STR="' + " ".join(flags + defines) + '"',
-                       "-I", port, "-I", ROOT / "third_party/coremark"]
-            linker = ROOT / "cores/evolve5/link.ld"
     else:
         sources = [ROOT / "firmware/start.S", ROOT / "firmware/selftest.c"]
         linker = ROOT / "firmware/link.ld"
@@ -94,27 +89,27 @@ def main():
         raise ValueError("Firmware contains division instructions, but ENABLE_DIV=0")
     if args.application == "coremark" and not re.search(r"\tmul(?:h(?:su|u)?)?\s", disassembly):
         raise ValueError("CoreMark did not generate hardware multiplication instructions")
-    prefix = "evolve5_" if args.core == "evolve5" else ""
-    ram_size = 32768 if args.core == "evolve5" else 65536
+    prefix = "" if args.core == "single" else args.core + "_"
+    ram_size = 65536
     for section, size, padding, name in [
             (".text", 32768, 0x00000013, prefix + "rom.hex"), (".data", ram_size, 0, prefix + "ram.hex")]:
         binary = output / (section[1:] + ".bin")
         run([args.prefix + "objcopy", "-j", section, "-O", "binary", elf, binary])
         write_words(ROOT / "firmware" / name, binary.read_bytes(), size, padding, args.verify_existing)
     initialized = (output / "data.bin").read_bytes()
-    if args.core == "single":
+    if args.core in ("single", "acore_dual"):
         byte_image = "".join(f"{value:02x}\n" for value in initialized.ljust(ram_size, b"\0"))
         if args.verify_existing:
-            if (ROOT / "firmware/ram_bytes.hex").read_text(encoding="ascii") != byte_image:
+            if (ROOT / "firmware" / (prefix + "ram_bytes.hex")).read_text(encoding="ascii") != byte_image:
                 raise ValueError("Rebuilt byte image differs")
         else:
-            (ROOT / "firmware/ram_bytes.hex").write_text(byte_image, encoding="ascii")
+            (ROOT / "firmware" / (prefix + "ram_bytes.hex")).write_text(byte_image, encoding="ascii")
     dependencies = sources + [linker]
     if args.application == "coremark":
         dependencies += [ROOT / "csrc/coremark_port/platform.h", ROOT / "csrc/coremark_port/core_portme.h"]
     manifest = {"application": args.application, "mode": args.mode, "iterations": args.iterations,
                 "core": args.core, "isa": "rv32i_zmmul", "enable_div": 0,
-                "mul_pipeline_stages": 0 if args.core == "evolve5" else 3,
+                "mul_pipeline_stages": 3,
                 "clock_hz": 25000000, "baud_rate": 115200, "flags": flags + defines,
                 "compiler": subprocess.check_output([args.prefix + "gcc", "--version"], text=True).splitlines()[0],
                 "elf_sha256": hashlib.sha256(elf.read_bytes()).hexdigest(),
@@ -122,7 +117,7 @@ def main():
                 "ram_sha256": hashlib.sha256((ROOT / "firmware" / (prefix + "ram.hex")).read_bytes()).hexdigest(),
                 "sources": {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                             for path in dependencies}}
-    manifest_name = "manifest_evolve5.json" if args.core == "evolve5" else "manifest.json"
+    manifest_name = "manifest.json" if args.core == "single" else "manifest_" + args.core + ".json"
     for path in (output / "manifest.json", ROOT / "build/firmware" / manifest_name):
         path.write_text(json.dumps(manifest, indent=2) + "\n")
 

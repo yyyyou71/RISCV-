@@ -12,8 +12,8 @@ def require(condition, message):
         raise RuntimeError(message)
 
 
-def final_timing(build):
-    report = (build / "place_route/board_top.rtr").read_text(errors="replace")
+def final_timing(build, top="board_top"):
+    report = (build / "place_route" / (top + ".rtr")).read_text(errors="replace")
     paths = re.findall(r"Path Type\s+: (max|min) \((slow|fast) corner\).*?"
                        r"Slack\s+\((MET|VIOLATED)\)\s+(-?[\d.]+)", report, re.DOTALL)
     expected = {(kind, corner) for kind in ("max", "min") for corner in ("slow", "fast")}

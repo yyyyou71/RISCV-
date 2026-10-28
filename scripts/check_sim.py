@@ -14,7 +14,7 @@ def main():
     output = ROOT / "build/sim/behavioral"
     output.mkdir(parents=True, exist_ok=True)
     rtl = [path for path in sorted((ROOT / "rtl").glob("*.v"))
-           if path.name not in ("ROM_core.v", "memory_core.v", "multiplier_core.v")]
+           if path.name not in ("ROM_core.v", "memory_core.v", "multiplier_core.v", "acore_fetch_memory.v")]
     rtl += sorted((ROOT / "sim/models").glob("*.v"))
     rtl += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     board = sorted((ROOT / "board").glob("*.v"))

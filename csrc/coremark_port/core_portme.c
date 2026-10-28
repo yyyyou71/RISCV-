@@ -83,13 +83,8 @@ portable_init(core_portable *p, int *argc, char *argv[])
     start_cycles = 0;
     stop_cycles = 0;
     *(volatile ee_u32 *)COREMARK_GPIO_DATA = 0;
-#ifdef COREMARK_EVOLVE5
-    *(volatile ee_u32 *)0x40001004u = 3;
-    *(volatile ee_u32 *)0x40002010u = 0;
-    *(volatile ee_u32 *)0x40002000u = 0;
-    *(volatile ee_u32 *)0x40002004u = 0;
-    *(volatile ee_u32 *)0x40002010u = 1;
-    ee_printf("EVOLVE5 dual issue / RV32I+Zmmul / %u Hz / UART 115200\n", CPU_CLOCK_HZ);
+#ifdef COREMARK_ACORE_DUAL
+    ee_printf("Acore in-order dual issue / RV32I+Zmmul / %u Hz / UART 115200\n", CPU_CLOCK_HZ);
 #else
     ee_printf("Acore single issue / RV32I+Zmmul / %u Hz / UART 115200\n", CPU_CLOCK_HZ);
 #endif

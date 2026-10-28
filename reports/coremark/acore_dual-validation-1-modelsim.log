@@ -1,0 +1,67 @@
+Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet -onfinish exit -l C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/TB_coremark_transcript.log -wlf C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/TB_coremark.wlf -modelsimini C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim-acore_dual/modelsim.ini work.TB_coremark -do "onerror {quit -code 1}; run -all; quit -code 1" 
+# Start time: 17:42:09 on Oct 28,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# onerror {quit -code 1}
+#  Warning: onerror command for use within macro
+#  run -all
+# Acore in-order dual issue / RV32I+Zmmul / 25000000 Hz / UART 115200
+# 
+# 2K validation run parameters for coremark.
+# 
+# CoreMark Size    : 666
+# 
+# Total ticks      : 354981
+# 
+# Total time (secs): 0.014199
+# 
+# Iterations/Sec   : 70.426305
+# 
+# ERROR! Must execute for at least 10 secs for a valid result!
+# 
+# Iterations       : 1
+# 
+# Compiler version : GCC10.2.0
+# 
+# Compiler flags   : -march=rv32im -mno-div -mabi=ilp32 -O2 -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-common -fno-stack-protector -fno-pic -fno-pie -nostdlib -nostartfiles -DITERATIONS=1 -DTOTAL_DATA_SIZE=2000 -DVALIDATION_RUN=1 -DCPU_CLOCK_HZ=25000000u
+# 
+# Memory location  : STATIC RAM
+# 
+# seedcrc          : 0x18f2
+# 
+# [0]crclist       : 0xe3c1
+# 
+# [0]crcmatrix     : 0x0747
+# 
+# [0]crcstate      : 0x8d84
+# 
+# [0]crcfinal      : 0xe3c1
+# 
+# Errors detected
+# 
+# COREMARK DONE
+# 
+# PASS: CoreMark board exit_code=0; 811 UART characters; 2168413 cycles
+# BENCH COUNTERS: cycles=354981 retired=310256 second=58198
+# ** Note: $finish    : C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/TB_coremark.v(76)
+#    Time: 86736540 ns  Iteration: 1  Instance: /TB_coremark
+# End time: 17:42:43 on Oct 28,2026, Elapsed time: 0:00:34
+# Errors: 0, Warnings: 0

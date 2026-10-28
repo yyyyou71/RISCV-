@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     unsigned int characters = 0;
     bool receiving = false;
     bool previous_tx = true;
-#ifdef EVOLVE5
+#ifdef ACORE_DUAL
     std::uint64_t first_retired = 0;
     std::uint64_t second_retired = 0;
     std::uint64_t start_cycle = 0;
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
         model.eval();
         const bool exit_write = model.dev_we && model.dev_addr == 0x30000;
         const std::uint32_t exit_code = model.dev_data;
-#ifdef EVOLVE5
+#ifdef ACORE_DUAL
         if (model.cycle_sample) {
             if (samples == 0) {
                 start_cycle = cycle;
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
             }
             std::cout << "PASS: CoreMark board exit_code=0; " << characters
                       << " UART characters; " << cycle << " cycles\n";
-#ifdef EVOLVE5
+#ifdef ACORE_DUAL
             std::cout << "DUAL RETIRED: " << first_retired << " first, " << second_retired << " second\n";
             std::cout << "BENCH COUNTERS: cycles=" << measured_cycles << " retired=" << measured_retired
                       << " second=" << measured_second << '\n';

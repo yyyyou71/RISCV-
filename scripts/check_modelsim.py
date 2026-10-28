@@ -28,13 +28,13 @@ def main():
     parser.add_argument("--pds-root", type=Path,
                         default=Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1"))
     parser.add_argument("--tests", nargs="+")
-    parser.add_argument("--core", choices=("single", "evolve5"), default="single")
+    parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     args = parser.parse_args()
     if os.name == "nt" and not os.environ.get("MGLS_LICENSE_FILE"):
         import winreg
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as key:
             os.environ["MGLS_LICENSE_FILE"] = winreg.QueryValueEx(key, "MGLS_LICENSE_FILE")[0]
-    output = ROOT / "build/sim" / ("modelsim-evolve5" if args.core == "evolve5" else "modelsim")
+    output = ROOT / "build/sim" / ("modelsim" if args.core == "single" else "modelsim-" + args.core)
     output.mkdir(parents=True, exist_ok=True)
     library = output / "work"
     if not library.exists():
@@ -49,12 +49,11 @@ def main():
     includes = []
     names = ("pango_rom", "pango_ram", "pango_multiplier_ip")
     tests = args.tests or ["TB_storage_images", "TB_memory_core", "TB_mem", "TB_multiplier_ip", "TB_coremark"]
-    if args.core == "evolve5":
-        from evolve5_sources import design_sources
-        sources = design_sources()
-        includes.append("+incdir+" + str(ROOT / "cores/evolve5/rtl"))
-        names = ("pango_evolve_rom", "pango_evolve_ram", "pango_evolve_mul")
-        tests = args.tests or ["TB_evolve5_coremark"]
+    defines = "+define+PANGO_IP+NO_WAVES"
+    if args.core == "acore_dual":
+        names = ("pango_acore_fetch", "pango_acore_ram", "pango_multiplier_ip")
+        tests = args.tests or ["TB_acore_fetch_ip", "TB_acore_ram_ip", "TB_multiplier_ip", "TB_coremark"]
+        defines += "+ACORE_DUAL"
     for name in names:
         directory = ROOT / "ipcore" / name
         document = ET.parse(directory / (name + ".idf"))
@@ -66,7 +65,7 @@ def main():
     benches = [ROOT / "sim" / (name + ".v")
                for name in tests]
     execute([args.modelsim / "vlog.exe", "-sv", "-modelsimini", configuration,
-             "-work", "work", "+define+PANGO_IP+NO_WAVES",
+             "-work", "work", defines,
              *includes, *sources, *benches], output / "compile.log")
     for bench in benches:
         report = execute([args.modelsim / "vsim.exe", "-c", "-quiet", "-onfinish", "exit",
@@ -79,15 +78,15 @@ def main():
                         if "PASS" in line or "Errors:" in line), flush=True)
         if "PASS" not in report or "Fatal:" in report:
             raise RuntimeError(f"No successful result for {bench.stem}")
-        if bench.stem in ("TB_coremark", "TB_evolve5_coremark"):
-            manifest_name = "manifest_evolve5.json" if args.core == "evolve5" else "manifest.json"
+        if bench.stem == "TB_coremark":
+            manifest_name = "manifest.json" if args.core == "single" else "manifest_" + args.core + ".json"
             manifest = json.loads((ROOT / "build/firmware" / manifest_name).read_text())
             result = validate(report, manifest)
             result["simulator"] = "ModelSim official memory and multiplier IP"
-            design = design_sources() if args.core == "evolve5" else sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
+            design = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
             result["rtl_sha256"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                                     for path in design}
-            prefix = "evolve5-" if args.core == "evolve5" else ""
+            prefix = "" if args.core == "single" else args.core + "-"
             destination = ROOT / "reports/coremark" / (prefix + manifest["mode"] + f"-{manifest['iterations']}-modelsim.json")
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_text(json.dumps(result, indent=2) + "\n")

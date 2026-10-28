@@ -2,7 +2,8 @@
 
 module memory_core #(
     // 仿真初始化文件按字节存放；留空时保持未初始化的 X。
-    parameter INIT_FILE = ""
+    parameter INIT_FILE = "",
+    parameter DUAL_IMAGE = 0
 )(
     // 单端口 RAM：14 位字地址，16384 x 32 bit，共 64 KiB。
     input [13:0]a_addr,

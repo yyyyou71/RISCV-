@@ -10,8 +10,8 @@
 /constraint_check/
 /temp_projects/
 /download/
-/cores/evolve5/pds/*
-!/cores/evolve5/pds/evolve5.pds
+/projects/acore_dual/*
+!/projects/acore_dual/acore_dual.pds
 /bak/
 logbackup/
 

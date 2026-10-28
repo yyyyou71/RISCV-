@@ -80,16 +80,17 @@ def build(name, source, c_demo=False):
 
 def simulate(name, source, inject="inject", resume="resume", enabled=0,
              skip=0, stalled=0, min_wait=0, irqs=1, c_demo=False,
-             stores=0, prediction=-1, taken=-1):
+             stores=0, prediction=-1, taken=-1, dual=0, paired=-1):
     base, symbols = build(name, source, c_demo)
     sim = base.with_suffix(".out")
     run(["iverilog", "-g2012", "-s", "TB_interrupt", "-y", ROOT / "sim/models", "-y", ROOT / "rtl",
          f'-DPROG_FILE="{base.with_suffix(".hex")}"',
          f'-DDATA_FILE="{base.with_suffix(".data")}"',
-         f"-PTB_interrupt.ENABLE_DIV={enabled}", "-o", sim, ROOT / "sim/TB_interrupt.v"],
+         f"-PTB_interrupt.ENABLE_DIV={enabled}", f"-PTB_interrupt.ENABLE_DUAL={dual}",
+         "-o", sim, ROOT / "sim/TB_interrupt.v"],
         base.with_suffix(".compile.log"))
     args = ["vvp", sim, f"+irqs={irqs}", f"+skip={skip}", f"+stall={stalled}", f"+min_wait={min_wait}",
-            f"+stores={stores}", f"+prediction={prediction}", f"+taken={taken}"]
+            f"+stores={stores}", f"+prediction={prediction}", f"+taken={taken}", f"+paired={paired}"]
     if irqs:
         args += [f"+inject={symbols[inject]:x}", f"+resume={symbols[resume]:x}"]
     report = run(args, base.with_suffix(".run.log"))
@@ -97,6 +98,7 @@ def simulate(name, source, inject="inject", resume="resume", enabled=0,
         raise RuntimeError(f"No completion for {name}: {report}")
     summary = re.search(r"^PASS interrupt.*$", report, re.MULTILINE).group(0)
     print(f"{name}: {summary}", flush=True)
+    return {"name": name, "summary": summary, "dual": dual, "result": "pass"}
 
 
 def csr_program():

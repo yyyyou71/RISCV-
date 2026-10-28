@@ -8,7 +8,8 @@
 module memory #(
     parameter DATA_WIDTH = 8,
     parameter ADDR_WIDTH = 16,
-    parameter DEPTH = 1 << ADDR_WIDTH
+    parameter DEPTH = 1 << ADDR_WIDTH,
+    parameter DUAL_IMAGE = 0
 ) (
     input clk,
     input rst_n,
@@ -40,7 +41,7 @@ module memory #(
     end
 
     memory_core #(
-        .INIT_FILE(`DATA_FILE)
+        .INIT_FILE(`DATA_FILE), .DUAL_IMAGE(DUAL_IMAGE)
     ) u_memory_core (
         .a_addr(core_word_addr),
         .a_wr_data(core_wr_data),

@@ -30,11 +30,6 @@ def main():
         path = Path(match.group(2))
         if not path.is_absolute():
             path = source.parent / path
-        if path.resolve() == (ROOT / "build/pds-evolve5/evolve5_design.v").resolve():
-            portable = ROOT / "cores/evolve5/generated/evolve5_design.v"
-            if not portable.is_file() or portable.read_bytes() != path.read_bytes():
-                raise RuntimeError("EVOLVE5 portable design snapshot is missing or stale; run evolve5_sources.py")
-            path = portable
         if not path.is_file():
             raise FileNotFoundError(f"PDS project references a missing file: {path}")
         relative = Path(os.path.relpath(path.resolve(), destination.parent)).as_posix()

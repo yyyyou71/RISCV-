@@ -1,55 +1,50 @@
-# PG2L100H：Acore / EVOLVE5 与 CoreMark
+# PG2L100H：Acore 单发射 / 顺序双发射与 CoreMark
 
 当前分支为 `ziguang_rv32i`。目标沿用已经确认的 RK3568_MES2L100H：
 **Logos2 / PG2L100H / FBG484 / -6，25 MHz，PDS 2022.2-SP6.1**。
 
 ## 选择内核
 
-| 项目 | Acore 单发射（默认） | EVOLVE5 可选双发射 |
+| 项目 | Acore 单发射（默认） | Acore 顺序双发射 |
 |---|---|---|
-| 可编辑工程 | `rv32I.pds` | `cores/evolve5/pds/evolve5.pds` |
-| 一键构建 | `scripts/build_fpga.ps1` | `scripts/build_evolve5.ps1` |
-| 下载文件 | `download/coremark_single_25mhz.sbit` | `download/coremark_evolve5_25mhz.sbit` |
-| RTL | `rtl/` | `cores/evolve5/rtl/`、`fpga/` |
-| 程序镜像 | `firmware/rom.hex`、`ram.hex` | `firmware/evolve5_rom.hex`、`evolve5_ram.hex` |
-| ROM / RAM | 32 KiB / 64 KiB | 32 KiB / 32 KiB |
-| 默认迭代数 | 1000 | 2048 |
+| 可编辑工程 | `rv32I.pds` | `projects/acore_dual/acore_dual.pds` |
+| 一键构建 | `scripts/build_fpga.ps1` | `scripts/build_acore_dual.ps1` |
+| 下载文件 | `download/coremark_single_25mhz.sbit` | `download/coremark_acore_dual_25mhz.sbit` |
+| RTL | `rtl/`，`ENABLE_DUAL=0` | 同一套 `rtl/`，`ENABLE_DUAL=1` |
+| 程序镜像 | `firmware/rom.hex`、`ram.hex` | `firmware/acore_dual_rom.hex`、`acore_dual_ram.hex` |
+| ROM / RAM | 32 KiB / 64 KiB | 32 KiB / 64 KiB |
+| 默认迭代数 | 1000 | 1000 |
 
 单发射的独立 Git 基线为 `e20bb3cae859de74291d5222d49fac3062fb8368`。
-EVOLVE5 是另一套可选核，不是把你的 `Acore.v` 改成双发射；两套工程、IP、镜像和输出相互隔离。
-GUI 工程位于不同目录，避免同名顶层的中间文件互相覆盖；双发射 GUI 工作文件由 `.gitignore` 单独排除。
-均按 RV32I+Zmmul 编译，使用硬件乘法和软件除法。详细适配与限制见 [EVOLVE5 说明](cores/evolve5/README.md)。
+双发射直接扩展 `rtl/Acore.v`，复用原有译码器、ALU、CSR、分支预测和多周期乘法单元。
+新增第二个整数执行槽、四读两写寄存器堆、跨槽前递和八项取指队列；不使用 Cache。
+GUI 工程、存储器 IP、镜像和输出相互隔离，CPU 和 MMIO 地址保持一致。
+均按 RV32I+Zmmul 编译，使用硬件乘法和软件除法。
+详细设计、发射限制与验证方法见 [Acore 双发射设计说明](docs/acore_dual.md)。
 
 ```powershell
-./scripts/build_evolve5.ps1 -Python python -ModelsimBin 'C:\diskE\modelsim\win64'
+./scripts/build_acore_dual.ps1 -Python python -ModelsimBin 'C:\diskE\modelsim\win64'
 ```
 
 双发射版沿用相同的五个板级引脚与串口参数，LED3 仍只表示程序结束，LED4 表示异常。
-不要同时把两套 `board_top`、两套存储器模型或两套核的源文件加入一个 PDS 工程。
-以下章节描述默认 Acore 工程；双发射版有不同的 RAM/MMIO 地址。
+PDS 顶层分别为 `board_top` 和 `acore_dual_top`；仿真行为模型不加入硬件工程。
+以下章节中的板卡、外设和地址说明适用于两个版本。
 
-## 本机离线验证结果
+## 本机离线验证
 
 两版均为 GCC 10.2.0、O2、2000-byte 工作集、25 MHz、硬件乘法与软件除法。
-
-| 项目 | Acore 单发射 | EVOLVE5 双发射 + Cache |
-|---|---:|---:|
-| performance 迭代数 | 1000 | 2048 |
-| 目标计时 / 秒 | 15.132597 | 20.385616 |
-| CoreMark/MHz（仿真） | 2.643300 | 4.018520 |
-| 计时窗口 IPC | 未测 | 1.245147 |
-| LUT / FF | 2812 / 4520 | 9960 / 7834 |
-| APM / DRM36K | 4 / 24 | 4 / 16 |
-| 25 MHz slow/fast setup/hold | 全部通过 | 全部通过 |
-
-两组标准 CRC、长跑及最终独立 STA 均通过；证据见 `reports/coremark/`。
-上述约 52% 提升是两套核与存储层次的整体仿真对比，不是同一内核只开关双发射的对比。
-**两套新位流均尚未进行实板验收，不能把上述数字当作实板正式成绩。**
+验证数据见 `reports/coremark/`；双发射逐指令对比、中断与实现审计见 `reports/acore_dual/`。
+历史单发射基线为 2.643300 CoreMark/MHz（1000 次仿真）。
+当前双发射成绩以 `acore_dual-performance-1000-verilator.json` 为准。
+本机本版为 2.825921 CoreMark/MHz（1000 次、14.154679 秒仿真），
+实现为 5551 LUT / 5442 FF / 4 APM / 24 DRM36K，25 MHz 四角 setup/hold 通过。
+离线验证与时序通过不能代替实板验收。
 
 ## 本次移植范围
 
 CPU 基于 `origin/main` 的 `9bd2479b0ce167a77bfa4ca22e1969984f06a236`，导入到 `rtl/`。
-保留五级单发射、分支预测、CSR、定时器中断进入和 MRET；本板级版本将 `timer_irq` 接零。
+保留原五级主流水线、分支预测、CSR、定时器中断进入和 MRET；可选受限顺序双发射。
+本板级版本将 `timer_irq` 接零；内核接口及仿真仍支持中断。
 默认硬件乘法、软件除法，即 RV32I + Zmmul；`ENABLE_DIV=0`。
 处理器的 33×33 有符号乘法使用官方 Simple Multiplier IP，三拍，四个 Logos2 APM。
 ROM/RAM 同样使用官方 IP，不把仿真数组加入 PDS。
