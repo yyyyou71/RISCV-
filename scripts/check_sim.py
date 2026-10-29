@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_rk_iic", "TB_board_iic")
+    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus")
     parser.add_argument("--test", choices=tests)
     args = parser.parse_args()
     output = ROOT / "build/sim/behavioral"
@@ -21,7 +21,14 @@ def main():
                '-DDATA_FILE="firmware/ram_bytes.hex"']
     for name in ([args.test] if args.test else tests):
         executable = output / (name + ".vvp")
-        subprocess.run(["iverilog", "-g2012", "-s", name, *defines,
+        test_defines = defines
+        if name == "TB_cpu_iic":
+            subprocess.run(["python3", str(ROOT / "scripts/build_firmware.py"),
+                            "--app", "iic_service", "--image-dir",
+                            str(ROOT / "build/firmware/iic_service/images")], cwd=ROOT, check=True)
+            test_defines = ["-DNO_WAVES", '-DPROG_FILE="build/firmware/iic_service/images/rom.hex"',
+                            '-DDATA_FILE="build/firmware/iic_service/images/ram_bytes.hex"']
+        subprocess.run(["iverilog", "-g2012", "-s", name, *test_defines,
                         "-o", str(executable), str(ROOT / "sim" / (name + ".v")),
                         *map(str, rtl + board)], cwd=ROOT, check=True)
         result = subprocess.run(["vvp", str(executable)], cwd=ROOT, capture_output=True, text=True)

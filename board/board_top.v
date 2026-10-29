@@ -2,7 +2,7 @@ module board_top #(
     parameter integer CLOCK_HZ = 25000000,
     parameter integer BAUD_RATE = 115200,
     parameter integer RESET_HOLD_CYCLES = 250000,
-    parameter integer IIC_BOOT_TEST = 1
+    parameter integer IIC_BOOT_TEST = 0
 ) (
     input wire sys_clk,
     input wire key0_n,
@@ -20,6 +20,9 @@ module board_top #(
     wire rk_param_update;
     wire rk_uplink_ready;
     reg rk_test_byte_sent;
+    wire [7:0] cpu_rk_tx_data;
+    wire cpu_rk_tx_valid;
+    wire boot_pending = IIC_BOOT_TEST && !rk_test_byte_sent;
 
     // Bring-up only: enqueue 0xA5 once after each board reset.
     // Disable IIC_BOOT_TEST when replacing this source with a real FIFO.
@@ -37,11 +40,11 @@ module board_top #(
         .clk(sys_clk), .rst_n(rst_n),
         .iic_scl(iic_scl), .iic_sda(iic_sda),
         .param_data(rk_param_data), .param_update(rk_param_update),
-        .uplink_data(8'hA5),
-        .uplink_valid(rst_n && IIC_BOOT_TEST && !rk_test_byte_sent),
+        .uplink_data(boot_pending ? 8'hA5 : cpu_rk_tx_data),
+        .uplink_valid(rst_n && (boot_pending || cpu_rk_tx_valid)),
         .uplink_ready(rk_uplink_ready)
     );
-    // Parameters terminate here for now; CPU MMIO integration is separate.
+    // CPU and IIC application interfaces share sys_clk.
 
     board_reset #(.HOLD_CYCLES(RESET_HOLD_CYCLES)) u_reset (
         .clk(sys_clk),
@@ -52,6 +55,9 @@ module board_top #(
     soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE)) u_soc (
         .clk(sys_clk),
         .rst_n(rst_n),
+        .rk_tx_data(cpu_rk_tx_data), .rk_tx_valid(cpu_rk_tx_valid),
+        .rk_tx_ready(rk_uplink_ready && !boot_pending),
+        .rk_param_data(rk_param_data), .rk_param_update(rk_param_update),
         .uart_txd(uart_tx),
         .bus_err(bus_err),
         .gpio_out(gpio_out)

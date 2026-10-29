@@ -24,30 +24,33 @@ def write_words(path, data, size, padding):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
+    parser.add_argument('--app', choices=('selftest', 'iic_service'), default='selftest')
+    parser.add_argument('--image-dir', type=Path, default=ROOT / 'firmware')
     args = parser.parse_args()
-    output = ROOT / "build/firmware"
+    args.image_dir.mkdir(parents=True, exist_ok=True)
+    output = ROOT / "build/firmware" / args.app
     output.mkdir(parents=True, exist_ok=True)
-    elf = output / "selftest.elf"
+    elf = output / (args.app + ".elf")
     flags = ["-march=rv32i", "-mabi=ilp32", "-O2", "-mno-relax",
              "-msmall-data-limit=0", "-ffreestanding", "-fno-builtin",
              "-fno-common", "-fno-stack-protector", "-nostdlib", "-nostartfiles"]
     run([args.prefix + "gcc", *flags, "-T", ROOT / "firmware/link.ld",
-         "-Wl,-Map=" + str(output / "selftest.map"), "-o", elf,
-         ROOT / "firmware/start.S", ROOT / "firmware/selftest.c", "-lgcc"])
+         "-Wl,-Map=" + str(output / (args.app + ".map")), "-o", elf,
+         ROOT / "firmware/start.S", ROOT / "firmware" / (args.app + ".c"), "-lgcc"])
     run([args.prefix + "size", elf])
     for section, size, padding, name in [
             (".text", 32768, 0x00000013, "rom.hex"),
             (".data", 65536, 0, "ram.hex")]:
         binary = output / (section[1:] + ".bin")
         run([args.prefix + "objcopy", "-j", section, "-O", "binary", elf, binary])
-        write_words(ROOT / "firmware" / name, binary.read_bytes(), size, padding)
+        write_words(args.image_dir / name, binary.read_bytes(), size, padding)
     initialized = (output / "data.bin").read_bytes()
-    (ROOT / "firmware/ram_bytes.hex").write_text(
+    (args.image_dir / "ram_bytes.hex").write_text(
         "".join(f"{value:02x}\n" for value in initialized.ljust(65536, b"\0")),
         encoding="ascii")
-    manifest = {"application": "selftest", "clock_hz": 25000000, "baud_rate": 115200,
-                "rom_sha256": hashlib.sha256((ROOT / "firmware/rom.hex").read_bytes()).hexdigest(),
-                "ram_sha256": hashlib.sha256((ROOT / "firmware/ram.hex").read_bytes()).hexdigest()}
+    manifest = {"application": args.app, "clock_hz": 25000000, "baud_rate": 115200,
+                "rom_sha256": hashlib.sha256((args.image_dir / "rom.hex").read_bytes()).hexdigest(),
+                "ram_sha256": hashlib.sha256((args.image_dir / "ram.hex").read_bytes()).hexdigest()}
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
 
 

@@ -7,7 +7,7 @@ module TB_board_iic;
     integer updates=0;
     assign sda = sda_low ? 1'b0 : 1'bz;
     always #20 clk=~clk;
-    board_top #(.RESET_HOLD_CYCLES(8)) dut (
+    board_top #(.RESET_HOLD_CYCLES(8), .IIC_BOOT_TEST(1)) dut (
         .sys_clk(clk), .key0_n(key0_n), .uart_tx(uart_tx),
         .led0(led0), .led1(led1), .iic_scl(scl), .iic_sda(sda)
     );

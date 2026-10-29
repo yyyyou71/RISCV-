@@ -1,0 +1,7 @@
+{
+  "application": "iic_service",
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "rom_sha256": "46ad5f0ff42cefd2e4fed44208db10ccc1e82d0406a34927e4ba997d9778d6b3",
+  "ram_sha256": "b4892e8550c0688558ed8bd21f497efc1ffb7620b2a72715a4719a9753ab08fb"
+}

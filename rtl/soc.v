@@ -4,6 +4,11 @@ module soc #(
 ) (
     input wire clk,
     input wire rst_n,
+    output wire [7:0] rk_tx_data,
+    output wire rk_tx_valid,
+    input wire rk_tx_ready,
+    input wire [31:0] rk_param_data,
+    input wire rk_param_update,
     output wire uart_txd,
     output wire bus_err,
     output wire [1:0] gpio_out
@@ -42,6 +47,8 @@ module soc #(
         .dev_wdata(dev_wdata),
         .dev_size(dev_size),
         .dev_rdata(dev_rdata),
+        .rk_tx_data(rk_tx_data), .rk_tx_valid(rk_tx_valid), .rk_tx_ready(rk_tx_ready),
+        .rk_param_data(rk_param_data), .rk_param_update(rk_param_update),
         .uart_txd(uart_txd),
         .gpio_out(gpio_out)
     );

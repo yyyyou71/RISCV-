@@ -1,20 +1,25 @@
 # RK I2C adaptation scaffold
 
+Update: CPU FIFO/MMIO integration is now available. See rk_cpu_link.md for the
+current deployment procedure and register map. IIC_BOOT_TEST now defaults to 0.
+The bring-up description below applies only with IIC_BOOT_TEST=1.
+
+
 The adapter in rtl/rk_iic is now instantiated as u_rk_iic in
 board/board_top.v. It shares the existing 25 MHz clock and board reset, and
 exposes iic_scl/iic_sda at the board top. The four RTL files are listed in
 rv32I.pds and scripts/implement.tcl. No additional PLL or vendor IP is needed.
-CPU MMIO and the real UART receive FIFO are not connected yet.
+CPU MMIO is connected through a 64-byte transmit FIFO; UART RX is not needed for CPU-produced data.
 
 ## Integrated bring-up behavior
 
-IIC_BOOT_TEST defaults to 1. Each board reset queues one byte, 0xA5, for RK
+For the optional bring-up mode, set IIC_BOOT_TEST to 1. Each board reset queues one byte, 0xA5, for RK
 to read. Reading register 0x21 does not consume it; writing 1 to 0x22 clears
 it. The test source sends no more bytes until the next board reset. Set
 IIC_BOOT_TEST=0 when connecting the application producer.
 RK parameter commits drive rk_param_data and a one-clock rk_param_update
-pulse inside board_top. These signals are available for the next application
-connection; accepting a parameter does not yet change CPU or video behavior.
+pulse inside board_top. These signals feed CPU MMIO. The iic_service firmware applies parameters to GPIO
+and echoes them; the original selftest firmware does not consume parameters.
 
 Run python3 scripts/check_sim.py --test TB_board_iic from the project root
 in WSL to test the actual board wrapper. It covers the boot byte, repeated
