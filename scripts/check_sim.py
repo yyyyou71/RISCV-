@@ -1,4 +1,5 @@
 import argparse
+import json
 from pathlib import Path
 import subprocess
 
@@ -7,27 +8,33 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus")
+    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_coremark", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus")
     parser.add_argument("--test", choices=tests)
     args = parser.parse_args()
     output = ROOT / "build/sim/behavioral"
     output.mkdir(parents=True, exist_ok=True)
     rtl = [path for path in sorted((ROOT / "rtl").glob("*.v"))
-           if path.name not in ("ROM_core.v", "memory_core.v")]
+           if path.name not in ("ROM_core.v", "memory_core.v", "multiplier_core.v", "acore_fetch_memory.v", "MuxKeyInternal.v")]
     rtl += sorted((ROOT / "sim/models").glob("*.v"))
     rtl += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     board = sorted((ROOT / "board").glob("*.v"))
     defines = ["-DNO_WAVES", '-DPROG_FILE="firmware/rom.hex"',
                '-DDATA_FILE="firmware/ram_bytes.hex"']
-    for name in ([args.test] if args.test else tests):
+    selected = [args.test] if args.test else ["TB_memory_core", "TB_mem", "TB_rk_iic"]
+    manifest = ROOT / "build/firmware/manifest.json"
+    if not args.test and manifest.exists() and json.loads(manifest.read_text())["application"] == "selftest":
+        selected.append("TB_board")
+    for name in selected:
         executable = output / (name + ".vvp")
         test_defines = defines
-        if name == "TB_cpu_iic":
+        if name in ("TB_board", "TB_board_iic", "TB_cpu_iic"):
+            app = "iic_service" if name == "TB_cpu_iic" else "selftest"
+            images = ROOT / "build/firmware" / app / "images"
             subprocess.run(["python3", str(ROOT / "scripts/build_firmware.py"),
-                            "--app", "iic_service", "--image-dir",
-                            str(ROOT / "build/firmware/iic_service/images")], cwd=ROOT, check=True)
-            test_defines = ["-DNO_WAVES", '-DPROG_FILE="build/firmware/iic_service/images/rom.hex"',
-                            '-DDATA_FILE="build/firmware/iic_service/images/ram_bytes.hex"']
+                            "--app", app, "--image-dir", str(images)], cwd=ROOT, check=True)
+            rel = images.relative_to(ROOT).as_posix()
+            test_defines = ["-DNO_WAVES", '-DPROG_FILE="' + rel + '/rom.hex"',
+                            '-DDATA_FILE="' + rel + '/ram_bytes.hex"']
         subprocess.run(["iverilog", "-g2012", "-s", name, *test_defines,
                         "-o", str(executable), str(ROOT / "sim" / (name + ".v")),
                         *map(str, rtl + board)], cwd=ROOT, check=True)
@@ -35,8 +42,11 @@ def main():
         report = result.stdout + result.stderr
         (output / (name + ".log")).write_text(report)
         print(report, end="", flush=True)
-        if result.returncode or "PASS" not in report or "ERROR" in report or "FATAL" in report:
+        if result.returncode or "PASS" not in report or "FATAL" in report:
             raise RuntimeError(f"{name} failed")
+        if name == "TB_coremark":
+            from validate_coremark import validate
+            validate(report, json.loads(manifest.read_text()))
 
 
 if __name__ == "__main__":

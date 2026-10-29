@@ -3,7 +3,7 @@
 `endif
 
 module ROM_core(
-    /* verilator lint_off UNUSEDSIGNAL */
+    /* verilator lint_off UNUSED */
     input clk,
     input [12:0]addr,
     input rst,
@@ -34,4 +34,4 @@ module ROM_core(
     end
 
 endmodule
-/* verilator lint_on UNUSEDSIGNAL */
+/* verilator lint_on UNUSED */

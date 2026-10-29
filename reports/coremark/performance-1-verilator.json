@@ -1,0 +1,16 @@
+{
+  "mode": "performance",
+  "iterations": 1,
+  "cycles": 378282,
+  "clock_hz": 25000000,
+  "seconds": 0.01513128,
+  "crc_pass": true,
+  "short_run": true,
+  "hardware_tested": false,
+  "iterations_per_second": 66.08826219592791,
+  "coremark_per_mhz": 2.643530487837116,
+  "firmware_rom_sha256": "a5dbe57652e930a7ec37688b660f1b41c5fe3fdf76260c38703fd249fd20a8a8",
+  "firmware_ram_sha256": "e2774b293e3d8ff8c1dcbd43c53e5e8b45bb903e2282b792f24bbfa0856a933c",
+  "simulator": "Verilator behavioral memories and multiplier, actual UART bitstream",
+  "wall_seconds": 0.173766538000109
+}

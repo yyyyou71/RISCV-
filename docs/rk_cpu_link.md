@@ -43,7 +43,8 @@ firmware/iic_service.c 为持续运行的应用示例，通信驱动可直接用
 这是可验证的业务接入示例，不代表已经实现你的最终数据生成算法。
 
 已编译固件存放在 firmware/iic_service/：rom.hex、ram.hex、ram_bytes.hex。
-现有 firmware 根目录的自检镜像保留，用于原回归测试。
+合并远程后，firmware 根目录保留远程 CoreMark 镜像；IIC 服务镜像仍单独存放。
+自检/IIC 回归由脚本临时编译各自镜像，不覆盖远程 CoreMark 镜像。
 仅修改 RTL 后下载旧自检固件，不会发送 READY，也不会处理参数。
 
 在 WSL 项目根目录重新构建服务固件：
@@ -59,7 +60,7 @@ firmware/iic_service.c 为持续运行的应用示例，通信驱动可直接用
 
 不要把 ram_bytes.hex 当作 32 位 RAM IP 初始化文件，它是行为仿真模型使用的。
 旧生成的 IP 中有旧机器路径和已嵌入的初始化常量，因此只替换 hex 文件并不够。
-不要运行现有 build_fpga.ps1 来部署服务版：它仍是自检构建流程，会生成自检固件/IP。
+不要运行现有 build_fpga.ps1 来部署服务版：它是上游 CoreMark 构建流程，会生成其他固件并自动操作 IP。
 本次未运行 IP 生成、PDS 实现或下载。
 
 ## 上板检查（RK 端仍用原程序）

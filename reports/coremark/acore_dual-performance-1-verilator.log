@@ -1,0 +1,20 @@
+Acore in-order dual issue / RV32I+Zmmul / 25000000 Hz / UART 115200
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 281848
+Total time (secs): 0.011274
+Iterations/Sec   : 88.700292
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 1
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xe714
+Errors detected
+CoreMark        : 88.700292
+CoreMark/MHz    : 3.548012
+COREMARK DONE
+PASS: CoreMark board exit_code=0; 532 UART characters; 1487935 cycles
+DUAL RETIRED: 1124743 first, 121716 second
+BENCH COUNTERS: cycles=281848 retired=309808 second=96695

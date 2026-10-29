@@ -1,4 +1,6 @@
-module decoder(
+module decoder #(
+    parameter integer ENABLE_DIV = 0
+)(
     input [31:0]instruction,
     input clk,
     input rst_n,
@@ -21,6 +23,11 @@ module decoder(
     output reg ALUSrc1, // 数据选择器信号，选择第一个操作数来源，选择1说明来自PC 
     output reg ALUSrc2, // 数据选择器信号，选择第二个操作数来源,选择1说明来自寄存器
     output reg [3:0]ALUOp, // alu控制信号
+    output reg [1:0]DivOp, // DIV/DIVU/REM/REMU 的 funct3 低两位
+    output reg CSR_en,
+    output reg [2:0] CSR_op,
+    output reg [11:0] CSR_addr,
+    output reg Mret,
     output reg Branch,
     output reg [2:0]Branch_type, // 跳转种类
     output reg Jump,
@@ -42,6 +49,9 @@ module decoder(
     localparam OP_SLT  = 4'b1000;
     localparam OP_SLTU = 4'b1001;
     localparam OP_EQ   = 4'b1010;
+    localparam OP_DIV  = 4'b1011;
+    // 1100..1111 送到独立的多周期乘法单元，普通 ALU 不处理这些编码。
+    localparam OP_MUL_BASE = 4'b1100;
 
     // 分支指令的 funct3 编码 (BranchType)
     localparam BR_BEQ  = 3'h0; // 3'b000, 相等则跳转
@@ -114,6 +124,11 @@ module decoder(
             Jump <= Jump;
             immediate <= immediate;
             ALUOp <= ALUOp;
+            DivOp <= DivOp;
+            CSR_en <= CSR_en;
+            CSR_op <= CSR_op;
+            CSR_addr <= CSR_addr;
+            Mret <= Mret;
             ALUen <= ALUen;
             wb_type <= wb_type;
             ALUSrc1 <= ALUSrc1;
@@ -133,10 +148,15 @@ module decoder(
             ALUSrc1     <= 1'b0;
             ALUSrc2     <= 1'b0;
             ALUOp       <= OP_ADD;
+            DivOp       <= 2'b00;
             MemSize     <= 2'b00;
             MemUnsigned <= 1'b0;
             Branch_type <= 3'd0;
             immediate   <= 32'd0;
+            CSR_en      <= 1'b0;
+            CSR_op      <= 3'b0;
+            CSR_addr    <= 12'b0;
+            Mret        <= 1'b0;
 
             // 冲刷 = 注入 NOP：把选择子置 0（不匹配任何有效桶），自动落入下面的
             // default: 桶 → 所有有副作用的使能（RegWrite/MemWrite/**Jump**/**Branch**/
@@ -160,6 +180,22 @@ module decoder(
                     rs1_addr <= instruction[19:15];
                     rs2_addr <= instruction[24:20];
                     rd_addr <= instruction[11:7]; 
+                    if (funct7 == 7'h01) begin
+                        if (!funct3[2]) begin
+                            ALUOp <= OP_MUL_BASE | {2'b00, funct3[1:0]};
+                        end else if (ENABLE_DIV != 0) begin
+                            ALUOp <= OP_DIV;
+                            DivOp <= funct3[1:0];
+                        end else begin
+                            // 总开关关闭时，除法指令不产生副作用或停顿。
+                            // 当前处理器尚未接入非法指令异常。
+                            RegWrite <= 0;
+                            ALUen <= 0;
+                            rd_addr <= 0;
+                            rs1_addr <= 0;
+                            rs2_addr <= 0;
+                        end
+                    end else begin
                     case (funct3)
                         3'h0: begin
                             if (funct7 == 7'h0)
@@ -181,6 +217,7 @@ module decoder(
                         3'h7: ALUOp <= OP_AND;     
                         default: ALUOp <= OP_ADD;  
                     endcase
+                    end
                 end  
                 10'b00_0000_0010: begin   // if_I_A
                     RegWrite <= 1;
@@ -361,6 +398,24 @@ module decoder(
                     Jump <= 0;
                     immediate <= 0;
                     ALUen <= 0;
+                    // SYSTEM：六条 Zicsr 指令；FENCE 保持原来的无副作用行为。
+                    if (instruction[6:0] == 7'b1110011) begin
+                        if (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011 ||
+                            funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) begin
+                            CSR_en <= 1'b1;
+                            CSR_op <= funct3;
+                            CSR_addr <= instruction[31:20];
+                            RegWrite <= 1'b1;
+                            rd_addr <= instruction[11:7];
+                            wb_type <= WB_ALU; // CSR 旧值复用结果前递/写回通路
+                            if (funct3[2])
+                                immediate <= {27'b0, instruction[19:15]};
+                            else
+                                rs1_addr <= instruction[19:15];
+                        end else if (instruction == 32'h3020_0073) begin
+                            Mret <= 1'b1;
+                        end
+                    end
                 end 
                 default: begin
                     RegWrite <= 0;

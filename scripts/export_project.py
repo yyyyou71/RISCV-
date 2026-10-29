@@ -11,9 +11,13 @@ DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
+    parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--destination", type=Path, default=ROOT / "rv32I.pds")
+    parser.add_argument("--no-compile", action="store_true")
     args = parser.parse_args()
-    source = ROOT / "build/pds/rv32I.pds"
-    destination = ROOT / "rv32I.pds"
+    source = args.source.resolve()
+    destination = args.destination.resolve()
+    destination.parent.mkdir(parents=True, exist_ok=True)
     project = source.read_text(encoding="utf-8")
     project = re.sub(r"(?ms)^([ \t]*)\(_(?:db_)?output\b.*?^\1\)[ \t]*\n", "", project)
     project = re.sub(
@@ -34,6 +38,9 @@ def main():
 
     project = re.sub(r'(\(_(?:file|ip|ip_source_item)\s+")([^"]+)(")', rebase, project)
     destination.write_text(project, encoding="utf-8")
+    if args.no_compile:
+        print(f"PROJECT_EXPORTED_NOT_COMPILED {destination}")
+        return
 
     if os.name == "nt" and not os.environ.get("PANGO_LICENSE_FILE"):
         import winreg
@@ -41,9 +48,10 @@ def main():
             os.environ["PANGO_LICENSE_FILE"] = winreg.QueryValueEx(key, "PANGO_LICENSE_FILE")[0]
     result = subprocess.run([str(args.pds_root / "bin/pds_shell.exe"),
                              "-project", str(destination), "-run", "compile"],
-                            cwd=ROOT, capture_output=True, text=True, errors="replace", timeout=120)
+                            cwd=destination.parent, capture_output=True, text=True, errors="replace", timeout=120)
     output = result.stdout + result.stderr
-    log = ROOT / "build/project_check/root_compile.log"
+    name = "root" if destination.name == "rv32I.pds" else destination.stem
+    log = ROOT / "build/project_check" / (name + "_compile.log")
     log.parent.mkdir(parents=True, exist_ok=True)
     log.write_text(output, encoding="utf-8")
     if result.returncode or re.search(r"^E:", output, re.MULTILINE) or 'Process "Compile" done.' not in output:

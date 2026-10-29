@@ -1,7 +1,8 @@
 module branch_predictor#(
     parameter IDX_BITS = 6,         // 查找表的位数
     parameter IDX_NUM = (1<<IDX_BITS),
-    parameter PC_HI    = 14         // ROM 32KB → pc[14:0]
+    parameter PC_HI    = 14,         // ROM 32KB → pc[14:0]
+    parameter integer SECOND_LOOKUP = 0
 )(
     input clk,
     input rst_n,
@@ -17,7 +18,10 @@ module branch_predictor#(
     input [1:0]upd_type,            // 00:B  11:JAL  10:JALR = {Jump_ID, ALUSrc1_ID}
     input upd_en,                   // 是否为跳转指令
     input upd_taken,                // 是否真的执行跳转/分支          
-    input [31:0]upd_target_pc       // 跳转/分支后的目标PC，Acore中位于根植于ID/EX寄存器
+    input [31:0]upd_target_pc,       // 跳转/分支后的目标PC，Acore中位于根植于ID/EX寄存器
+    input [31:0]pc2,
+    output if_predict2,
+    output [31:0]pc_predict2
 );
     localparam STRONG_J  = 2'b00;
     localparam WEAK_J    = 2'b01;
@@ -35,15 +39,15 @@ module branch_predictor#(
 
 
     // 更新预测矩阵
-    integer entry_index;
+    integer i;
     always @(posedge clk) begin
         if(!rst_n)begin
-            for(entry_index=0;entry_index<IDX_NUM;entry_index=entry_index+1)begin
-                tag[entry_index] <= 0;
-                B_type[entry_index] <= 0;
-                PC_N[entry_index] <= 0;
-                strength_cnt[entry_index] <= WEAK_NJ;
-                valid[entry_index] <= 0;
+            for(i=0;i<IDX_NUM;i = i + 1)begin
+                tag[i] <= 0;
+                B_type[i] <= 0;
+                PC_N[i] <= 0;
+                strength_cnt[i] <= WEAK_NJ;
+                valid[i] <= 0;
             end
         end
 
@@ -92,6 +96,11 @@ module branch_predictor#(
             
         end
     end
+
+    wire [IDX_BITS-1:0] idx2 = pc2[2+IDX_BITS-1:2];
+    assign if_predict2 = (SECOND_LOOKUP != 0) && valid[idx2] &&
+                        tag[idx2] == pc2[PC_HI:8] && strength_cnt[idx2] < WEAK_NJ;
+    assign pc_predict2 = if_predict2 ? PC_N[idx2] : 32'b0;
 
     // 预测部分
     always @(*) begin

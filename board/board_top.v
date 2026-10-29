@@ -2,7 +2,8 @@ module board_top #(
     parameter integer CLOCK_HZ = 25000000,
     parameter integer BAUD_RATE = 115200,
     parameter integer RESET_HOLD_CYCLES = 250000,
-    parameter integer IIC_BOOT_TEST = 0
+    parameter integer IIC_BOOT_TEST = 0,
+    parameter integer ENABLE_DUAL = 0
 ) (
     input wire sys_clk,
     input wire key0_n,
@@ -52,7 +53,7 @@ module board_top #(
         .rst_n(rst_n)
     );
 
-    soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE)) u_soc (
+    soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE), .ENABLE_DUAL(ENABLE_DUAL)) u_soc (
         .clk(sys_clk),
         .rst_n(rst_n),
         .rk_tx_data(cpu_rk_tx_data), .rk_tx_valid(cpu_rk_tx_valid),

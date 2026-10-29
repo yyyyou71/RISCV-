@@ -1,0 +1,19 @@
+Acore single issue / RV32I+Zmmul / 25000000 Hz / UART 115200
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 378314914
+Total time (secs): 15.132597
+Iterations/Sec   : 66.082512
+Iterations       : 1000
+Compiler version : GCC10.2.0
+Compiler flags   : -march=rv32im -mno-div -mabi=ilp32 -O2 -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-common -fno-stack-protector -fno-pic -fno-pie -nostdlib -nostartfiles -DITERATIONS=1000 -DTOTAL_DATA_SIZE=2000 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=25000000u
+Memory location  : STATIC RAM
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xd340
+Correct operation validated. See README.md for run and reporting rules.
+CoreMark 1.0 : 66.082512 / GCC10.2.0 -march=rv32im -mno-div -mabi=ilp32 -O2 -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-common -fno-stack-protector -fno-pic -fno-pie -nostdlib -nostartfiles -DITERATIONS=1000 -DTOTAL_DATA_SIZE=2000 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=25000000u / STATIC RAM
+COREMARK DONE
+PASS: CoreMark board exit_code=0; 1121 UART characters; 380827650 cycles

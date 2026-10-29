@@ -1,0 +1,19 @@
+{
+  "source": "User supplied UART log in chat on 2026-10-28",
+  "iterations": 1000,
+  "clock_hz": 25000000,
+  "cycles": 281873350,
+  "seconds": 11.274934,
+  "coremark": 88.69231518339708,
+  "coremark_per_mhz": 3.5476926073358834,
+  "seedcrc": "e9f5",
+  "crclist": "e714",
+  "crcmatrix": "1fd7",
+  "crcstate": "8e3a",
+  "crcfinal": "d340",
+  "crc_pass": true,
+  "duration_at_least_10_seconds": true,
+  "optimization": "O2",
+  "exact_bitstream_identity_confirmed": false,
+  "scope": "Prior 1000-iteration firmware with verbose UART; does not certify final 2700-iteration firmware"
+}

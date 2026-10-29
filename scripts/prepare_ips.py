@@ -9,7 +9,8 @@ DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
 
 
 def prepare(pds, kind, instance, overrides):
-    model = pds / "ip/module_ip/ipm2l_flex_ram/ipm2l_flex_ram_eval" / kind
+    category = "apm" if kind == "ipm2l_mult" else "ram"
+    model = pds / f"ip/module_ip/ipm2l_flex_{category}/ipm2l_flex_{category}_eval" / kind
     index = ET.parse(model / "index.xml").getroot()
     document = ET.Element("ip_inst")
     header = ET.SubElement(document, "header")
@@ -39,6 +40,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pds-root", type=Path, default=DEFAULT_PDS)
     parser.add_argument("--prepare-only", action="store_true")
+    parser.add_argument("--only", choices=("pango_rom", "pango_ram", "pango_multiplier_ip", "pango_acore_fetch", "pango_acore_ram"))
+    parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     args = parser.parse_args()
     if os.name == "nt" and not os.environ.get("PANGO_LICENSE_FILE"):
         import winreg
@@ -53,9 +56,24 @@ def main():
                B_BE_WIDTH="4", A_OUTPUT_REG="0", B_OUTPUT_REG="0",
                A_WRITE_MODE="TRANSPARENT_WRITE", B_WRITE_MODE="TRANSPARENT_WRITE",
                INIT_FILE=(ROOT / "firmware/ram.hex").as_posix())
-    for kind, name, configuration in [("ipm2l_rom", "pango_rom", rom),
-                                       ("ipm2l_dpram", "pango_ram", ram)]:
-        if not Path(configuration["INIT_FILE"]).is_file():
+    multiplier = dict(ASIZE="33", BSIZE="33", A_SIGNED="1", B_SIGNED="1",
+                      ASYNC_RST="0", ASYNC_RST_BOOL="0", PIPE_STATUS="3",
+                      INREG_EN="0", PIPEREG_EN_1="1", PIPEREG_EN_2="1",
+                      PIPEREG_EN_3="1", OUTREG_EN="0", OPTIMAL_TIMING="0",
+                      OPTIMAL_TIMING_BOOL="0", ADVANCED_BOOL="0")
+    configurations = [("ipm2l_rom", "pango_rom", rom), ("ipm2l_dpram", "pango_ram", ram),
+                      ("ipm2l_mult", "pango_multiplier_ip", multiplier)]
+    if args.core == "acore_dual":
+        fetch = dict(ram, A_ADDR_WIDTH="13", B_ADDR_WIDTH="13", A_CLK_EN="1", B_CLK_EN="1",
+                     INIT_FILE=(ROOT / "firmware/acore_dual_rom.hex").as_posix())
+        ram["INIT_FILE"] = (ROOT / "firmware/acore_dual_ram.hex").as_posix()
+        configurations = [("ipm2l_dpram", "pango_acore_fetch", fetch),
+                          ("ipm2l_dpram", "pango_acore_ram", ram),
+                          ("ipm2l_mult", "pango_multiplier_ip", multiplier)]
+    for kind, name, configuration in configurations:
+        if args.only and args.only != name:
+            continue
+        if "INIT_FILE" in configuration and not Path(configuration["INIT_FILE"]).is_file():
             raise FileNotFoundError("Build the firmware before generating memory IP")
         path = prepare(args.pds_root, kind, name, configuration)
         print(path, flush=True)

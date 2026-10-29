@@ -1,0 +1,78 @@
+Reading C:/diskE/modelsim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet -onfinish exit -l C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim/TB_coremark_transcript.log -wlf C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim/TB_coremark.wlf -modelsimini C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/sim/modelsim/modelsim.ini work.TB_coremark -do "onerror {quit -code 1}; run -all; quit -code 1" 
+# Start time: 13:22:20 on Oct 28,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(315): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(323): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(331): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(346): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(361): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# ** Warning: C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v(362): (vopt-2576) [BSOB] - Bit-select into 'addr_bus' is out of bounds.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# onerror {quit -code 1}
+#  Warning: onerror command for use within macro
+#  run -all
+# Acore single issue / RV32I+Zmmul / 25000000 Hz / UART 115200
+# 
+# 2K performance run parameters for coremark.
+# 
+# CoreMark Size    : 666
+# 
+# Total ticks      : 378282
+# 
+# Total time (secs): 0.015131
+# 
+# Iterations/Sec   : 66.088262
+# 
+# ERROR! Must execute for at least 10 secs for a valid result!
+# 
+# Iterations       : 1
+# 
+# Compiler version : GCC10.2.0
+# 
+# Compiler flags   : -march=rv32im -mno-div -mabi=ilp32 -O2 -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -fno-common -fno-stack-protector -fno-pic -fno-pie -nostdlib -nostartfiles -DITERATIONS=1 -DTOTAL_DATA_SIZE=2000 -DPERFORMANCE_RUN=1 -DCPU_CLOCK_HZ=25000000u
+# 
+# Memory location  : STATIC RAM
+# 
+# seedcrc          : 0xe9f5
+# 
+# [0]crclist       : 0xe714
+# 
+# [0]crcmatrix     : 0x1fd7
+# 
+# [0]crcstate      : 0x8e3a
+# 
+# [0]crcfinal      : 0xe714
+# 
+# Errors detected
+# 
+# COREMARK DONE
+# 
+# PASS: CoreMark board exit_code=0; 806 UART characters; 2180318 cycles
+# ** Note: $finish    : C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/sim/TB_coremark.v(50)
+#    Time: 87212740 ns  Iteration: 1  Instance: /TB_coremark
+# End time: 13:22:51 on Oct 28,2026, Elapsed time: 0:00:31
+# Errors: 0, Warnings: 6

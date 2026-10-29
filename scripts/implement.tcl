@@ -5,6 +5,7 @@ foreach source_file [glob [file join $project_root rtl *.v] [file join $project_
 }
 add_design [file join $project_root ipcore pango_rom pango_rom.idf]
 add_design [file join $project_root ipcore pango_ram pango_ram.idf]
+add_design [file join $project_root ipcore pango_multiplier_ip pango_multiplier_ip.idf]
 add_constraint -fdc [file join $project_root board pins.fdc]
 add_constraint -fdc [file join $project_root board timing.fdc]
 compile -top_module board_top
