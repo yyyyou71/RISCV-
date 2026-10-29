@@ -2,6 +2,10 @@
 
 Update: CPU FIFO/MMIO integration is now available. See rk_cpu_link.md for the
 current deployment procedure and register map. IIC_BOOT_TEST now defaults to 0.
+2026-10-29: board pins are SCL=P19/SDA=R19, LVCMOS33. CPU MMIO moved to
+0x30400; the wire address remains 0x66. The root project uses acore_dual_top.
+The pending items below describe the earlier scaffold; current integration
+status is recorded in ai_board_integration_plan.md and rk_cpu_link.md.
 The bring-up description below applies only with IIC_BOOT_TEST=1.
 
 

@@ -9,7 +9,7 @@ DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
 
 
 def prepare(pds, kind, instance, overrides):
-    category = "apm" if kind == "ipm2l_mult" else "ram"
+    category = "apm" if kind in ("ipm2l_mult", "ipm2l_multadd") else "ram"
     model = pds / f"ip/module_ip/ipm2l_flex_{category}/ipm2l_flex_{category}_eval" / kind
     index = ET.parse(model / "index.xml").getroot()
     document = ET.Element("ip_inst")

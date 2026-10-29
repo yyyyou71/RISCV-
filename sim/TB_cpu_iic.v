@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module TB_cpu_iic;
+module TB_cpu_iic #(
+    parameter integer ENABLE_DUAL = 0
+);
     reg clk=0, key0_n=0, scl=1, sda_low=0;
     tri1 sda;
     wire uart_tx, led0, led1;
@@ -7,7 +9,7 @@ module TB_cpu_iic;
     integer updates=0;
     assign sda = sda_low ? 1'b0 : 1'bz;
     always #20 clk=~clk;
-    board_top #(.RESET_HOLD_CYCLES(8)) dut (
+    board_top #(.RESET_HOLD_CYCLES(8), .ENABLE_DUAL(ENABLE_DUAL)) dut (
         .sys_clk(clk), .key0_n(key0_n), .uart_tx(uart_tx),
         .led0(led0), .led1(led1), .iic_scl(scl), .iic_sda(sda)
     );

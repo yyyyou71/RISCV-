@@ -113,13 +113,27 @@
                 (_file "rtl/MuxKeyInternal.v"
                     (_format verilog)
                 )
-                (_file "board/acore_dual_top.v"
+                (_file "board/acore_dual_top.v" + "acore_dual_top:"
                     (_format verilog)
                 )
-                (_file "board/board_top.v" + "board_top:"
+                (_file "board/board_top.v"
                     (_format verilog)
                     (_timespec "2026-10-27T16:19:53")
                 )
+                (_file "rtl/ddr_cpu_window.v" (_format verilog))
+                (_file "rtl/ddr_block_transfer.v" (_format verilog))
+                (_file "rtl/ddr_chunk_client.v" (_format verilog))
+                (_file "rtl/conv2d_ddr_engine.v" (_format verilog))
+                (_file "rtl/conv_mac_tile.v" (_format verilog))
+                (_file "rtl/conv2d_core.v" (_format verilog))
+                (_file "rtl/conv2d_w8a16_core.v" (_format verilog))
+                (_file "rtl/requant_int8.v" (_format verilog))
+                (_file "rtl/requant_q13.v" (_format verilog))
+                (_file "rtl/add_int16.v" (_format verilog))
+                (_file "rtl/multiply_adder.v" (_format verilog))
+                (_file "rtl/multiply_adder_w8a16.v" (_format verilog))
+                (_file "rtl/video_frame_capture.v" (_format verilog))
+                (_file "rtl/video_async_fifo.v" (_format verilog))
                 (_file "rtl/rk_iic/rk_iic_adapter.v"
                     (_format verilog)
                     (_timespec "2026-10-27T16:17:22")
@@ -257,6 +271,17 @@
     (_task tsk_pnr
         (_command cmd_pnr
             (_gci_state (_integer 0))
+            (_option plc_decongestion (_integer 3))
+            (_option gplace_seed (_integer 2))
+            (_option groute_seed (_integer 2))
+            (_option optimize_multi_corner_timing (_switch ON))
+            (_option fix_hold_violation (_switch ON))
+            (_option fix_hold_violation_iterations (_integer 15))
+            (_option fix_hold_violation_threshold (_integer 200))
+            (_option fix_hold_violation_threshold_for_clock_path_cross_srb (_integer 400))
+            (_option fix_hold_violation_threshold_for_clk_tree (_integer 200))
+            (_option max_hold_violated_paths_num (_integer 100000))
+            (_option refineplacement_cluster (_boolean FALSE))
             (_option report_timing (_switch ON))
         )
         (_widget wgt_power_calculator

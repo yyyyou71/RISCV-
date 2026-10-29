@@ -56,6 +56,17 @@ module board_top #(
     soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE), .ENABLE_DUAL(ENABLE_DUAL)) u_soc (
         .clk(sys_clk),
         .rst_n(rst_n),
+        .timer_irq(1'b0),
+        // DDR/AI remain disabled in the existing board image until M2 wiring.
+        .core_clk(sys_clk), .ddr_init_done(1'b0),
+        .pixclk_in(1'b0), .vs_in(1'b0), .hs_in(1'b0), .de_in(1'b0),
+        .r_in(8'd0), .g_in(8'd0), .b_in(8'd0),
+        .axi_awaddr(), .axi_araddr(), .axi_awuser_ap(), .axi_aruser_ap(),
+        .axi_awvalid(), .axi_arvalid(), .axi_awuser_id(), .axi_aruser_id(),
+        .axi_awlen(), .axi_arlen(), .axi_awready(1'b0), .axi_arready(1'b0),
+        .axi_wready(1'b0), .axi_wusero_last(1'b0), .axi_wusero_id(4'd0),
+        .axi_rid(4'd0), .axi_wdata(), .axi_wstrb(), .axi_rdata(128'd0),
+        .axi_rlast(1'b0), .axi_rvalid(1'b0),
         .rk_tx_data(cpu_rk_tx_data), .rk_tx_valid(cpu_rk_tx_valid),
         .rk_tx_ready(rk_uplink_ready && !boot_pending),
         .rk_param_data(rk_param_data), .rk_param_update(rk_param_update),

@@ -190,7 +190,12 @@ module ddr3 #(
         begin
             slot = find_slot(address);
             if (slot >= 0 && occupied[slot]) load_word = contents[slot];
-            else load_word = (zero_init != 0) ? {DATA_BITS{1'b0}} : {DATA_BITS{1'bx}};
+            else begin
+`ifdef DDR3_MODEL_STRICT_READS
+                $fatal(1, "DDR3: read of uninitialized word at native address %h", address);
+`endif
+                load_word = (zero_init != 0) ? {DATA_BITS{1'b0}} : {DATA_BITS{1'bx}};
+            end
         end
     endfunction
 
@@ -209,7 +214,9 @@ module ddr3 #(
                 end
                 for (lane = 0; lane < BYTE_LANES; lane = lane + 1) begin
                     if (strobe[lane]) begin
-                        if ($isunknown(data[lane*8 +: 8]))
+                        // Icarus 12 may mis-evaluate $isunknown on a variable
+                        // part-select inside this automatic task; XOR preserves X/Z.
+                        if (^data[lane*8 +: 8] === 1'bx)
                             $fatal(1, "DDR3: unknown enabled write byte at native address %h", address);
                         contents[slot][lane*8 +: 8] = data[lane*8 +: 8];
                     end

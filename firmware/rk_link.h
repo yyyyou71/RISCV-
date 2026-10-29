@@ -2,12 +2,13 @@
 #define RK_LINK_H
 #include <stdint.h>
 #define RK_REG(a) (*(volatile uint32_t *)(a))
-#define RK_TX RK_REG(0x00030200u)
-#define RK_STATUS RK_REG(0x00030204u)
-#define RK_PARAM RK_REG(0x00030208u)
-#define RK_SEQ RK_REG(0x0003020cu)
-#define RK_ACK RK_REG(0x00030210u)
-#define RK_CLEAR RK_REG(0x00030214u)
+/* CPU MMIO only; the RK-side I2C slave remains at 7-bit address 0x66. */
+#define RK_TX RK_REG(0x00030400u)
+#define RK_STATUS RK_REG(0x00030404u)
+#define RK_PARAM RK_REG(0x00030408u)
+#define RK_SEQ RK_REG(0x0003040cu)
+#define RK_ACK RK_REG(0x00030410u)
+#define RK_CLEAR RK_REG(0x00030414u)
 /* Single producer; full returns 0 so caller can retry without losing data. */
 static inline int rk_try_send(uint8_t byte) {
     if (!(RK_STATUS & 1u)) return 0;

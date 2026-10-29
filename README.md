@@ -6,6 +6,12 @@
 ## 当前工程与构建
 
 唯一维护的 PDS 工程入口是根目录 `rv32I.pds`，当前顶层为 `acore_dual_top`，运行 Acore 双发射 CoreMark。
+2026-10-29 已恢复双发射入口，并保留合并后的 IIC FIFO；IIC CPU MMIO 改为
+`0x30400`，从机地址仍为 `0x66`。本轮检查和后续 AI 接入方案见
+[板级集成计划](docs/ai_board_integration_plan.md)，通信接口见 [RK 通道](docs/rk_cpu_link.md)。
+DDR 块窗口、W8A16 五类算子及 CPU 调度代码已作为可选功能移植，单双发射短回归通过；
+当前板级构建仍关闭 DDR/AI，接线和厂商 AI IP 尚待完成。见 [M1 移植说明](docs/ai_port_m1.md)。
+后续模型加载/控制/结果通道已决定改为 SPI；本阶段按用户要求保留现有 IIC，暂不实现 SPI。
 默认 `build_fpga.ps1` 构建双发射并更新这个根工程。单发射保留作回归和 Git 历史基线，
 只有显式使用 `-Core single` 构建时才将同一个根工程切换为单发射。
 PDS 在 `build/`、`compile/` 下自动产生的内部 `.pds` 属于忽略的中间文件，不是另一个维护入口。
@@ -31,7 +37,7 @@ PDS 在 `build/`、`compile/` 下自动产生的内部 `.pds` 属于忽略的中
 ./scripts/build_fpga.ps1 -Python python -ModelsimBin 'C:\diskE\modelsim\win64'
 ```
 
-双发射版沿用相同的五个板级引脚与串口参数，LED3 仍只表示程序结束，LED4 表示异常。
+双发射版保留原时钟、按键、两只 LED 和串口，并增加 IIC SCL/SDA；LED3 仍只表示程序结束，LED4 表示异常。
 PDS 顶层分别为 `board_top` 和 `acore_dual_top`；仿真行为模型不加入硬件工程。
 以下章节中的板卡、外设和地址说明适用于两个版本。
 
@@ -56,9 +62,12 @@ CPU 基于 `origin/main` 的 `9bd2479b0ce167a77bfa4ca22e1969984f06a236`，导入
 处理器的 33×33 有符号乘法使用官方 Simple Multiplier IP，三拍，四个 Logos2 APM。
 ROM/RAM 同样使用官方 IP，不把仿真数组加入 PDS。
 
-DDR、AI/YOLO、视频和 IIC 不接入当前上板顶层。原有 `rtl/rk_iic`、`csrc/rk_iic`、
-相关文档及仿真文件保留；不要把原 `TB_board_iic` 当作当前顶层的测试。
-`origin/main` 的 AI/DDR 软件和 RTL 在原分支中保留，本次没有合并或改写它们。
+IIC 已接入当前顶层：`iic_scl=P19`、`iic_sda=R19`、LVCMOS33，CPU 发送 FIFO 为 64 字节，
+RK 下发仍是最新 32 位参数邮箱。`TB_cpu_iic` 可分别测试单/双发射；当前没有 IIC 中断。
+DDR、AI/YOLO、HDMI、PCIe 尚未接入当前 PDS；PCIe 已有的 RTL/IP 文件仅为移植准备。
+`origin/main` 的 DDR/AI 逻辑现已选择性移入 `rtl/`、`csrc/software/`、`pc_ai/`，
+通过 `soc.ENABLE_DDR/ENABLE_AI` 选择，默认关闭；没有改变 Acore 双发射实现。
+HDMI 接入时将停用板级 UART：参考工程的 `r_in[7]` 和当前 `uart_tx` 都使用 AB21，不能共存。
 
 ## 下载及上板现象
 
@@ -104,6 +113,9 @@ RAM 是真双口 `TRANSPARENT_WRITE`，当前 CPU 只用 A 口；同步读取一
 | 0x00030100 | UART TXDATA，32-bit 写，低八位发送 |
 | 0x00030104 | UART STATUS，bit0=1 可发送 |
 | 0x00030108 | 两位 GPIO |
+| 0x00030400–0x00030414 | IIC 发送 FIFO、参数、版本确认和溢出状态；从机地址仍为 0x66 |
+
+预留 `0x30200` 给 AI、`0x30300` 给视频、`0x31000` 给 DDR 窗口，均尚未接入本分支顶层。
 
 `uart_tx.v` 原本就存在；本次补齐 CoreMark 的轮询发送适配和 CR/LF，不依赖 TB 的 0x30008 字符口。
 软件浮点和软件除法来自 RV32I 的 libgcc，不要求 F/D 或硬件除法器。

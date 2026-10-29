@@ -1,0 +1,167 @@
+{
+  "commit": "c035675ff1031060fb07cf34d67936e78c4a18d5",
+  "coremark_run": false,
+  "vendor_ip_generated": false,
+  "synthesis_run": false,
+  "cases": [
+    {
+      "name": "TB_memory_core",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_memory_core.log",
+      "summary": "PASS: memory_core (71 cycle checks)",
+      "log_sha256": "efbcd69d507c73887e05c788efa7944dd88481acbfd3fde018ccdf1e26657365"
+    },
+    {
+      "name": "TB_mem",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_mem.log",
+      "summary": "[160000] PASS SW/LW @0x0000: deadbeef\n[240000] PASS SW/LW zero @0x0004: 00000000\n[320000] PASS SW/LW all-ones @0x0008: ffffffff\n[400000] PASS byte0=44 @0x0010: 00000044\n[440000] PASS byte1=33 @0x0011: 00000033\n[480000] PASS byte2=22 @0x0012: 00000022\n[520000] PASS byte3=11 @0x0013: 00000011\n[600000] PASS LBU 0x80 @0x0020: 00000080\n[640000] PASS LB  0x80 @0x0020: ffffff80\n[720000] PASS LBU 0x7F @0x0021: 0000007f\n[760000] PASS LB  0x7F @0x0021: 0000007f\n[840000] PASS LHU 0x8000 @0x0030: 00008000\n[880000] PASS LH  0x8000 @0x0030: ffff8000\n[960000] PASS LHU 0x7FFF @0x0032: 00007fff\n[1000000] PASS LH  0x7FFF @0x0032: 00007fff\n[1120000] PASS word=AA BB CC 11 @0x0040: aabbcc11\n[1240000] PASS word=55 66 12 34 @0x0050: 55661234\n[1360000] PASS word=AB CD 77 88 @0x0060: abcd7788\n[2040000] PASS bulk[0] = a0000000\n[2080000] PASS bulk[1] = a0000001\n[2120000] PASS bulk[2] = a0000002\n[2160000] PASS bulk[3] = a0000003\n[2200000] PASS bulk[4] = a0000004\n[2240000] PASS bulk[5] = a0000005\n[2280000] PASS bulk[6] = a0000006\n[2320000] PASS bulk[7] = a0000007\n[2360000] PASS bulk[8] = a0000008\n[2400000] PASS bulk[9] = a0000009\n[2440000] PASS bulk[10] = a000000a\n[2480000] PASS bulk[11] = a000000b\n[2520000] PASS bulk[12] = a000000c\n[2560000] PASS bulk[13] = a000000d\n[2600000] PASS bulk[14] = a000000e\n[2640000] PASS bulk[15] = a000000f\n[2880000] PASS alt-wr1 @0x0090: 12345678\n[2960000] PASS alt-wr2 @0x0094: 9abcdef0\n[3000000] PASS alt-rd1 @0x0090: 12345678\n[3040000] PASS alt-rd2 @0x0094: 9abcdef0",
+      "log_sha256": "9288bf9fac90bab90ade90a739ef91cc24333a8623411cf31a2898319631114b"
+    },
+    {
+      "name": "TB_rk_iic",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_rk_iic.log",
+      "summary": "PASS: address NACK, repeated START, scratch, atomic commit, uplink mailbox",
+      "log_sha256": "e22be1e3382d4afbd413fb415eaecd10434f447a089a9e10f2a461fb371a7557"
+    },
+    {
+      "name": "TB_rk_cpu_bus",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_rk_cpu_bus.log",
+      "summary": "PASS: CPU MMIO FIFO capacity/order/wrap/backpressure/overflow, parameter snapshot ACK race/reset",
+      "log_sha256": "eb3366e7fa6cdf83230d91b9ff059c92f139ecc360e91e3976ccc8df5991f2bb"
+    },
+    {
+      "name": "TB_board_iic",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_board_iic.log",
+      "summary": "PASS: board I2C boot byte, consume once, scratch, parameter commit, reset recovery",
+      "log_sha256": "e59f7a7c1ee9be0ea173641c8f08892e641ba821ab96e5c20160c82198b3ee26"
+    },
+    {
+      "name": "TB_cpu_iic",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_cpu_iic.log",
+      "summary": "PASS: actual RV32 firmware -> FIFO -> IIC, RK parameter -> CPU -> echo/GPIO, reset recovery",
+      "log_sha256": "0410c3942ec45c5b295f7fade8fbb8c9359b0a735b98132bacc517e508912c7a"
+    },
+    {
+      "name": "TB_board",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/TB_board.log",
+      "summary": "RAM INIT/BSS/BYTE/HALF/WORD PASS\nSELFTEST PASS\nRAM INIT/BSS/BYTE/HALF/WORD PASS\nSELFTEST PASS\nPASS: board boot, UART 115200, RAM, GPIO, timer and button restart at 25 MHz",
+      "log_sha256": "7964242e3398ff0943fd2229d76c65d6e7e76c0be0af96fa0ccdc2977565011f"
+    },
+    {
+      "name": "cpu_iic_dual",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/cpu_iic_dual.log",
+      "summary": "PASS: actual RV32 firmware -> FIFO -> IIC, RK parameter -> CPU -> echo/GPIO, reset recovery",
+      "log_sha256": "0410c3942ec45c5b295f7fade8fbb8c9359b0a735b98132bacc517e508912c7a"
+    },
+    {
+      "name": "rk_iic_host_mock",
+      "passed": true,
+      "exit_code": 0,
+      "log": "build/integration-review/rk_iic_host_mock.log",
+      "summary": "PASS: combined reads, endian order, commit/wrap, verification failure, mailbox, errors without retry",
+      "log_sha256": "fb55d5e46613effeb7da80e82f17242535f6ad35d2d7e52701dce1051cf92b1c"
+    }
+  ],
+  "date": "2026-10-29",
+  "scope": "modified working tree based on the recorded commit; behavioral review only",
+  "status": "passed_short_checks_with_documented_integration_followups",
+  "fpga_implemented": false,
+  "fpga_tested_this_review": false,
+  "iic_irq_integrated": false,
+  "ai_integrated": false,
+  "iic_cpu_mmio_base": "0x00030400",
+  "iic_slave_address_7bit": "0x66",
+  "static_checks": {
+    "top_module": "acore_dual_top",
+    "enable_dual": 1,
+    "project_file_references": 53,
+    "missing_files": [],
+    "duplicate_current_pin_locations": [],
+    "ip_targets": {
+      "pango_acore_fetch": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      },
+      "pango_acore_ram": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      },
+      "pango_multiplier_ip": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      },
+      "pango_ram": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      },
+      "pango_rom": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      },
+      "pcie_test": {
+        "family": "Logos2",
+        "device": "PG2L100H",
+        "package": "FBG484",
+        "speedgrade": "-6"
+      }
+    },
+    "external_ddr_hdmi_pcie_instantiated": false
+  },
+  "source_sha256": {
+    "rv32I.pds": "9dcf6d5eeeeb0b4d60a5e12ea620cdf227784852f3e046f58679438e6e9d4827",
+    "board/board_top.v": "1ebf2c17a85b56e7c45d93296681ca7ddcd7571fed4fab5e607870f9a9115741",
+    "board/acore_dual_top.v": "6432b0b57c8627b4fbee166ab5ea37758cbbf8b3b69abc538637bc4747376d98",
+    "board/pins.fdc": "872fc34fcf42c6e0b3a08da888e0a1ba4c9da6aba8485c96bfead5095741aeae",
+    "board/timing.fdc": "6bc907f115e06557d8f13f07991b94a76de9788ba65881f1e0d71b31c1434ce6",
+    "rtl/Acore.v": "cd7eef7827e4b7eb30408aa19f7a24ef8725152e9d5bd97aa9ef7d369a9e9a6c",
+    "rtl/CSR.v": "3f6aa82deab134118f6578678870d8a97f0a398fcf2577459ad71566f7d78445",
+    "rtl/soc.v": "5038f904e041fa681d65459310446355e354886681cded5e08c8f88a4a982c05",
+    "rtl/peripheral_bus.v": "32cf4536085b62fdc779a07bcd2e56177df4073c00bb8a68787e13bf9ebf215f",
+    "firmware/rk_link.h": "4e2eb2521230e89099f11035c2c7e5c2d49eb7f4590a8026c2151ffde8c6cf7f",
+    "firmware/iic_service.c": "8f764cb737c0d509f1e312f57cb8dcc63a67ae5136109919921f9791624d3b42",
+    "firmware/iic_service/rom.hex": "b70b7bdcd657c3282c5799bc82f6c374dfe50d74bedaad6dfa1e78cff3dac4be",
+    "firmware/iic_service/ram.hex": "b4892e8550c0688558ed8bd21f497efc1ffb7620b2a72715a4719a9753ab08fb",
+    "firmware/iic_service/manifest.json": "437097bdff5cb8f8870336c3eab8c588da0dfbe7da4c88ab3b432d4d469a90f3",
+    "scripts/check_sim.py": "f00f5d85d9f61926e6988e7b6a0870997cf8f873306503882cc2fff141e2192d",
+    "sim/TB_cpu_iic.v": "4d52cfcf103a243e304d78f92276b65f982f6860f8a72ee0d74ccc8ab4803a0d",
+    "sim/TB_rk_cpu_bus.v": "6649bfc4c8b0e2233ae9cdc1f67f858239f18b0ecd5765effae77bf32575d3d5",
+    "rtl/rk_iic/rk_iic_adapter.v": "ad2e08b3fdc5f5ead2da087a04206037d4364abdc1cfe73ea546565932dab979",
+    "rtl/rk_iic/rk_iic_frontend.v": "4965f4011383ea972bb9ec649e7cd5d78d5d8d9a1624125e15025351510b9e02",
+    "rtl/rk_iic/rk_iic_regs.v": "ca7b6fcb82a2ba081db407da1c29ebf6b26c5dd78cdef64be968f5e691198f08",
+    "rtl/rk_iic/rk_iic_serial.v": "f1688ae934fb8915cc82d28f35f4ee6773e87d7efb01c81458ee7f885063cb87"
+  },
+  "followups": [
+    "Add external interrupt source/controller; timer-only CSR and SoC tie-off remain",
+    "Extend IIC latest-parameter/single-mailbox protocol for reliable block loading and framed results",
+    "Merge DDR/AI/video MMIO selectively, share one DDR controller with transaction ownership",
+    "Remove UART pin AB21 when HDMI r_in[7] is introduced",
+    "Complete multi-clock, IIC synchronizer and HDMI timing constraints before implementation",
+    "Hardware memory IPs still contain CoreMark; select service image manually for IIC firmware deployment"
+  ],
+  "model_preparation_report": "reports/integration_review/model_asset.json"
+}

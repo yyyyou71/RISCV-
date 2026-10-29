@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "initial": 18252,
+  "golden": 18252,
+  "models": 28,
+  "launches": 14,
+  "valid_networks": 3,
+  "invalid_models": 24,
+  "cases": [
+    {
+      "name": "tasks_dual0_cpu25",
+      "summary": "PASS ai_tasks models=28 launches=14 words=18252",
+      "simulation_seconds": 0.7221467270001085,
+      "plusargs": [
+        "+TASK_INITIAL=18252",
+        "+TASK_GOLDEN=18252",
+        "+TASK_JOBS=28",
+        "+TASK_LAUNCHES=14"
+      ],
+      "passed": true
+    },
+    {
+      "name": "tasks_dual0_stalled",
+      "summary": "PASS ai_tasks models=28 launches=14 words=18252",
+      "simulation_seconds": 0.7236406709998846,
+      "plusargs": [
+        "+TASK_INITIAL=18252",
+        "+TASK_GOLDEN=18252",
+        "+TASK_JOBS=28",
+        "+TASK_LAUNCHES=14",
+        "+cpu_half_ns=7",
+        "+ddr3_core_period_ns=6",
+        "+ddr3_random_stalls=1"
+      ],
+      "passed": true
+    },
+    {
+      "name": "tasks_dual1_cpu25",
+      "summary": "PASS ai_tasks models=28 launches=14 words=18252",
+      "simulation_seconds": 0.670941189000132,
+      "plusargs": [
+        "+TASK_INITIAL=18252",
+        "+TASK_GOLDEN=18252",
+        "+TASK_JOBS=28",
+        "+TASK_LAUNCHES=14"
+      ],
+      "passed": true
+    },
+    {
+      "name": "tasks_dual1_stalled",
+      "summary": "PASS ai_tasks models=28 launches=14 words=18252",
+      "simulation_seconds": 0.7231236779998653,
+      "plusargs": [
+        "+TASK_INITIAL=18252",
+        "+TASK_GOLDEN=18252",
+        "+TASK_JOBS=28",
+        "+TASK_LAUNCHES=14",
+        "+cpu_half_ns=7",
+        "+ddr3_core_period_ns=6",
+        "+ddr3_random_stalls=1"
+      ],
+      "passed": true
+    },
+    {
+      "name": "fault_reset_mmio_coexist",
+      "summary": "PASS ai_control fault_cdc=1 reset_inflight=1 recovery=2 iic_coexist=1",
+      "simulation_seconds": 0.06917765300022438,
+      "plusargs": [
+        "/mnt/c/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/build/ai-port/control.vvp"
+      ],
+      "passed": true
+    },
+    {
+      "name": "four_state_unknown_write",
+      "passed": true,
+      "expected_failure": true,
+      "summary": "Known enabled byte accepted despite masked X; enabled X byte rejected"
+    },
+    {
+      "name": "dual_cpu_detection",
+      "passed": true,
+      "summary": "One RTL convolution, 4219 DDR words, 7 CPU detection records"
+    }
+  ],
+  "rom_bytes": 4496,
+  "data_bytes": 0,
+  "firmware_sha256": "bd1759366c78bf74e37a4024fd1d61ecba504c5710d86c008be0890ce0bb9be8",
+  "full_network_run": false,
+  "coremark_run": false,
+  "vendor_ip_verified": false,
+  "pds_implemented": false,
+  "verilator": "Verilator 5.052 2026-09-05 rev v5.052-61-g983a06a16",
+  "source_sha256": {
+    "rtl/ALU.v": "ac19f295fc1a7fbe177c82c913a4123c799069fff7a13b62f948d6336407d541",
+    "rtl/Acore.v": "cd7eef7827e4b7eb30408aa19f7a24ef8725152e9d5bd97aa9ef7d369a9e9a6c",
+    "rtl/CSR.v": "3f6aa82deab134118f6578678870d8a97f0a398fcf2577459ad71566f7d78445",
+    "rtl/GPR_matrix.v": "f0921cfe29610b8e3b0587e9a5c49e06da5d47a14256b1a6d3e68c7528559db2",
+    "rtl/MuxKeyInternal.v": "5c76292cf3de8bf6075ebcb9b06290d1b42dafce73acca6af1a5d6c8ea658412",
+    "rtl/PC.v": "05603f0feed9466abb3296709869836799d7c85d4be1acf75307ee618382a89d",
+    "rtl/ROM.v": "5ac6e482262caf156fa50a953f6a42c817f47fb0ad026ab3d47bbc6463753a1d",
+    "rtl/ROM_core.v": "c98d0b78cec8e72897a2f6011280a73bee7fd14a292bcf57f4fa4d3693292d68",
+    "rtl/Reg.v": "d9d3cadac23f52000a85f5d612182b6cbb4d3f0fe93071bc38c7ce4f10d7309c",
+    "rtl/acore_fetch_memory.v": "469c67444ca7da5a5a6f1f4fe064ed266f6eadf194f3a6a8365bc0c7e8a8d55d",
+    "rtl/acore_fetch_queue.v": "875a281e0b25c0cac0391827addc604b95b5dd843c00d9dcca7cd5459c794c0c",
+    "rtl/acore_forward.v": "544bc9564eb00466987d79e6fdeebd96fe20bc34d56a3b361056d406e854632e",
+    "rtl/acore_pair.v": "2e75f61253491397e81c8316491bb766b03c22347196faf01c1928f18fc28c11",
+    "rtl/add_int16.v": "2b18e1934c8e54f1b25649ccf62ae845fddd94bf5d866890c10b8870da8a598f",
+    "rtl/branch_predictor.v": "bb406a5bc78751fa1bd74d16523e780aed00ebf956c7916558007d1bd713bbb0",
+    "rtl/conv2d_core.v": "2f4749bf817e0a5fcb49476c68f96e675c95dc32468c9cd2d7f898a4b6b6919a",
+    "rtl/conv2d_ddr_engine.v": "0e15d0bd369c5f70b4747325ba0d00a537619183ff89a2ad39f9ed4678b6b5dc",
+    "rtl/conv2d_w8a16_core.v": "11df5923584688ad04f457d0f279ca24ee2376bb2de88cfce3aa91b7f5dff953",
+    "rtl/conv_mac_tile.v": "10ae0476b9028b77a5bd8f5c9e691db64dfee2ae9ed2281cb9404a03d961d73e",
+    "rtl/ddr_block_transfer.v": "48df68c5b79c46d909ec891422b0d9dfa9942eb738094727e375be509cb1724f",
+    "rtl/ddr_chunk_client.v": "44c13ee0369d40b999752148d8d104197cbdc1ad6fb8e287c7c151448cf7deaa",
+    "rtl/ddr_cpu_window.v": "f0945f59462cb4b1c81c530de1739e3da5902d66dd26c2063eed5887db88d1da",
+    "rtl/decoder.v": "7488431d347ade162af2b63b3341795f9050ff0b4cf643dd3a30fdffd82dd063",
+    "rtl/divide_unit.v": "6b79fce9559823d485981685bf60ac5ddf37b75e945d2e3c7df2f5275cd3fef5",
+    "rtl/divider_core.v": "b2981039b71dc2b0846907f4397a0edc792ae900f0ac0c7ca6d36d8b07dfca49",
+    "rtl/hazard_detection_unit.v": "7b7450e197b289ce7a85c955967582bf92f514c32229cfa7d75114aa6aa4bce4",
+    "rtl/memory.v": "aa065816f6e44a66775c8416a2940f4d84c4dd5d2417af62a721d58f1e028c2a",
+    "rtl/memory_core.v": "c48e8af68616dd1bac433d17678df0f774c0e0646aa6fa82a18a1f5c16823027",
+    "rtl/multiplier_core.v": "23098b5d003ca18f08338acdc780befdd0118e86527099369436b579b4bd2eef",
+    "rtl/multiply_adder.v": "e7c2e1d68d4fb8bea046caf71b3938b26cc8da727308c3d67ee00a8e9ad3590e",
+    "rtl/multiply_adder_w8a16.v": "71320bf34595264bf376d574633df01097b711676593a71bf163ffe0c2667de6",
+    "rtl/multiply_unit.v": "813ab2d4ad4eccd4c42e43912800244b95307d9969d26f2db045800feb751a6e",
+    "rtl/peripheral_bus.v": "7f8b05ff21468dad26df8e5fa16236e47fe12665fd58e5d272a139eb04a08752",
+    "rtl/requant_int8.v": "67626756087821b002e8709d51dd7d7b11d696c5ea37cbc3b3a742dca53cb9c8",
+    "rtl/requant_q13.v": "45f591af2455998339d33b6512494fb6de2197578bef59e5d6ab784de5e13ea1",
+    "rtl/soc.v": "31c27db0c6e8b5d7242d076ddc7519daf4d60f7bca162dfb681a5905a16cb82a",
+    "rtl/uart_tx.v": "a5842224e3919ae36fbf3bbf91fc45cb36b741e0db2dcd0336af07a0ee6b00b9",
+    "rtl/video_async_fifo.v": "94a633cb22fed25fd87c14f43c8a9ac72b32c5c086676ad5f6382b83ab534b25",
+    "rtl/video_frame_capture.v": "b82c39799fcc025402c6a55ddb79728f3273ed5f17e509f5739057a06dd8b353",
+    "sim/models/ROM_core.v": "43370af0f12ae394999dbe5f516e189d7074cc22c7edee91b08443c3b26f0e9a",
+    "sim/models/acore_fetch_memory.v": "0bd8d11395b1911ca80e21daf619ec295dfa8f27e5b6a800952c4fb626e973a8",
+    "sim/models/memory_core.v": "8f6e155733ea57550ffc8ed3d826173a6cbe802c3e3026ab161f4c600cf3242c",
+    "sim/models/multiplier_core.v": "cb4c827b470e525919b3b86b65b0e992639fdae7aacf177aa033b307016e6307",
+    "sim/models/multiply_adder.v": "95271112d87fd5f10bb4bfe7ac903b3804d12cc72f0db1c36fac1a69694312c5",
+    "sim/models/multiply_adder_w8a16.v": "2d87b3618daaadcfd36461a70906562a9f3c325c292acc41a668bdb39af15a4b",
+    "sim/models/pango_video_fifo_model.v": "9abb063faab1ed7355b6e089f12f5df7a0a921dec581138aec6e101e0d76ceec",
+    "sim/models/video_async_fifo.v": "abc93551e4b17cc556c1be1202f4a71fba91e3a6622122dbdf9d158b17fcfbdd",
+    "sim/ai/TB_add_int16.v": "6fdda462986f9c092cac223346d6134bdd94b05aa35a57701a8b6a33e961f0ed",
+    "sim/ai/TB_ai_control.v": "3eba3e3af089a2a77d850953cbd9a494e0f4ff9e8193acadd0f4b9785bbe786b",
+    "sim/ai/TB_conv2d_ddr_engine.v": "004861d540eef886a62c1c5787e20eaf63c3bdf5bdfbb56167f016431e849c2c",
+    "sim/ai/TB_ddr_block_transfer.v": "7fd8278d47b9d6c4a06762e4067f407f048cad90be4b53580ffc77587dd2215d",
+    "sim/ai/TB_ddr_block_transfer_faults.v": "9b2521864589106eabe43a8e3e306ef7625927a60f822c9907ebeb3298e92b36",
+    "sim/ai/TB_ddr_cpu_window.v": "52c1d5ab908808a82b7a6a592c09b187fd7e10ddb42c941a954dfd248dbd81b7",
+    "sim/ai/TB_ddr_unknown_write.v": "322878ec00eb408cd1cb81ca764c51bab18b52208b56c73fe6ff2ccec76968c3",
+    "sim/ai/ai_network_checks.vh": "ef8136421889a3bda63657a3561fd5862d5bb13a7a207eb609e80556c82a5bd2",
+    "sim/ai/ai_task_checks.vh": "f420b883f50dc95f850d74bc706d3ce89c06e5ad61b1883e8d707ef7064ab68f",
+    "sim/ai/w8a16_checks.vh": "8e7122c9ab359c4ced47173619fcdae5b9a9d63a96c7fb0f1ac27aa2a39ab99a",
+    "scripts/check_ai_port.py": "394439024d46e8501f04d7f7784fb8ae7c4d53598f54028c6d67b458e0a494a2",
+    "sim/ddr3/ddr3.sv": "dd978ddad9b9b1adc09de5c9bcde8393304ae1fe0b745b5385cd8881c5447a1d",
+    "csrc/software/ai_runtime.c": "fe22c1ed17d5a5b6f11903cc60acd3d99d1263710f10c9d40a00ebb39b3e9568",
+    "csrc/software/ai_task_runner.c": "e0575eb3036f25ce14bc98e71c4edaf7d40631208f31e54e96fddac1af9513a8",
+    "firmware/ai_link.ld": "fabc5711de2f50fd1a6761e903845fed015cbf45427e45599b91d4ba49bc40e2",
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c"
+  }
+}

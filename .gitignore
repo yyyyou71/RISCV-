@@ -1,5 +1,6 @@
 # PDS implementation outputs and exported programming files
 /build/
+/pc_ai/outputs/
 /compile/
 /synthesize/
 /device_map/

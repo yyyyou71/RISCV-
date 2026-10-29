@@ -1,7 +1,13 @@
 // CPU 外设接口适配：地址译码、UART 写请求和同步读数据返回。
 module peripheral_bus #(
     parameter integer CLK_FREQ  = 25_000_000,
-    parameter integer BAUD_RATE = 115200
+    parameter integer BAUD_RATE = 115200,
+    parameter integer ENABLE_DDR = 0,
+    parameter integer ENABLE_AI = 0,
+    parameter integer AI_ACT_WIDTH = 16,
+    parameter integer DDR_TIMEOUT_CYCLES = 4096,
+    parameter integer ENABLE_VIDEO = 0,
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9
 )(
     input  wire        clk,
     input  wire        rst_n,
@@ -14,6 +20,19 @@ module peripheral_bus #(
     input  wire [31:0] dev_wdata,
     input  wire [1:0]  dev_size,
     output reg  [31:0] dev_rdata,
+
+    input wire core_clk, ddr_init_done,
+    input wire pixclk_in, vs_in, de_in,
+    input wire [23:0] rgb_in,
+    output wire [27:0] axi_awaddr, axi_araddr,
+    output wire axi_awuser_ap, axi_aruser_ap, axi_awvalid, axi_arvalid,
+    output wire [3:0] axi_awuser_id, axi_aruser_id, axi_awlen, axi_arlen,
+    input wire axi_awready, axi_arready, axi_wready, axi_wusero_last,
+    input wire [3:0] axi_wusero_id, axi_rid,
+    output wire [127:0] axi_wdata,
+    output wire [15:0] axi_wstrb,
+    input wire [127:0] axi_rdata,
+    input wire axi_rlast, axi_rvalid,
 
     output wire [7:0] rk_tx_data,
     output wire rk_tx_valid,
@@ -32,6 +51,38 @@ module peripheral_bus #(
     reg [31:0] cycle_count;
     wire word_access;
 
+    // One synchronous CPU read stage is retained for every MMIO target.
+    // The window owns its CPU/DDR CDC mailbox and serializes AI/window/video jobs.
+    wire [31:0] ddr_read_data;
+    generate if (ENABLE_DDR != 0) begin : g_ddr
+        ddr_cpu_window #(.ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH),
+            .TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES), .ENABLE_VIDEO(ENABLE_VIDEO),
+            .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS)) u_window (
+            .clk(clk), .rst_n(rst_n), .core_clk(core_clk), .ddr_init_done(ddr_init_done),
+            .pixclk_in(pixclk_in), .vs_in(vs_in), .de_in(de_in), .rgb_in(rgb_in),
+            .dev_we(dev_we && word_access), .dev_addr_wr(dev_addr_wr),
+            .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .read_data(ddr_read_data),
+            .axi_awaddr(axi_awaddr), .axi_araddr(axi_araddr),
+            .axi_awuser_ap(axi_awuser_ap), .axi_aruser_ap(axi_aruser_ap),
+            .axi_awvalid(axi_awvalid), .axi_arvalid(axi_arvalid),
+            .axi_awuser_id(axi_awuser_id), .axi_aruser_id(axi_aruser_id),
+            .axi_awlen(axi_awlen), .axi_arlen(axi_arlen),
+            .axi_awready(axi_awready), .axi_arready(axi_arready),
+            .axi_wready(axi_wready), .axi_wusero_last(axi_wusero_last),
+            .axi_wusero_id(axi_wusero_id), .axi_rid(axi_rid),
+            .axi_wdata(axi_wdata), .axi_wstrb(axi_wstrb),
+            .axi_rdata(axi_rdata), .axi_rlast(axi_rlast), .axi_rvalid(axi_rvalid)
+        );
+    end else begin : g_no_ddr
+        assign ddr_read_data=0;
+        assign axi_awaddr=0; assign axi_araddr=0;
+        assign axi_awuser_ap=0; assign axi_aruser_ap=0;
+        assign axi_awvalid=0; assign axi_arvalid=0;
+        assign axi_awuser_id=0; assign axi_aruser_id=0;
+        assign axi_awlen=0; assign axi_arlen=0;
+        assign axi_wdata=0; assign axi_wstrb=0;
+    end endgenerate
+
     always @(posedge clk) begin
         if (!rst_n) begin
             cycle_count <= 32'b0;
@@ -45,9 +96,11 @@ module peripheral_bus #(
     end
 
     // Same-clock CPU queue; full writes are rejected and flagged.
-    localparam [31:0] RK_TX=32'h00030200, RK_STATUS=32'h00030204,
-        RK_PARAM=32'h00030208, RK_SEQ=32'h0003020c,
-        RK_ACK=32'h00030210, RK_CLEAR=32'h00030214;
+    // 0x30200 is reserved for AI, 0x30300 for video capture.
+    // This CPU MMIO base is independent of the I2C slave address (0x66).
+    localparam [31:0] RK_TX=32'h00030400, RK_STATUS=32'h00030404,
+        RK_PARAM=32'h00030408, RK_SEQ=32'h0003040c,
+        RK_ACK=32'h00030410, RK_CLEAR=32'h00030414;
     reg [7:0] tx_fifo [0:63];
     reg [5:0] tx_wr_ptr, tx_rd_ptr;
     reg [6:0] tx_count;
@@ -129,8 +182,8 @@ module peripheral_bus #(
             else if (word_access && dev_addr_rd == RK_PARAM) dev_rdata <= param_value;
             else if (word_access && dev_addr_rd == RK_SEQ) dev_rdata <= param_seq;
             else
-                // 未实现地址、不支持的访问宽度、只写寄存器读回均返回 0。
-                dev_rdata <= 32'b0;
+                // DDR/AI/video read_data is combinational, so no extra read cycle.
+                dev_rdata <= word_access ? ddr_read_data : 32'b0;
         end
     end
 

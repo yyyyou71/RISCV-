@@ -2,6 +2,10 @@
 
 ## 当前状态
 
+2026-10-29 补充：后续集成以桌面已上板运行的 `ziguang-fpga2` 为参考，
+整体方案见 `ai_board_integration_plan.md`。当前 IIC 已有 P19/R19 约束；
+下文“待确认”是导入 PCIe 时的历史状态。PCIe 仍未例化到本分支顶层。
+
 来源：D:/Projects/Maximus-project/fpga/purple-light-fpga-main。
 目标：当前 RISCV- 工程，PG2L100H / FBG484 / -6。
 
