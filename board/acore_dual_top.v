@@ -1,5 +1,9 @@
 // CPU + proven HDMI/PCIe platform, sharing one physical DDR3 controller.
-module acore_dual_top #(parameter integer ENABLE_AI=0)(
+module acore_dual_top #(
+    parameter integer ENABLE_AI=0,
+    parameter integer STANDALONE_CAPTURE=1,
+    parameter integer RESET_HOLD_CYCLES=250000
+)(
 
     input wire sys_clk,key0_n,iic_scl,
     inout wire iic_sda,
@@ -41,10 +45,13 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
     always @(posedge cpu_clk or negedge system_rst_n)
         if(!system_rst_n)begin ready_sync<=0;fault_sync<=0;end
         else begin ready_sync<={ready_sync[0],ready};fault_sync<={fault_sync[0],fault};end
-    assign led0=ready_sync[1];
+    // In local bring-up GPIO[0] carries error pulses on LED0, independently of
+    // the hard-fault OR on LED1. Normal/full-mode DDR indication is preserved.
+    assign led0=ready_sync[1] ^ (STANDALONE_CAPTURE ? cpu_led0:1'b0);
     assign led1=cpu_led1|fault_sync[1];
     board_top #(.ENABLE_DUAL(1),.ENABLE_DDR(1),.ENABLE_AI(ENABLE_AI),
-        .ENABLE_FRAME_CONTROL(1),.ENABLE_PREPROCESS(1),.DDR_LIMIT_BYTES(32'h04000000)) u_board (
+        .ENABLE_FRAME_CONTROL(1),.ENABLE_PREPROCESS(1),.RESET_HOLD_CYCLES(RESET_HOLD_CYCLES),
+        .DDR_LIMIT_BYTES(32'h04000000)) u_board (
         .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
         .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .sys_clk(cpu_clk),
@@ -85,7 +92,8 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
         .axi_rdata(rdata),
         .axi_rvalid(rvalid),
         .axi_rlast(rlast));
-    acore_video_platform u_video (
+    acore_video_platform #(.STANDALONE_CAPTURE(STANDALONE_CAPTURE),
+        .RESET_HOLD_CYCLES(RESET_HOLD_CYCLES)) u_video (
         .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
         .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .monitor_clk(cpu_clk),

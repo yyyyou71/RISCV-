@@ -1,4 +1,7 @@
-module acore_video_platform (
+module acore_video_platform #(
+    parameter integer STANDALONE_CAPTURE=0,
+    parameter integer RESET_HOLD_CYCLES=250000
+)(
     input wire monitor_clk,
     input wire tensor_we,
     input wire [7:0] tensor_addr_wr,tensor_addr_rd,
@@ -422,6 +425,15 @@ assign cca_dbg_valid_pix=1'b0;
 //   读侧(pclk_div2)  : 128bit, 呈现与 a_fifi 相同的 rd_data/rd_empty/almost_empty 接口。
 //   帧对齐由内部 marker 驱动, 读侧自治, 无需外部 wr_rst/rd_rst/frame_active。
 wire input_shape_ok;
+wire application_rst_n;
+generate if(STANDALONE_CAPTURE)begin: g_local_application_reset
+    // CPU, DDR and preprocessing must run with no PCIe reference clock/PERST#.
+    // The PCIe IP and DMA retain their original reset and clock connections.
+    board_reset #(.HOLD_CYCLES(RESET_HOLD_CYCLES)) u_local_reset(
+        .clk(monitor_clk),.key0_n(button_rst_n),.rst_n(application_rst_n));
+end else begin: g_pcie_application_reset
+    assign application_rst_n=core_rst_n;
+end endgenerate
 wire [31:0] source_next_id,raw_begin_id,raw_end_id;
 wire source_ready,raw_begin,raw_accepted,raw_end,raw_end_ok,tensor_fault;
 wire [2:0] raw_begin_slot,raw_end_slot;
@@ -432,11 +444,11 @@ wire [3:0] tensor_awlen,tensor_awid,tensor_wid;
 wire [127:0] tensor_write_data;
 wire [15:0] tensor_wstrb;
 assign cpu_ddr_clk=ddr_core_clk;
-assign system_rst_n=core_rst_n;
-video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(core_rst_n),
+assign system_rst_n=application_rst_n;
+video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(application_rst_n),
     .vs(vs_in),.de(de_in),.shape_ok(input_shape_ok),.shape(measured_shape),.period_ticks(measured_period));
 hdmi_tensor_capture u_preprocess (
-    .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(core_rst_n),
+    .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(application_rst_n),
     .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
     .dev_we(tensor_we),.dev_addr_wr(tensor_addr_wr),.dev_addr_rd(tensor_addr_rd),
     .dev_wdata(tensor_wdata),.read_data(tensor_rdata),
@@ -449,7 +461,7 @@ hdmi_tensor_capture u_preprocess (
     .axi_awlen(tensor_awlen),.axi_awid(tensor_awid),.axi_awready(tensor_awready),
     .axi_wdata(tensor_write_data),.axi_wstrb(tensor_wstrb),
     .axi_wready(tensor_wready),.axi_wlast(tensor_wlast),.axi_wid(tensor_wid));
-frame_ring_ddr3 u_hdmi_fifo (
+frame_ring_ddr3 #(.ENABLE_PCIE_READER(!STANDALONE_CAPTURE)) u_hdmi_fifo (
   .tensor_awaddr(tensor_awaddr),.tensor_awvalid(tensor_awvalid),.tensor_awap(tensor_awap),
   .tensor_awlen(tensor_awlen),.tensor_awid(tensor_awid),.tensor_awready(tensor_awready),
   .tensor_wdata(tensor_write_data),.tensor_wstrb(tensor_wstrb),.tensor_wready(tensor_wready),
@@ -466,7 +478,7 @@ frame_ring_ddr3 u_hdmi_fifo (
   .write_slot(frame_wr_slot),.write_active(frame_wr_active),.shared_fault(shared_fault),
   // 时钟与复位
   .sys_clk        (sys_clk),          // 25MHz -> DDR3 参考时钟
-  .sys_rst_n      (core_rst_n),       // 系统复位
+  .sys_rst_n      (application_rst_n), // local or original PCIe application reset
   .clr            (1'b0),             // 保留未用
   .core_clk       (ddr_core_clk),     // DDR3 输出核心时钟(导出, 顶层未用)
   .ddr_init_done  (cpu_ddr_ready),

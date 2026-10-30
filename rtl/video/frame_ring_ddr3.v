@@ -21,6 +21,7 @@
 // (clr / wr_en / dma_start) 保留但内部未用, 见各处标注。
 // =============================================================================
 module frame_ring_ddr3 #(
+    parameter integer ENABLE_PCIE_READER = 1,
     parameter MEM_ROW_WIDTH    = 15,
     parameter MEM_COLUMN_WIDTH = 10,
     parameter MEM_BANK_WIDTH   = 3,
@@ -235,6 +236,7 @@ module frame_ring_ddr3 #(
     );
 
     // ======================== 读控制器: DDR3 -> FIFO (含 ddr_2_fifo, 自治) ========================
+    generate if(ENABLE_PCIE_READER)begin: g_reader
     ddr3_read_ctrl #(
         .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
         .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
@@ -273,6 +275,16 @@ module frame_ring_ddr3 #(
         .axi_rlast        ( r_rlast        ),
         .axi_rvalid       ( r_rvalid       )
     );
+    end else begin: g_no_reader
+        // No RK means the PCIe read clock may not exist. Do not fill its FIFO,
+        // acquire a reader lease or issue video AR requests in local mode.
+        assign reader_hold=0;
+        assign frame_consumed=0;assign consumed_frame_id=0;
+        assign read_busy=0;assign read_done=0;
+        assign rd_data=0;assign rd_empty=1;assign rd_almost_empty=1;
+        assign r_araddr=0;assign r_aruser_ap=0;assign r_aruser_id=0;
+        assign r_arlen=0;assign r_arvalid=0;
+    end endgenerate
 
     // ======================== 诊断粘滞标志 (core_clk 域) ========================
     reg wr_done_seen_r, read_started_r, frame_done_seen_r;

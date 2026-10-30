@@ -12,9 +12,9 @@
       "source": "hdl/new_ring/frame_ring_ddr3.v",
       "destination": "rtl/video/frame_ring_ddr3.v",
       "sha256": "26fea8b2593372f7171397ca912e834e19ff1e71756636f1fcaaa3cc74b30c29",
-      "current_normalized_sha256": "4323e3fa1e6fe13561e3d5e5a7fffde1c5a6fefc5dc9ba3a78c48f9061b3c028",
+      "current_normalized_sha256": "51a3d0a3be06b3ec68485ae4625913e1404ae5d5005e4cca01f691181cd18072",
       "modified": true,
-      "change": "Preserve video DDR layout; add nested CPU/tensor arbitration, raw frame events, source identity and independent tensor frame protection."
+      "change": "Preserve DDR write layout and CPU/tensor arbitration; optional PCIe reader elimination for standalone capture, with no reader lease or video AR requests."
     },
     {
       "source": "hdl/new_ring/ddr3_write_ctrl_lite.v",
@@ -1235,8 +1235,8 @@
       "destination": "board/acore_video_platform.v",
       "modified": true,
       "sha256": "9073e4fbeec5846ca203f5f4b50cefb9f831f277025107593986b323d48b5fc4",
-      "current_normalized_sha256": "ff68fd6bd6dee82ad16719b21d892ffd17e4ffd2f4ced36c4b5b8da18c44c856",
-      "change": "Retain PCIe/DMA/HDMI configuration; connect CPU-triggered RGB888 tensor capture, original-frame identity/lease and tensor DDR writes on globally buffered monitor clock."
+      "current_normalized_sha256": "6880a4868d53ada2c5cc629fe217b21d1c458b4d6cba2abf6c3df6f3ec3899b5",
+      "change": "Retain reference PCIe clocks/reset; add optional local-25MHz CPU/DDR/preprocess application reset and disable PCIe reader in standalone capture mode."
     }
   ],
   "sha256_definition": "sha256: exact original desktop bytes; current_normalized_sha256: imported/adapted LF-normalized bytes",

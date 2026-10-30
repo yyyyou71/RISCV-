@@ -2,6 +2,7 @@
 
 基线为合并后的 `0b32c29`，唯一工程入口仍是根目录 `rv32I.pds`，顶层为 `acore_dual_top`。
 本阶段接入 P1 预处理，不启用 AI，不修改 SPI 的协议、引脚、服务固件或测试顶层。
+当前已增加并默认启用不接 RK 的独立模式，应用复位和 LED 闪码说明以 `standalone_capture.md` 为准。
 
 ## 合并检查
 
@@ -80,18 +81,28 @@ PCIe 仍按原逻辑发送 RGB565 原图，不等待 AI 结果；P4 再接结果
 `firmware/preprocess_capture.h` 提供 START、查询描述符和 RELEASE 接口。
 `firmware/preprocess_bringup.c` 等待 DDR 和实际 1080p 输入尺寸（给 HDMI 配置最多 2 秒），
 抓一帧，读回张量首尾像素检查格式/补零，再保留结果。
-成功后 LED1 的 RTL 输出每 0.5 秒翻转，失败则保持高；LED0 仍独立表示 DDR ready。
+成功后 LED1 的 RTL 输出每 0.5 秒翻转；独立模式失败时 LED0 给出阶段闪码，见 `standalone_capture.md`。
 板上亮灭取决于 LED 极性，LED0 不证明预处理完成。
 
-例子已编译为 `firmware/preprocess_bringup/` 中的独立 hex，未替换当前 CPU IP 中的 CoreMark：
+例子已编译为 `firmware/preprocess_bringup/` 中的独立 hex。
+2026-10-30 按用户要求，当前 CPU ROM/RAM IP 已切换到该镜像并重新生成。
+ROM 8,192 个字和 RAM 16,384 个字均从生成的 DRM INIT 常量解码后逐字核对通过；
+除 INIT_FILE 外所有 IP 参数保持不变，记录在 `reports/preprocess/selected_firmware.json`。
 
 ```bash
 python3 scripts/build_firmware.py --app preprocess_bringup --core acore_dual --image-dir firmware/preprocess_bringup
 ```
 
-要运行该例子，需在 `pango_acore_fetch`、`pango_acore_ram` 的 IP 配置中分别选择
-此目录的 `acore_dual_rom.hex` 和 `acore_dual_ram.hex`，并重新生成这两个 IP，保持其他配置不变。
+以后重新编译程序后，可用以下命令更新两个现有 IP 的初始化内容：
+
+```powershell
+python scripts/select_acore_firmware.py --image-dir firmware/preprocess_bringup
+```
+
+该脚本分别选择此目录的 `acore_dual_rom.hex` 和 `acore_dual_ram.hex` 并重新生成 IP。
+加 `--verify-only` 可只核对已嵌入的数据，不运行 IP 生成或仿真。
 `acore_dual_ram_bytes.hex` 仅供仿真，不用于 IP 初始化。原 SPI 镜像和原 CoreMark hex 均保留。
+旧位流仍包含生成它时的程序；需重新打开根工程，从 Compile/综合开始重新生成位流再烧录。
 
 ## 验证范围
 
@@ -104,6 +115,7 @@ python3 scripts/build_firmware.py --app preprocess_bringup --core acore_dual --i
 
 结果在 `reports/preprocess/integration.json`，结构检查在 `reports/video_integration/structural.json`。
 根工程 Compile 和原生综合均已通过，9 条新增同步首级约束均各匹配 1 个对象。
+该综合记录对应切换固件前的初始化内容，切换后必须重新构建。
 综合统计：20,514 LUT、20,536 FF、846 Distributed RAM、74.5 DRM、4 APM，
 记录在 `reports/preprocess/synthesis.json`，原始报告为 `synthesize/acore_dual_top.snr`。
 综合估计的本域 setup 余量：CPU +17.571 ns、DDR +1.340 ns、像素 +1.526 ns。

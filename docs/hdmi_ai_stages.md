@@ -34,4 +34,5 @@ P1 输出中的帧号来自上游在实际 SOF 提供的 `source_frame_id`；直
 已经流出的部分数据必须由 P2 的事务管理丢弃，只有终态 DONE 且 ERROR=0 才能发布给 AI。
 
 P1 独立核的验证报告仍保留其独立范围；P2 的实际 HDMI/DDR 接线和统一帧槽归属见 `hdmi_tensor_p2.md`。
-当前 CPU IP 初始化仍是 CoreMark，运行按需抓帧自检需另选择 P2 的独立程序镜像。
+当前 CPU IP 已切换并重新生成为 P2 的 `firmware/preprocess_bringup/` 自检镜像；
+需重新生成位流后才能在板上运行。原 CoreMark hex 保留。

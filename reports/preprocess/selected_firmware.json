@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "application": "preprocess_bringup",
+  "ips": [
+    {
+      "instance": "pango_acore_fetch",
+      "image": "firmware/preprocess_bringup/acore_dual_rom.hex",
+      "sha256": "dd0bb7fced26f7ad0caf19d9ebe0dd3cef4d87e46fadf831d70562e63a062d75",
+      "embedded_words_verified": 8192,
+      "other_parameters_preserved": true
+    },
+    {
+      "instance": "pango_acore_ram",
+      "image": "firmware/preprocess_bringup/acore_dual_ram.hex",
+      "sha256": "26d6c7ae00fefc89dffc9ff03d1d4b7f724cedf883b5c27b8112bc9d9ca29e91",
+      "embedded_words_verified": 16384,
+      "other_parameters_preserved": true
+    }
+  ],
+  "bitstream_generated": false,
+  "note": "Rebuild root PDS before programming; existing bitstreams still contain their old images."
+}
