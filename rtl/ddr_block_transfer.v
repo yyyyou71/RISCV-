@@ -14,7 +14,8 @@ module ddr_block_transfer #(
     parameter integer AXI_ADDR_WIDTH = 28,
     parameter integer COLUMN_WIDTH = 10,
     parameter integer TIMEOUT_CYCLES = 4096,
-    parameter [3:0] AXI_ID = 4'd0
+    parameter [3:0] AXI_ID = 4'd0,
+    parameter [32:0] LIMIT_BYTES = 33'd1 << (AXI_ADDR_WIDTH+1)
 )(
     input  wire                      core_clk,
     input  wire                      rst_n,
@@ -72,7 +73,7 @@ module ddr_block_transfer #(
     localparam integer TIMEOUT_LAST = TIMEOUT_CYCLES - 1;
     localparam [WAIT_WIDTH-1:0] WAIT_LIMIT = TIMEOUT_LAST[WAIT_WIDTH-1:0];
     // 一个原生地址单位对应一个 x16 存储位置，即两个字节。
-    localparam [32:0] CAPACITY_BYTES = 33'd1 << (AXI_ADDR_WIDTH + 1);
+    localparam [32:0] CAPACITY_BYTES = LIMIT_BYTES;
 
     reg [3:0] state;
     reg [127:0] block_buf [0:15];

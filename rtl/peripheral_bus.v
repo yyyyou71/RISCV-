@@ -7,7 +7,9 @@ module peripheral_bus #(
     parameter integer AI_ACT_WIDTH = 16,
     parameter integer DDR_TIMEOUT_CYCLES = 4096,
     parameter integer ENABLE_VIDEO = 0,
-    parameter integer VIDEO_FIFO_ADDR_BITS = 9
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9,
+    parameter integer ENABLE_FRAME_CONTROL = 0,
+    parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 )(
     input  wire        clk,
     input  wire        rst_n,
@@ -22,6 +24,12 @@ module peripheral_bus #(
     output reg  [31:0] dev_rdata,
 
     input wire core_clk, ddr_init_done,
+    input wire [4:0] frame_available,
+    input wire [159:0] frame_ids,
+    input wire [2:0] frame_wr_slot,
+    input wire frame_wr_active,shared_ddr_fault,
+    input wire [31:0] video_shape,video_period,
+    output wire [4:0] frame_hold_mask,
     input wire pixclk_in, vs_in, de_in,
     input wire [23:0] rgb_in,
     output wire [27:0] axi_awaddr, axi_araddr,
@@ -54,8 +62,20 @@ module peripheral_bus #(
     // One synchronous CPU read stage is retained for every MMIO target.
     // The window owns its CPU/DDR CDC mailbox and serializes AI/window/video jobs.
     wire [31:0] ddr_read_data;
+    wire [31:0] frame_read_data;
+    generate if(ENABLE_FRAME_CONTROL!=0) begin : g_frames
+        frame_mailbox u_frames(.clk(clk),.core_clk(core_clk),.rst_n(rst_n),
+            .dev_we(dev_we&&word_access),.dev_addr_wr(dev_addr_wr),.dev_addr_rd(dev_addr_rd),
+            .dev_wdata(dev_wdata),.read_data(frame_read_data),.available(frame_available),
+            .frame_ids(frame_ids),.wr_slot(frame_wr_slot),.wr_active(frame_wr_active),
+            .ddr_ready(ddr_init_done),.arb_fault(shared_ddr_fault),
+            .video_shape(video_shape),.video_period(video_period),.hold_mask(frame_hold_mask));
+    end else begin : g_no_frames
+        assign frame_read_data=0;assign frame_hold_mask=0;
+    end endgenerate
     generate if (ENABLE_DDR != 0) begin : g_ddr
         ddr_cpu_window #(.ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH),
+            .DDR_LIMIT_BYTES(DDR_LIMIT_BYTES),
             .TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES), .ENABLE_VIDEO(ENABLE_VIDEO),
             .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS)) u_window (
             .clk(clk), .rst_n(rst_n), .core_clk(core_clk), .ddr_init_done(ddr_init_done),
@@ -181,6 +201,8 @@ module peripheral_bus #(
                 dev_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
             else if (word_access && dev_addr_rd == RK_PARAM) dev_rdata <= param_value;
             else if (word_access && dev_addr_rd == RK_SEQ) dev_rdata <= param_seq;
+            else if(word_access && dev_addr_rd>=32'h30600 && dev_addr_rd<=32'h30620)
+                dev_rdata<=frame_read_data;
             else
                 // DDR/AI/video read_data is combinational, so no extra read cycle.
                 dev_rdata <= word_access ? ddr_read_data : 32'b0;

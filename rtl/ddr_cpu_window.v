@@ -7,6 +7,7 @@
 // 多位邮箱不能逐位同步。上板需对邮箱总线添加跨域最大延迟约束，见文档。
 // rst_n 必须同时复位 DDR IP；禁止仅复位本模块来取消原生事务。
 module ddr_cpu_window #(
+    parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000,
     parameter integer AXI_ADDR_WIDTH = 28,
     parameter integer COLUMN_WIDTH = 10,
     parameter integer TIMEOUT_CYCLES = 4096,
@@ -370,6 +371,7 @@ module ddr_cpu_window #(
     end
 
     ddr_block_transfer #(
+        .LIMIT_BYTES({1'b0,DDR_LIMIT_BYTES}),
         .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH), .COLUMN_WIDTH(COLUMN_WIDTH), .TIMEOUT_CYCLES(TIMEOUT_CYCLES)
     ) u_transfer (
         .core_clk(core_clk), .rst_n(core_reset_n), .ddr_init_done(ddr_init_done),

@@ -1,10 +1,149 @@
-module acore_dual_top (
-    input sys_clk, key0_n,
-    output uart_tx, led0, led1,
-    input iic_scl,
-    inout iic_sda
+// CPU + proven HDMI/PCIe platform, sharing one physical DDR3 controller.
+module acore_dual_top #(parameter integer ENABLE_AI=0)(
+
+    input wire sys_clk,key0_n,iic_scl,
+    inout wire iic_sda,
+    output wire led0,led1,
+    input wire ref_clk_p,ref_clk_n,perst_n,
+    input wire [1:0] rxn,rxp,
+    output wire [1:0] txn,txp,
+    input wire pixclk_in,vs_in,hs_in,de_in,
+    input wire [7:0] r_in,g_in,b_in,
+    output wire hd_scl,
+    inout wire hd_sda,
+    output wire mem_rst_n,mem_ck,mem_ck_n,mem_cke,mem_cs_n,mem_ras_n,mem_cas_n,mem_we_n,mem_odt,
+    output wire [14:0] mem_a,
+    output wire [2:0] mem_ba,
+    inout wire [1:0] mem_dqs,mem_dqs_n,
+    inout wire [15:0] mem_dq,
+    output wire [1:0] mem_dm
 );
-    board_top #(.ENABLE_DUAL(1)) u_board (
-        .sys_clk(sys_clk), .key0_n(key0_n), .uart_tx(uart_tx), .led0(led0), .led1(led1), .iic_scl(iic_scl), .iic_sda(iic_sda)
-    );
+    wire core_clk,ready,system_rst_n,fault;
+    wire [4:0] available,hold_mask;
+    wire [159:0] frame_ids;
+    wire [2:0] write_slot;
+    wire write_active;
+    wire [31:0] shape,period;
+    wire [27:0] awaddr,araddr;
+    wire awvalid,arvalid,awap,arap,awready,arready,wready,wlast,rvalid,rlast;
+    wire [3:0] awlen,arlen,awid,arid,wid,rid;
+    wire [127:0] wdata,rdata;
+    wire [15:0] wstrb;
+    wire cpu_led0,cpu_led1;
+    (* ASYNC_REG="TRUE" *) reg [1:0] ready_sync,fault_sync;
+    always @(posedge sys_clk or negedge system_rst_n)
+        if(!system_rst_n)begin ready_sync<=0;fault_sync<=0;end
+        else begin ready_sync<={ready_sync[0],ready};fault_sync<={fault_sync[0],fault};end
+    assign led0=ready_sync[1];
+    assign led1=cpu_led1|fault_sync[1];
+    board_top #(.ENABLE_DUAL(1),.ENABLE_DDR(1),.ENABLE_AI(ENABLE_AI),
+        .ENABLE_FRAME_CONTROL(1),.DDR_LIMIT_BYTES(32'h04000000)) u_board (
+        .sys_clk(sys_clk),
+        .key0_n(key0_n&&system_rst_n),
+        .uart_tx(),
+        .led0(cpu_led0),
+        .led1(cpu_led1),
+        .iic_scl(iic_scl),
+        .iic_sda(iic_sda),
+        .core_clk(core_clk),
+        .ddr_init_done(ready),
+        .frame_available(available),
+        .frame_ids(frame_ids),
+        .frame_wr_slot(write_slot),
+        .frame_wr_active(write_active),
+        .shared_ddr_fault(fault),
+        .video_shape(shape),
+        .video_period(period),
+        .frame_hold_mask(hold_mask),
+        .axi_awaddr(awaddr),
+        .axi_araddr(araddr),
+        .axi_awvalid(awvalid),
+        .axi_arvalid(arvalid),
+        .axi_awuser_ap(awap),
+        .axi_aruser_ap(arap),
+        .axi_awlen(awlen),
+        .axi_arlen(arlen),
+        .axi_awuser_id(awid),
+        .axi_aruser_id(arid),
+        .axi_awready(awready),
+        .axi_arready(arready),
+        .axi_wready(wready),
+        .axi_wusero_last(wlast),
+        .axi_wusero_id(wid),
+        .axi_rid(rid),
+        .axi_wdata(wdata),
+        .axi_wstrb(wstrb),
+        .axi_rdata(rdata),
+        .axi_rvalid(rvalid),
+        .axi_rlast(rlast));
+    acore_video_platform u_video (
+        .sys_clk(sys_clk),
+        .ref_clk_p(ref_clk_p),
+        .ref_clk_n(ref_clk_n),
+        .perst_n(perst_n),
+        .rxn(rxn),
+        .rxp(rxp),
+        .txn(txn),
+        .txp(txp),
+        .pixclk_in(pixclk_in),
+        .vs_in(vs_in),
+        .hs_in(hs_in),
+        .de_in(de_in),
+        .r_in(r_in),
+        .g_in(g_in),
+        .b_in(b_in),
+        .hd_scl(hd_scl),
+        .hd_sda(hd_sda),
+        .mem_rst_n(mem_rst_n),
+        .mem_ck(mem_ck),
+        .mem_ck_n(mem_ck_n),
+        .mem_cke(mem_cke),
+        .mem_cs_n(mem_cs_n),
+        .mem_ras_n(mem_ras_n),
+        .mem_cas_n(mem_cas_n),
+        .mem_we_n(mem_we_n),
+        .mem_odt(mem_odt),
+        .mem_a(mem_a),
+        .mem_ba(mem_ba),
+        .mem_dqs(mem_dqs),
+        .mem_dqs_n(mem_dqs_n),
+        .mem_dq(mem_dq),
+        .mem_dm(mem_dm),
+        .button_rst_n(key0_n),
+        .ref_led(),
+        .pclk_led(),
+        .rx_rst_n(),
+        .rstn_out(),
+        .cpu_ddr_clk(core_clk),
+        .cpu_ddr_ready(ready),
+        .system_rst_n(system_rst_n),
+        .shared_fault(fault),
+        .frame_available(available),
+        .frame_ids(frame_ids),
+        .frame_wr_slot(write_slot),
+        .frame_wr_active(write_active),
+        .frame_hold_mask(hold_mask),
+        .measured_shape(shape),
+        .measured_period(period),
+        .cpu_awaddr(awaddr),
+        .cpu_araddr(araddr),
+        .cpu_awvalid(awvalid),
+        .cpu_arvalid(arvalid),
+        .cpu_awap(awap),
+        .cpu_arap(arap),
+        .cpu_awlen(awlen),
+        .cpu_arlen(arlen),
+        .cpu_awid(awid),
+        .cpu_arid(arid),
+        .cpu_awready(awready),
+        .cpu_arready(arready),
+        .cpu_wready(wready),
+        .cpu_wlast(wlast),
+        .cpu_wid(wid),
+        .cpu_rid(rid),
+        .cpu_wdata(wdata),
+        .cpu_wstrb(wstrb),
+        .cpu_rdata(rdata),
+        .cpu_rvalid(rvalid),
+        .cpu_rlast(rlast));
 endmodule

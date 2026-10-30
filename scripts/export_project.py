@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 import os
 from pathlib import Path
 import re
@@ -6,6 +7,64 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PDS = Path(r"C:\diskE\FPGA_Learning\PGenvironment\PDS_2022.2-SP6.1")
+
+
+def group_end(text, start):
+    depth = 0
+    quoted = False
+    escaped = False
+    for index in range(start, len(text)):
+        char = text[index]
+        if escaped:
+            escaped = False
+            continue
+        if quoted and char == '\\':
+            escaped = True
+            continue
+        if char == '"':
+            quoted = not quoted
+        if not quoted:
+            depth += (char == '(') - (char == ')')
+            if depth == 0:
+                return index
+    raise ValueError('Unbalanced PDS expression')
+
+
+def complete_source_metadata(project, directory):
+    """Supply PDS-required timestamps without changing sources or flow options.
+
+    A balanced S-expression is insufficient: PDS 2022.2 requires _timespec on
+    _file, _ip, and _ip_source_item entries, including the IP parent itself.
+    """
+    edits = []
+    counts = dict(_file=0, _ip=0, _ip_source_item=0)
+    pattern = r'\((_(?:file|ip|ip_source_item))\s+"([^"]+)"'
+    for match in re.finditer(pattern, project):
+        kind, filename = match.groups()
+        end = group_end(project, match.start())
+        tail = project[match.end():end]
+        has_timestamp = (re.match(r'\s*\(_timespec\b', tail) if kind == '_ip'
+                         else re.search(r'\(_timespec\b', tail))
+        if has_timestamp:
+            continue
+        path = directory / filename
+        timestamp = datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%dT%H:%M:%S')
+        line_start = project.rfind('\n', 0, match.start()) + 1
+        indent = re.match(r'[ \t]*', project[line_start:match.start()]).group()
+        insert = match.end()
+        if kind == '_file':
+            fmt = re.search(r'\(_format\b', tail)
+            if not fmt:
+                raise ValueError(f'Missing PDS _format: {filename}')
+            insert = group_end(project, match.end() + fmt.start()) + 1
+        value = '\n' + indent + '    (_timespec "' + timestamp + '")'
+        if not project[insert:end].strip() and '\n' not in project[insert:end]:
+            value += '\n' + indent
+        edits.append((insert, value))
+        counts[kind] += 1
+    for insert, value in sorted(edits, reverse=True):
+        project = project[:insert] + value + project[insert:]
+    return project, counts
 
 
 def main():
@@ -37,7 +96,10 @@ def main():
         return match.group(1) + relative + match.group(3)
 
     project = re.sub(r'(\(_(?:file|ip|ip_source_item)\s+")([^"]+)(")', rebase, project)
+    project, supplied = complete_source_metadata(project, destination.parent)
     destination.write_text(project, encoding="utf-8")
+    if any(supplied.values()):
+        print(f"PDS_REQUIRED_METADATA_ADDED {supplied}")
     if args.no_compile:
         print(f"PROJECT_EXPORTED_NOT_COMPILED {destination}")
         return

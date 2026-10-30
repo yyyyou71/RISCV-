@@ -41,7 +41,7 @@ def check_coremark_sources():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
-    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "iic_service"), default="coremark")
+    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "iic_service", "video_bringup"), default="coremark")
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     parser.add_argument("--verify-existing", action="store_true")
     parser.add_argument("--mode", choices=("performance", "validation"), default="performance")

@@ -7,12 +7,20 @@ module soc #(
     parameter integer AI_ACT_WIDTH = 16,
     parameter integer DDR_TIMEOUT_CYCLES = 4096,
     parameter integer ENABLE_VIDEO = 0,
-    parameter integer VIDEO_FIFO_ADDR_BITS = 9
+    parameter integer VIDEO_FIFO_ADDR_BITS = 9,
+    parameter integer ENABLE_FRAME_CONTROL = 0,
+    parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 ) (
     input wire clk,
     input wire rst_n,
     input wire timer_irq,
     input wire core_clk, ddr_init_done,
+    input wire [4:0] frame_available,
+    input wire [159:0] frame_ids,
+    input wire [2:0] frame_wr_slot,
+    input wire frame_wr_active,shared_ddr_fault,
+    input wire [31:0] video_shape,video_period,
+    output wire [4:0] frame_hold_mask,
     input wire pixclk_in, vs_in, hs_in, de_in,
     input wire [7:0] r_in, g_in, b_in,
     output wire [27:0] axi_awaddr, axi_araddr,
@@ -60,7 +68,8 @@ module soc #(
         .BAUD_RATE(BAUD_RATE),
         .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH),
         .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES), .ENABLE_VIDEO(ENABLE_VIDEO),
-        .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS)
+        .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS),
+        .ENABLE_FRAME_CONTROL(ENABLE_FRAME_CONTROL),.DDR_LIMIT_BYTES(DDR_LIMIT_BYTES)
     ) u_peripheral_bus (
         .clk(clk),
         .rst_n(rst_n),
@@ -72,6 +81,9 @@ module soc #(
         .dev_size(dev_size),
         .dev_rdata(dev_rdata),
         .core_clk(core_clk), .ddr_init_done(ddr_init_done),
+        .frame_available(frame_available),.frame_ids(frame_ids),.frame_wr_slot(frame_wr_slot),
+        .frame_wr_active(frame_wr_active),.shared_ddr_fault(shared_ddr_fault),
+        .video_shape(video_shape),.video_period(video_period),.frame_hold_mask(frame_hold_mask),
         .pixclk_in(pixclk_in), .vs_in(vs_in), .de_in(de_in), .rgb_in({r_in,g_in,b_in}),
         .axi_awaddr(axi_awaddr), .axi_araddr(axi_araddr),
         .axi_awuser_ap(axi_awuser_ap), .axi_aruser_ap(axi_aruser_ap),

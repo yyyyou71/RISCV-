@@ -1,5 +1,8 @@
 # M1：Acore 双发射与 DDR / W8A16 AI 逻辑移植
 
+本文是 M1 阶段记录。M2 已把参考 HDMI/PCIe/物理 DDR 接入根顶层，板级 UART 已移除；
+当前配置、初值切换和检查结果以 [M2 说明](video_integration_m2.md) 为准。
+
 2026-10-29，分支 `ziguang_rv32i`。本阶段完成逻辑移植及行为短测试，未完成厂商 AI IP 验证或板级接入。
 后续通信按用户最新决定改为 SPI；本次暂不修改 IIC、SPI 或它们的引脚。
 

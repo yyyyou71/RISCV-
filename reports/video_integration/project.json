@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "scope": "static paths, pins, IP parts and source provenance",
+  "pds_parser_run": false,
+  "pds_implementation_run": false,
+  "hardware_tested": false,
+  "checks": {
+    "pds_balanced_groups": true,
+    "all_pds_paths_exist": true,
+    "no_duplicate_pds_files": true,
+    "pds_required_source_metadata": true,
+    "physical_top_selected": true,
+    "no_simulation_models_in_pds": true,
+    "target_part": true,
+    "all_general_io_pinned": true,
+    "no_duplicate_pins_or_ports": true,
+    "ab21_hdmi_only": true,
+    "iic_pins_preserved": true,
+    "all_active_ip_parts_match": true,
+    "own_acore_and_iic_unchanged_from_m1": true,
+    "import_manifest_hashes_match": true,
+    "build_acore_dual.ps1_guards_root_project": true,
+    "build_fpga.ps1_guards_root_project": true
+  },
+  "missing_files": [],
+  "duplicate_files": [],
+  "missing_pds_metadata": {
+    "_file": 0,
+    "_ip": 0,
+    "_ip_source_item": 0
+  },
+  "missing_pin_constraints": [],
+  "unknown_pin_ports": [],
+  "duplicate_pins": [],
+  "bad_ip_parts": [],
+  "changed_core": [],
+  "stale_imports": [],
+  "general_io_pins": 88,
+  "imported_files": 175,
+  "desktop_source_verified": true
+}

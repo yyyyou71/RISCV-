@@ -12,6 +12,10 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$currentProjectRoot = Split-Path -Parent $PSScriptRoot
+if (Select-String -LiteralPath (Join-Path $currentProjectRoot 'rv32I.pds') -SimpleMatch 'board/acore_video_platform.v' -Quiet) {
+    throw 'The root project now includes HDMI/PCIe/shared DDR (M2). This historical CoreMark flow would overwrite it. Follow docs/video_integration_m2.md and build the root rv32I.pds in PDS.'
+}
 if ($Core -eq 'acore_dual') {
     if ($Application -ne 'coremark') {
         throw 'Dual issue currently supports CoreMark; use -Core single -Application selftest for the original selftest.'

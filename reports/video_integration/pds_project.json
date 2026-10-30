@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "scope": "PDS 2022.2-SP6.1 GUI successfully loaded the maintained root project",
+  "pds_parser_run": true,
+  "gui_open_verified": true,
+  "project_sha256": "f00c0c2b8c1485c2685804c6223547516580f27fccba30c6c102f0ead1ba1474",
+  "observed_window_title": "Pango Design Suite 2022.2-SP6.1 - C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/rv32I.pds (on yyyyou71)",
+  "observed_part": "PG2L100H-6FBG484",
+  "observed_top_module": "acore_dual_top",
+  "missing_metadata_added": {
+    "_file": 62,
+    "_ip": 5,
+    "_ip_source_item": 128
+  },
+  "required_metadata_still_missing": {
+    "_file": 0,
+    "_ip": 0,
+    "_ip_source_item": 0
+  },
+  "hdl_compile_completed": false,
+  "synthesis_completed": false,
+  "place_route_completed": false,
+  "hardware_tested": false,
+  "limitations": [
+    "Command-line default flow was inadvertently entered and ended without a completed implementation.",
+    "A separate isolated Compile-only attempt timed out after 120 seconds; not counted as a pass.",
+    "GUI opening and static metadata checks do not establish HDL compilation, resources or timing closure."
+  ],
+  "observed_hierarchy": [
+    "acore_dual_top",
+    "u_board - board_top",
+    "u_video - acore_video_platform",
+    "u_video_monitor - video_timing_monitor",
+    "u_hdmi_fifo - frame_ring_ddr3"
+  ],
+  "observed_console": "Welcome to PANGO Tcl Console."
+}

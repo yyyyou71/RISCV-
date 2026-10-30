@@ -1,9 +1,21 @@
-# PG2L100H：Acore 单发射 / 顺序双发射与 CoreMark
+# PG2L100H：Acore 双发射、HDMI / PCIe / DDR 与 AI 移植
 
 当前分支为 `ziguang_rv32i`。目标沿用已经确认的 RK3568_MES2L100H：
 **Logos2 / PG2L100H / FBG484 / -6，25 MHz，PDS 2022.2-SP6.1**。
 
-## 当前工程与构建
+2026-10-30：唯一根工程 `rv32I.pds`、顶层 `acore_dual_top` 已接入桌面 `ziguang-fpga2`
+的 HDMI / PCIe / DDR，保留自己的 Acore 双发射。新增共享 DDR 仲裁、64 MiB CPU/AI 隔离区和帧锁定。
+板级 UART 已移除，IIC 保留，SPI 暂缓；AI 逻辑已导入但物理顶层仍关闭。
+
+当前移植来源、层级、寄存器、上板步骤与完整短测报告见 [M2 说明](docs/video_integration_m2.md)。
+新自检程序在 `firmware/video_bringup.c`，镜像在 `firmware/video_bringup/`；
+必须在 PDS 中选择新 ROM/RAM 初值并重新生成 IP，现有生成 HDL 仍包含历史 CoreMark。
+PDS 资源/时序看本次实现后的 `place_route/acore_dual_top.prr`、`acore_dual_top.rtr`。
+
+下文保留 **M2 以前的 CPU / CoreMark 基线记录**。其中 UART、CPU-only 顶层、旧一键构建和部署步骤
+不适用于当前 HDMI 系统；历史一键脚本已加保护，避免覆盖根工程。
+
+## 历史 CPU / CoreMark 工程与构建
 
 唯一维护的 PDS 工程入口是根目录 `rv32I.pds`，当前顶层为 `acore_dual_top`，运行 Acore 双发射 CoreMark。
 2026-10-29 已恢复双发射入口，并保留合并后的 IIC FIFO；IIC CPU MMIO 改为
