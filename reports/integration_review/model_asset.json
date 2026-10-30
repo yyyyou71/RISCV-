@@ -1,0 +1,44 @@
+{
+  "prepared": true,
+  "tasks": 99,
+  "operators": {
+    "conv2d": 72,
+    "add": 10,
+    "concat": 14,
+    "maxpool5": 1,
+    "upsample2x": 2
+  },
+  "logical_macs": 403334784,
+  "mac_issues": 51495120,
+  "memory_bytes": {
+    "weights": 10186624,
+    "bias": 43120,
+    "quant": 344960,
+    "add_quant": 160,
+    "input": 294912,
+    "header_and_tasks": 6400,
+    "features": 2427840,
+    "guards": 3168
+  },
+  "model_bytes": 13307184,
+  "ddr_bytes": 536870912,
+  "arena_begin": 65536,
+  "readonly_end": 10941712,
+  "arena_end": 13372720,
+  "binding": {
+    "source_sha256": "cce904bf8bdb2776c63fd8cb8023b35f46c06f0a953add75b59a735c24323952",
+    "weights_sha256": "ffabd646534f212e323afbb67038d14ff5d34fe01e54cd43af61b2aa87c8637b",
+    "exporter_sha256": "1774337680f5f62b183773313e631eee7a562b68d73f401c0e77899b077f8b27",
+    "graph_sha256": "4b1152b9b3ae8e0308feb7727b9b2f60aed3e0978b95a2ef69ed7bf6334df624",
+    "input_sha256": "d32fae0b0fa8ef0bb2d54917c72e757de986c8c498de8f3062b9a0da89c44793"
+  },
+  "golden_tensors": 0,
+  "original_forward_compared": false,
+  "rtl_verified": false,
+  "cpu_postprocess_requested": false,
+  "cpu_postprocess_verified": false,
+  "pds_verified": false,
+  "upstream_commit": "9bd2479b0ce167a77bfa4ca22e1969984f06a236",
+  "reference_path": "C:/Users/yyyyou71/Desktop/TridentVision",
+  "inspection_only": true
+}

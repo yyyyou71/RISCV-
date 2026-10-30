@@ -1,0 +1,38 @@
+{
+  "jobs": 342,
+  "results": {
+    "normal": {
+      "passed": true,
+      "plusargs": [],
+      "summary": "PASS DDR block transfer: commands=350 read_words=1552 invalid=7 AW=195 AR=204 resets=4"
+    },
+    "zero_latency": {
+      "passed": true,
+      "plusargs": [
+        "+ddr3_read_latency=0",
+        "+ddr3_write_latency=0",
+        "+ddr3_init_cycles=73"
+      ],
+      "summary": "PASS DDR block transfer: commands=350 read_words=1552 invalid=7 AW=195 AR=204 resets=4"
+    },
+    "stalled": {
+      "passed": true,
+      "plusargs": [
+        "+ddr3_read_latency=11",
+        "+ddr3_write_latency=7",
+        "+ddr3_stall_every=7",
+        "+ddr3_stall_cycles=2",
+        "+ddr3_random_stalls=1",
+        "+ddr3_seed=17"
+      ],
+      "summary": "PASS DDR block transfer: commands=350 read_words=1552 invalid=7 AW=195 AR=204 resets=4"
+    },
+    "faults": {
+      "passed": true,
+      "summary": "PASS DDR block transfer faults: fatal_cases=11 same_edge_commands=2 host_pauses=2"
+    },
+    "lint": {
+      "passed": true
+    }
+  }
+}

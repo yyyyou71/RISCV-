@@ -1,5 +1,16 @@
 # FSPI 移植与适配（2026-10-30）
 
+## 后续视频分支合并注意事项
+
+- 保留远端软核、固件与IP内容，不重新生成初始化镜像。
+- 视频的CPU地址仍为0x30300，IIC的CPU地址采用远端的0x30400（RK侧IIC地址仍为0x66）。
+- ENABLE_VIDEO=0时FSPI保持下述0x30300地址；ENABLE_VIDEO=1时FSPI四个寄存器映射到0x30700/04/08/0c，避免与视频重叠。
+- firmware/fspi_service/ 内旧镜像使用旧IIC地址，不能直接作为本次合并后的联调固件。本文后续的“已验证镜像”指移植时的历史验证，不代表当前合并版本。按用户要求本次未更新固件。
+- firmware/fspi_link.h 保持原样，仅适用于未启用视频的FSPI地址；视频与FSPI同时启用时，应用接口需另行适配，不能直接使用旧头文件。
+- 当前PDS顶层保留远端 acore_dual_top，FSPI测试时需另选 board_fspi_top；视频物理顶层尚未引出FSPI引脚。
+- 合并回归：python3 scripts/check_fspi_integration.py；读取已有IIC镜像，不重编译或修改软核程序。
+
+
 ## 已实现与范围
 
 参考本机 fspi_slave_test/fspi_slave_test 原例程和 fpga_rk通信手册v1.pdf 第5–6页。

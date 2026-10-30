@@ -10,11 +10,16 @@ def main():
     parser = argparse.ArgumentParser()
     tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_coremark", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus", "TB_cpu_fspi")
     parser.add_argument("--test", choices=tests)
+    parser.add_argument("--core", choices=("single", "acore_dual"), default="single",
+                        help="CPU configuration for TB_cpu_iic")
     args = parser.parse_args()
+    if args.core != "single" and args.test != "TB_cpu_iic":
+        parser.error("--core acore_dual is supported with --test TB_cpu_iic")
     output = ROOT / "build/sim/behavioral"
     output.mkdir(parents=True, exist_ok=True)
     rtl = [path for path in sorted((ROOT / "rtl").glob("*.v"))
-           if path.name not in ("ROM_core.v", "memory_core.v", "multiplier_core.v", "acore_fetch_memory.v", "MuxKeyInternal.v")]
+           if path.name not in ("ROM_core.v", "memory_core.v", "multiplier_core.v", "acore_fetch_memory.v", "MuxKeyInternal.v",
+                                "multiply_adder.v", "multiply_adder_w8a16.v", "video_async_fifo.v")]
     rtl += sorted((ROOT / "sim/models").glob("*.v"))
     rtl += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     rtl += sorted((ROOT / "rtl/rk_fspi").glob("*.v"))
@@ -36,7 +41,9 @@ def main():
             rel = images.relative_to(ROOT).as_posix()
             test_defines = ["-DNO_WAVES", '-DPROG_FILE="' + rel + '/rom.hex"',
                             '-DDATA_FILE="' + rel + '/ram_bytes.hex"']
-        subprocess.run(["iverilog", "-g2012", "-s", name, *test_defines,
+        parameters = (["-PTB_cpu_iic.ENABLE_DUAL=1"]
+                      if name == "TB_cpu_iic" and args.core == "acore_dual" else [])
+        subprocess.run(["iverilog", "-g2012", "-s", name, *test_defines, *parameters,
                         "-o", str(executable), str(ROOT / "sim" / (name + ".v")),
                         *map(str, rtl + board)], cwd=ROOT, check=True)
         result = subprocess.run(["vvp", str(executable)], cwd=ROOT, capture_output=True, text=True)

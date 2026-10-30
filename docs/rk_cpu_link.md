@@ -17,12 +17,16 @@ FIFO 64 字节，另有原 IIC 邮箱 1 字节；总缓存最多 65 字节。
 
 | 地址 | 访问 | 含义 |
 |---|---|---|
-| 0x00030200 | W | 将最低 8 位加入发送 FIFO |
-| 0x00030204 | R | bit0 可写；bit1 写满丢弃粘滞标志；bit2 新参数待处理；bit3 参数覆盖粘滞标志；bits14:8 FIFO 字节数，不含邮箱 |
-| 0x00030208 | R | 最近一次已提交的 32 位参数 |
-| 0x0003020C | R | CPU 侧 32 位参数版本号，每次提交加 1 |
-| 0x00030210 | W | 写入已处理版本号；仅匹配当前版本时清除待处理位 |
-| 0x00030214 | W | bit1 写 1 清发送溢出，bit3 写 1 清参数覆盖 |
+| 0x00030400 | W | 将最低 8 位加入发送 FIFO |
+| 0x00030404 | R | bit0 可写；bit1 写满丢弃粘滞标志；bit2 新参数待处理；bit3 参数覆盖粘滞标志；bits14:8 FIFO 字节数，不含邮箱 |
+| 0x00030408 | R | 最近一次已提交的 32 位参数 |
+| 0x0003040C | R | CPU 侧 32 位参数版本号，每次提交加 1 |
+| 0x00030410 | W | 写入已处理版本号；仅匹配当前版本时清除待处理位 |
+| 0x00030414 | W | bit1 写 1 清发送溢出，bit3 写 1 清参数覆盖 |
+
+2026-10-29：CPU MMIO 从 0x30200 搬到 0x30400，避免与主线 AI 寄存器冲突。
+RK 侧 IIC 从机地址仍为 0x66，版本 1 寄存器索引保持不变，RK 库无需因此改地址。
+当前仍为 CPU 轮询参数待处理位，没有 IIC 中断输出，也没有接入 CPU 中断。
 
 FIFO 满时硬件不会阻塞 CPU 总线：本次写入被拒绝并置溢出标志。
 软件先调用 rk_try_send，它返回 0 时保留数据、稍后重试。
@@ -53,12 +57,14 @@ firmware/iic_service.c 为持续运行的应用示例，通信驱动可直接用
 
 请你在 PDS 中操作已有的存储器 IP：
 
-1. pango_rom 初始化文件选择本项目 firmware/iic_service/rom.hex。
-2. pango_ram 初始化文件选择本项目 firmware/iic_service/ram.hex（32 位字）。
+1. 默认双发射：pango_acore_fetch 初始化文件选择本项目 firmware/iic_service/rom.hex。
+2. pango_acore_ram 初始化文件选择本项目 firmware/iic_service/ram.hex（32 位字）。
 3. 保持原深度、位宽、读延迟等配置，重新生成两个 IP。
 4. 再重新编译、综合、布局布线、检查时序并生成下载文件。
 
 不要把 ram_bytes.hex 当作 32 位 RAM IP 初始化文件，它是行为仿真模型使用的。
+这份 IIC 服务固件使用相同 ISA，可用于单发射和双发射；单发射时选择 pango_rom/pango_ram。
+恢复双发射顶层没有自动切换默认 CoreMark 初值；部署服务版时须手动选择上述镜像并重新生成 IP。
 旧生成的 IP 中有旧机器路径和已嵌入的初始化常量，因此只替换 hex 文件并不够。
 不要运行现有 build_fpga.ps1 来部署服务版：它是上游 CoreMark 构建流程，会生成其他固件并自动操作 IP。
 本次未运行 IP 生成、PDS 实现或下载。
@@ -85,6 +91,7 @@ RK 仍需主动轮询读取，FPGA 从机不会主动发起 IIC 事务。
 
     python3 scripts/check_sim.py --test TB_rk_cpu_bus
     python3 scripts/check_sim.py --test TB_cpu_iic
+    python3 scripts/check_sim.py --test TB_cpu_iic --core acore_dual
 
 前者覆盖队列满/空、顺序、指针回绕、并发出入队、错误访问宽度/地址、溢出清除、
 参数更新与确认竞争、复位。后者运行实际 RV32 固件，通过串行 IIC 事务验证

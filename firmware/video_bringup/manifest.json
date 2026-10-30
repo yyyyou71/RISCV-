@@ -1,0 +1,36 @@
+{
+  "application": "video_bringup",
+  "mode": "performance",
+  "iterations": 2700,
+  "core": "acore_dual",
+  "isa": "rv32i_zmmul",
+  "enable_div": 0,
+  "mul_pipeline_stages": 3,
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "flags": [
+    "-march=rv32im",
+    "-mno-div",
+    "-mabi=ilp32",
+    "-O2",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-common",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-pie",
+    "-nostdlib",
+    "-nostartfiles"
+  ],
+  "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+  "elf_sha256": "2ba96c845f84a598ea17c4596eafcacf1dc79f31b7a5190b58f45582cae81af3",
+  "rom_sha256": "0fc2c870f5aa1d8518efdc3799d3508ce7ec77df690880a995651fb0683ddb3b",
+  "ram_sha256": "26d6c7ae00fefc89dffc9ff03d1d4b7f724cedf883b5c27b8112bc9d9ca29e91",
+  "sources": {
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+    "firmware/video_bringup.c": "e994197d6214d686356ba2cd3c2397ee02c161755237f316b1ba3ee8f5265104",
+    "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba"
+  }
+}

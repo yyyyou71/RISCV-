@@ -1,4 +1,43 @@
-create_clock -name {sys_clk} -period {40.000} -waveform {0.000 20.000} [get_ports {sys_clk}]
+# Reference PHY clocks plus new mailbox/monitor constraints.
+# External HDMI input delay budget requires receiver/board timing data before sign-off.
+create_clock -name {pclk} [get_pins {u_video.u_ips2l_pcie_wrap.U_IPS2L_PCIE_TOP.U_IPS2L_HSSTLP_PCIE_SOFT_PHY.pclk}] -period {4.000} -waveform {0.000 2.000}
+create_clock -name {pclk_div2} [get_pins {u_video.u_ips2l_pcie_wrap.U_IPS2L_PCIE_TOP.U_IPS2L_HSSTLP_PCIE_SOFT_PHY.pclk_div2}] -period {8.000} -waveform {0.000 4.000}
+create_clock -name {ref_clk} [get_pins {u_video.u_ips2l_pcie_wrap.U_IPS2L_PCIE_TOP.U_IPS2L_HSSTLP_PCIE_SOFT_PHY/P_REFCK2CORE_0}] -period {10.000} -waveform {0.000 5.000}
+set_clock_groups -name group_1 -asynchronous -group [get_clocks {pclk}]
+set_clock_groups -name group_2 -asynchronous -group [get_clocks {pclk_div2}]
+set_clock_groups -name group_3 -asynchronous -group [get_clocks {ref_clk}]
+create_clock -name {sys_clk} [get_ports {sys_clk}] -period {40.0} -waveform {0 20.0}
+create_generated_clock -name {rst_clk} -source [get_ports {sys_clk}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {sys_clk}] -multiply_by {84} -divide_by {84}
+create_generated_clock -name {ddrphy_sysclk} -source [get_ports {sys_clk}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {sys_clk}] -multiply_by {84} -divide_by {16}
+create_generated_clock -name {phy_dq_clk_0} -source [get_ports {sys_clk}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {sys_clk}] -multiply_by {84} -divide_by {2}
+create_generated_clock -name {phy_dq_sysclk_0} -source [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_0}] -edges {5 13 21} -edge_shift {0 0 0}
+create_generated_clock -name {phy_dq_clk_1} -source [get_ports {sys_clk}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {sys_clk}] -multiply_by {84} -divide_by {2}
+create_generated_clock -name {phy_dq_sysclk_1} -source [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_1}] -edges {5 13 21} -edge_shift {0 0 0}
+set_clock_groups -name rst_clk -asynchronous -group [get_clocks {rst_clk}]
+set_clock_groups -name phy_dq_clk_0 -asynchronous -group [get_clocks {phy_dq_clk_0}]
+set_clock_groups -name phy_dq_clk_1 -asynchronous -group [get_clocks {phy_dq_clk_1}]
+set_clock_groups -asynchronous -group [get_clocks {ddrphy_sysclk}] -group [get_clocks {pclk pclk_div2 ref_clk}]
+create_clock -name {hdmi_pixel} -period {6.734} [get_ports {pixclk_in}]
 set_clock_uncertainty {0.200} [get_clocks {sys_clk}]
-set_false_path -from [get_ports {key0_n}]
-set_false_path -to [get_ports {led0 led1 uart_tx}]
+set_false_path -from [get_ports {key0_n perst_n}]
+set_false_path -to [get_ports {led0 led1}]
+set_max_delay 15.0 -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
+set_min_delay 0.0 -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
+set_max_delay 40.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
+set_min_delay 0.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
+set_max_delay 40.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
+set_min_delay 0.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
+set_max_delay 6.5 -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
+set_min_delay 0.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
+set_max_delay 6.5 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
+set_min_delay 0.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.req_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.ack_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.init_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.req_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.ack_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.ready_meta/D}]
+set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.fault_meta/D}]
+set_false_path -to [get_pins {u_video.u_video_monitor.meta/D}]
+set_false_path -to [get_pins {u_video.u_hdmi_fifo.stream_meta/D}]
+set_false_path -from [get_ports {iic_scl iic_sda}] -to [get_pins {u_board.u_rk_iic.u_frontend.sclPipe[0]/D u_board.u_rk_iic.u_frontend.sdaPipe[0]/D}]

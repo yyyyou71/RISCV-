@@ -26,7 +26,9 @@ make CC=/path/to/target-toolchain-gcc
     ./rk_iic_demo /dev/i2c-0 recv
 
 总线编号需现场确认。要求 i2c-dev、正确 pinmux、总线速度及设备访问权限。
-FPGA 的适配模块也必须已经接到物理引脚并下载；当前已接入 board_top，但 SCL/SDA 引脚及电压约束仍待确认，尚不能直接上板。
+FPGA 的适配模块必须接到物理引脚并下载；当前已接入 board_top 和 acore_dual_top，
+约束为 SCL=P19、SDA=R19、LVCMOS33。需使用包含服务固件的新位流，部署见 docs/rk_cpu_link.md。
+CPU MMIO 已移到 0x30400；本 RK 库使用的 0x66 从机地址和寄存器索引均不受影响。
 程序不修改设备树、不设置 SCL 频率、不加载驱动，也不使用强制占用地址操作。
 
 ## 调用顺序

@@ -10,6 +10,9 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+if (Select-String -LiteralPath (Join-Path $projectRoot 'rv32I.pds') -SimpleMatch 'board/acore_video_platform.v' -Quiet) {
+    throw 'The root project now includes HDMI/PCIe/shared DDR (M2). This historical CoreMark flow would overwrite it. Follow docs/video_integration_m2.md and build the root rv32I.pds in PDS.'
+}
 Push-Location -LiteralPath $projectRoot
 try {
     $wslRoot = (& wsl.exe -d $Distro --exec wslpath -a $projectRoot.Replace('\', '/')).Trim()
