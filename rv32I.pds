@@ -129,9 +129,11 @@
                 )
                 (_file "rtl/rk_fspi/rk_fspi_adapter.v"
                     (_format verilog)
+                    (_timespec "2026-10-30T09:24:22")
                 )
                 (_file "board/board_fspi_top.v"
                     (_format verilog)
+                    (_timespec "2026-10-30T09:35:28")
                 )
                 (_file "board/board_top.v"
                     (_format verilog)
