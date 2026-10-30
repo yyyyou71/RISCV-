@@ -1,7 +1,8 @@
 # M2：按现有工程移植 HDMI / PCIe / 共享 DDR
 
 更新：2026-10-30；分支 `ziguang_rv32i`。唯一维护入口为根目录 `rv32I.pds`，顶层仍为 `acore_dual_top`。
-本阶段完成新增连接和短测试，PDS 编译、实现和烧录由用户完成。
+本阶段已完成新增连接和短测试；PDS 综合、布局布线、时序检查与位流生成由 Codex 执行，用户负责烧录与板级验收。
+当前 DDR 实现验证进度和产物以 `ddr_timing_fix.md` 为准。预处理仍仅完成独立核验证，尚未接入此顶层。
 
 ### PDS 工程格式修复记录
 
@@ -89,6 +90,8 @@ CPU 仍通过 `0x31000` 控制寄存器和 `0x31100` 数据窗口分块搬运；
 
 CPU 通过稳定参数与 request/ack toggle 跨域；参数保持到应答、结果保持到下一条命令。
 帧号按模 2^32 的有符号差比较新旧；重复 acquire 保持当前 lease，不暗中换帧。
+DDR 时序修复将最新帧选择改为五周期扫描，扫描期间保留候选槽快照，CPU 仍通过 BUSY 等待。
+细节及实现验证见 [DDR 时序修复](ddr_timing_fix.md)。
 
 | CPU MMIO | 功能 |
 | --- | --- |
@@ -116,8 +119,9 @@ IIC 仍为 P19/R19、3.3 V、地址 0x66、CPU MMIO `0x30400`，没有新增中�
 
 DDR/PCIe 继续沿用参考公共复位，CPU 复位也受该公共复位控制，避免只复位一个 mailbox/原生事务端。
 `board/timing.fdc` 保留 PHY/PCIe 生成时钟和参考关系；新增 HDMI pixel 时钟按 148.5 MHz 上限约束，CPU 为 25 MHz。
-新增 mailbox 数据路径设置跨域最大/最小延迟，只对首级同步寄存器 D 端设置定向例外。
-PDS 实现后需检查这些层级名是否实际命中；当前没有通过综合后的名称、时序收敛或板级输入裕量验收。
+新增 mailbox 数据路径使用跨域 `set_max_delay -datapath_only`，对应异步方向只切除 hold 关系；
+首级同步器例外使用 PDS 可匹配的寄存器 cell，IIC 例外另限定外部端口起点。
+实际匹配和最终时序检查已通过，详见 `ddr_timing_fix.md`；板级输入裕量仍需实板验收。
 HDMI 外部 input delay 沿用参考的已有信息范围，没有编造接收器延迟；新时钟约束不等于已完成外部 IO 时序签核。
 
 LED0（J16）高表示同步后的 DDR ready；LED1（M17）高表示 CPU 错误 GPIO 或共享 DDR 故障。
@@ -167,7 +171,8 @@ python3 scripts/audit_video_project.py --reference-root /mnt/c/Users/yyyyou71/De
 - 静态审计：PDS 文件存在/无重复/分组平衡，目标器件、管脚覆盖和冲突检查，以及 Acore/IIC 和参考源文件 SHA 核对。
 
 以上短测针对新增连接，**不代表厂商 PHY 仿真、综合、实现或实板验收**。
-PDS 工程打开已在本机图形界面单独确认；命令行 Compile 检查未完成，见文首修复记录。
+PDS 工程打开已在本机图形界面确认；后续已完成综合、实现和最终时序检查，
+种子 3 的最终报告及对应位流已生成，详见 `ddr_timing_fix.md`。文首的超时说明为早期检查记录。
 没有重新运行 AI 回归、完整网络、CoreMark 或带宽评估。
 
 | 内容 | 路径 |

@@ -70,6 +70,13 @@ def main():
     checks['all_general_io_pinned'] = ports - hsst_lanes == set(pin_map)
     checks['no_duplicate_pins_or_ports'] = not repeated_pins and len(locations) == len(pin_map)
     checks['ab21_hdmi_only'] = pin_map.get('r_in[7]') == 'AB21' and 'uart_tx' not in pins
+    timing=(ROOT/'board/timing.fdc').read_text()
+    phy_timing=[]
+    for bank in range(2):
+        phy_timing += [f'set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_{bank}]',
+            f'set_clock_uncertainty {{0.4}} -from [get_clocks {{ddrphy_sysclk}}] -to [get_clocks {{phy_dq_sysclk_{bank}}}] -setup -hold',
+            f'set_clock_uncertainty {{0.4}} -from [get_clocks {{phy_dq_sysclk_{bank}}}] -to [get_clocks {{ddrphy_sysclk}}] -setup -hold']
+    checks['reference_phy_multicycle_and_uncertainty_preserved']=all(line in timing for line in phy_timing)
     checks['iic_pins_preserved'] = pin_map.get('iic_scl') == 'P19' and pin_map.get('iic_sda') == 'R19'
     bad_parts = []
     for name in ['pcie_test', 'ddr3', 'PLL_CLK', 'fifo_2_ddr', 'ddr_2_fifo',

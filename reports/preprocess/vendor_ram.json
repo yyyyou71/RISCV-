@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "simulator": "ModelSim with generated vendor RAM + GTP_DRM36K_E1",
+  "summary": "# PASS pool RAM IP: 96 independent 48-bit sums, one-cycle read, reset retention",
+  "sources": {
+    "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
+    "sim/video/TB_pool_sum_ram.v": "4fc09770d6947c2ab6a25c04d5d06423f2bb5dd079a3c5987b116c28d8614a77",
+    "ipcore/pango_pool_sum_ram/rtl/ipm2l_sdpram_v1_10_pango_pool_sum_ram.v": "621345ed82420b9d2ebf9a9d032886e94b0b14090295f1ba45e3aa1fa3a887fa",
+    "ipcore/pango_pool_sum_ram/pango_pool_sum_ram.v": "62729e531da3f571509ca0730a99fcc137bbacf47ea3182a0dcdda1dd42f1e4b"
+  }
+}

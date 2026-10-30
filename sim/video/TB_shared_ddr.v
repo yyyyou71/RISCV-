@@ -77,12 +77,12 @@ module TB_shared_ddr;
                 if(beat==15)begin vs<=0;round<=round+1;beat<=0;end else beat<=beat+1;
             end
         endcase
-        if((|hold_mask)&&!old_hold)begin
+        if(cpu.u_peripheral_bus.g_frames.u_frames.core_held&&!old_hold)begin
             if(hold_mask!=5'b01000)$fatal(1,"lease did not select latest frame");
             leases<=leases+1;
         end
-        if(!(|hold_mask)&&old_hold)releases<=releases+1;
-        old_hold<=|hold_mask;
+        if(!cpu.u_peripheral_bus.g_frames.u_frames.core_held&&old_hold)releases<=releases+1;
+        old_hold<=cpu.u_peripheral_bus.g_frames.u_frames.core_held;
         if(gpio==1 && round==32 && leases>=2 && releases>=2)begin
             $display("PASS shared DDR: video_writes=%0d video_reads=%0d leases=%0d releases=%0d CPU_bounds=1",video_writes,video_reads,leases,releases);
             $finish;

@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "stage": "P1 standalone preprocessing core",
+  "top_level_connected": false,
+  "ai_regression_run": false,
+  "coremark_run": false,
+  "hardware_tested": false,
+  "input_shape": [
+    1080,
+    1920,
+    3
+  ],
+  "output_shape": [
+    96,
+    96,
+    16
+  ],
+  "dtype": "little-endian INT16",
+  "bytes_per_frame": 294912,
+  "full_frame_patterns": 5,
+  "compared_rgb_values": 138240,
+  "cases": [
+    {
+      "test": "TB_rgb_mean240",
+      "profile": null,
+      "passed": true,
+      "summary": "PASS mean240: all 61201 valid sums, RGB, tags, bubbles and ties-to-even",
+      "seconds": 0.09662394599999935
+    },
+    {
+      "test": "TB_pool_errors",
+      "profile": null,
+      "passed": true,
+      "summary": "PASS pool errors: unknown RAM, timeout, short/long line, partial frame, blocked sink, cancel, recovery/reset",
+      "seconds": 0.239945622999997
+    },
+    {
+      "test": "TB_rgb888_pool96",
+      "profile": 0,
+      "passed": true,
+      "summary": "PASS pool96: pattern=0 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",
+      "seconds": 2.1306569290000006
+    },
+    {
+      "test": "TB_rgb888_pool96",
+      "profile": 1,
+      "passed": true,
+      "summary": "PASS pool96: pattern=1 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",
+      "seconds": 2.215110408000001
+    },
+    {
+      "test": "TB_rgb888_pool96",
+      "profile": 2,
+      "passed": true,
+      "summary": "PASS pool96: pattern=2 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",
+      "seconds": 2.203423104999999
+    },
+    {
+      "test": "TB_rgb888_pool96",
+      "profile": 3,
+      "passed": true,
+      "summary": "PASS pool96: pattern=3 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",
+      "seconds": 2.2068601380000032
+    },
+    {
+      "test": "TB_rgb888_pool96",
+      "profile": 4,
+      "passed": true,
+      "summary": "PASS pool96: pattern=4 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",
+      "seconds": 2.285782073
+    },
+    {
+      "test": "TB_pool_errors",
+      "profile": "four_state",
+      "passed": true,
+      "summary": "PASS pool errors: unknown RAM, timeout, short/long line, partial frame, blocked sink, cancel, recovery/reset",
+      "seconds": 1.0081583339999938
+    }
+  ],
+  "sources": {
+    "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
+    "rtl/video/preprocess/rgb888_pool96.v": "3b3482afee94b3e74967640b867c64243e6a1d9d00c52a0a10c918069bc8e432",
+    "rtl/video/preprocess/rgb_mean240.v": "88a09fbcdbe807effee1c30b8f28b3c7b06e8aaf0ed2654d3952ca56c20e2b88",
+    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2",
+    "sim/video/TB_rgb_mean240.v": "73ea302dc06bfcb4a75e34c72264d2e88cd8a6658e22b45294ebc939d4b9c4b8",
+    "sim/video/TB_pool_errors.v": "c2673fb4ac7077c047924c10be80b4c26fc52ce4f8b54f4753b18a04db5f00fe",
+    "sim/video/TB_rgb888_pool96.v": "63ac0b1e16f3ea2697f9b29dbbdd1ed9063d65e6461171f0c799168e7e3fd687",
+    "scripts/check_preprocess.py": "cd211538cc4b188f23c4e32b6769d93733eb8936606f37e6293556baee43ad79"
+  }
+}

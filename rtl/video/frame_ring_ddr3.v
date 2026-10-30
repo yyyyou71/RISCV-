@@ -290,17 +290,17 @@ module frame_ring_ddr3 #(
     wire [7:0] s_wid,s_rid;
     wire [255:0] s_rdata;
     wire arb_error;
-    reg range_error;
-    wire aw_inside=({1'b0,cpu_awaddr}+({25'b0,cpu_awlen}+29'd1)*29'd8)<=29'h2000000;
-    wire ar_inside=({1'b0,cpu_araddr}+({25'b0,cpu_arlen}+29'd1)*29'd8)<=29'h2000000;
-    always @(posedge core_clk_i or negedge sys_rst_n)
-        if(!sys_rst_n)range_error<=0;
-        else if((cpu_awvalid&&!aw_inside)||(cpu_arvalid&&!ar_inside))range_error<=1;
+    wire range_error;
+    wire [1:0] cpu_qualified;
+    ddr_region_check u_region_check(.clk(core_clk_i),.rst_n(sys_rst_n),
+        .valid({cpu_arvalid,cpu_awvalid}),.accepted({cpu_arvalid&&cpu_arready,cpu_awvalid&&cpu_awready}),
+        .address({cpu_araddr,cpu_awaddr}),.length({cpu_arlen,cpu_awlen}),
+        .qualified(cpu_qualified),.fault(range_error));
     assign shared_fault=arb_error|range_error;
     ddr_native_arbiter u_arbiter (
         .clk(core_clk_i),.rst_n(sys_rst_n),
         .s_awaddr({cpu_awaddr+28'h2000000,w_awaddr}),.s_araddr({cpu_araddr+28'h2000000,r_araddr}),
-        .s_awvalid({cpu_awvalid&&aw_inside,w_awvalid}),.s_arvalid({cpu_arvalid&&ar_inside,r_arvalid}),
+        .s_awvalid({cpu_qualified[0],w_awvalid}),.s_arvalid({cpu_qualified[1],r_arvalid}),
         .s_awap({cpu_awap,w_awuser_ap}),.s_arap({cpu_arap,r_aruser_ap}),
         .s_awlen({cpu_awlen,w_awlen}),.s_arlen({cpu_arlen,r_arlen}),
         .s_awid({cpu_awid,4'd0}),.s_arid({cpu_arid,r_aruser_id}),

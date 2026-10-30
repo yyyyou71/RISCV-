@@ -13,6 +13,13 @@ create_generated_clock -name {phy_dq_clk_0} -source [get_ports {sys_clk}] [get_p
 create_generated_clock -name {phy_dq_sysclk_0} -source [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_0}] -edges {5 13 21} -edge_shift {0 0 0}
 create_generated_clock -name {phy_dq_clk_1} -source [get_ports {sys_clk}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {sys_clk}] -multiply_by {84} -divide_by {2}
 create_generated_clock -name {phy_dq_sysclk_1} -source [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].ddrphy_ppll/clkoutphy}] [get_pins {u_video.u_hdmi_fifo.u_ddr3.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[1].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_1}] -edges {5 13 21} -edge_shift {0 0 0}
+# Preserve the reference DDR PHY interface timing recipe in full.
+set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_0]
+set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_1]
+set_clock_uncertainty {0.4} -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {phy_dq_sysclk_0}] -setup -hold
+set_clock_uncertainty {0.4} -from [get_clocks {phy_dq_sysclk_0}] -to [get_clocks {ddrphy_sysclk}] -setup -hold
+set_clock_uncertainty {0.4} -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {phy_dq_sysclk_1}] -setup -hold
+set_clock_uncertainty {0.4} -from [get_clocks {phy_dq_sysclk_1}] -to [get_clocks {ddrphy_sysclk}] -setup -hold
 set_clock_groups -name rst_clk -asynchronous -group [get_clocks {rst_clk}]
 set_clock_groups -name phy_dq_clk_0 -asynchronous -group [get_clocks {phy_dq_clk_0}]
 set_clock_groups -name phy_dq_clk_1 -asynchronous -group [get_clocks {phy_dq_clk_1}]
@@ -21,23 +28,30 @@ create_clock -name {hdmi_pixel} -period {6.734} [get_ports {pixclk_in}]
 set_clock_uncertainty {0.200} [get_clocks {sys_clk}]
 set_false_path -from [get_ports {key0_n perst_n}]
 set_false_path -to [get_ports {led0 led1}]
-set_max_delay 15.0 -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
-set_min_delay 0.0 -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
-set_max_delay 40.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
-set_min_delay 0.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
-set_max_delay 40.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
-set_min_delay 0.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
-set_max_delay 6.5 -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
-set_min_delay 0.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
-set_max_delay 6.5 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
-set_min_delay 0.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.req_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.ack_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_ddr.u_window.init_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.req_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.ack_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.ready_meta/D}]
-set_false_path -to [get_pins {u_board.u_soc.u_peripheral_bus.g_frames.u_frames.fault_meta/D}]
-set_false_path -to [get_pins {u_video.u_video_monitor.meta/D}]
-set_false_path -to [get_pins {u_video.u_hdmi_fifo.stream_meta/D}]
-set_false_path -from [get_ports {iic_scl iic_sda}] -to [get_pins {u_board.u_rk_iic.u_frontend.sclPipe[0]/D u_board.u_rk_iic.u_frontend.sdaPipe[0]/D}]
+# Bundled mailboxes / gray-pointer CDC: bound physical propagation, independent
+# of clock insertion skew. A same-edge hold relationship does not exist here.
+# Keep setup/max-delay analysis; do not cut the entire pair of clock domains.
+set_max_delay -datapath_only 15.0 -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
+set_false_path -hold -from [get_clocks {sys_clk}] -to [get_clocks {ddrphy_sysclk}]
+set_max_delay -datapath_only 40.0 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
+set_false_path -hold -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {sys_clk}]
+set_max_delay -datapath_only 40.0 -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
+set_false_path -hold -from [get_clocks {hdmi_pixel}] -to [get_clocks {sys_clk}]
+set_max_delay -datapath_only 6.5 -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
+set_false_path -hold -from [get_clocks {hdmi_pixel}] -to [get_clocks {ddrphy_sysclk}]
+set_max_delay -datapath_only 6.5 -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
+set_false_path -hold -from [get_clocks {ddrphy_sysclk}] -to [get_clocks {hdmi_pixel}]
+# Register-cell endpoints avoid assuming an RTL register has a physical /D pin
+# before ADS mapping. Only the first stage is an endpoint; stage 2 stays timed.
+set_false_path -to [get_cells -hierarchical {*u_window*req_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_window*ack_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_window*init_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_frames*req_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_frames*ack_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_frames*ready_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_frames*fault_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_video_monitor*meta*}]
+set_false_path -to [get_cells -hierarchical {*u_hdmi_fifo*stream_meta*}]
+# PDS groups this two-bit pipe into one pre-synthesis cell. Restrict the source
+# to the external ports: the stage-1 Q -> stage-2 D path is not waived.
+set_false_path -from [get_ports {iic_scl iic_sda}] -to [get_cells -hierarchical {*u_frontend*sclPipe*0* *u_frontend*sdaPipe*0*}]
