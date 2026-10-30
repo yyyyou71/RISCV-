@@ -1,4 +1,5 @@
 module acore_video_platform (
+    input wire monitor_clk,
     output wire cpu_ddr_clk,cpu_ddr_ready,system_rst_n,shared_fault,
     output wire [4:0] frame_available,
     output wire [159:0] frame_ids,
@@ -419,7 +420,7 @@ assign cca_dbg_valid_pix=1'b0;
 wire input_shape_ok;
 assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=core_rst_n;
-video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(sys_clk),.rst_n(core_rst_n),
+video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(core_rst_n),
     .vs(vs_in),.de(de_in),.shape_ok(input_shape_ok),.shape(measured_shape),.period_ticks(measured_period));
 frame_ring_ddr3 u_hdmi_fifo (
   .cpu_awaddr(cpu_awaddr),.cpu_araddr(cpu_araddr),.cpu_awvalid(cpu_awvalid),.cpu_arvalid(cpu_arvalid),

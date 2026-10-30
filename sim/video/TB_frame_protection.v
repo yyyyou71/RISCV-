@@ -5,6 +5,10 @@ module TB_frame_protection;
     always #4 core_clk=~core_clk;
     reg [15:0] pixel=0;
     reg [4:0] protect=0;
+    wire [4:0] cpu_hold,protection=protect|cpu_hold;
+    reg cpu_we=0;
+    reg [31:0] cpu_command=0;
+    wire [31:0] cpu_status;
     wire [4:0] done;
     wire [159:0] ids;
     wire [2:0] slot;
@@ -24,14 +28,14 @@ module TB_frame_protection;
     ddr3_write_ctrl_lite #(.H_ACTIVE(128),.V_ACTIVE(4)) dut (
         .wr_clk(wr_clk),.core_clk(core_clk),.rst_n(rst_n),.ddr_init_done(1'b1),
         .fifo_wr_en(en),.fifo_wr_data(pixel),.fifo_almost_full(full),
-        .protect_mask(protect),.capture_ok(1'b1),.frame_ids(ids),.write_active(active),
+        .protect_mask(protection),.capture_ok(1'b1),.frame_ids(ids),.write_active(active),
         .axi_awaddr(awaddr),.axi_awuser_ap(awap),.axi_awlen(awlen),.axi_awvalid(awvalid),
         .axi_awready(awready),.axi_wdata(wdata),.axi_wstrb(wstrb),.axi_wready(wready),.axi_wusero_last(wlast),
         .frame_done(done),.frame_consumed(1'b0),.consumed_frame_id(3'd0),.wr_frame_id(slot),.dbg_sof_seen());
     always @(posedge core_clk)if(rst_n)begin
         cycles<=cycles+1;
         if(awvalid&&awready)begin
-            if(protect[awaddr[24:22]])$fatal(1,"protected slot overwritten");
+            if(protection[awaddr[24:22]])$fatal(1,"protected slot overwritten");
             if(awlen!=15)$fatal(1,"video burst length changed");
             address<=awaddr;sending<=1;delay<=3;beat<=0;aw_count<=aw_count+1;
         end
@@ -42,6 +46,15 @@ module TB_frame_protection;
             if(wlast)begin sending<=0;beat<=0;end else beat<=beat+1;
         end
     end
+    frame_mailbox mailbox(.clk(wr_clk),.core_clk(core_clk),.rst_n(rst_n),
+        .dev_we(cpu_we),.dev_addr_wr(32'h30600),.dev_addr_rd(32'h30604),.dev_wdata(cpu_command),
+        .read_data(cpu_status),.available(done),.frame_ids(ids),.wr_slot(slot),.wr_active(active),
+        .ddr_ready(1'b1),.arb_fault(1'b0),.video_shape(32'b0),.video_period(32'b0),.hold_mask(cpu_hold));
+    task command;input [31:0] value;begin
+        @(negedge wr_clk);cpu_command=value;cpu_we=1;
+        @(negedge wr_clk);cpu_we=0;#1;
+        while(cpu_status[0])@(negedge wr_clk);
+    end endtask
     task send_frame;input integer frame;integer n;begin
         for(n=0;n<512;n=n+1)begin
             @(negedge wr_clk);en=1;pixel=n==0 ? 16'h0001:16'(((frame+1)<<8)|(n&254));
@@ -49,6 +62,8 @@ module TB_frame_protection;
         @(negedge wr_clk);en=0;
         repeat(400)@(negedge core_clk);
     end endtask
+    integer held_slot,j;
+    reg [31:0] held_id;
     initial begin
         repeat(6)@(negedge core_clk);rst_n=1;
         send_frame(0);send_frame(1);
@@ -61,7 +76,16 @@ module TB_frame_protection;
         if(aw_count!=before_drop)$fatal(1,"full pool did not drop input");
         protect=1;send_frame(10);send_frame(11);
         if(aw_count<=before_drop||first_word!==snapshot)$fatal(1,"resume or retained frame failed");
-        $display("PASS frame protection: retained slot/data/id, wrap skip, full-pool drop, resume AW=%0d",aw_count);$finish;
+        protect=0;
+        fork send_frame(12);command(1);join
+        if(cpu_hold==0||cpu_status[3])$fatal(1,"concurrent CPU lease failed");
+        held_slot=0;
+        for(j=0;j<5;j=j+1)if(cpu_hold[j])held_slot=j;
+        held_id=ids[held_slot*32+:32];
+        send_frame(13);send_frame(14);send_frame(15);send_frame(16);send_frame(17);send_frame(18);
+        if(ids[held_slot*32+:32]!==held_id)$fatal(1,"leased metadata overwritten after wrap");
+        command(2);if(cpu_hold!=0)$fatal(1,"CPU lease did not release");
+        $display("PASS frame protection: retained slot/data/id, wrap skip, full-pool drop/resume, concurrent mailbox lease AW=%0d",aw_count);$finish;
     end
     initial begin #500000;$fatal(1,"protection timeout");end
 endmodule

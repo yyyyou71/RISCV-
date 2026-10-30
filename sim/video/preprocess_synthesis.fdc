@@ -1,0 +1,7 @@
+# Standalone P1 synthesis check only; board timing remains board/timing.fdc.
+create_clock -name {pixel_clk} -period {6.734} [get_ports {clk}]
+set_false_path -from [get_ports {rst_n}]
+# Synchronous module-boundary contract for this standalone check, not an HDMI
+# receiver/PCB delay specification. P2's board top uses its real clock domains.
+set_input_delay -clock [get_clocks {pixel_clk}] 0.0 [get_ports {start cancel vs de rgb* source_frame_id* out_ready}]
+set_output_delay -clock [get_clocks {pixel_clk}] 0.0 [get_ports {ready busy frame_start done error error_code* result_frame_id* out_valid out_data* out_last out_beats*}]

@@ -9,35 +9,42 @@
       "profile": "normal",
       "passed": true,
       "summary": "PASS shared DDR: video_writes=512 video_reads=512 leases=2 releases=2 CPU_bounds=1",
-      "seconds": 0.20618440199999988
+      "seconds": 0.19912436999999983
     },
     {
       "name": "TB_shared_ddr",
       "profile": "stalled",
       "passed": true,
       "summary": "PASS shared DDR: video_writes=512 video_reads=512 leases=2 releases=2 CPU_bounds=1",
-      "seconds": 0.19886059199999995
+      "seconds": 0.1987575029999995
     },
     {
       "name": "TB_frame_mailbox",
       "profile": "normal",
       "passed": true,
       "summary": "PASS frame mailbox: empty/active exclusion, stable metadata, rollover, release, fault/reset",
-      "seconds": 0.008018833999999586
+      "seconds": 0.020142337999999427
+    },
+    {
+      "name": "TB_ddr_region_check",
+      "profile": "normal",
+      "passed": true,
+      "summary": "PASS DDR region: registered qualification, stalled/back-to-back, all burst boundaries, overflow/reset",
+      "seconds": 0.007839243999999468
     },
     {
       "name": "TB_video_timing",
       "profile": "normal",
       "passed": true,
       "summary": "PASS video timing: 1080p, measured period, bad line/frame rejection, recovery/reset",
-      "seconds": 4.1136514150000005
+      "seconds": 4.174394877000001
     },
     {
       "name": "TB_frame_protection",
       "profile": "normal",
       "passed": true,
-      "summary": "PASS frame protection: retained slot/data/id, wrap skip, full-pool drop, resume AW=40",
-      "seconds": 0.01548069100000049
+      "summary": "PASS frame protection: retained slot/data/id, wrap skip, full-pool drop/resume, concurrent mailbox lease AW=68",
+      "seconds": 0.02433995900000241
     }
   ],
   "verilator": "Verilator 5.052 2026-09-05 rev v5.052-61-g983a06a16",
@@ -62,10 +69,11 @@
     "rtl/ddr_chunk_client.v": "44c13ee0369d40b999752148d8d104197cbdc1ad6fb8e287c7c151448cf7deaa",
     "rtl/ddr_cpu_window.v": "634b726debc19381c394267e179cd07e35849249d932290115f420ef1065d237",
     "rtl/ddr_native_arbiter.v": "f91c428f558dc0576c113903bf55cab365133711eade644b607e1272ac3092da",
+    "rtl/ddr_region_check.v": "64588a6638ebd5b557954b1f9b21fd4dca7f356265a25a27c0839e037b9ce1f5",
     "rtl/decoder.v": "7488431d347ade162af2b63b3341795f9050ff0b4cf643dd3a30fdffd82dd063",
     "rtl/divide_unit.v": "6b79fce9559823d485981685bf60ac5ddf37b75e945d2e3c7df2f5275cd3fef5",
     "rtl/divider_core.v": "b2981039b71dc2b0846907f4397a0edc792ae900f0ac0c7ca6d36d8b07dfca49",
-    "rtl/frame_mailbox.v": "fa87ff7d4f01946332656bcebf81d9af2f5c4db43bcfc37c2ff53506375ff3fe",
+    "rtl/frame_mailbox.v": "16202965f74295cd92009292402fa3de4c7f048b88a3a3dd36fcef892f979dd9",
     "rtl/hazard_detection_unit.v": "7b7450e197b289ce7a85c955967582bf92f514c32229cfa7d75114aa6aa4bce4",
     "rtl/memory.v": "aa065816f6e44a66775c8416a2940f4d84c4dd5d2417af62a721d58f1e028c2a",
     "rtl/multiply_unit.v": "813ab2d4ad4eccd4c42e43912800244b95307d9969d26f2db045800feb751a6e",
@@ -76,21 +84,28 @@
     "rtl/uart_tx.v": "a5842224e3919ae36fbf3bbf91fc45cb36b741e0db2dcd0336af07a0ee6b00b9",
     "rtl/video_frame_capture.v": "b82c39799fcc025402c6a55ddb79728f3273ed5f17e509f5739057a06dd8b353",
     "rtl/video_timing_monitor.v": "dac4beae0ab92dd769723a495da809ff181ae442154b806f3faa649aeee9702e",
+    "sim/models/GTP_CLKBUFG.v": "726a59d46dd194b230b826d9197e4f55d3cf5054270904254332e00b0751a2fc",
     "sim/models/ROM_core.v": "43370af0f12ae394999dbe5f516e189d7074cc22c7edee91b08443c3b26f0e9a",
     "sim/models/acore_fetch_memory.v": "0bd8d11395b1911ca80e21daf619ec295dfa8f27e5b6a800952c4fb626e973a8",
     "sim/models/memory_core.v": "8f6e155733ea57550ffc8ed3d826173a6cbe802c3e3026ab161f4c600cf3242c",
     "sim/models/multiplier_core.v": "cb4c827b470e525919b3b86b65b0e992639fdae7aacf177aa033b307016e6307",
     "sim/models/multiply_adder.v": "95271112d87fd5f10bb4bfe7ac903b3804d12cc72f0db1c36fac1a69694312c5",
     "sim/models/multiply_adder_w8a16.v": "2d87b3618daaadcfd36461a70906562a9f3c325c292acc41a668bdb39af15a4b",
+    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2",
     "sim/models/pango_video_fifo_model.v": "9abb063faab1ed7355b6e089f12f5df7a0a921dec581138aec6e101e0d76ceec",
     "sim/models/video_async_fifo.v": "abc93551e4b17cc556c1be1202f4a71fba91e3a6622122dbdf9d158b17fcfbdd",
-    "sim/video/TB_frame_mailbox.v": "433964decf12ab5a2793661157a74716603b8cc8abd31ba64807985f9f8beb91",
-    "sim/video/TB_frame_protection.v": "c49debf17fd18516b991ca2b0226795be47912de642de05e4efc54db03b7a1ad",
-    "sim/video/TB_shared_ddr.v": "89fa861d1646bda4040764b47ca68ef89d6f879674ea8e550b4d241458efe330",
+    "sim/video/TB_ddr_region_check.v": "1898fab6b2e193954ff0b97663bf81115ceed1ef97e8a7b8c64fa8166d982d89",
+    "sim/video/TB_frame_mailbox.v": "64922a017ef5924e4c1278b175b370fda45badcace61b52dd082ee613959f88f",
+    "sim/video/TB_frame_protection.v": "2aee312c1eebf1b5deeba1bb19f11b6266d8f1100bed439dcf0ce474e03bf6c5",
+    "sim/video/TB_pool_errors.v": "c2673fb4ac7077c047924c10be80b4c26fc52ce4f8b54f4753b18a04db5f00fe",
+    "sim/video/TB_pool_sum_ram.v": "4fc09770d6947c2ab6a25c04d5d06423f2bb5dd079a3c5987b116c28d8614a77",
+    "sim/video/TB_rgb888_pool96.v": "63ac0b1e16f3ea2697f9b29dbbdd1ed9063d65e6461171f0c799168e7e3fd687",
+    "sim/video/TB_rgb_mean240.v": "73ea302dc06bfcb4a75e34c72264d2e88cd8a6658e22b45294ebc939d4b9c4b8",
+    "sim/video/TB_shared_ddr.v": "778ce2de1f43daaef5f0b23e3f21d15daec5c99d4643703168ace719fd3bc514",
     "sim/video/TB_video_timing.v": "cf5c845f7826fb2d0fa28272c1ea8efd6f72c7ff64cc4282825a797592310f88",
     "sim/video/fifo_2_ddr_model.v": "c443f54bd7f092dadae8844fa907a0f450783fd2dcb068b54b82ba37e806c745",
     "rtl/video/ddr3_write_ctrl_lite.v": "0d0d14afa35e001d3c04bac7da6f86c75c7d8c008b1346814edc98a38fbeb1b8",
     "sim/ddr3/ddr3.sv": "dd978ddad9b9b1adc09de5c9bcde8393304ae1fe0b745b5385cd8881c5447a1d",
-    "scripts/check_video_integration.py": "31f9edd9482b6cc754e6988006a6bb8328fe800ac91374966a2693fecaaaa108"
+    "scripts/check_video_integration.py": "3976212525bcb1a7dea138a748ea0060e0edfac1df4675279e06547984852f68"
   }
 }

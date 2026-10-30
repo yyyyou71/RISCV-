@@ -19,6 +19,10 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
     output wire [1:0] mem_dm
 );
     wire core_clk,ready,system_rst_n,fault;
+    wire cpu_clk;
+    // Keep the proven DDR reference input raw; distribute the added CPU domain
+    // through its own global network instead of general routing.
+    GTP_CLKBUFG u_cpu_clkbuf(.CLKIN(sys_clk),.CLKOUT(cpu_clk));
     wire [4:0] available,hold_mask;
     wire [159:0] frame_ids;
     wire [2:0] write_slot;
@@ -31,14 +35,14 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
     wire [15:0] wstrb;
     wire cpu_led0,cpu_led1;
     (* ASYNC_REG="TRUE" *) reg [1:0] ready_sync,fault_sync;
-    always @(posedge sys_clk or negedge system_rst_n)
+    always @(posedge cpu_clk or negedge system_rst_n)
         if(!system_rst_n)begin ready_sync<=0;fault_sync<=0;end
         else begin ready_sync<={ready_sync[0],ready};fault_sync<={fault_sync[0],fault};end
     assign led0=ready_sync[1];
     assign led1=cpu_led1|fault_sync[1];
     board_top #(.ENABLE_DUAL(1),.ENABLE_DDR(1),.ENABLE_AI(ENABLE_AI),
         .ENABLE_FRAME_CONTROL(1),.DDR_LIMIT_BYTES(32'h04000000)) u_board (
-        .sys_clk(sys_clk),
+        .sys_clk(cpu_clk),
         .key0_n(key0_n&&system_rst_n),
         .uart_tx(),
         .led0(cpu_led0),
@@ -77,6 +81,7 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
         .axi_rvalid(rvalid),
         .axi_rlast(rlast));
     acore_video_platform u_video (
+        .monitor_clk(cpu_clk),
         .sys_clk(sys_clk),
         .ref_clk_p(ref_clk_p),
         .ref_clk_n(ref_clk_n),

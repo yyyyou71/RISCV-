@@ -24,35 +24,48 @@ module frame_mailbox (
     reg [31:0] core_id;
     (* ASYNC_REG="TRUE" *) reg req_meta,req_sync,ack_meta,ack_sync;
     (* ASYNC_REG="TRUE" *) reg ready_meta,ready_sync,fault_meta,fault_sync;
-    reg found;
-    reg [2:0] candidate;
-    reg [31:0] candidate_id;
-    integer i;
-    always @(*) begin
-        found=0;candidate=0;candidate_id=0;
-        for(i=0;i<5;i=i+1) if(available[i] && !(wr_active && wr_slot==i)) begin
-            if(!found || $signed(frame_ids[i*32 +:32]-candidate_id)>0) begin
-                found=1;candidate=i[2:0];candidate_id=frame_ids[i*32 +:32];
-            end
-        end
-    end
-    wire acquiring=req_sync!=ack && !command_release && !core_held && found && ddr_ready && !arb_fault;
-    // Provisional protection closes the acquire/SOF race on the same core edge.
+    reg searching,scan_found;
+    reg [4:0] reserved;
+    reg [2:0] scan_index,scan_slot;
+    reg [31:0] scan_id;
+    wire pending_acquire=req_sync!=ack && !command_release && !core_held && ddr_ready && !arb_fault;
+    wire [4:0] eligible=available & ~(wr_active ? (5'b1<<wr_slot):5'b0);
+    wire [31:0] indexed_id=frame_ids[scan_index*32 +:32];
+    wire scan_wins=reserved[scan_index] && (!scan_found || $signed(indexed_id-scan_id)>0);
+    // Reserve the snapshot while selecting one slot per cycle. Protection does
+    // not depend on a chain of five 32-bit frame-id comparisons. Including live
+    // available closes the first request/SOF race; reserved survives a reader
+    // clearing available during the scan. Stage-to-stage ownership has no gap.
     assign hold_mask=(core_held ? (5'b1<<core_slot):5'b0) |
-                     (acquiring ? (5'b1<<candidate):5'b0);
+                     (pending_acquire ? (available|reserved):5'b0);
     always @(posedge core_clk or negedge core_reset[1]) begin
         if(!core_reset[1]) begin
             req_meta<=0;req_sync<=0;ack<=0;core_held<=0;core_slot<=0;core_id<=0;response_error<=0;
+            searching<=0;reserved<=0;scan_index<=0;scan_found<=0;scan_slot<=0;scan_id<=0;
         end else begin
             req_meta<=req;req_sync<=req_meta;
-            if(req_sync!=ack) begin
-                response_error<=0;
-                if(command_release) core_held<=0;
-                else if(!core_held) begin
-                    if(acquiring) begin core_held<=1;core_slot<=candidate;core_id<=candidate_id;end
-                    else response_error<=1;
+            if(searching)begin
+                if(!ddr_ready || arb_fault)begin
+                    response_error<=1;ack<=req_sync;searching<=0;reserved<=0;
+                end else begin
+                    if(scan_wins)begin scan_found<=1;scan_slot<=scan_index;scan_id<=indexed_id;end
+                    if(scan_index==4)begin
+                        response_error<=!(scan_found||scan_wins);
+                        core_held<=scan_found||scan_wins;
+                        core_slot<=scan_wins ? scan_index:scan_slot;
+                        core_id<=scan_wins ? indexed_id:scan_id;
+                        ack<=req_sync;searching<=0;reserved<=0;
+                    end else scan_index<=scan_index+1'b1;
                 end
-                ack<=req_sync;
+            end else if(req_sync!=ack) begin
+                response_error<=0;
+                if(command_release)begin core_held<=0;ack<=req_sync;end
+                else if(core_held)ack<=req_sync;
+                else if(!ddr_ready||arb_fault)begin response_error<=1;ack<=req_sync;end
+                else begin
+                    searching<=1;reserved<=eligible;scan_index<=0;
+                    scan_found<=0;scan_slot<=0;scan_id<=0;
+                end
             end
         end
     end

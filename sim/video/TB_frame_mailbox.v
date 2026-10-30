@@ -32,6 +32,19 @@ module TB_frame_mailbox;
         command(1);if(mask!=4)$fatal(1,"acquire changed existing lease");
         command(2);ready=0;command(1);if(!rd[3]||mask!=0)$fatal(1,"DDR not ready");
         ready=1;fault=1;command(1);if(!rd[3]||mask!=0)$fatal(1,"fault acquire");
+        fault=0;available=5'b11111;active=0;
+        ids={32'd14,32'd13,32'd12,32'd11,32'd10};
+        fork
+            command(1);
+            begin
+                wait(dut.searching);@(negedge core_clk);
+                // A PCIe reader may consume the published frames meanwhile.
+                available=0;#1;if(mask!=31)$fatal(1,"snapshot reservation lost during scan");
+            end
+        join
+        if(mask!=16||rd[3])$fatal(1,"snapshot/latest selection failed");
+        ra=32'h3060c;#1;if(rd!=14)$fatal(1,"reserved frame id changed");
+        command(2);
         rst_n=0;repeat(5)@(negedge clk);if(mask!=0)$fatal(1,"reset retained lease");
         $display("PASS frame mailbox: empty/active exclusion, stable metadata, rollover, release, fault/reset");$finish;
     end

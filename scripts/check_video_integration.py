@@ -18,6 +18,7 @@ def main():
         '-DPROG_FILE="firmware/video_bringup/acore_dual_rom.hex"',
         '-DDATA_FILE="firmware/video_bringup/acore_dual_ram_bytes.hex"']),
         ('TB_frame_mailbox',[],[]),
+        ('TB_ddr_region_check',[],[]),
         ('TB_video_timing',[],[]),
         ('TB_frame_protection',[ROOT/'rtl/video/ddr3_write_ctrl_lite.v',ROOT/'sim/video/fifo_2_ddr_model.v'],[])]
     for name,extra,defines in tests:

@@ -15,6 +15,7 @@
     "all_general_io_pinned": true,
     "no_duplicate_pins_or_ports": true,
     "ab21_hdmi_only": true,
+    "reference_phy_multicycle_and_uncertainty_preserved": true,
     "iic_pins_preserved": true,
     "all_active_ip_parts_match": true,
     "own_acore_and_iic_unchanged_from_m1": true,

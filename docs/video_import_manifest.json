@@ -12,9 +12,9 @@
       "source": "hdl/new_ring/frame_ring_ddr3.v",
       "destination": "rtl/video/frame_ring_ddr3.v",
       "sha256": "26fea8b2593372f7171397ca912e834e19ff1e71756636f1fcaaa3cc74b30c29",
-      "current_normalized_sha256": "c298afe289f609bb546a9c59a93ec6dd1d3b3d3f72d663aefd4358352f67e499",
+      "current_normalized_sha256": "d4018bc6daa9179f9369b8a6ba0edfa06d9c69f3e00f6c66c81078140e0511df",
       "modified": true,
-      "change": "Add shared native DDR arbiter, isolated CPU address region, range guard, frame metadata and reader/CPU protection."
+      "change": "Shared native DDR arbitration, isolated CPU address region, registered CPU range qualification, frame metadata and ownership protection."
     },
     {
       "source": "hdl/new_ring/ddr3_write_ctrl_lite.v",
@@ -1235,8 +1235,8 @@
       "destination": "board/acore_video_platform.v",
       "modified": true,
       "sha256": "9073e4fbeec5846ca203f5f4b50cefb9f831f277025107593986b323d48b5fc4",
-      "current_normalized_sha256": "280df5c37d30b45be3c618b0dacd9dff4fa377cfec7670e618f1e642ad5e9859",
-      "change": "Rename reference top; retain PCIe/DMA/HDMI configuration; use raw RGB565; disable UART/APB debug; add CPU DDR/metadata ports and timing monitor."
+      "current_normalized_sha256": "b996e07bf5ca9f5abb9a0be8849b60b9cc5868c9740b8d4b13af36e7779a743f",
+      "change": "Rename reference top; retain PCIe/DMA/HDMI configuration; use raw RGB565; disable UART/APB debug; add CPU DDR/metadata ports and timing monitor on the buffered CPU clock."
     }
   ],
   "sha256_definition": "sha256: exact original desktop bytes; current_normalized_sha256: imported/adapted LF-normalized bytes",
