@@ -1,0 +1,38 @@
+{
+  "application": "fspi_service",
+  "mode": "performance",
+  "iterations": 1000,
+  "core": "single",
+  "isa": "rv32i_zmmul",
+  "enable_div": 0,
+  "mul_pipeline_stages": 3,
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "flags": [
+    "-march=rv32im",
+    "-mno-div",
+    "-mabi=ilp32",
+    "-O2",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-common",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-pie",
+    "-nostdlib",
+    "-nostartfiles"
+  ],
+  "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+  "elf_sha256": "66092d41b31cf83e678d4a2f10d4e164d359d4d1b65dfe094868113164ff8fb1",
+  "rom_sha256": "bba6cf7082d6805a4b6bbc50e94f56455a6f9228edb227bd594f4099b361414d",
+  "ram_sha256": "26d6c7ae00fefc89dffc9ff03d1d4b7f724cedf883b5c27b8112bc9d9ca29e91",
+  "sources": {
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+    "firmware/fspi_service.c": "504487c6500cd38111dfad38b8070e793c2015315e0f924c175e51aac9e6e61e",
+    "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba",
+    "firmware/rk_link.h": "c5aa98f188f85995f15bd53eac3aa3af11ad35f3eec1eb0f5be84df34ea9da30",
+    "firmware/fspi_link.h": "d7446f810ee8fb83294e4be6c258a58b958a31e8152e10691924367f966951bb"
+  }
+}

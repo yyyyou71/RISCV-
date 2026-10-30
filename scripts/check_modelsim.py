@@ -46,6 +46,7 @@ def main():
             output / "mapping.log")
     sources = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
     sources += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
+    sources += sorted((ROOT / "rtl/rk_fspi").glob("*.v"))
     includes = []
     names = ("pango_rom", "pango_ram", "pango_multiplier_ip")
     tests = args.tests or ["TB_storage_images", "TB_memory_core", "TB_mem", "TB_multiplier_ip", "TB_coremark"]

@@ -1,7 +1,8 @@
 // CPU 外设接口适配：地址译码、UART 写请求和同步读数据返回。
 module peripheral_bus #(
     parameter integer CLK_FREQ  = 25_000_000,
-    parameter integer BAUD_RATE = 115200
+    parameter integer BAUD_RATE = 115200,
+    parameter integer ENABLE_FSPI = 0
 )(
     input  wire        clk,
     input  wire        rst_n,
@@ -13,8 +14,10 @@ module peripheral_bus #(
     input  wire [31:0] dev_addr_rd,
     input  wire [31:0] dev_wdata,
     input  wire [1:0]  dev_size,
-    output reg  [31:0] dev_rdata,
+    output wire [31:0] dev_rdata,
 
+    input wire spi_clk, spi_cs,
+    inout wire [3:0] spi_data,
     output wire [7:0] rk_tx_data,
     output wire rk_tx_valid,
     input wire rk_tx_ready,
@@ -24,13 +27,33 @@ module peripheral_bus #(
     output reg [1:0]   gpio_out
 );
 
+    wire word_access;
+    reg [31:0] legacy_rdata;
+    reg fspi_read_selected;
+    wire [31:0] fspi_rdata;
+    always @(posedge clk) begin
+        if (!rst_n) fspi_read_selected <= 0;
+        else if (dev_re) fspi_read_selected <= ENABLE_FSPI && word_access &&
+            dev_addr_rd >= 32'h00030300 && dev_addr_rd <= 32'h0003030c && dev_addr_rd[1:0]==0;
+    end
+    assign dev_rdata = fspi_read_selected ? fspi_rdata : legacy_rdata;
+    generate if (ENABLE_FSPI) begin: g_fspi
+        rk_fspi_adapter u_fspi (
+            .clk(clk), .rst_n(rst_n), .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data),
+            .cpu_we(dev_we && word_access), .cpu_re(dev_re && word_access),
+            .cpu_addr(dev_we ? dev_addr_wr : dev_addr_rd), .cpu_wdata(dev_wdata),
+            .cpu_rdata(fspi_rdata));
+    end else begin: g_no_fspi
+        assign spi_data=4'bzzzz;
+        assign fspi_rdata=0;
+    end endgenerate
+
     localparam [31:0] UART_TXDATA = 32'h0003_0100;
     localparam [31:0] UART_STATUS = 32'h0003_0104;
     localparam [31:0] GPIO_DATA = 32'h0003_0108;
     localparam [31:0] CYCLE_COUNT = 32'h0003_000c;
 
     reg [31:0] cycle_count;
-    wire word_access;
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -115,22 +138,22 @@ module peripheral_bus #(
     // 更新读数据寄存器。无读请求时保持上次结果。
     always @(posedge clk) begin
         if (!rst_n) begin
-            dev_rdata <= 32'b0;
+            legacy_rdata <= 32'b0;
         end
         else if (dev_re) begin
             if (word_access && (dev_addr_rd == UART_STATUS))
-                dev_rdata <= {31'b0, !uart_busy};
+                legacy_rdata <= {31'b0, !uart_busy};
             else if (word_access && (dev_addr_rd == CYCLE_COUNT))
-                dev_rdata <= cycle_count;
+                legacy_rdata <= cycle_count;
             else if (word_access && (dev_addr_rd == GPIO_DATA))
-                dev_rdata <= {30'b0, gpio_out};
+                legacy_rdata <= {30'b0, gpio_out};
             else if (word_access && dev_addr_rd == RK_STATUS)
-                dev_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
-            else if (word_access && dev_addr_rd == RK_PARAM) dev_rdata <= param_value;
-            else if (word_access && dev_addr_rd == RK_SEQ) dev_rdata <= param_seq;
+                legacy_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
+            else if (word_access && dev_addr_rd == RK_PARAM) legacy_rdata <= param_value;
+            else if (word_access && dev_addr_rd == RK_SEQ) legacy_rdata <= param_seq;
             else
                 // 未实现地址、不支持的访问宽度、只写寄存器读回均返回 0。
-                dev_rdata <= 32'b0;
+                legacy_rdata <= 32'b0;
         end
     end
 

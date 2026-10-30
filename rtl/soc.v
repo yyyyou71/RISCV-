@@ -1,10 +1,13 @@
 module soc #(
     parameter integer CLK_FREQ = 25000000,
     parameter integer BAUD_RATE = 115200,
-    parameter integer ENABLE_DUAL = 0
+    parameter integer ENABLE_DUAL = 0,
+    parameter integer ENABLE_FSPI = 0
 ) (
     input wire clk,
     input wire rst_n,
+    input wire spi_clk, spi_cs,
+    inout wire [3:0] spi_data,
     output wire [7:0] rk_tx_data,
     output wire rk_tx_valid,
     input wire rk_tx_ready,
@@ -38,7 +41,7 @@ module soc #(
 
     peripheral_bus #(
         .CLK_FREQ(CLK_FREQ),
-        .BAUD_RATE(BAUD_RATE)
+        .BAUD_RATE(BAUD_RATE), .ENABLE_FSPI(ENABLE_FSPI)
     ) u_peripheral_bus (
         .clk(clk),
         .rst_n(rst_n),
@@ -49,6 +52,7 @@ module soc #(
         .dev_wdata(dev_wdata),
         .dev_size(dev_size),
         .dev_rdata(dev_rdata),
+        .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data),
         .rk_tx_data(rk_tx_data), .rk_tx_valid(rk_tx_valid), .rk_tx_ready(rk_tx_ready),
         .rk_param_data(rk_param_data), .rk_param_update(rk_param_update),
         .uart_txd(uart_txd),
