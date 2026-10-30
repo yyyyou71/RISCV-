@@ -41,7 +41,7 @@ def check_coremark_sources():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
-    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "iic_service", "video_bringup"), default="coremark")
+    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "iic_service", "fspi_service", "video_bringup"), default="coremark")
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     parser.add_argument("--verify-existing", action="store_true")
     parser.add_argument("--mode", choices=("performance", "validation"), default="performance")
@@ -107,8 +107,10 @@ def main():
         else:
             (args.image_dir / (prefix + "ram_bytes.hex")).write_text(byte_image, encoding="ascii")
     dependencies = sources + [linker]
-    if args.application == "iic_service":
+    if args.application in ("iic_service", "fspi_service"):
         dependencies += [ROOT / "firmware/rk_link.h"]
+    if args.application == "fspi_service":
+        dependencies += [ROOT / "firmware/fspi_link.h"]
     if args.application == "coremark":
         dependencies += [ROOT / "csrc/coremark_port/platform.h", ROOT / "csrc/coremark_port/core_portme.h"]
     manifest = {"application": args.application, "mode": args.mode, "iterations": args.iterations,

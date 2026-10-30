@@ -1,0 +1,10 @@
+{
+  "source_root": "D:\\Projects\\Maximus-project\\fpga\\rv32\\fspi_slave_test\\fspi_slave_test",
+  "adaptation": "new sampled single-clock RTL, compatible 00/80 quad protocol",
+  "sources": {
+    "src/fspi_slave_top.v": "da71c6161e56d66bdebcc7189526de7b4f8c1bc373a99939d5ccc9ff6fd70a22",
+    "src/fspi_slave.v": "c9c539ff77221b26834e8965d9cf67a9cf5b60a326af548cabb1d95942fe3ef0",
+    "src/spi_ram_crtl.v": "7218dbac898548189257a3a02b604aef751331026a0aca5ba8503b9f33831d22",
+    "fdc/fspi_slave_top.fdc": "630926be993e92e4e014d36a93b489f9fbd7ca3e4174fe921ec729c28c794349"
+  }
+}

@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_coremark", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus")
+    tests = ("TB_memory_core", "TB_mem", "TB_board", "TB_coremark", "TB_rk_iic", "TB_board_iic", "TB_cpu_iic", "TB_rk_cpu_bus", "TB_cpu_fspi")
     parser.add_argument("--test", choices=tests)
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single",
                         help="CPU configuration for TB_cpu_iic")
@@ -22,6 +22,7 @@ def main():
                                 "multiply_adder.v", "multiply_adder_w8a16.v", "video_async_fifo.v")]
     rtl += sorted((ROOT / "sim/models").glob("*.v"))
     rtl += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
+    rtl += sorted((ROOT / "rtl/rk_fspi").glob("*.v"))
     board = sorted((ROOT / "board").glob("*.v"))
     defines = ["-DNO_WAVES", '-DPROG_FILE="firmware/rom.hex"',
                '-DDATA_FILE="firmware/ram_bytes.hex"']
@@ -32,8 +33,8 @@ def main():
     for name in selected:
         executable = output / (name + ".vvp")
         test_defines = defines
-        if name in ("TB_board", "TB_board_iic", "TB_cpu_iic"):
-            app = "iic_service" if name == "TB_cpu_iic" else "selftest"
+        if name in ("TB_board", "TB_board_iic", "TB_cpu_iic", "TB_cpu_fspi"):
+            app = "fspi_service" if name == "TB_cpu_fspi" else ("iic_service" if name == "TB_cpu_iic" else "selftest")
             images = ROOT / "build/firmware" / app / "images"
             subprocess.run(["python3", str(ROOT / "scripts/build_firmware.py"),
                             "--app", app, "--image-dir", str(images)], cwd=ROOT, check=True)

@@ -2,6 +2,7 @@
 module peripheral_bus #(
     parameter integer CLK_FREQ  = 25_000_000,
     parameter integer BAUD_RATE = 115200,
+    parameter integer ENABLE_FSPI = 0,
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
     parameter integer AI_ACT_WIDTH = 16,
@@ -21,8 +22,10 @@ module peripheral_bus #(
     input  wire [31:0] dev_addr_rd,
     input  wire [31:0] dev_wdata,
     input  wire [1:0]  dev_size,
-    output reg  [31:0] dev_rdata,
+    output wire [31:0] dev_rdata,
 
+    input wire spi_clk, spi_cs,
+    inout wire [3:0] spi_data,
     input wire core_clk, ddr_init_done,
     input wire [4:0] frame_available,
     input wire [159:0] frame_ids,
@@ -51,13 +54,37 @@ module peripheral_bus #(
     output reg [1:0]   gpio_out
 );
 
+    // Preserve video firmware addresses when video and FSPI are both enabled.
+    localparam [31:0] FSPI_BASE = ENABLE_VIDEO ? 32'h00030700 : 32'h00030300;
+    wire fspi_wr_hit = dev_addr_wr >= FSPI_BASE && dev_addr_wr <= FSPI_BASE+12 && dev_addr_wr[1:0]==0;
+    wire fspi_rd_hit = dev_addr_rd >= FSPI_BASE && dev_addr_rd <= FSPI_BASE+12 && dev_addr_rd[1:0]==0;
+    wire word_access;
+    reg [31:0] legacy_rdata;
+    reg fspi_read_selected;
+    wire [31:0] fspi_rdata;
+    always @(posedge clk) begin
+        if (!rst_n) fspi_read_selected <= 0;
+        else if (dev_re) fspi_read_selected <= ENABLE_FSPI && word_access &&
+            fspi_rd_hit;
+    end
+    assign dev_rdata = fspi_read_selected ? fspi_rdata : legacy_rdata;
+    generate if (ENABLE_FSPI) begin: g_fspi
+        rk_fspi_adapter u_fspi (
+            .clk(clk), .rst_n(rst_n), .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data),
+            .cpu_we(dev_we && word_access && fspi_wr_hit), .cpu_re(dev_re && word_access && fspi_rd_hit),
+            .cpu_addr((dev_we ? dev_addr_wr : dev_addr_rd) - FSPI_BASE + 32'h00030300), .cpu_wdata(dev_wdata),
+            .cpu_rdata(fspi_rdata));
+    end else begin: g_no_fspi
+        assign spi_data=4'bzzzz;
+        assign fspi_rdata=0;
+    end endgenerate
+
     localparam [31:0] UART_TXDATA = 32'h0003_0100;
     localparam [31:0] UART_STATUS = 32'h0003_0104;
     localparam [31:0] GPIO_DATA = 32'h0003_0108;
     localparam [31:0] CYCLE_COUNT = 32'h0003_000c;
 
     reg [31:0] cycle_count;
-    wire word_access;
 
     // One synchronous CPU read stage is retained for every MMIO target.
     // The window owns its CPU/DDR CDC mailbox and serializes AI/window/video jobs.
@@ -188,24 +215,24 @@ module peripheral_bus #(
     // 更新读数据寄存器。无读请求时保持上次结果。
     always @(posedge clk) begin
         if (!rst_n) begin
-            dev_rdata <= 32'b0;
+            legacy_rdata <= 32'b0;
         end
         else if (dev_re) begin
             if (word_access && (dev_addr_rd == UART_STATUS))
-                dev_rdata <= {31'b0, !uart_busy};
+                legacy_rdata <= {31'b0, !uart_busy};
             else if (word_access && (dev_addr_rd == CYCLE_COUNT))
-                dev_rdata <= cycle_count;
+                legacy_rdata <= cycle_count;
             else if (word_access && (dev_addr_rd == GPIO_DATA))
-                dev_rdata <= {30'b0, gpio_out};
+                legacy_rdata <= {30'b0, gpio_out};
             else if (word_access && dev_addr_rd == RK_STATUS)
-                dev_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
-            else if (word_access && dev_addr_rd == RK_PARAM) dev_rdata <= param_value;
-            else if (word_access && dev_addr_rd == RK_SEQ) dev_rdata <= param_seq;
+                legacy_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
+            else if (word_access && dev_addr_rd == RK_PARAM) legacy_rdata <= param_value;
+            else if (word_access && dev_addr_rd == RK_SEQ) legacy_rdata <= param_seq;
             else if(word_access && dev_addr_rd>=32'h30600 && dev_addr_rd<=32'h30620)
-                dev_rdata<=frame_read_data;
+                legacy_rdata<=frame_read_data;
             else
                 // DDR/AI/video read_data is combinational, so no extra read cycle.
-                dev_rdata <= word_access ? ddr_read_data : 32'b0;
+                legacy_rdata <= word_access ? ddr_read_data : 32'b0;
         end
     end
 

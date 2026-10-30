@@ -2,6 +2,7 @@ module soc #(
     parameter integer CLK_FREQ = 25000000,
     parameter integer BAUD_RATE = 115200,
     parameter integer ENABLE_DUAL = 0,
+    parameter integer ENABLE_FSPI = 0,
     parameter integer ENABLE_DDR = 0,
     parameter integer ENABLE_AI = 0,
     parameter integer AI_ACT_WIDTH = 16,
@@ -13,6 +14,8 @@ module soc #(
 ) (
     input wire clk,
     input wire rst_n,
+    input wire spi_clk, spi_cs,
+    inout wire [3:0] spi_data,
     input wire timer_irq,
     input wire core_clk, ddr_init_done,
     input wire [4:0] frame_available,
@@ -65,7 +68,7 @@ module soc #(
 
     peripheral_bus #(
         .CLK_FREQ(CLK_FREQ),
-        .BAUD_RATE(BAUD_RATE),
+        .BAUD_RATE(BAUD_RATE), .ENABLE_FSPI(ENABLE_FSPI),
         .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH),
         .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES), .ENABLE_VIDEO(ENABLE_VIDEO),
         .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS),
@@ -80,6 +83,7 @@ module soc #(
         .dev_wdata(dev_wdata),
         .dev_size(dev_size),
         .dev_rdata(dev_rdata),
+        .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data),
         .core_clk(core_clk), .ddr_init_done(ddr_init_done),
         .frame_available(frame_available),.frame_ids(frame_ids),.frame_wr_slot(frame_wr_slot),
         .frame_wr_active(frame_wr_active),.shared_ddr_fault(shared_ddr_fault),
