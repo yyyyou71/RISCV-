@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "stage": "P2 CPU-triggered HDMI tensor capture",
+  "top_level_connected": true,
+  "physical_build_verified": false,
+  "hardware_tested": false,
+  "ai_enabled": false,
+  "ai_regression_run": false,
+  "coremark_run": false,
+  "cases": [
+    {
+      "test": "TB_hdmi_tensor",
+      "passed": true,
+      "seconds": 2.317881988,
+      "summary": "PASS tensor capture: full RGB888 frame, 18432 checked DDR beats, CPU/video contention, raw identity/lease, invalid range, drop and malformed input cpu=2788 video=4404"
+    },
+    {
+      "test": "TB_frame_protection",
+      "passed": true,
+      "seconds": 0.024078042000001076,
+      "summary": "PASS frame protection: retained slot/data/id, wrap skip, full-pool drop/resume, concurrent mailbox lease AW=68"
+    }
+  ],
+  "sources": {
+    "rtl/ddr_native_arbiter.v": "f91c428f558dc0576c113903bf55cab365133711eade644b607e1272ac3092da",
+    "rtl/ddr_block_transfer.v": "79152008307ff7025fda41fee758082444bf5b496653583acfb8914d4c254fda",
+    "rtl/frame_mailbox.v": "16202965f74295cd92009292402fa3de4c7f048b88a3a3dd36fcef892f979dd9",
+    "sim/video/fifo_2_ddr_model.v": "c443f54bd7f092dadae8844fa907a0f450783fd2dcb068b54b82ba37e806c745",
+    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2",
+    "rtl/video/preprocess/hdmi_tensor_capture.v": "063a4d3e094be6dfe00f3479d499bae00af021d97032e1d84167c518a9084ee3",
+    "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
+    "rtl/video/preprocess/rgb888_pool96.v": "3b3482afee94b3e74967640b867c64243e6a1d9d00c52a0a10c918069bc8e432",
+    "rtl/video/preprocess/rgb_mean240.v": "88a09fbcdbe807effee1c30b8f28b3c7b06e8aaf0ed2654d3952ca56c20e2b88",
+    "rtl/video/ddr3_write_ctrl_lite.v": "e390a61b9c08a4af715e9ee6481744cb261d459275c8436e779c255c771b7fd1",
+    "sim/video/TB_hdmi_tensor.v": "ab1777bd1bf82c35a34eb36bf98f41d4f27bf0882adfd6ccea3436b3e93aad93",
+    "sim/video/TB_frame_protection.v": "553f0bb85231233e937e8c63f27e86eb21a352ffd899b99fadff9cd12697aa1c",
+    "scripts/check_tensor_capture.py": "850e9004042603e24448d82e98a1b64dd7128ed2c529f9c641b42857ec04edb3"
+  }
+}

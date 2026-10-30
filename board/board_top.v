@@ -5,8 +5,13 @@ module board_top #(
     parameter integer IIC_BOOT_TEST = 0,
     parameter integer ENABLE_DUAL = 0,
     parameter integer ENABLE_DDR = 0,ENABLE_AI = 0,ENABLE_FRAME_CONTROL = 0,
+    parameter integer ENABLE_PREPROCESS = 0,
     parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 ) (
+    output wire tensor_we,
+    output wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    output wire [31:0] tensor_wdata,
+    input wire [31:0] tensor_rdata,
     input wire sys_clk,
     input wire key0_n,
     output wire uart_tx,
@@ -72,11 +77,14 @@ module board_top #(
 
     soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE), .ENABLE_DUAL(ENABLE_DUAL),
         .ENABLE_DDR(ENABLE_DDR),.ENABLE_AI(ENABLE_AI),.ENABLE_FRAME_CONTROL(ENABLE_FRAME_CONTROL),
+        .ENABLE_PREPROCESS(ENABLE_PREPROCESS),
         .DDR_LIMIT_BYTES(DDR_LIMIT_BYTES)) u_soc (
         .clk(sys_clk),
+        .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
+        .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .rst_n(rst_n),
         .timer_irq(1'b0),
-        // DDR/AI remain disabled in the existing board image until M2 wiring.
+        // Optional engines and external preprocessing MMIO follow board parameters.
         .core_clk(core_clk), .ddr_init_done(ddr_init_done),
         .frame_available(frame_available),.frame_ids(frame_ids),.frame_wr_slot(frame_wr_slot),
         .frame_wr_active(frame_wr_active),.shared_ddr_fault(shared_ddr_fault),

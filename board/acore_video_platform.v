@@ -1,5 +1,9 @@
 module acore_video_platform (
     input wire monitor_clk,
+    input wire tensor_we,
+    input wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    input wire [31:0] tensor_wdata,
+    output wire [31:0] tensor_rdata,
     output wire cpu_ddr_clk,cpu_ddr_ready,system_rst_n,shared_fault,
     output wire [4:0] frame_available,
     output wire [159:0] frame_ids,
@@ -418,11 +422,41 @@ assign cca_dbg_valid_pix=1'b0;
 //   读侧(pclk_div2)  : 128bit, 呈现与 a_fifi 相同的 rd_data/rd_empty/almost_empty 接口。
 //   帧对齐由内部 marker 驱动, 读侧自治, 无需外部 wr_rst/rd_rst/frame_active。
 wire input_shape_ok;
+wire [31:0] source_next_id,raw_begin_id,raw_end_id;
+wire source_ready,raw_begin,raw_accepted,raw_end,raw_end_ok,tensor_fault;
+wire [2:0] raw_begin_slot,raw_end_slot;
+wire [4:0] tensor_hold;
+wire [27:0] tensor_awaddr;
+wire tensor_awvalid,tensor_awap,tensor_awready,tensor_wready,tensor_wlast;
+wire [3:0] tensor_awlen,tensor_awid,tensor_wid;
+wire [127:0] tensor_write_data;
+wire [15:0] tensor_wstrb;
 assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=core_rst_n;
 video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(core_rst_n),
     .vs(vs_in),.de(de_in),.shape_ok(input_shape_ok),.shape(measured_shape),.period_ticks(measured_period));
+hdmi_tensor_capture u_preprocess (
+    .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(core_rst_n),
+    .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
+    .dev_we(tensor_we),.dev_addr_wr(tensor_addr_wr),.dev_addr_rd(tensor_addr_rd),
+    .dev_wdata(tensor_wdata),.read_data(tensor_rdata),
+    .vs(vs_in),.de(de_in),.rgb({r_in,g_in,b_in}),.source_ready(source_ready&&input_shape_ok),
+    .source_next_id(source_next_id),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
+    .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
+    .raw_end_ok(raw_end_ok),.raw_end_id(raw_end_id),.raw_end_slot(raw_end_slot),
+    .hold_mask(tensor_hold),.fault(tensor_fault),
+    .axi_awaddr(tensor_awaddr),.axi_awvalid(tensor_awvalid),.axi_awap(tensor_awap),
+    .axi_awlen(tensor_awlen),.axi_awid(tensor_awid),.axi_awready(tensor_awready),
+    .axi_wdata(tensor_write_data),.axi_wstrb(tensor_wstrb),
+    .axi_wready(tensor_wready),.axi_wlast(tensor_wlast),.axi_wid(tensor_wid));
 frame_ring_ddr3 u_hdmi_fifo (
+  .tensor_awaddr(tensor_awaddr),.tensor_awvalid(tensor_awvalid),.tensor_awap(tensor_awap),
+  .tensor_awlen(tensor_awlen),.tensor_awid(tensor_awid),.tensor_awready(tensor_awready),
+  .tensor_wdata(tensor_write_data),.tensor_wstrb(tensor_wstrb),.tensor_wready(tensor_wready),
+  .tensor_wlast(tensor_wlast),.tensor_wid(tensor_wid),.tensor_hold(tensor_hold),.tensor_fault(tensor_fault),
+  .source_next_id(source_next_id),.source_ready(source_ready),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
+  .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
+  .raw_end_ok(raw_end_ok),.raw_end_id(raw_end_id),.raw_end_slot(raw_end_slot),
   .cpu_awaddr(cpu_awaddr),.cpu_araddr(cpu_araddr),.cpu_awvalid(cpu_awvalid),.cpu_arvalid(cpu_arvalid),
   .cpu_awap(cpu_awap),.cpu_arap(cpu_arap),.cpu_awlen(cpu_awlen),.cpu_arlen(cpu_arlen),
   .cpu_awid(cpu_awid),.cpu_arid(cpu_arid),.cpu_awready(cpu_awready),.cpu_arready(cpu_arready),

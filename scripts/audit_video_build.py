@@ -29,6 +29,7 @@ def timing_passes(sections):
 
 def main():
     pds=(ROOT/'rv32I.pds').read_text(encoding='utf-8')
+    preprocessing_connected='.ENABLE_PREPROCESS(1)' in (ROOT/'board/acore_dual_top.v').read_text()
     paths=[]
     for name in re.findall(r'\((?:_file|_ip|_ip_source_item) "([^"]+)"',pds):
         p=(ROOT/name).resolve()
@@ -46,12 +47,13 @@ def main():
     final=files['place_route/acore_dual_top.rtr']
     final_sections=timing_sections(final) if fresh[final.relative_to(ROOT).as_posix()] else {}
     timing_passed=timing_passes(sections) and timing_passes(final_sections)
-    log=ROOT/'build/video-platform/pds_console.log'
-    text=log.read_text(errors='replace') if log.exists() else ''
+    candidates=[ROOT/name for name in ('build/video-platform/pds_console.log','flow.log','pds.log') if (ROOT/name).is_file()]
+    log=max(candidates,key=lambda p:p.stat().st_mtime) if candidates else None
+    text=log.read_text(errors='replace') if log else ''
     errors=re.findall(r'^E:.*$',text,re.M)
     matches=re.findall(r"The pattern '([^']+)'[^\n]*match (\d+) objects",text)
     scoped=[dict(pattern=p,count=int(n)) for p,n in matches if any(t in p for t in
-            ('req_meta','ack_meta','init_meta','ready_meta','fault_meta','stream_meta','sclPipe','sdaPipe','u_video_monitor'))]
+            ('req_meta','ack_meta','init_meta','ready_meta','fault_meta','stream_meta','sclPipe','sdaPipe','u_video_monitor','u_preprocess','overflow_meta'))]
     resources={}
     resource_text=files['place_route/acore_dual_top.prr'].read_text(errors='replace') if fresh['place_route/acore_dual_top.prr'] else ''
     header=re.search(r'^\| Module Inst Name\s*\|(.+)$',resource_text,re.M)
@@ -66,11 +68,12 @@ def main():
         artifacts_fresh=fresh,errors=errors,scoped_constraint_matches=scoped,timing_sections=sections,
         final_timing_sections=final_sections,final_timing_passed=timing_passes(final_sections),
         resources=resources,
+        console_log=log.relative_to(ROOT).as_posix() if log else None,
         sources={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
         artifacts={name:dict(bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
                    for name,p in files.items() if p.is_file()},
-        hardware_tested=False,preprocessing_connected=False,ai_enabled=False)
-    dest=ROOT/'reports/video_integration/ddr_timing_fix.json'
+        hardware_tested=False,preprocessing_connected=preprocessing_connected,ai_enabled=False)
+    dest=ROOT/('reports/preprocess/implementation.json' if preprocessing_connected else 'reports/video_integration/ddr_timing_fix.json')
     dest.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print('DDR implementation audit:', 'PASS' if report['passed'] else 'FAIL')
     print('Fresh artifacts:',fresh,'Timing summary passed:',timing_passed)

@@ -1,0 +1,37 @@
+{
+  "application": "preprocess_bringup",
+  "mode": "performance",
+  "iterations": 2700,
+  "core": "acore_dual",
+  "isa": "rv32i_zmmul",
+  "enable_div": 0,
+  "mul_pipeline_stages": 3,
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "flags": [
+    "-march=rv32im",
+    "-mno-div",
+    "-mabi=ilp32",
+    "-O2",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-common",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-pie",
+    "-nostdlib",
+    "-nostartfiles"
+  ],
+  "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+  "elf_sha256": "d59831f33aba2c5db7cf3329302e68e3334e2a418e42b62d2c924f3d4e8a9ad0",
+  "rom_sha256": "acf052f181508a9b3762e798998a25443c1538ba15cbe5c81db98c5f9625cd4d",
+  "ram_sha256": "26d6c7ae00fefc89dffc9ff03d1d4b7f724cedf883b5c27b8112bc9d9ca29e91",
+  "sources": {
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+    "firmware/preprocess_bringup.c": "535f407e55472d67d01b90a2b9e23562ae2f9fb7682db07f68129f571436ac8b",
+    "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba",
+    "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158"
+  }
+}

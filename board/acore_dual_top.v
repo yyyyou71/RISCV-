@@ -34,6 +34,9 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
     wire [127:0] wdata,rdata;
     wire [15:0] wstrb;
     wire cpu_led0,cpu_led1;
+    wire tensor_we;
+    wire [7:0] tensor_addr_wr,tensor_addr_rd;
+    wire [31:0] tensor_wdata,tensor_rdata;
     (* ASYNC_REG="TRUE" *) reg [1:0] ready_sync,fault_sync;
     always @(posedge cpu_clk or negedge system_rst_n)
         if(!system_rst_n)begin ready_sync<=0;fault_sync<=0;end
@@ -41,7 +44,9 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
     assign led0=ready_sync[1];
     assign led1=cpu_led1|fault_sync[1];
     board_top #(.ENABLE_DUAL(1),.ENABLE_DDR(1),.ENABLE_AI(ENABLE_AI),
-        .ENABLE_FRAME_CONTROL(1),.DDR_LIMIT_BYTES(32'h04000000)) u_board (
+        .ENABLE_FRAME_CONTROL(1),.ENABLE_PREPROCESS(1),.DDR_LIMIT_BYTES(32'h04000000)) u_board (
+        .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
+        .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .sys_clk(cpu_clk),
         .key0_n(key0_n&&system_rst_n),
         .uart_tx(),
@@ -81,6 +86,8 @@ module acore_dual_top #(parameter integer ENABLE_AI=0)(
         .axi_rvalid(rvalid),
         .axi_rlast(rlast));
     acore_video_platform u_video (
+        .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
+        .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .monitor_clk(cpu_clk),
         .sys_clk(sys_clk),
         .ref_clk_p(ref_clk_p),

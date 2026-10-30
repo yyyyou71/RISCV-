@@ -35,7 +35,7 @@ def main():
     excluded = {'memory_core.v', 'ROM_core.v', 'multiplier_core.v', 'acore_fetch_memory.v',
                 'multiply_adder.v', 'multiply_adder_w8a16.v', 'video_async_fifo.v', 'MuxKeyInternal.v'}
     sources = [p for p in sorted((ROOT / 'rtl').glob('*.v')) if p.name not in excluded]
-    for directory, pattern in [('rtl/video', '**/*.v'), ('rtl/rk_iic', '*.v'),
+    for directory, pattern in [('rtl/video', '**/*.v'), ('rtl/rk_iic', '*.v'), ('rtl/rk_fspi', '*.v'),
                                ('board', '*.v'), ('sim/models', '*.v'),
                                ('ipcore/pcie_test/rtl/hsst_pipe', '*.v')]:
         sources += sorted((ROOT / directory).glob(pattern))

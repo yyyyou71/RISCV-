@@ -2,7 +2,9 @@
 
 更新：2026-10-30；分支 `ziguang_rv32i`。唯一维护入口为根目录 `rv32I.pds`，顶层仍为 `acore_dual_top`。
 本阶段已完成新增连接和短测试；PDS 综合、布局布线、时序检查与位流生成由 Codex 执行，用户负责烧录与板级验收。
-当前 DDR 实现验证进度和产物以 `ddr_timing_fix.md` 为准。预处理仍仅完成独立核验证，尚未接入此顶层。
+DDR 阶段的实现验证和产物以 `ddr_timing_fix.md` 为准。
+后续 P2 已接入 CPU 按需控制的 HDMI 预处理和张量 DDR 通路，详见 `hdmi_tensor_p2.md`；
+旧 DDR 阶段报告不代表加入 P2 后已经完成布局布线。
 
 ### PDS 工程格式修复记录
 

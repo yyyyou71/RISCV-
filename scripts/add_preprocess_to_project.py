@@ -1,7 +1,7 @@
-"""Register the P1 RTL and generated IP in the sole maintained root PDS.
+"""Register preprocessing RTL and its generated IP in the root PDS.
 
-The modules remain inactive in acore_dual_top until P2 connects frame ownership
-and DDR output. This does not enable AI or change the board's current firmware.
+P2 connects these modules to CPU control, frame ownership and DDR output.
+This does not enable AI or change the board's current firmware.
 """
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -30,7 +30,7 @@ def main():
         append('wgt_my_ips_src',body+'                )\n')
     text,added=complete_source_metadata(text,ROOT)
     p.write_text(text,encoding='utf-8',newline='\n')
-    print('P1 sources/IP registered; board active hierarchy unchanged.',added)
+    print('Preprocessing sources/IP registered; firmware images unchanged.',added)
 
 
 if __name__=='__main__':main()

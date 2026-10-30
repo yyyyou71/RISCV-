@@ -38,6 +38,18 @@ module frame_ring_ddr3 #(
     parameter FRAME_SHIFT      = 22,           // 原生地址槽步长 2^22，保留参考写读布局
     parameter [PIXEL_WIDTH-1:0] MAGIC_SOF = 16'h0001
 )(
+    input wire [27:0] tensor_awaddr,
+    input wire tensor_awvalid,tensor_awap,tensor_fault,
+    input wire [3:0] tensor_awlen,tensor_awid,
+    input wire [127:0] tensor_wdata,
+    input wire [15:0] tensor_wstrb,
+    output wire tensor_awready,tensor_wready,tensor_wlast,
+    output wire [3:0] tensor_wid,
+    input wire [4:0] tensor_hold,
+    output wire [31:0] source_next_id,
+    output wire source_ready,raw_begin,raw_accepted,raw_end,raw_end_ok,
+    output wire [31:0] raw_begin_id,raw_end_id,
+    output wire [2:0] raw_begin_slot,raw_end_slot,
     input wire [27:0] cpu_awaddr,cpu_araddr,
     input wire cpu_awvalid,cpu_arvalid,cpu_awap,cpu_arap,
     input wire [3:0] cpu_awlen,cpu_arlen,cpu_awid,cpu_arid,
@@ -174,7 +186,7 @@ module frame_ring_ddr3 #(
         .hdmi_data    ( wr_data      ),
         .fifo_wr_en   ( det_wr_en    ),
         .fifo_wr_data ( det_wr_data  ),
-        .wr_enable    (              ),
+        .wr_enable    ( source_ready ),
         .out_line     (              )
     );
 
@@ -190,8 +202,12 @@ module frame_ring_ddr3 #(
         .FRAME_SHIFT    ( FRAME_SHIFT    ),
         .MAGIC_SOF      ( MAGIC_SOF      )
     ) u_write_ctrl (
-        .protect_mask(hold_mask|reader_hold),.capture_ok(stream_sync),
+        .protect_mask(hold_mask|reader_hold|tensor_hold),.capture_ok(stream_sync),
         .frame_ids(frame_ids),.write_active(write_active),
+        .source_next_id(source_next_id),.source_fault(video_source_fault),
+        .frame_begin(raw_begin),.frame_begin_accepted(raw_accepted),
+        .frame_begin_id(raw_begin_id),.frame_begin_slot(raw_begin_slot),
+        .frame_end(raw_end),.frame_end_ok(raw_end_ok),.frame_end_id(raw_end_id),.frame_end_slot(raw_end_slot),
         .wr_clk           ( wr_clk         ),
         .core_clk         ( core_clk_i     ),
         .rst_n            ( sys_rst_n      ),
@@ -291,36 +307,66 @@ module frame_ring_ddr3 #(
     wire [255:0] s_rdata;
     wire arb_error;
     wire range_error;
+    wire video_source_fault,client_fault;
+    wire [27:0] client_awaddr,client_araddr;
+    wire client_awvalid,client_arvalid,client_awap,client_arap;
+    wire [3:0] client_awlen,client_arlen,client_awid,client_arid;
+    wire [127:0] client_wdata;
+    wire [15:0] client_wstrb;
+    wire [1:0] c_awready,c_arready,c_wready,c_wlast,c_rvalid,c_rlast;
+    wire [7:0] c_wid,c_rid;
+    wire [255:0] c_rdata;
     wire [1:0] cpu_qualified;
     ddr_region_check u_region_check(.clk(core_clk_i),.rst_n(sys_rst_n),
         .valid({cpu_arvalid,cpu_awvalid}),.accepted({cpu_arvalid&&cpu_arready,cpu_awvalid&&cpu_awready}),
         .address({cpu_araddr,cpu_awaddr}),.length({cpu_arlen,cpu_awlen}),
         .qualified(cpu_qualified),.fault(range_error));
-    assign shared_fault=arb_error|range_error;
+    assign shared_fault=arb_error|range_error|video_source_fault|client_fault|tensor_fault;
+    // The reference video port remains requester 0 of the outer arbiter. CPU
+    // and tensor writes share requester 1, retaining complete-burst ownership.
+    ddr_native_arbiter u_client_arbiter(
+        .clk(core_clk_i),.rst_n(sys_rst_n),
+        .s_awaddr({tensor_awaddr,cpu_awaddr+28'h2000000}),.s_araddr({28'b0,cpu_araddr+28'h2000000}),
+        .s_awvalid({tensor_awvalid,cpu_qualified[0]}),.s_arvalid({1'b0,cpu_qualified[1]}),
+        .s_awap({tensor_awap,cpu_awap}),.s_arap({1'b0,cpu_arap}),
+        .s_awlen({tensor_awlen,cpu_awlen}),.s_arlen({4'b0,cpu_arlen}),
+        .s_awid({tensor_awid,cpu_awid}),.s_arid({4'b0,cpu_arid}),
+        .s_awready(c_awready),.s_arready(c_arready),.s_wready(c_wready),.s_wlast(c_wlast),
+        .s_rvalid(c_rvalid),.s_rlast(c_rlast),.s_wid(c_wid),.s_rid(c_rid),
+        .s_wdata({tensor_wdata,cpu_wdata}),.s_wstrb({tensor_wstrb,cpu_wstrb}),.s_rdata(c_rdata),
+        .m_awaddr(client_awaddr),.m_araddr(client_araddr),.m_awvalid(client_awvalid),.m_arvalid(client_arvalid),
+        .m_awap(client_awap),.m_arap(client_arap),.m_awlen(client_awlen),.m_arlen(client_arlen),
+        .m_awid(client_awid),.m_arid(client_arid),.m_awready(s_awready[1]),.m_arready(s_arready[1]),
+        .m_wready(s_wready[1]),.m_wlast(s_wlast[1]),.m_rvalid(s_rvalid[1]),.m_rlast(s_rlast[1]),
+        .m_wid(s_wid[7:4]),.m_rid(s_rid[7:4]),.m_wdata(client_wdata),.m_wstrb(client_wstrb),
+        .m_rdata(s_rdata[255:128]),.fault(client_fault));
+    assign {tensor_awready,cpu_awready}=c_awready;
+    assign cpu_arready=c_arready[0];
+    assign {tensor_wready,cpu_wready}=c_wready;
+    assign {tensor_wlast,cpu_wlast}=c_wlast;
+    assign tensor_wid=c_wid[7:4];assign cpu_wid=c_wid[3:0];
+    assign cpu_rid=c_rid[3:0];assign cpu_rvalid=c_rvalid[0];assign cpu_rlast=c_rlast[0];
+    assign cpu_rdata=c_rdata[127:0];
     ddr_native_arbiter u_arbiter (
         .clk(core_clk_i),.rst_n(sys_rst_n),
-        .s_awaddr({cpu_awaddr+28'h2000000,w_awaddr}),.s_araddr({cpu_araddr+28'h2000000,r_araddr}),
-        .s_awvalid({cpu_qualified[0],w_awvalid}),.s_arvalid({cpu_qualified[1],r_arvalid}),
-        .s_awap({cpu_awap,w_awuser_ap}),.s_arap({cpu_arap,r_aruser_ap}),
-        .s_awlen({cpu_awlen,w_awlen}),.s_arlen({cpu_arlen,r_arlen}),
-        .s_awid({cpu_awid,4'd0}),.s_arid({cpu_arid,r_aruser_id}),
+        .s_awaddr({client_awaddr,w_awaddr}),.s_araddr({client_araddr,r_araddr}),
+        .s_awvalid({client_awvalid,w_awvalid}),.s_arvalid({client_arvalid,r_arvalid}),
+        .s_awap({client_awap,w_awuser_ap}),.s_arap({client_arap,r_aruser_ap}),
+        .s_awlen({client_awlen,w_awlen}),.s_arlen({client_arlen,r_arlen}),
+        .s_awid({client_awid,4'd0}),.s_arid({client_arid,r_aruser_id}),
         .s_awready(s_awready),.s_arready(s_arready),.s_wready(s_wready),.s_wlast(s_wlast),
         .s_rvalid(s_rvalid),.s_rlast(s_rlast),.s_wid(s_wid),.s_rid(s_rid),
-        .s_wdata({cpu_wdata,w_wdata}),.s_wstrb({cpu_wstrb,w_wstrb}),.s_rdata(s_rdata),
+        .s_wdata({client_wdata,w_wdata}),.s_wstrb({client_wstrb,w_wstrb}),.s_rdata(s_rdata),
         .m_awaddr(m_awaddr),.m_araddr(m_araddr),.m_awvalid(m_awvalid),.m_arvalid(m_arvalid),
         .m_awap(m_awap),.m_arap(m_arap),.m_awlen(m_awlen),.m_arlen(m_arlen),
         .m_awid(m_awid),.m_arid(m_arid),.m_awready(m_awready),.m_arready(m_arready),
         .m_wready(m_wready),.m_wlast(m_wlast),.m_rvalid(m_rvalid),.m_rlast(m_rlast),
         .m_wid(m_wid),.m_rid(m_rid),.m_wdata(m_wdata),.m_wstrb(m_wstrb),.m_rdata(m_rdata),.fault(arb_error)
     );
-    assign {cpu_awready,w_awready}=s_awready;
-    assign {cpu_arready,r_arready}=s_arready;
-    assign {cpu_wready,w_wready}=s_wready;
-    assign {cpu_wlast,w_wlast}=s_wlast;
-    assign {cpu_rvalid,r_rvalid}=s_rvalid;
-    assign {cpu_rlast,r_rlast}=s_rlast;
-    assign cpu_wid=s_wid[7:4];assign cpu_rid=s_rid[7:4];
-    assign r_rid=s_rid[3:0];assign cpu_rdata=s_rdata[255:128];assign r_rdata=s_rdata[127:0];
+    assign w_awready=s_awready[0];assign r_arready=s_arready[0];
+    assign w_wready=s_wready[0];assign w_wlast=s_wlast[0];
+    assign r_rvalid=s_rvalid[0];assign r_rlast=s_rlast[0];
+    assign r_rid=s_rid[3:0];assign r_rdata=s_rdata[127:0];
     ddr3 u_ddr3 (
         .ref_clk                ( sys_clk          ),
         .resetn                 ( sys_rst_n        ),

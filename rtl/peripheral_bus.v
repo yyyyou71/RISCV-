@@ -10,8 +10,13 @@ module peripheral_bus #(
     parameter integer ENABLE_VIDEO = 0,
     parameter integer VIDEO_FIFO_ADDR_BITS = 9,
     parameter integer ENABLE_FRAME_CONTROL = 0,
+    parameter integer ENABLE_PREPROCESS = 0,
     parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 )(
+    output wire tensor_we,
+    output wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    output wire [31:0] tensor_wdata,
+    input wire [31:0] tensor_rdata,
     input  wire        clk,
     input  wire        rst_n,
 
@@ -59,6 +64,9 @@ module peripheral_bus #(
     wire fspi_wr_hit = dev_addr_wr >= FSPI_BASE && dev_addr_wr <= FSPI_BASE+12 && dev_addr_wr[1:0]==0;
     wire fspi_rd_hit = dev_addr_rd >= FSPI_BASE && dev_addr_rd <= FSPI_BASE+12 && dev_addr_rd[1:0]==0;
     wire word_access;
+    assign tensor_we=ENABLE_PREPROCESS && dev_we && word_access && dev_addr_wr[31:8]==24'h000308;
+    assign tensor_addr_wr=dev_addr_wr[7:0];assign tensor_addr_rd=dev_addr_rd[7:0];
+    assign tensor_wdata=dev_wdata;
     reg [31:0] legacy_rdata;
     reg fspi_read_selected;
     wire [31:0] fspi_rdata;
@@ -230,6 +238,8 @@ module peripheral_bus #(
             else if (word_access && dev_addr_rd == RK_SEQ) legacy_rdata <= param_seq;
             else if(word_access && dev_addr_rd>=32'h30600 && dev_addr_rd<=32'h30620)
                 legacy_rdata<=frame_read_data;
+            else if(ENABLE_PREPROCESS && word_access && dev_addr_rd[31:8]==24'h000308)
+                legacy_rdata<=tensor_rdata;
             else
                 // DDR/AI/video read_data is combinational, so no extra read cycle.
                 legacy_rdata <= word_access ? ddr_read_data : 32'b0;

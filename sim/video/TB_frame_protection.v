@@ -62,6 +62,17 @@ module TB_frame_protection;
         @(negedge wr_clk);en=0;
         repeat(400)@(negedge core_clk);
     end endtask
+    wire source_fault,frame_begin;
+    wire [31:0] source_next_id,frame_begin_id;
+    integer observed_frames=0;
+    assign source_fault=dut.source_fault;
+    assign frame_begin=dut.frame_begin;
+    assign source_next_id=dut.source_next_id;
+    assign frame_begin_id=dut.frame_begin_id;
+    always @(posedge core_clk)if(rst_n&&frame_begin)begin
+        if(frame_begin_id!=observed_frames)$fatal(1,"source/write frame IDs diverged");
+        observed_frames<=observed_frames+1;
+    end
     integer held_slot,j;
     reg [31:0] held_id;
     initial begin
@@ -85,6 +96,7 @@ module TB_frame_protection;
         send_frame(13);send_frame(14);send_frame(15);send_frame(16);send_frame(17);send_frame(18);
         if(ids[held_slot*32+:32]!==held_id)$fatal(1,"leased metadata overwritten after wrap");
         command(2);if(cpu_hold!=0)$fatal(1,"CPU lease did not release");
+        if(source_fault||source_next_id!=19||observed_frames!=19)$fatal(1,"SOF identity changed across dropped frames");
         $display("PASS frame protection: retained slot/data/id, wrap skip, full-pool drop/resume, concurrent mailbox lease AW=%0d",aw_count);$finish;
     end
     initial begin #500000;$fatal(1,"protection timeout");end

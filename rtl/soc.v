@@ -10,8 +10,13 @@ module soc #(
     parameter integer ENABLE_VIDEO = 0,
     parameter integer VIDEO_FIFO_ADDR_BITS = 9,
     parameter integer ENABLE_FRAME_CONTROL = 0,
+    parameter integer ENABLE_PREPROCESS = 0,
     parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 ) (
+    output wire tensor_we,
+    output wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    output wire [31:0] tensor_wdata,
+    input wire [31:0] tensor_rdata,
     input wire clk,
     input wire rst_n,
     input wire spi_clk, spi_cs,
@@ -72,9 +77,11 @@ module soc #(
         .ENABLE_DDR(ENABLE_DDR), .ENABLE_AI(ENABLE_AI), .AI_ACT_WIDTH(AI_ACT_WIDTH),
         .DDR_TIMEOUT_CYCLES(DDR_TIMEOUT_CYCLES), .ENABLE_VIDEO(ENABLE_VIDEO),
         .VIDEO_FIFO_ADDR_BITS(VIDEO_FIFO_ADDR_BITS),
-        .ENABLE_FRAME_CONTROL(ENABLE_FRAME_CONTROL),.DDR_LIMIT_BYTES(DDR_LIMIT_BYTES)
+        .ENABLE_FRAME_CONTROL(ENABLE_FRAME_CONTROL),.ENABLE_PREPROCESS(ENABLE_PREPROCESS),.DDR_LIMIT_BYTES(DDR_LIMIT_BYTES)
     ) u_peripheral_bus (
         .clk(clk),
+        .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
+        .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .rst_n(rst_n),
         .dev_we(dev_we),
         .dev_re(dev_re),

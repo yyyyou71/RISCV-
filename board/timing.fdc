@@ -52,6 +52,17 @@ set_false_path -to [get_cells -hierarchical {*u_frames*ready_meta*}]
 set_false_path -to [get_cells -hierarchical {*u_frames*fault_meta*}]
 set_false_path -to [get_cells -hierarchical {*u_video_monitor*meta*}]
 set_false_path -to [get_cells -hierarchical {*u_hdmi_fifo*stream_meta*}]
+# P2 request/result handshakes. Bundled buses retain the clock-pair maximum
+# propagation budgets above; only asynchronous control first stages are cut.
+set_false_path -to [get_cells -hierarchical {*u_preprocess*req_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*ack_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*ready_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*fault_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*start_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*cancel_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*sof_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_preprocess*done_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_write_ctrl*overflow_meta*}]
 # PDS groups this two-bit pipe into one pre-synthesis cell. Restrict the source
 # to the external ports: the stage-1 Q -> stage-2 D path is not waived.
 set_false_path -from [get_ports {iic_scl iic_sda}] -to [get_cells -hierarchical {*u_frontend*sclPipe*0* *u_frontend*sdaPipe*0*}]

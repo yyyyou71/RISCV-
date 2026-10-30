@@ -34,6 +34,11 @@ module ddr3_write_ctrl_lite #(
     input wire capture_ok,
     output reg [159:0] frame_ids,
     output wire write_active,
+    output reg [31:0] source_next_id,
+    output wire frame_begin,frame_begin_accepted,frame_end,frame_end_ok,
+    output wire [31:0] frame_begin_id,frame_end_id,
+    output wire [2:0] frame_begin_slot,frame_end_slot,
+    output wire source_fault,
     input                              wr_clk,     // hdmi_pixclk (FIFO 写侧)
     input                              core_clk,   // DDR3 core_clk (FIFO 读侧 + AXI)
     input                              rst_n,
@@ -76,13 +81,28 @@ module ddr3_write_ctrl_lite #(
     wire                        rd_empty;
     wire [9:0]                  rd_water_level;
     wire                        almost_empty;
+    wire fifo_full;
+    reg overflow_pixel;
+    (* ASYNC_REG="TRUE" *) reg overflow_meta,overflow_sync;
+    // Both counters count the same in-band SOFs, including intentionally dropped
+    // frames. An overflow invalidates that correspondence until common reset.
+    always @(posedge wr_clk or negedge rst_n)
+        if(!rst_n)begin source_next_id<=0;overflow_pixel<=0;end
+        else if(fifo_wr_en)begin
+            if(fifo_wr_data==MAGIC_SOF)source_next_id<=source_next_id+1'b1;
+            if(fifo_full)overflow_pixel<=1;
+        end
+    always @(posedge core_clk or negedge rst_n)
+        if(!rst_n)begin overflow_meta<=0;overflow_sync<=0;end
+        else begin overflow_meta<=overflow_pixel;overflow_sync<=overflow_meta;end
+    assign source_fault=overflow_sync;
 
     fifo_2_ddr u_fifo_2_ddr (
         .wr_clk         (wr_clk),
         .wr_rst         (~rst_n),
         .wr_en          (fifo_wr_en),
         .wr_data        (fifo_wr_data),
-        .wr_full        (),
+        .wr_full        (fifo_full),
         .almost_full    (fifo_almost_full),
         .rd_clk         (core_clk),
         .rd_rst         (~rst_n),
@@ -156,6 +176,14 @@ module ddr3_write_ctrl_lite #(
     reg [31:0] sequence_id,active_id;
     reg [15:0] written_bursts;
     localparam FRAME_BURSTS=H_ACTIVE*V_ACTIVE*PIXEL_WIDTH/8/(AXI_DATA_WIDTH/8*BURST_BEAT_CNT);
+    assign frame_begin=load_done&&is_sof;
+    assign frame_begin_accepted=free_slot;
+    assign frame_begin_id=sequence_id;
+    assign frame_begin_slot=slot_next;
+    assign frame_end=frame_begin&&have_prev;
+    assign frame_end_id=active_id;
+    assign frame_end_slot=slot;
+    assign frame_end_ok=!drop_frame&&!invalid_frame&&written_bursts==FRAME_BURSTS&&!source_fault;
     integer search,choice;
     always @(*) begin
         free_slot=0;slot_next=0;
