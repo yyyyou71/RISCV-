@@ -1,3 +1,5 @@
+> Application update: CPU communication firmware and automatic RK client are now implemented; see comm_service.md. Existing programmed IP images still require user update.
+
 # 主工程 FSPI 50 MHz 集成（2026-10-31）
 
 ## 当前状态与边界

@@ -1,0 +1,41 @@
+{
+  "application": "fspi_service",
+  "mode": "performance",
+  "iterations": 2700,
+  "core": "acore_dual",
+  "isa": "rv32i_zmmul",
+  "enable_div": 0,
+  "mul_pipeline_stages": 3,
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "flags": [
+    "-march=rv32im",
+    "-mno-div",
+    "-mabi=ilp32",
+    "-O2",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-common",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-pie",
+    "-nostdlib",
+    "-nostartfiles"
+  ],
+  "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+  "elf_sha256": "327f561bb2a99c853652754d7aa9d7bb0abd6211456ed47ff41662d6b235b9d4",
+  "rom_sha256": "0851878203eef235c156216c36d8e0cb2aa75b748b999750b8a416b6f15c004a",
+  "ram_sha256": "fdb58a65ffab484d5d83e76f2066c20489e21f9791574b2b8549fc680ba25c55",
+  "sources": {
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+    "firmware/fspi_service.c": "0f52194d403566cd881714ca288633a91e9cf8af4ab335d65e33113d52b7a844",
+    "firmware/rk_comm.c": "1d07fdc433909b08af7e21ffa2d7c264cb5ab2b812a7e920c0043e64f1fed041",
+    "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba",
+    "firmware/rk_link.h": "4e2eb2521230e89099f11035c2c7e5c2d49eb7f4590a8026c2151ffde8c6cf7f",
+    "firmware/rk_comm.h": "6d668cd47a2974e077a21f1a7f196119901010f6b8ad018491967f1217895665",
+    "csrc/rk_fspi/fspi_v2.h": "ead0d3ba9f60879ac1a70a0a87c87990607bbc693736826bd8974f700b0e094a",
+    "csrc/rk_fspi/comm_protocol.h": "26b77d161d236d5248334740ded93cdeaf3fbbf8b2df75145bfe90acb8d6977d"
+  }
+}

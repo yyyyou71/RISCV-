@@ -1,0 +1,46 @@
+#ifndef RK_COMM_PROTOCOL_H
+#define RK_COMM_PROTOCOL_H
+#include <stdint.h>
+#include <stddef.h>
+#define COMM_MAGIC 0x31435652u /* little endian RVC1 */
+#define COMM_ABI 0x00010001u
+#define COMM_HEADER 16u
+#define COMM_MAX 2048u
+#define COMM_PARAMS 16u
+#define COMM_INFO 0xa0u
+#define COMM_ARM 0xa1u
+#define COMM_POLL 0xa2u
+#define COMM_ACK_MAGIC 0xc3u
+#define COMM_IDLE 0u
+#define COMM_RX 1u
+#define COMM_TX 2u
+#define COMM_FAULT 4u
+#define COMM_SET_PARAM 1u
+#define COMM_GET_PARAM 2u
+#define COMM_READ_LOG 3u
+#define COMM_GET_STATUS 4u
+#define COMM_OK 0u
+#define COMM_BAD_PACKET 1u
+#define COMM_BAD_ARGUMENT 2u
+#define COMM_BAD_OPCODE 3u
+#define COMM_BUSY 4u
+#define COMM_IO_ERROR 5u
+static inline uint16_t comm_u16(const uint8_t *p){return (uint16_t)(p[0]|((uint16_t)p[1]<<8));}
+static inline uint32_t comm_u32(const uint8_t *p){return (uint32_t)p[0]|((uint32_t)p[1]<<8)|((uint32_t)p[2]<<16)|((uint32_t)p[3]<<24);}
+static inline void comm_put16(uint8_t *p,uint16_t v){p[0]=(uint8_t)v;p[1]=(uint8_t)(v>>8);}
+static inline void comm_put32(uint8_t *p,uint32_t v){unsigned i;for(i=0;i<4;i++)p[i]=(uint8_t)(v>>(8*i));}
+/* FNV-1a detects transmission corruption; not an authentication mechanism. */
+static inline uint32_t comm_hash(const uint8_t *p,size_t n){
+ uint32_t h=2166136261u;size_t i;
+ for(i=0;i<n;i++)if(i<12 || i>=16)h=(h^p[i])*16777619u;
+ return h;
+}
+static inline void comm_seal(uint8_t *p,uint32_t seq,uint16_t kind,uint16_t payload){
+ comm_put32(p,COMM_MAGIC);comm_put32(p+4,seq);comm_put16(p+8,kind);
+ comm_put16(p+10,payload);comm_put32(p+12,comm_hash(p,COMM_HEADER+payload));
+}
+static inline int comm_valid(const uint8_t *p,size_t n){
+ return n>=COMM_HEADER && n<=COMM_MAX && comm_u32(p)==COMM_MAGIC &&
+        (size_t)comm_u16(p+10)+COMM_HEADER==n && comm_u32(p+12)==comm_hash(p,n);
+}
+#endif

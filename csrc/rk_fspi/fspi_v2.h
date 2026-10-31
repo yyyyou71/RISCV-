@@ -2,7 +2,7 @@
 #define FSPI_V2_H
 #include <stddef.h>
 #include <stdint.h>
-/* Optional CPU-side driver. Not included in or linked into existing firmware.
+/* CPU-side driver used by firmware/rk_comm.c; requires comm_service deployment.
  * Main acore_dual_top uses 0x30300. ENABLE_VIDEO=1 remaps to 0x30700.
  * Application must coordinate lengths/readiness with RK, e.g. over IIC.
  * Single CPU owner; no interrupts/second core may interleave INDEX/DATA.

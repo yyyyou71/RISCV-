@@ -80,6 +80,9 @@ def main():
         sources = [ROOT / "firmware/start.S", ROOT / "firmware" / (args.application + ".c")]
         linker = ROOT / "firmware/link.ld"
         options = []
+        if args.application == "fspi_service":
+            sources.append(ROOT / "firmware/rk_comm.c")
+            options += ["-Wall", "-Wextra", "-Werror"]
     libgcc = subprocess.check_output([args.prefix + "gcc", "-march=rv32i", "-mabi=ilp32",
                                      "-print-libgcc-file-name"], text=True).strip()
     run([args.prefix + "gcc", *flags, *options, "-T", linker,
@@ -110,7 +113,9 @@ def main():
     if args.application in ("iic_service", "fspi_service"):
         dependencies += [ROOT / "firmware/rk_link.h"]
     if args.application == "fspi_service":
-        dependencies += [ROOT / "firmware/fspi_link.h"]
+        dependencies += [ROOT / "firmware/rk_comm.h",
+                         ROOT / "csrc/rk_fspi/fspi_v2.h",
+                         ROOT / "csrc/rk_fspi/comm_protocol.h"]
     if args.application == "preprocess_bringup":
         dependencies += [ROOT / "firmware/preprocess_capture.h"]
     if args.application == "coremark":

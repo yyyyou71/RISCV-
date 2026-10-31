@@ -128,7 +128,7 @@
         </param>
         <param>
             <name>INIT_FILE</name>
-            <value>C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/firmware/preprocess_bringup/acore_dual_rom.hex</value>
+            <value>C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/firmware/acore_dual_rom.hex</value>
         </param>
         <param>
             <name>INIT_FORMAT</name>
