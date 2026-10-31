@@ -1,5 +1,10 @@
 # CPU/RK SPI 通信应用（2026-10-31）
 
+> 当前根工程已选择 `firmware/video_diagnostic/`，使用新的纯 SPI 终端，带 HDMI 自检、
+> 视频状态查询与重试，不使用本文的 IIC 协商。部署与 RK 命令见 [video_spi_diagnostic.md](video_spi_diagnostic.md)。
+> `csrc/rk_fspi/rk_comm_cli` 现已改为纯 SPI 客户端，不能搭配本文旧通信镜像。
+> 下文的 `comm_service` 初始化选择说明是该独立通信镜像的使用方法，不是根工程当前默认值。
+
 ## 已实现
 
 firmware/fspi_service.c 现在运行 rk_comm_init()/rk_comm_poll() 通信服务，替代原来的测试数据/求和程序。

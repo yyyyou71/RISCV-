@@ -1,0 +1,26 @@
+{
+  "scope": "SPI-only CPU terminal and cooperative HDMI diagnostic firmware",
+  "transport": "50MHz mode3 quad, fixed 256-byte SPT1 frames, no IIC",
+  "firmware": "firmware/video_diagnostic/manifest.json",
+  "firmware_sha256": "7606ead6a0f758d963940bace955366b751c2131c116fa22ac67e5a27f788a6e",
+  "firmware_build": "passed, GCC10.2 O2 RV32IM -mno-div -Wall -Wextra -Werror",
+  "elf_size": {
+    "text": 4716,
+    "data": 300,
+    "bss": 1484
+  },
+  "host_build": "passed",
+  "host_mock_checks": "passed: ready handshake, empty polls, text, status, video commands, CRC/bounds/errors, no command retry",
+  "ip_embedded_words": {
+    "rom": 8192,
+    "ram": 16384
+  },
+  "only_ip_parameter_changed": "INIT_FILE",
+  "rtl_changed": false,
+  "reference_projects_changed": false,
+  "rtl_simulation_run": false,
+  "pds_implementation_run": false,
+  "bitstream_generated": false,
+  "hardware_tested": false,
+  "note": "Rebuild root rv32I.pds and program the new bitstream; build RK CLI from csrc/rk_fspi on RK."
+}

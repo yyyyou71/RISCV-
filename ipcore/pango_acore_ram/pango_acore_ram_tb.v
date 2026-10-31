@@ -69,7 +69,7 @@ localparam B_CLK_OR_POL_INV = 0 ; // @IPC bool
 
 localparam INIT_EN = 1 ; // @IPC bool
 
-localparam INIT_FILE = "C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/firmware/acore_dual_ram.hex" ; // @IPC string
+localparam INIT_FILE = "C:/diskE/FPGA_Learning/mywork/PG/RV32I/rv32I/firmware/video_diagnostic/acore_dual_ram.hex" ; // @IPC string
 
 localparam INIT_FORMAT = "HEX" ; // @IPC enum BIN,HEX
 

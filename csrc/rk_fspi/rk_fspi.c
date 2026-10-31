@@ -43,11 +43,15 @@ static int transfer(rk_fspi *d,const uint8_t *tx,uint8_t *rx,size_t size) {
     tr.tx_nbits=tr.rx_nbits=4;
     tr.speed_hz=d->speed_hz;tr.bits_per_word=8;
     while(nanosleep(&gap,&gap)<0) if(errno!=EINTR) return -1;
+#ifdef RK_FSPI_TRACE
     fprintf(stderr,"SMDT %s: mode=0x%x payload=%zu speed_hz=%u message_transfers=1%c",
             rx ? "READ" : "WRITE",(unsigned)mode,size,(unsigned)tr.speed_hz,10);
+#endif
     result=ioctl(d->fd,SPI_IOC_MESSAGE(1),&tr);
     if(result<0) return -1; /* Never retry possibly partial transfers. */
+#ifdef RK_FSPI_TRACE
     fprintf(stderr,"SMDT returned=%d expected=%zu%c",result,size,10);
+#endif
     return result==(int)size ? 0 : fail(EIO);
 }
 int rk_fspi_write(rk_fspi *d,const uint8_t *data,size_t size) { return transfer(d,data,0,size); }

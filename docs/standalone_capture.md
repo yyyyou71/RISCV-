@@ -1,5 +1,9 @@
 # 不接 RK 的 HDMI 独立自检
 
+> 当前默认固件已改为视频自检＋纯 SPI 终端服务，见 [video_spi_diagnostic.md](video_spi_diagnostic.md)。
+> 本文以下记录旧 `preprocess_bringup` 镜像的 LED 闪码方案，仍可单独选择使用；
+> 新默认镜像报错后继续响应 RK，无需 IIC，不再发送 LED0 组闪码。
+
 根工程 `rv32I.pds`，顶层 `acore_dual_top`，默认 `STANDALONE_CAPTURE=1`。
 CPU、DDR、视频监测和预处理的应用复位由本地全局 25 MHz 时钟与 key0_n 生成，
 不再依赖 PCIe 参考时钟、PERST# 或 PCIe core_rst_n。

@@ -19,6 +19,30 @@
 #define COMM_GET_PARAM 2u
 #define COMM_READ_LOG 3u
 #define COMM_GET_STATUS 4u
+#define COMM_VIDEO_STATUS 5u
+#define COMM_VIDEO_RETRY 6u
+#define COMM_VIDEO_RELEASE 7u
+/* Optional video diagnostic application. Existing transport ABI is unchanged. */
+#define COMM_VIDEO_ABI 0x00010000u
+#define COMM_VIDEO_WORDS 28u
+#define COMM_VIDEO_IDLE 0u
+#define COMM_VIDEO_WAIT_DDR 1u
+#define COMM_VIDEO_WAIT_INPUT 2u
+#define COMM_VIDEO_CAPTURE 3u
+#define COMM_VIDEO_READ_FIRST 4u
+#define COMM_VIDEO_READ_LAST 5u
+#define COMM_VIDEO_SUCCESS 6u
+#define COMM_VIDEO_ERROR 7u
+#define COMM_VIDEO_RELEASING 8u
+/* SPI-only fixed-size transport; distinct magic prevents mixing IIC clients. */
+#define SPI_TERM_MAGIC 0x31545053u /* little endian SPT1 */
+#define SPI_TERM_ABI 0x00010000u
+#define SPI_TERM_FRAME 256u
+#define SPI_TERM_PAYLOAD (SPI_TERM_FRAME-COMM_HEADER)
+#define SPI_TERM_READY 0x8000u
+#define SPI_TERM_LOG 0x8001u
+#define SPI_TERM_VIDEO 0x8002u
+#define SPI_TERM_RESPONSE 0x8003u
 #define COMM_OK 0u
 #define COMM_BAD_PACKET 1u
 #define COMM_BAD_ARGUMENT 2u
@@ -42,5 +66,14 @@ static inline void comm_seal(uint8_t *p,uint32_t seq,uint16_t kind,uint16_t payl
 static inline int comm_valid(const uint8_t *p,size_t n){
  return n>=COMM_HEADER && n<=COMM_MAX && comm_u32(p)==COMM_MAGIC &&
         (size_t)comm_u16(p+10)+COMM_HEADER==n && comm_u32(p+12)==comm_hash(p,n);
+}
+static inline void spi_term_seal(uint8_t *p,uint32_t seq,uint16_t kind,uint16_t payload){
+ comm_put32(p,SPI_TERM_MAGIC);comm_put32(p+4,seq);comm_put16(p+8,kind);
+ comm_put16(p+10,payload);comm_put32(p+12,comm_hash(p,COMM_HEADER+payload));
+}
+static inline int spi_term_valid(const uint8_t *p){
+ unsigned size=COMM_HEADER+comm_u16(p+10);
+ return comm_u32(p)==SPI_TERM_MAGIC && size<=SPI_TERM_FRAME &&
+        comm_u32(p+12)==comm_hash(p,size);
 }
 #endif

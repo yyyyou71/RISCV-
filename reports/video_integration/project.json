@@ -39,7 +39,7 @@
   "bad_ip_parts": [],
   "changed_core": [],
   "stale_imports": [],
-  "general_io_pins": 88,
+  "general_io_pins": 94,
   "imported_files": 175,
   "desktop_source_verified": false
 }

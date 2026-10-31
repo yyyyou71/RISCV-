@@ -10,6 +10,11 @@ static uint32_t parameters[COMM_PARAMS],received,transmitted,dropped;
 static unsigned log_rd,log_count,consume_after_tx,expected,tx_length;
 static unsigned state,ack_pos,ack_count;
 static uint8_t transport_fault;
+__attribute__((weak)) uint16_t rk_comm_application_command(uint16_t operation,
+ const uint8_t *request,uint16_t length,uint8_t *response,uint16_t capacity,uint16_t *response_length){
+ (void)operation;(void)request;(void)length;(void)response;(void)capacity;
+ *response_length=0;return COMM_BAD_OPCODE;
+}
 uint32_t rk_comm_parameter(unsigned index){return index<COMM_PARAMS?parameters[index]:0;}
 size_t rk_comm_send(const uint8_t *data,size_t n){
  size_t i=0;if(!data)return 0;
@@ -50,7 +55,12 @@ static void process_packet(void){
   comm_put32(tx+16,COMM_ABI);comm_put32(tx+20,received);
   comm_put32(tx+24,transmitted);comm_put32(tx+28,log_count);
   comm_put32(tx+32,dropped);comm_put32(tx+36,CYCLES);n=24;break;
- default:status=COMM_BAD_OPCODE;break;
+ default:{
+  uint16_t size=0;
+  status=rk_comm_application_command(op,rx+COMM_HEADER,len,tx+COMM_HEADER,COMM_MAX-COMM_HEADER,&size);
+  if(size>COMM_MAX-COMM_HEADER){status=COMM_IO_ERROR;size=0;}
+  n=size;break;
+ }
  }
  comm_seal(tx,comm_u32(rx+4),status,(uint16_t)n);tx_length=n+COMM_HEADER;
 }

@@ -1,18 +1,18 @@
 {
   "passed": true,
-  "application": "preprocess_bringup",
+  "application": "video_diagnostic",
   "ips": [
     {
       "instance": "pango_acore_fetch",
-      "image": "firmware/preprocess_bringup/acore_dual_rom.hex",
-      "sha256": "dd0bb7fced26f7ad0caf19d9ebe0dd3cef4d87e46fadf831d70562e63a062d75",
+      "image": "firmware/video_diagnostic/acore_dual_rom.hex",
+      "sha256": "99056eb06cca45bc3b9f1da598a01ced4d83cc1e5b66f1bcada23d4791f4f410",
       "embedded_words_verified": 8192,
       "other_parameters_preserved": true
     },
     {
       "instance": "pango_acore_ram",
-      "image": "firmware/preprocess_bringup/acore_dual_ram.hex",
-      "sha256": "26d6c7ae00fefc89dffc9ff03d1d4b7f724cedf883b5c27b8112bc9d9ca29e91",
+      "image": "firmware/video_diagnostic/acore_dual_ram.hex",
+      "sha256": "148ac7467c96546a20bc689e7f7756458bfbf38314cdc8bd1de440c0ba616321",
       "embedded_words_verified": 16384,
       "other_parameters_preserved": true
     }

@@ -1,6 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
 #include "rk_fspi.h"
-#include "../rk_iic/rk_iic.h"
 #include "comm_protocol.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,96 +7,135 @@
 #include <errno.h>
 #include <time.h>
 #include <unistd.h>
+#include <signal.h>
 #include <sys/file.h>
-static rk_iic control=RK_IIC_INIT;
 static rk_fspi spi={.fd=-1};
-static uint8_t token;
+static volatile sig_atomic_t stopped;
 static int fail(int e){errno=e;return -1;}
+static void stop_handler(int n){(void)n;stopped=1;}
 static uint64_t milliseconds(void){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);return (uint64_t)t.tv_sec*1000u+t.tv_nsec/1000000u;}
-static void pause_ms(void){struct timespec t={0,1000000};while(nanosleep(&t,&t)<0 && errno==EINTR){}}
-static int control_call(unsigned op,unsigned arg,uint32_t *value){
- uint8_t reply[8],byte;unsigned used=0;uint64_t until;int rc;
- ++token;
- if(rk_iic_set_parameter(&control,((uint32_t)op<<24)|((uint32_t)token<<16)|arg))return -1;
- until=milliseconds()+3000;
- while(milliseconds()<until){
-  rc=rk_iic_peek(&control,&byte);if(rc<0)return -1;
-  if(!rc){pause_ms();continue;}
-  if(rk_iic_consume(&control))return -1;
-  if(!used && byte!=COMM_ACK_MAGIC)continue;
-  reply[used++]=byte;
-  if(used==8){
-   used=0;if(reply[1]!=token)continue;
-   if(reply[3]!=1)return fail(EPROTO);
-   if(reply[2]!=COMM_OK){fprintf(stderr,"CPU control rejected: code=%u detail=%u\n",reply[2],comm_u32(reply+4));return fail(EPROTO);}
-   *value=comm_u32(reply+4);return 0;
-  }
- }
- return fail(ETIMEDOUT);
-}
+static void pause_poll(void){struct timespec t={0,10000000};while(nanosleep(&t,&t)<0 && errno==EINTR && !stopped){}}
 static int number(const char *s,uint32_t *v){
- char *end;unsigned long long x;errno=0;
- if(!s[0] || s[0]=='-')return -1;
- x=strtoull(s,&end,0);
- if(errno || *end || x>0xffffffffu)return -1;
- *v=(uint32_t)x;return 0;
+ char *end;unsigned long long x;errno=0;if(!s[0] || s[0]=='-')return -1;
+ x=strtoull(s,&end,0);if(errno || *end || x>0xffffffffu)return -1;*v=(uint32_t)x;return 0;
+}
+static const char *video_state(uint32_t s){
+ static const char *const names[]={"IDLE","WAIT_DDR","WAIT_VIDEO","CAPTURING","READ_FIRST_PIXEL","READ_LAST_PIXEL","SUCCESS_HELD","ERROR","RELEASING"};
+ return s<sizeof(names)/sizeof(names[0])?names[s]:"UNKNOWN";
+}
+static const char *video_error(uint32_t s){
+ static const char *const names[]={"none","DDR not ready/fault","no 1920x1080 measurement within 10 seconds","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
+ return s<sizeof(names)/sizeof(names[0])?names[s]:"unknown stage";
+}
+static int print_video(const uint8_t *p,unsigned size,int detailed){
+ uint32_t v[COMM_VIDEO_WORDS];unsigned i;
+ if(size!=COMM_VIDEO_WORDS*4)return fail(EPROTO);
+ for(i=0;i<COMM_VIDEO_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_VIDEO_ABI)return fail(EPROTO);
+ printf("[video] state=%s measured=%ux%u error_stage=%u PP_STATUS=0x%08x PP_ERROR=0x%08x",video_state(v[1]),v[5]&65535u,v[5]>>16,v[2],v[7],v[8]);
+ if(v[6])printf(" last_frame_hz=%.3f",25000000.0/v[6]);
+ putchar('\n');
+ if(!detailed)return 0;
+ printf("error: %s; retry_count=%u; cycles=%u\n",video_error(v[2]),v[22],v[3]);
+ printf("last_period_ticks=%u (latched measurement; not a source-alive indicator)\n",v[6]);
+ printf("DDR_READY=%u BUSY=%u DONE=%u HELD=%u ERROR=%u FAULT=%u written_bytes=%u\n",(v[7]>>4)&1u,v[7]&1u,(v[7]>>1)&1u,(v[7]>>3)&1u,(v[7]>>2)&1u,(v[7]>>5)&1u,v[9]);
+ printf("frame_mailbox=0x%08x DDR_WINDOW_STATUS=0x%08x DDR_WINDOW_ERROR=0x%08x state_elapsed_ms=%.3f\n",v[10],v[11],v[12],v[4]/25000.0);
+ if(v[2])printf("failure_snapshot: measured=%ux%u period_ticks=%u PP_STATUS=0x%08x PP_ERROR=0x%08x cycles=%u\n",v[13]&65535u,v[13]>>16,v[14],v[15],v[16],v[23]);
+ if(v[1]==COMM_VIDEO_SUCCESS){
+  printf("held_frame: id=%u raw_slot=%u raw_native_base=0x%08x tensor_logical_base=0x%08x bytes=%u\n",v[17],v[18],v[19],v[20],v[21]);
+  printf("tensor_first_RGB=(%u,%u,%u) tensor_last_RGB=(%u,%u,%u)\n",v[24]&65535u,v[24]>>16,v[25]&65535u,v[26]&65535u,v[26]>>16,v[27]&65535u);
+ }
+ return 0;
+}
+/* Empty hardware reads return a complete FF frame; no TX ownership is used. */
+static int receive(uint8_t *p){
+ unsigned i;if(rk_fspi_read(&spi,p,SPI_TERM_FRAME))return -1;
+ for(i=0;i<SPI_TERM_FRAME && p[i]==255;i++){}
+ if(i==SPI_TERM_FRAME)return 0;
+ if(!spi_term_valid(p))return fail(EBADMSG);
+ return 1;
+}
+static int event(const uint8_t *p){
+ unsigned kind=comm_u16(p+8),len=comm_u16(p+10);
+ if(kind==SPI_TERM_LOG){fwrite(p+16,1,len,stdout);fflush(stdout);}
+ else if(kind==SPI_TERM_VIDEO){if(print_video(p+16,len,0))return -1;}
+ else if(kind==SPI_TERM_READY){
+  if(len!=24 || comm_u32(p+16)!=SPI_TERM_ABI || comm_u32(p+20)!=SPI_TERM_FRAME)return fail(EPROTO);
+ }else if(kind==SPI_TERM_RESPONSE){fprintf(stderr,"Previous command response sequence=%u received; no command is replayed.\n",comm_u32(p+4));}
+ else return fail(EPROTO);
+ fflush(stdout);return 0;
 }
 int main(int argc,char **argv){
- uint8_t tx[COMM_MAX]={0},rx[COMM_MAX];uint32_t a=0,b=0,state,sequence;
- uint16_t operation,payload=0;size_t n;uint64_t deadline;int rc=1;
- if(argc<4)goto usage;
- if(!strcmp(argv[3],"status") && argc==4)operation=COMM_GET_STATUS;
- else if(!strcmp(argv[3],"set") && argc==6 && !number(argv[4],&a) && a<COMM_PARAMS && !number(argv[5],&b)){
+ uint8_t tx[SPI_TERM_FRAME]={0},rx[SPI_TERM_FRAME];
+ uint32_t a=0,b=0,sequence;uint16_t operation=0,payload=0;
+ uint64_t deadline;int listen=0,once=0,rc=1,r,notice=0;
+ struct sigaction action;stopped=0;
+ if(argc<2)goto usage;
+ if(argc==2 || (argc==3 && (!strcmp(argv[2],"listen") || !strcmp(argv[2],"logs"))))listen=1;
+ else if(argc==3 && !strcmp(argv[2],"once")){listen=1;once=1;}
+ else if(argc==3 && !strcmp(argv[2],"status"))operation=COMM_GET_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"video-status"))operation=COMM_VIDEO_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"video-retry"))operation=COMM_VIDEO_RETRY;
+ else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
+ else if(argc==5 && !strcmp(argv[2],"set") && !number(argv[3],&a) && a<COMM_PARAMS && !number(argv[4],&b)){
   operation=COMM_SET_PARAM;payload=8;comm_put32(tx+16,a);comm_put32(tx+20,b);
- }else if(!strcmp(argv[3],"get") && argc==5 && !number(argv[4],&a) && a<COMM_PARAMS){
-  operation=COMM_GET_PARAM;payload=4;comm_put32(tx+16,a);
- }else if(!strcmp(argv[3],"logs") && (argc==4 || (argc==5 && !number(argv[4],&a))) && a<=COMM_MAX-COMM_HEADER){
-  if(argc==4)a=512;
-  operation=COMM_READ_LOG;payload=4;comm_put32(tx+16,a);
- }else goto usage;
- if(rk_iic_open(&control,argv[1],0x66)){perror("IIC open");goto done;}
- if(flock(control.fd,LOCK_EX|LOCK_NB)){perror("Another communication client holds IIC");goto done;}
- if(rk_fspi_open(&spi,argv[2],50000000)){perror("SPI open");goto done;}
- if(flock(spi.fd,LOCK_EX|LOCK_NB)){perror("Another communication client holds SPI");goto done;}
- /* Discard stale control notifications only, never retry a data operation. */
- deadline=milliseconds()+3000;
- for(;;){uint8_t byte;int r=rk_iic_peek(&control,&byte);if(r<0)goto io_error;if(!r)break;
-  if(rk_iic_consume(&control))goto io_error;
-  if(milliseconds()>=deadline){errno=ETIMEDOUT;goto io_error;}
+ }else if(argc==4 && !strcmp(argv[2],"get") && !number(argv[3],&a) && a<COMM_PARAMS){operation=COMM_GET_PARAM;payload=4;comm_put32(tx+16,a);}
+ else goto usage;
+ if(rk_fspi_open(&spi,argv[1],50000000)){perror("SPI open");goto done;}
+ if(flock(spi.fd,LOCK_EX|LOCK_NB)){perror("Another client holds SPI");goto done;}
+ memset(&action,0,sizeof(action));action.sa_handler=stop_handler;sigemptyset(&action.sa_mask);
+ if(sigaction(SIGINT,&action,0) || sigaction(SIGTERM,&action,0)){perror("signal setup");goto done;}
+ if(listen){
+  fprintf(stderr,"SPI-only terminal: %s, 50 MHz mode 3; Ctrl+C to stop.\n",argv[1]);deadline=milliseconds()+5000;
+  while(!stopped){
+   r=receive(rx);if(r<0){if(stopped)break;goto io_error;}
+   if(r){
+    if(!once)deadline=milliseconds()+5000;
+    notice=0;
+    if(event(rx))goto io_error;
+    if(once && comm_u16(rx+8)!=SPI_TERM_READY){rc=0;goto done;}
+   }
+   if(milliseconds()>=deadline){
+    if(once){errno=ETIMEDOUT;goto io_error;}
+    if(!notice && !r){fprintf(stderr,"No current data; check the root FPGA bitstream/CPU firmware if no messages appear.\n");notice=1;}
+   }
+   pause_poll();
+  }
+  rc=0;goto done;
  }
- token=(uint8_t)(getpid()^milliseconds());
- if(control_call(COMM_INFO,0,&state))goto io_error;
- if(state!=COMM_ABI){errno=EPROTO;goto io_error;}
- if(control_call(COMM_POLL,0,&state))goto io_error;
- if((state&65535u)!=COMM_IDLE){fprintf(stderr,"CPU has pending transaction/state=%u. Reconcile it before another command.\n",state&65535u);goto done;}
- sequence=(uint32_t)(milliseconds()^((uint32_t)getpid()<<16));
- comm_seal(tx,sequence,operation,payload);
- if(control_call(COMM_ARM,COMM_HEADER+payload,&state))goto io_error;
- if(state!=COMM_HEADER+payload){errno=EPROTO;goto io_error;}
- if(rk_fspi_write(&spi,tx,COMM_HEADER+payload))goto io_error;
- deadline=milliseconds()+3000;
- do{
-  if(control_call(COMM_POLL,0,&state))goto io_error;
-  if((state&65535u)==COMM_TX)break;
-  if((state&65535u)!=COMM_RX){errno=EPROTO;goto io_error;}
-  pause_ms();
- }while(milliseconds()<deadline);
- if((state&65535u)!=COMM_TX){errno=ETIMEDOUT;goto io_error;}
- n=state>>16;if(n<COMM_HEADER || n>COMM_MAX){errno=EPROTO;goto io_error;}
- if(rk_fspi_read(&spi,rx,n))goto io_error;
- if(!comm_valid(rx,n) || comm_u32(rx+4)!=sequence){errno=EBADMSG;goto io_error;}
- if(comm_u16(rx+8)!=COMM_OK){fprintf(stderr,"CPU application error=%u\n",comm_u16(rx+8));goto done;}
- if(operation==COMM_READ_LOG){fwrite(rx+16,1,n-16,stdout);}
- else if(operation==COMM_GET_STATUS){
-  if(n!=40){errno=EPROTO;goto io_error;}
-  printf("ABI=%08x RX_packets=%u TX_packets=%u log_bytes=%u log_dropped=%u cycles=%u\n",
-   comm_u32(rx+16),comm_u32(rx+20),comm_u32(rx+24),comm_u32(rx+28),comm_u32(rx+32),comm_u32(rx+36));
+ /* READY is sent only after the CPU arms its fixed-length RX buffer. */
+ deadline=milliseconds()+5000;
+ for(;;){
+  if(stopped)goto done;
+  r=receive(rx);if(r<0)goto io_error;
+  if(r){if(event(rx))goto io_error;if(comm_u16(rx+8)==SPI_TERM_READY && (comm_u32(rx+24)&4u))break;}
+  if(milliseconds()>=deadline){errno=ETIMEDOUT;goto io_error;}pause_poll();
+ }
+ sequence=(uint32_t)(milliseconds()^((uint32_t)getpid()<<16));spi_term_seal(tx,sequence,operation,payload);
+ if(rk_fspi_write(&spi,tx,SPI_TERM_FRAME))goto io_error;
+ deadline=milliseconds()+5000;
+ for(;;){
+  if(stopped)goto done;
+  r=receive(rx);if(r<0)goto io_error;
+  if(r){if(comm_u16(rx+8)==SPI_TERM_RESPONSE && comm_u32(rx+4)==sequence)break;if(event(rx))goto io_error;}
+  if(milliseconds()>=deadline){errno=ETIMEDOUT;goto io_error;}pause_poll();
+ }
+ payload=comm_u16(rx+10);
+ if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
+ a=comm_u32(rx+16);
+ if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
+ if(operation>=COMM_VIDEO_STATUS && operation<=COMM_VIDEO_RELEASE){
+  if(print_video(rx+24,payload-8,1))goto io_error;
+  if(operation!=COMM_VIDEO_STATUS)puts("Request accepted; query video-status for completion.");
+ }else if(operation==COMM_GET_STATUS){
+  if(payload!=32){errno=EPROTO;goto io_error;}
+  printf("SPI_ABI=%08x RX_packets=%u TX_packets=%u log_bytes=%u log_dropped=%u cycles=%u\n",comm_u32(rx+24),comm_u32(rx+28),comm_u32(rx+32),comm_u32(rx+36),comm_u32(rx+40),comm_u32(rx+44));
  }else{
-  if(n!=20){errno=EPROTO;goto io_error;}
-  printf("parameter[%u] = 0x%08x (%u)\n",a,comm_u32(rx+16),comm_u32(rx+16));
+  if(payload!=12){errno=EPROTO;goto io_error;}
+  printf("parameter value = 0x%08x (%u)\n",comm_u32(rx+24),comm_u32(rx+24));
  }
  rc=0;goto done;
-io_error:perror("Communication");fprintf(stderr,"No automatic retry. A failed write/read may have taken effect; pending transactions require reconciliation or coordinated reset.\n");
-done:rk_fspi_close(&spi);rk_iic_close(&control);return rc;
-usage:fprintf(stderr,"Usage: %s I2C_DEVICE SPI_DEVICE status|get INDEX|set INDEX VALUE|logs [MAX_BYTES]\nExample: %s /dev/i2c-0 /dev/spidev4.0 set 0 3\n",argv[0],argv[0]);return 2;
+io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
+done:rk_fspi_close(&spi);return rc;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

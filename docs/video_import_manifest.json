@@ -12,7 +12,7 @@
       "source": "hdl/new_ring/frame_ring_ddr3.v",
       "destination": "rtl/video/frame_ring_ddr3.v",
       "sha256": "26fea8b2593372f7171397ca912e834e19ff1e71756636f1fcaaa3cc74b30c29",
-      "current_normalized_sha256": "51a3d0a3be06b3ec68485ae4625913e1404ae5d5005e4cca01f691181cd18072",
+      "current_normalized_sha256": "dfa2bf8b33510a3078c55ffa80e20d5389a9f6f2c96a57f1f52ee034b1c895a7",
       "modified": true,
       "change": "Preserve DDR write layout and CPU/tensor arbitration; optional PCIe reader elimination for standalone capture, with no reader lease or video AR requests."
     },

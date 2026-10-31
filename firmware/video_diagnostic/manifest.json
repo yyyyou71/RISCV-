@@ -1,0 +1,41 @@
+{
+  "application": "video_diagnostic",
+  "mode": "performance",
+  "iterations": 2700,
+  "core": "acore_dual",
+  "isa": "rv32i_zmmul",
+  "enable_div": 0,
+  "mul_pipeline_stages": 3,
+  "clock_hz": 25000000,
+  "baud_rate": 115200,
+  "flags": [
+    "-march=rv32im",
+    "-mno-div",
+    "-mabi=ilp32",
+    "-O2",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-common",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-pie",
+    "-nostdlib",
+    "-nostartfiles"
+  ],
+  "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+  "elf_sha256": "7606ead6a0f758d963940bace955366b751c2131c116fa22ac67e5a27f788a6e",
+  "rom_sha256": "99056eb06cca45bc3b9f1da598a01ced4d83cc1e5b66f1bcada23d4791f4f410",
+  "ram_sha256": "148ac7467c96546a20bc689e7f7756458bfbf38314cdc8bd1de440c0ba616321",
+  "sources": {
+    "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+    "firmware/video_diagnostic.c": "aa18634e3cffdcd8f32b1ef7cb3948713e02e98cb2e6a4d4398e05b2595fbf86",
+    "firmware/rk_spi_comm.c": "6c22712245548f4219dc857ddac0b5dfa87b1e28fd637805206b3ca0c53798e6",
+    "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba",
+    "firmware/rk_comm.h": "fdeae9a1bbc7797c171ee1efb667eb5639b668d0a38d901443198505a3123ede",
+    "csrc/rk_fspi/fspi_v2.h": "24c219b6f4988a15d6dadc691d6c357c2e71a261585ec8b86946b20894d83b81",
+    "csrc/rk_fspi/comm_protocol.h": "773bb8fd42b83a853a1d31ad572fb47557a4563de8e1ca8e60ee5183faac697b",
+    "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158"
+  }
+}
