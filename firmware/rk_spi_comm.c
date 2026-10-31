@@ -12,6 +12,7 @@ static uint32_t parameters[COMM_PARAMS],received,transmitted,dropped,event_seq;
 static uint32_t ready_tick,video_tick;
 static unsigned log_rd,log_count,tx_log_count,tx_prepared,tx_inflight;
 static unsigned response_pending,needs_arm,transport_fault;
+static unsigned ai_due;
 
 __attribute__((weak)) uint16_t rk_comm_application_command(uint16_t operation,
  const uint8_t *request,uint16_t length,uint8_t *out,uint16_t capacity,uint16_t *size){
@@ -30,6 +31,7 @@ void rk_comm_init(void){
  received=transmitted=dropped=event_seq=0;
  log_rd=log_count=tx_log_count=tx_prepared=tx_inflight=response_pending=0;
  needs_arm=1;transport_fault=!fspi_v2_present();
+ ai_due=0;
  ready_tick=video_tick=CYCLES-25000000u;
  REG(0x30108u)=0;rk_comm_send(boot,sizeof(boot)-1);
 }
@@ -62,7 +64,7 @@ static void process_packet(void){
 }
 static void prepare_tx(uint32_t owner){
  uint16_t size=0,status;unsigned i;uint32_t now=CYCLES;
- if(!response_pending && !log_count &&
+ if(!response_pending && !log_count && !ai_due &&
     !(now-ready_tick>=25000000u && (owner&4u)) && now-video_tick<25000000u)return;
  for(i=0;i<SPI_TERM_FRAME;i++)tx[i]=0;
  tx_log_count=0;
@@ -79,11 +81,17 @@ static void prepare_tx(uint32_t owner){
   tx_log_count=log_count<SPI_TERM_PAYLOAD?log_count:SPI_TERM_PAYLOAD;
   for(i=0;i<tx_log_count;i++)tx[16+i]=logs[(log_rd+i)&(LOG_SIZE-1)];
   spi_term_seal(tx,++event_seq,SPI_TERM_LOG,(uint16_t)tx_log_count);
+ }else if(ai_due){
+  ai_due=0;
+  status=rk_comm_application_command(COMM_AI_STATUS,tx,0,tx+16,SPI_TERM_PAYLOAD,&size);
+  if(status!=COMM_OK || size>SPI_TERM_PAYLOAD)return;
+  spi_term_seal(tx,++event_seq,SPI_TERM_AI,size);
  }else if(now-video_tick>=25000000u){
   video_tick=now;
   status=rk_comm_application_command(COMM_VIDEO_STATUS,tx,0,tx+16,SPI_TERM_PAYLOAD,&size);
   if(status!=COMM_OK || size>SPI_TERM_PAYLOAD)return;
   spi_term_seal(tx,++event_seq,SPI_TERM_VIDEO,size);
+  ai_due=1;
  }else return;
  tx_prepared=1;
 }

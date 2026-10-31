@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ip_inst>
     <header>
         <vendor>Pango</vendor>
@@ -11,6 +11,7 @@
         <device>PG2L100H</device>
         <package>FBG484</package>
         <speedgrade>-6</speedgrade>
+        <generator version="2022.2-SP6.1" build="138931">IP Compiler</generator>
     </header>
     <param_list>
         <param>
@@ -78,6 +79,17 @@
             <value>0</value>
         </param>
     </param_list>
-    <pin_list />
-    <file_list />
+    <pin_list/>
+    <file_list>
+        <output>
+            <file pathname="generate.log" format="log" description="Generate Log"/>
+            <file pathname="pango_ai_multadd_tb.v" format="verilog" description="Compiled File"/>
+            <file pathname="pango_ai_multadd_tmpl.v" format="verilog" description="Instantiation Template"/>
+            <file pathname="pango_ai_multadd_tmpl.vhdl" format="vhdl" description="Instantiation Template"/>
+        </output>
+        <source>
+            <file pathname="rtl/ipm2l_multadd_v1_3_pango_ai_multadd.v"/>
+            <file pathname="pango_ai_multadd.v"/>
+        </source>
+    </file_list>
 </ip_inst>

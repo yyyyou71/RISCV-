@@ -22,6 +22,9 @@
 #define COMM_VIDEO_STATUS 5u
 #define COMM_VIDEO_RETRY 6u
 #define COMM_VIDEO_RELEASE 7u
+#define COMM_AI_STATUS 8u
+#define COMM_AI_ABI 0x00010000u
+#define COMM_AI_WORDS 24u
 /* Optional video diagnostic application. Existing transport ABI is unchanged. */
 #define COMM_VIDEO_ABI 0x00010000u
 #define COMM_VIDEO_WORDS 28u
@@ -43,6 +46,7 @@
 #define SPI_TERM_LOG 0x8001u
 #define SPI_TERM_VIDEO 0x8002u
 #define SPI_TERM_RESPONSE 0x8003u
+#define SPI_TERM_AI 0x8004u
 #define COMM_OK 0u
 #define COMM_BAD_PACKET 1u
 #define COMM_BAD_ARGUMENT 2u

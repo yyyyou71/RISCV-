@@ -1,0 +1,51 @@
+{
+  "stage": "P3a: first real model layer",
+  "scope": "Connected full first-layer FPGA execution and first-pixel CPU comparison; board test pending",
+  "first_layer": {
+    "input": [
+      96,
+      96,
+      3
+    ],
+    "output": [
+      48,
+      48,
+      32
+    ],
+    "asset_bytes": 5760,
+    "output_bytes": 147456,
+    "expected_mac_issues": 1327104,
+    "checked_output_pixels": 1,
+    "checked_output_channels": 32
+  },
+  "physical_ai_enabled": true,
+  "full_99_task_network": false,
+  "pcie_overlay": false,
+  "spi_full_model_loading": false,
+  "firmware_sha256": "3ff7cac89a52709e3650a07d8009c74015518237ed04d9fa3f9cc62602616081",
+  "firmware_size": {
+    "text": 8624,
+    "data": 6332,
+    "bss": 1664
+  },
+  "asset_sha256": "388c2389565ce3ca409a1cdf66456e0d502319f10090d0ab91884c36bc93f3f9",
+  "vendor_primitive_boundary_passed": true,
+  "cpu_reference_passed": true,
+  "host_mock_passed": true,
+  "pds_compile_passed": true,
+  "pds_synthesis_run": false,
+  "pds_place_route_run": false,
+  "bitstream_generated": false,
+  "hardware_tested": false,
+  "sources": {
+    "board/acore_dual_top.v": "c6afb9987c97adb61554fe8200aa7328186bc17ef1f4e189657917cd9351f06a",
+    "rtl/multiply_adder_w8a16.v": "1ece17a2531edf5efbb5b2ebc1adb88475ef2a16a0aad715c7c7f7e7a806ba59",
+    "firmware/ai_first_layer.c": "b58141568067c06e4482803fadca6c9c060c925bd17b36def32743da5da67b51",
+    "firmware/ai_first_layer_quant.h": "3532d1b79f657a3fd1cfb3b6b2d125e5d3485593b2ce99cdcce6af01c418033a",
+    "firmware/video_diagnostic.c": "1a8938087f3094aa6641810717ffb6d766793a39565fe4bb5dc6b21c7f640dfe",
+    "firmware/rk_spi_comm.c": "ab41575df7350698429b48e598843e12335bb3dad1f57e2f4f37a3981e9c92eb",
+    "csrc/rk_fspi/comm_protocol.h": "0935f193f3cb3a6ced77ba1722fe5d86eb09db7ccd020234e0d78f444f3d1c55",
+    "csrc/rk_fspi/rk_comm_cli.c": "6b3426412bbc3d88b557ad21e55251424da7e09c250a615a1a3f6b254de7c27d"
+  },
+  "note": "Rebuild root PDS before programming; requires valid held HDMI tensor. Existing resource/timing reports predate AI enable."
+}

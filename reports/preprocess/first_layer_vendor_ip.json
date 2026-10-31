@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "scope": "new vendor Multiply-Adder only",
+  "summary": "# PASS vendor AI Multiply-Adder: signed extrema, 3 CE stages, stalls/reset, 101 checks",
+  "full_ai_simulation": false,
+  "sources": {
+    "rtl/multiply_adder_w8a16.v": "1ece17a2531edf5efbb5b2ebc1adb88475ef2a16a0aad715c7c7f7e7a806ba59",
+    "sim/ai/TB_ai_vendor_multadd.v": "7885f5fe34d5968071c2a1a07bff6b16083a8c89b9ea02c82e71d600bfb83181",
+    "ipcore/pango_ai_multadd/rtl/ipm2l_multadd_v1_3_pango_ai_multadd.v": "45ec012286d699ed61a8a52f5e0b431099adeb587ec1070e1a952829cf472316",
+    "ipcore/pango_ai_multadd/pango_ai_multadd.v": "69840b291930b16fa286ed75dc9c5bbaa32ba1c30e5edb560e6c5527d4df3871"
+  }
+}

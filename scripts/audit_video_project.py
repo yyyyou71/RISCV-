@@ -80,7 +80,7 @@ def main():
     checks['iic_pins_preserved'] = pin_map.get('iic_scl') == 'P19' and pin_map.get('iic_sda') == 'R19'
     bad_parts = []
     for name in ['pcie_test', 'ddr3', 'PLL_CLK', 'fifo_2_ddr', 'ddr_2_fifo',
-                 'pango_acore_fetch', 'pango_acore_ram', 'pango_multiplier_ip', 'pango_pool_sum_ram']:
+                 'pango_acore_fetch', 'pango_acore_ram', 'pango_multiplier_ip', 'pango_pool_sum_ram', 'pango_ai_multadd']:
         header = ET.parse(ROOT / 'ipcore' / name / (name + '.idf')).getroot().find('header')
         if [header.findtext(x) for x in ['device', 'package', 'speedgrade']] != ['PG2L100H', 'FBG484', '-6']:
             bad_parts.append(name)
@@ -91,6 +91,8 @@ def main():
         'rtl/video/preprocess/rgb_mean240.v','rtl/video/preprocess/pool_sum_ram.v',
         'ipcore/pango_pool_sum_ram/pango_pool_sum_ram.idf'))
     checks['physical_preprocess_enabled'] = '.ENABLE_PREPROCESS(1)' in (ROOT/'board/acore_dual_top.v').read_text()
+    checks['physical_ai_enabled'] = 'parameter integer ENABLE_AI=1' in (ROOT/'board/acore_dual_top.v').read_text()
+    checks['generated_ai_ip_registered'] = 'ipcore/pango_ai_multadd/pango_ai_multadd.idf' in files
     preserved = ['Acore.v', 'ALU.v', 'CSR.v', 'decoder.v', 'GPR_matrix.v',
                  'acore_pair.v', 'acore_forward.v', 'acore_fetch_queue.v', 'multiply_unit.v']
     preserved += ['rk_iic/' + p.name for p in (ROOT / 'rtl/rk_iic').glob('*.v')]

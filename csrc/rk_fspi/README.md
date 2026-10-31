@@ -6,13 +6,15 @@
 
 在 RK 本机编译（不要复制 WSL 的 x86 可执行文件）：
 
+    make clean
     make all
     ./rk_comm_cli /dev/spidev4.0
 
-默认持续读取软核日志并打印到终端，每秒左右显示一次视频状态。
+默认持续读取软核日志并打印到终端，每秒左右显示视频/AI 状态。
 Ctrl+C 停止监听后，可以执行：
 
     ./rk_comm_cli /dev/spidev4.0 video-status
+    ./rk_comm_cli /dev/spidev4.0 ai-status
     ./rk_comm_cli /dev/spidev4.0 video-retry
     ./rk_comm_cli /dev/spidev4.0 video-release
     ./rk_comm_cli /dev/spidev4.0 status

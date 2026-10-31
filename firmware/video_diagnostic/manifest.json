@@ -25,17 +25,21 @@
     "-nostartfiles"
   ],
   "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
-  "elf_sha256": "7606ead6a0f758d963940bace955366b751c2131c116fa22ac67e5a27f788a6e",
-  "rom_sha256": "99056eb06cca45bc3b9f1da598a01ced4d83cc1e5b66f1bcada23d4791f4f410",
-  "ram_sha256": "148ac7467c96546a20bc689e7f7756458bfbf38314cdc8bd1de440c0ba616321",
+  "elf_sha256": "3ff7cac89a52709e3650a07d8009c74015518237ed04d9fa3f9cc62602616081",
+  "rom_sha256": "df7493868a1bdd096a8dd79395a826fd45ea67de17a152559d1950db33c7339c",
+  "ram_sha256": "93e2f0eda1b0840835e8bf3efa337af365c55ec7079a8055166e428fe4cc5ec2",
   "sources": {
     "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
-    "firmware/video_diagnostic.c": "aa18634e3cffdcd8f32b1ef7cb3948713e02e98cb2e6a4d4398e05b2595fbf86",
-    "firmware/rk_spi_comm.c": "6c22712245548f4219dc857ddac0b5dfa87b1e28fd637805206b3ca0c53798e6",
+    "firmware/video_diagnostic.c": "1a8938087f3094aa6641810717ffb6d766793a39565fe4bb5dc6b21c7f640dfe",
+    "firmware/rk_spi_comm.c": "ab41575df7350698429b48e598843e12335bb3dad1f57e2f4f37a3981e9c92eb",
+    "firmware/ai_first_layer.c": "b58141568067c06e4482803fadca6c9c060c925bd17b36def32743da5da67b51",
     "firmware/link.ld": "8b35c682a78960ea10ffca00a3ecd0358968a0dfb8f35c3b3eb069417c9f01ba",
     "firmware/rk_comm.h": "fdeae9a1bbc7797c171ee1efb667eb5639b668d0a38d901443198505a3123ede",
     "csrc/rk_fspi/fspi_v2.h": "24c219b6f4988a15d6dadc691d6c357c2e71a261585ec8b86946b20894d83b81",
-    "csrc/rk_fspi/comm_protocol.h": "773bb8fd42b83a853a1d31ad572fb47557a4563de8e1ca8e60ee5183faac697b",
-    "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158"
+    "csrc/rk_fspi/comm_protocol.h": "0935f193f3cb3a6ced77ba1722fe5d86eb09db7ccd020234e0d78f444f3d1c55",
+    "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158",
+    "firmware/ai_first_layer.h": "afc89b8247f90a671a5201f1373c473924da4278ab5e7273a94350094feecab9",
+    "firmware/ai_first_layer_quant.h": "3532d1b79f657a3fd1cfb3b6b2d125e5d3485593b2ce99cdcce6af01c418033a",
+    "firmware/ai_first_layer_assets.h": "a870aa071eb38c227a975e2dd9f97c4a799e76082bed773f3941d93122d2d14d"
   }
 }

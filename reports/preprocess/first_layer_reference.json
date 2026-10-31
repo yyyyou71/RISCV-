@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "scope": "CPU first-pixel reference only, 16 small patches",
+  "checks": 512,
+  "golden_source_sha256": "cce904bf8bdb2776c63fd8cb8023b35f46c06f0a953add75b59a735c24323952",
+  "rtl_simulation": false,
+  "full_network": false,
+  "checker_sha256": "3532d1b79f657a3fd1cfb3b6b2d125e5d3485593b2ce99cdcce6af01c418033a"
+}

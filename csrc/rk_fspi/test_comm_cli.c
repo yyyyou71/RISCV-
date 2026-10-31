@@ -19,6 +19,10 @@ int rk_fspi_write(rk_fspi *d,const uint8_t *p,size_t n){
   comm_put32(answer+24,3);len=4;
  }else if(op==COMM_GET_PARAM){comm_put32(answer+24,3);len=4;}
  else if(op==COMM_GET_STATUS){comm_put32(answer+24,SPI_TERM_ABI);len=24;}
+ else if(op==COMM_AI_STATUS){
+  len=COMM_AI_WORDS*4;comm_put32(answer+24,COMM_AI_ABI);comm_put32(answer+28,9);
+  comm_put32(answer+24+13*4,32);comm_put32(answer+24+14*4,0xffffffffu);
+ }
  else{
   assert(op>=COMM_VIDEO_STATUS && op<=COMM_VIDEO_RELEASE && comm_u16(p+10)==0);
   len=COMM_VIDEO_WORDS*4;comm_put32(answer+24,COMM_VIDEO_ABI);
@@ -51,6 +55,7 @@ int main(void){
  char *video[]={"rk_comm_cli","spi","video-status",0};
  char *retry[]={"rk_comm_cli","spi","video-retry",0};
  char *release[]={"rk_comm_cli","spi","video-release",0};
+ char *ai[]={"rk_comm_cli","spi","ai-status",0};
  reset_mock();assert(cli_main(5,set)==0 && writes==1 && committed==1);
  reset_mock();assert(cli_main(4,get)==0 && writes==1);
  reset_mock();assert(cli_main(3,status)==0);
@@ -58,6 +63,7 @@ int main(void){
  reset_mock();assert(cli_main(3,video)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_STATUS);
  reset_mock();assert(cli_main(3,retry)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_RETRY);
  reset_mock();assert(cli_main(3,release)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_RELEASE);
+ reset_mock();assert(cli_main(3,ai)==0 && writes==1 && comm_u16(sent+8)==COMM_AI_STATUS);
  reset_mock();assert(cli_main(5,bad)==2 && !writes);
  reset_mock();write_error=1;assert(cli_main(5,set)==1 && writes==1);
  reset_mock();corrupt=1;assert(cli_main(5,set)==1 && writes==1 && committed==1);

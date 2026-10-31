@@ -1,9 +1,13 @@
 # HDMI 抓帧与纯 SPI 终端诊断
 
+> 当前固件在视频通过后还会运行真实模型第 1 层并输出 [ai] 状态，默认已启用 AI。
+> 新增范围见 [P3a 说明](ai_first_layer_p3a.md)。AI 运行时拒绝 video-release/retry，新增 ai-status。
+
 当前根 rv32I.pds 的 ROM/RAM 初始化选择 firmware/video_diagnostic/。
 运行双发射 Acore、视频自检和纯 SPI 消息服务，不运行 CoreMark。
 RK 工具位于 csrc/rk_fspi，只连接 SPI 即可收消息、查询和重试，不使用 IIC。
-原有 IIC RTL 留在工程内；本固件不访问它。CPU、HDMI、DDR、SPI/IIC RTL 未改。
+原有 IIC RTL 留在工程内；本固件不访问它。CPU、HDMI、DDR、SPI/IIC RTL 保持；
+P3a 开启原有 AI，并适配新生成的乘加 IP 端口。
 groute_seed=3，顶层仍为 acore_dual_top，STANDALONE_CAPTURE=1。
 
 ## 上板操作

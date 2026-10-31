@@ -21,6 +21,8 @@
     "groute_seed_is_3": true,
     "preprocess_sources_registered": true,
     "physical_preprocess_enabled": true,
+    "physical_ai_enabled": true,
+    "generated_ai_ip_registered": true,
     "own_acore_and_iic_unchanged_from_m1": true,
     "import_manifest_hashes_match": true,
     "build_acore_dual.ps1_guards_root_project": true,

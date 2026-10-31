@@ -1,6 +1,6 @@
 // CPU + proven HDMI/PCIe platform, sharing one physical DDR3 controller.
 module acore_dual_top #(
-    parameter integer ENABLE_AI=0,
+    parameter integer ENABLE_AI=1,
     parameter integer ENABLE_FSPI=1,
     parameter integer STANDALONE_CAPTURE=1,
     parameter integer RESET_HOLD_CYCLES=250000

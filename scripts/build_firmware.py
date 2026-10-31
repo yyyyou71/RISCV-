@@ -83,6 +83,8 @@ def main():
         if args.application in ("fspi_service", "video_diagnostic"):
             sources.append(ROOT / "firmware" / ("rk_spi_comm.c" if args.application == "video_diagnostic" else "rk_comm.c"))
             options += ["-Wall", "-Wextra", "-Werror"]
+        if args.application == "video_diagnostic":
+            sources.append(ROOT / "firmware/ai_first_layer.c")
     libgcc = subprocess.check_output([args.prefix + "gcc", "-march=rv32i", "-mabi=ilp32",
                                      "-print-libgcc-file-name"], text=True).strip()
     run([args.prefix + "gcc", *flags, *options, "-T", linker,
@@ -118,6 +120,9 @@ def main():
                          ROOT / "csrc/rk_fspi/comm_protocol.h"]
     if args.application in ("preprocess_bringup", "video_diagnostic"):
         dependencies += [ROOT / "firmware/preprocess_capture.h"]
+    if args.application == "video_diagnostic":
+        dependencies += [ROOT / "firmware" / name for name in
+                         ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h")]
     if args.application == "coremark":
         dependencies += [ROOT / "csrc/coremark_port/platform.h", ROOT / "csrc/coremark_port/core_portme.h"]
     manifest = {"application": args.application, "mode": args.mode, "iterations": args.iterations,

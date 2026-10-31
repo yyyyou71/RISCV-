@@ -27,6 +27,23 @@ static const char *video_error(uint32_t s){
  static const char *const names[]={"none","DDR not ready/fault","no 1920x1080 measurement within 10 seconds","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
  return s<sizeof(names)/sizeof(names[0])?names[s]:"unknown stage";
 }
+static int print_ai(const uint8_t *p,unsigned size,int detailed){
+ static const char *const names[]={"IDLE","UPLOAD","UPLOAD_WAIT","READ_INPUT","INPUT_WAIT",
+  "START","RUNNING","READ_OUTPUT","OUTPUT_WAIT","PASSED_FIRST_PIXEL","FAILED"};
+ uint32_t v[COMM_AI_WORDS];unsigned i;
+ if(size!=COMM_AI_WORDS*4)return fail(EPROTO);
+ for(i=0;i<COMM_AI_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_AI_ABI)return fail(EPROTO);
+ printf("[ai] first_layer=%s error=%u frame_id=%u checked_channels=%u hw_cycles=%u issues=%u\n",
+  v[1]<sizeof(names)/sizeof(names[0])?names[v[1]]:"UNKNOWN",v[2],v[3],v[13],v[7],v[8]);
+ if(detailed){
+  printf("scope=first of 99 layers; compares ONLY the first output pixel (32 channels)\n");
+  printf("loaded_asset_bytes=%u HW_STATUS=0x%08x HW_ERROR=%u output=%ux%ux32 bytes=%u\n",v[4],v[5],v[6],v[10],v[9],v[12]);
+  printf("input_logical=0x%08x input_bytes=%u output_logical=0x%08x\n",v[18],v[19],v[11]);
+  if(v[14]!=0xffffffffu)printf("mismatch: channel=%u expected=%d actual=%d\n",v[14],(int32_t)v[15],(int32_t)v[16]);
+ }
+ return 0;
+}
 static int print_video(const uint8_t *p,unsigned size,int detailed){
  uint32_t v[COMM_VIDEO_WORDS];unsigned i;
  if(size!=COMM_VIDEO_WORDS*4)return fail(EPROTO);
@@ -59,6 +76,7 @@ static int event(const uint8_t *p){
  unsigned kind=comm_u16(p+8),len=comm_u16(p+10);
  if(kind==SPI_TERM_LOG){fwrite(p+16,1,len,stdout);fflush(stdout);}
  else if(kind==SPI_TERM_VIDEO){if(print_video(p+16,len,0))return -1;}
+ else if(kind==SPI_TERM_AI){if(print_ai(p+16,len,0))return -1;}
  else if(kind==SPI_TERM_READY){
   if(len!=24 || comm_u32(p+16)!=SPI_TERM_ABI || comm_u32(p+20)!=SPI_TERM_FRAME)return fail(EPROTO);
  }else if(kind==SPI_TERM_RESPONSE){fprintf(stderr,"Previous command response sequence=%u received; no command is replayed.\n",comm_u32(p+4));}
@@ -77,6 +95,7 @@ int main(int argc,char **argv){
  else if(argc==3 && !strcmp(argv[2],"video-status"))operation=COMM_VIDEO_STATUS;
  else if(argc==3 && !strcmp(argv[2],"video-retry"))operation=COMM_VIDEO_RETRY;
  else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
+ else if(argc==3 && !strcmp(argv[2],"ai-status"))operation=COMM_AI_STATUS;
  else if(argc==5 && !strcmp(argv[2],"set") && !number(argv[3],&a) && a<COMM_PARAMS && !number(argv[4],&b)){
   operation=COMM_SET_PARAM;payload=8;comm_put32(tx+16,a);comm_put32(tx+20,b);
  }else if(argc==4 && !strcmp(argv[2],"get") && !number(argv[3],&a) && a<COMM_PARAMS){operation=COMM_GET_PARAM;payload=4;comm_put32(tx+16,a);}
@@ -124,7 +143,9 @@ int main(int argc,char **argv){
  if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
  a=comm_u32(rx+16);
  if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
- if(operation>=COMM_VIDEO_STATUS && operation<=COMM_VIDEO_RELEASE){
+ if(operation==COMM_AI_STATUS){
+  if(print_ai(rx+24,payload-8,1))goto io_error;
+ }else if(operation>=COMM_VIDEO_STATUS && operation<=COMM_VIDEO_RELEASE){
   if(print_video(rx+24,payload-8,1))goto io_error;
   if(operation!=COMM_VIDEO_STATUS)puts("Request accepted; query video-status for completion.");
  }else if(operation==COMM_GET_STATUS){
@@ -137,5 +158,5 @@ int main(int argc,char **argv){
  rc=0;goto done;
 io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
 done:rk_fspi_close(&spi);return rc;
-usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

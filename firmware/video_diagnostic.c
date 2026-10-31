@@ -1,5 +1,6 @@
 #include "rk_comm.h"
 #include "preprocess_capture.h"
+#include "ai_first_layer.h"
 #include "../csrc/rk_fspi/comm_protocol.h"
 
 #define REG(a) (*(volatile uint32_t *)(a))
@@ -18,6 +19,7 @@ static uint32_t failure_shape,failure_period,failure_status,failure_error;
 static uint32_t first_pixel[2],last_pixel[2];
 static uint32_t led_tick,led_phase;
 static unsigned restart_after_release;
+static unsigned ai_attempted;
 static struct pp_frame frame;
 
 static void log_text(const char *s){
@@ -36,6 +38,7 @@ static void fail(unsigned stage){
     log_text("Video self-test failed; read video-status, then video-retry.\n");
 }
 static void clear_result(void){
+    ai_first_layer_clear();ai_attempted=0;
     frame.frame_id=0;frame.raw_slot=0xffffffffu;frame.raw_native_base=0;
     frame.tensor_logical_base=PP_DEFAULT_BASE;frame.bytes=0;
     first_pixel[0]=first_pixel[1]=last_pixel[0]=last_pixel[1]=0;
@@ -129,13 +132,18 @@ uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
  uint16_t length,uint8_t *response,uint16_t capacity,uint16_t *response_length){
     uint32_t status;
     (void)request;*response_length=0;
+    if(operation==COMM_AI_STATUS){
+        if(length)return COMM_BAD_ARGUMENT;
+        if(capacity<COMM_AI_WORDS*4)return COMM_IO_ERROR;
+        ai_first_layer_status(response);*response_length=COMM_AI_WORDS*4;return COMM_OK;
+    }
     if(operation!=COMM_VIDEO_STATUS && operation!=COMM_VIDEO_RETRY && operation!=COMM_VIDEO_RELEASE)
         return COMM_BAD_OPCODE;
     if(length)return COMM_BAD_ARGUMENT;
     if(capacity<COMM_VIDEO_WORDS*4)return COMM_IO_ERROR;
     if(operation!=COMM_VIDEO_STATUS){
         status=PP_REG(4);
-        if(state==COMM_VIDEO_CAPTURE || state==COMM_VIDEO_READ_FIRST ||
+        if(ai_first_layer_busy() || state==COMM_VIDEO_CAPTURE || state==COMM_VIDEO_READ_FIRST ||
            state==COMM_VIDEO_READ_LAST || state==COMM_VIDEO_RELEASING ||
            (status&PP_BUSY) || (WINDOW_STATUS&1u))return COMM_BUSY;
         /* A fault may mean an unfinished native DDR transaction. A local
@@ -153,6 +161,13 @@ uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
     return COMM_OK;
 }
 int main(void){
-    rk_comm_init();start_waiting();
-    for(;;){rk_comm_poll();poll_video();}
+    rk_comm_init();ai_first_layer_init();start_waiting();
+    for(;;){
+        rk_comm_poll();poll_video();
+        if(state==COMM_VIDEO_SUCCESS && !ai_attempted){
+            ai_attempted=1;
+            ai_first_layer_start(frame.frame_id,frame.tensor_logical_base,frame.bytes);
+        }
+        ai_first_layer_poll();
+    }
 }

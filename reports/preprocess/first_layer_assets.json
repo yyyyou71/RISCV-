@@ -1,0 +1,23 @@
+{
+  "scope": "First of 99 tasks; actual model weights, bias and Q13 quantization",
+  "model_sha256": "aa311cdf094592b3692b5d36b24deed7d66d80f0d6343f1c8cfcddf7a18a9589",
+  "asset_sha256": "388c2389565ce3ca409a1cdf66456e0d502319f10090d0ab91884c36bc93f3f9",
+  "asset_bytes": 5760,
+  "offsets": {
+    "weight": 0,
+    "bias": 4608,
+    "quant": 4736
+  },
+  "input_shape": [
+    96,
+    96,
+    3
+  ],
+  "output_shape": [
+    48,
+    48,
+    32
+  ],
+  "input_layout": "HWC, align16 channels, INT16",
+  "full_network": false
+}
