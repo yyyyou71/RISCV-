@@ -15,6 +15,7 @@ Ctrl+C 停止监听后，可以执行：
 
     ./rk_comm_cli /dev/spidev4.0 video-status
     ./rk_comm_cli /dev/spidev4.0 ai-status
+    ./rk_comm_cli /dev/spidev4.0 network-status
     ./rk_comm_cli /dev/spidev4.0 video-retry
     ./rk_comm_cli /dev/spidev4.0 video-release
     ./rk_comm_cli /dev/spidev4.0 status
@@ -23,6 +24,18 @@ Ctrl+C 停止监听后，可以执行：
 once 只等待并打印一条日志/视频消息；logs 是持续监听的别名。
 重试命令返回接收成功后，用 video-status 或监听观察实际完成结果。
 设备路径按 RK 实际设备调整；同一时间只运行一个客户端，设备锁避免合作客户端竞争。
+
+完整模型工具（仅复制本目录即可编译）：
+
+    ./rk_model_cli /dev/spidev4.0 load board_model.bin
+    ./rk_model_cli /dev/spidev4.0 status
+    ./rk_model_cli /dev/spidev4.0 infer
+    ./rk_model_cli /dev/spidev4.0 results
+
+board_model.bin 用 scripts/prepare_board_model.py 在 PC 生成后另行复制。
+infer 需要已经持有有效 HDMI 帧；运行后查询到 DONE 才读取结果。
+断传不自动重发，可 status 后显式 resume 同一文件，或 abort 取消装载。
+见 [P3b 说明](../../docs/ai_network_p3b.md)。RK 暂缺联调条件，当前只完成主机侧检查。
 
 沿用已验证 SMDT 接口：50MHz、mode3、按读写分别设置 quad 标志、单段 payload-only transfer。
 没有修改 projects/fspi_test_50m/rk_tool 或其独立位流。

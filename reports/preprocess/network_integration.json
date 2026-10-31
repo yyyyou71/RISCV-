@@ -1,0 +1,49 @@
+{
+  "stage": "P3b full model load/schedule/postprocess software integration",
+  "passed_software_checks": true,
+  "firmware_sha256": "e1b1df05b569625b8aeed01562b167aa39db349aafada4cfe468dcbbefae00df",
+  "firmware_size": {
+    "text": 23572,
+    "data": 6718,
+    "bss": 2044
+  },
+  "stack_reserved_bytes": 16384,
+  "model_bytes": 13372720,
+  "model_sha256": "f60ca150267c99039ce4eab851ebd1ca19a64716e239663e88ed309b00d2d956",
+  "tasks": 99,
+  "head_tensors": 6,
+  "live_input": {
+    "logical_address": 66060288,
+    "bytes": 294912,
+    "cpu_frame_copy": false
+  },
+  "loader": "224-byte blocks, write/readback, full-image FNV-1a, sequential offsets, explicit resume",
+  "sources": {
+    "firmware/ai_network.c": "d46fac30acbd4f34ffdfa18c0264371e2248e1e0ae187d0017a013bb8a76f9f3",
+    "firmware/ai_network.h": "833115160028495adfd8032ec9c4efe841e2fa68fbac2c29f8a1120eddd392a8",
+    "csrc/software/ai_runtime.c": "137d7bd42463d92237fca7301e5ce591eb50ac3f6fdfd532671e4a05c6eb8341",
+    "csrc/software/ai_runtime.h": "a768bb7d1f3f5ba563534636bc8020d6cccf453076a0c6b06a10a84e07527605",
+    "csrc/rk_fspi/rk_model_cli.c": "c590d79095eeadfe8b4dd4bc8776fdbeefdfe2da125c28d87cb165009dc6fbd0",
+    "firmware/rk_spi_comm.c": "73b75a32f40552aa53ecb94b93c57223c83997d2fb26df3a0bab6f2bbdd70f35"
+  },
+  "physical_rtl_changed": false,
+  "firmware_rom_ram_embedded_words_verified": [
+    8192,
+    16384
+  ],
+  "fpga_board_available": true,
+  "rk_integration_environment_available": false,
+  "rk_hardware_verified": false,
+  "fpga_full_network_verified": false,
+  "full_network_math_executed": false,
+  "rtl_simulation_run": false,
+  "pds_compile_run_this_stage": false,
+  "pds_synthesis_run": false,
+  "pds_place_route_run": false,
+  "bitstream_generated": false,
+  "remaining": [
+    "RK/FPGA model upload and end-to-end verification",
+    "previous HDMI shape fault diagnosis",
+    "FPGA box overlay and PCIe output"
+  ]
+}

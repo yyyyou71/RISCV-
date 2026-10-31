@@ -1,5 +1,7 @@
 # P3a：HDMI 张量接入真实模型第 1 层
 
+> 当前固件还接入了 [P3b 完整模型加载/调度](ai_network_p3b.md)。未加载模型时保留本文的独立首层检查。
+
 根工程 rv32I.pds，顶层 acore_dual_top；ENABLE_AI=1、STANDALONE_CAPTURE=1、groute_seed=3。
 这是 99 层模型的第 1 层集成检查点，不是完整 YOLO 推理，尚无检测框或 PCIe 画框输出。
 

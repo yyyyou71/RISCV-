@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "scope": "software loader/control/host and runtime input rebinding",
+  "checks": {
+    "rk_clients": true,
+    "loader": true,
+    "input_binding": true
+  },
+  "model_math_executed": false,
+  "rtl_simulation_run": false,
+  "rk_hardware_verified": false,
+  "fpga_hardware_verified": false,
+  "sources": {
+    "firmware/ai_network.c": "d46fac30acbd4f34ffdfa18c0264371e2248e1e0ae187d0017a013bb8a76f9f3",
+    "firmware/ai_network.h": "833115160028495adfd8032ec9c4efe841e2fa68fbac2c29f8a1120eddd392a8",
+    "csrc/software/ai_runtime.c": "137d7bd42463d92237fca7301e5ce591eb50ac3f6fdfd532671e4a05c6eb8341",
+    "csrc/software/ai_runtime.h": "a768bb7d1f3f5ba563534636bc8020d6cccf453076a0c6b06a10a84e07527605",
+    "csrc/rk_fspi/rk_model_cli.c": "c590d79095eeadfe8b4dd4bc8776fdbeefdfe2da125c28d87cb165009dc6fbd0",
+    "firmware/rk_spi_comm.c": "73b75a32f40552aa53ecb94b93c57223c83997d2fb26df3a0bab6f2bbdd70f35"
+  }
+}

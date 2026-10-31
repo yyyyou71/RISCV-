@@ -25,6 +25,24 @@
 #define COMM_AI_STATUS 8u
 #define COMM_AI_ABI 0x00010000u
 #define COMM_AI_WORDS 24u
+#define COMM_MODEL_BEGIN 9u
+#define COMM_MODEL_CHUNK 10u
+#define COMM_MODEL_COMMIT 11u
+#define COMM_NETWORK_STATUS 12u
+#define COMM_NETWORK_RUN 13u
+#define COMM_DETECTIONS 14u
+#define COMM_MODEL_ABORT 15u
+#define COMM_NETWORK_ABI 0x00010000u
+#define COMM_NETWORK_WORDS 28u
+#define COMM_MODEL_CHUNK_BYTES 224u
+#define NW_EMPTY 0u
+#define NW_LOADING 1u
+#define NW_READY 2u
+#define NW_QUEUED 3u
+#define NW_RUNNING 4u
+#define NW_POSTPROCESS 5u
+#define NW_DONE 6u
+#define NW_ERROR 7u
 /* Optional video diagnostic application. Existing transport ABI is unchanged. */
 #define COMM_VIDEO_ABI 0x00010000u
 #define COMM_VIDEO_WORDS 28u
@@ -47,6 +65,7 @@
 #define SPI_TERM_VIDEO 0x8002u
 #define SPI_TERM_RESPONSE 0x8003u
 #define SPI_TERM_AI 0x8004u
+#define SPI_TERM_NETWORK 0x8005u
 #define COMM_OK 0u
 #define COMM_BAD_PACKET 1u
 #define COMM_BAD_ARGUMENT 2u

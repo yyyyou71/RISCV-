@@ -12,7 +12,7 @@ static uint32_t parameters[COMM_PARAMS],received,transmitted,dropped,event_seq;
 static uint32_t ready_tick,video_tick;
 static unsigned log_rd,log_count,tx_log_count,tx_prepared,tx_inflight;
 static unsigned response_pending,needs_arm,transport_fault;
-static unsigned ai_due;
+static unsigned ai_due,network_due;
 
 __attribute__((weak)) uint16_t rk_comm_application_command(uint16_t operation,
  const uint8_t *request,uint16_t length,uint8_t *out,uint16_t capacity,uint16_t *size){
@@ -31,7 +31,7 @@ void rk_comm_init(void){
  received=transmitted=dropped=event_seq=0;
  log_rd=log_count=tx_log_count=tx_prepared=tx_inflight=response_pending=0;
  needs_arm=1;transport_fault=!fspi_v2_present();
- ai_due=0;
+ ai_due=network_due=0;
  ready_tick=video_tick=CYCLES-25000000u;
  REG(0x30108u)=0;rk_comm_send(boot,sizeof(boot)-1);
 }
@@ -64,7 +64,7 @@ static void process_packet(void){
 }
 static void prepare_tx(uint32_t owner){
  uint16_t size=0,status;unsigned i;uint32_t now=CYCLES;
- if(!response_pending && !log_count && !ai_due &&
+ if(!response_pending && !log_count && !ai_due && !network_due &&
     !(now-ready_tick>=25000000u && (owner&4u)) && now-video_tick<25000000u)return;
  for(i=0;i<SPI_TERM_FRAME;i++)tx[i]=0;
  tx_log_count=0;
@@ -86,6 +86,12 @@ static void prepare_tx(uint32_t owner){
   status=rk_comm_application_command(COMM_AI_STATUS,tx,0,tx+16,SPI_TERM_PAYLOAD,&size);
   if(status!=COMM_OK || size>SPI_TERM_PAYLOAD)return;
   spi_term_seal(tx,++event_seq,SPI_TERM_AI,size);
+  network_due=1;
+ }else if(network_due){
+  network_due=0;
+  status=rk_comm_application_command(COMM_NETWORK_STATUS,tx,0,tx+16,SPI_TERM_PAYLOAD,&size);
+  if(status!=COMM_OK || size>SPI_TERM_PAYLOAD)return;
+  spi_term_seal(tx,++event_seq,SPI_TERM_NETWORK,size);
  }else if(now-video_tick>=25000000u){
   video_tick=now;
   status=rk_comm_application_command(COMM_VIDEO_STATUS,tx,0,tx+16,SPI_TERM_PAYLOAD,&size);
@@ -116,6 +122,9 @@ void rk_comm_poll(void){
   if(!result)needs_arm=0;
   else if(result==-4)transport_fault=1;
  }
+ /* A complete response gives the next-command RX credit to a bulk client.
+    Do not publish it until the next RX buffer is actually armed. */
+ if(needs_arm)return;
  flags=FSPI_V2_REG(8);if(flags&1u)return;
  owner=FSPI_V2_REG(0x18);
  if(!tx_inflight && !(owner&2u)){

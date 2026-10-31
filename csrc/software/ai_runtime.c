@@ -24,6 +24,10 @@
 #define AFORMAT MMIO(0x30244)
 #define AOPCODE MMIO(0x30248)
 #define POLL_LIMIT 200000u
+__attribute__((weak)) void ai_runtime_poll(void){}
+__attribute__((weak)) int ai_runtime_abort_requested(void){return 0;}
+__attribute__((weak)) void ai_runtime_progress(uint32_t task,uint32_t total,const ai_run_result *result)
+{(void)task;(void)total;(void)result;}
 
 /* 64 位范围计算防止尺寸乘法回绕。end 是开区间上界。 */
 static int region(uint32_t address,uint64_t bytes,uint32_t begin,uint32_t end)
@@ -33,6 +37,7 @@ static int region(uint32_t address,uint64_t bytes,uint32_t begin,uint32_t end)
 }
 static uint32_t wait_ready(void)
 {
+    ai_runtime_poll();
     for(uint32_t n=0;n<POLL_LIMIT;n++) {
         uint32_t s=STATUS;
         if(s&8)return AI_DDR_ERROR;
@@ -43,6 +48,10 @@ static uint32_t wait_ready(void)
 static uint32_t wait_done(uint32_t poll_limit)
 {
     for(uint32_t n=0;!poll_limit || n<poll_limit;n++) {
+        if(!(n&255u)){
+            ai_runtime_poll();
+            if(ai_runtime_abort_requested())return AI_POLL_TIMEOUT;
+        }
         uint32_t s=STATUS;
         if(!(s&1))return (s&8) || (s&6)!=2 ? AI_DDR_ERROR:AI_OK;
     }
@@ -136,7 +145,26 @@ static uint32_t validate_task(const ai_model_header *h,const ai_task *t)
     return AI_OK;
 }
 
-uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
+/* Only exact references to the declared input are rebound. Validate their
+ * extents before any task starts, preserving all original descriptor checks. */
+static uint32_t bind_input(const ai_model_header *h,ai_task *t,uint32_t input,uint32_t bytes)
+{
+    if(!input)return AI_OK;
+    uint32_t ih=t->hw&65535,iw=t->hw>>16,ci=t->channels&65535;
+    uint64_t size=(uint64_t)ih*iw*((ci+15)&~15u)*2;
+    if(t->input_addr>=h->input_addr && t->input_addr<(uint64_t)h->input_addr+h->input_bytes){
+        if(t->input_addr!=h->input_addr || size>bytes)return AI_BAD_RANGE;
+        t->input_addr=input;
+    }
+    if((t->opcode==AI_OP_ADD || t->opcode==AI_OP_CONCAT) &&
+       t->weight_addr>=h->input_addr && t->weight_addr<(uint64_t)h->input_addr+h->input_bytes){
+        if(t->opcode==AI_OP_CONCAT)size=(uint64_t)ih*iw*((t->group_split+15)&~15u)*2;
+        if(t->weight_addr!=h->input_addr || size>bytes)return AI_BAD_RANGE;
+        t->weight_addr=input;
+    }
+    return AI_OK;
+}
+static uint32_t run_model(uint32_t header_address,uint32_t input,uint32_t input_bytes,ai_run_result *r)
 {
     ai_model_header h;
     ai_task task;
@@ -159,16 +187,22 @@ uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
        !region(h.output_addr,h.output_bytes,h.readonly_end,h.arena_end) ||
        (header_address<(uint64_t)h.tasks_addr+(uint64_t)h.task_count*64 && h.tasks_addr<(uint64_t)header_address+64))
         return r->code=AI_BAD_RANGE;
+    if(input && (!wide || input_bytes!=h.input_bytes ||
+       !region(input,input_bytes,h.arena_end,AI_DDR_BYTES)))return r->code=AI_BAD_RANGE;
     /* 两遍扫描：先检查全部描述符，再执行，避免格式错误到中途才被发现。
        量化记录仍由计算引擎按组验证；CPU 不复制整份参数表。 */
     for(uint32_t n=0;n<h.task_count;n++) {
         code=ai_ddr_read(h.tasks_addr+n*64,(uint32_t *)&task,64);
         if(!code)code=validate_task(&h,&task);
+        if(!code)code=bind_input(&h,&task,input,input_bytes);
         if(code){r->failed_task=n;r->hardware_code=code==AI_DDR_ERROR ? ERROR:0;return r->code=code;}
     }
     for(uint32_t n=0;n<h.task_count;n++) {
+        ai_runtime_progress(n,h.task_count,r);
         code=ai_ddr_read(h.tasks_addr+n*64,(uint32_t *)&task,64);
         if(code){r->failed_task=n;r->hardware_code=ERROR;return r->code=code;}
+        code=bind_input(&h,&task,input,input_bytes);
+        if(code){r->failed_task=n;return r->code=code;}
         /* CPU 仅配置任务，输入/权重供数和所有特征图写回均由引擎完成。 */
         AINPUT=task.input_addr;AWEIGHT=task.weight_addr;ABIAS=task.bias_addr;AOUTPUT=task.output_addr;
         AHW=task.hw;ACHANNELS=task.channels;ACONV=task.conv;APOST=task.post;AQUANT=task.quant_addr;
@@ -183,6 +217,14 @@ uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
         }
         if(AOH!=task.out_h || AOW!=task.out_w){r->failed_task=n;return r->code=AI_SHAPE_ERROR;}
         r->completed++;r->out_h=AOH;r->out_w=AOW;
+        ai_runtime_progress(n,h.task_count,r);
     }
     return AI_OK;
+}
+uint32_t ai_run_model(uint32_t header_address,ai_run_result *r)
+{return run_model(header_address,0,0,r);}
+uint32_t ai_run_model_input(uint32_t header_address,uint32_t input,uint32_t bytes,ai_run_result *r)
+{
+    if(!input)return r->code=AI_BAD_RANGE;
+    return run_model(header_address,input,bytes,r);
 }

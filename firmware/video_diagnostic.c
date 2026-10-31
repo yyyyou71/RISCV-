@@ -1,6 +1,7 @@
 #include "rk_comm.h"
 #include "preprocess_capture.h"
 #include "ai_first_layer.h"
+#include "ai_network.h"
 #include "../csrc/rk_fspi/comm_protocol.h"
 
 #define REG(a) (*(volatile uint32_t *)(a))
@@ -38,6 +39,7 @@ static void fail(unsigned stage){
     log_text("Video self-test failed; read video-status, then video-retry.\n");
 }
 static void clear_result(void){
+    ai_network_clear_result();
     ai_first_layer_clear();ai_attempted=0;
     frame.frame_id=0;frame.raw_slot=0xffffffffu;frame.raw_native_base=0;
     frame.tensor_logical_base=PP_DEFAULT_BASE;frame.bytes=0;
@@ -132,6 +134,12 @@ uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
  uint16_t length,uint8_t *response,uint16_t capacity,uint16_t *response_length){
     uint32_t status;
     (void)request;*response_length=0;
+    if(operation>=COMM_MODEL_BEGIN && operation<=COMM_MODEL_ABORT){
+        int active=state==COMM_VIDEO_CAPTURE || state==COMM_VIDEO_READ_FIRST ||
+                   state==COMM_VIDEO_READ_LAST || state==COMM_VIDEO_RELEASING;
+        return ai_network_command(operation,request,length,response,capacity,response_length,
+            &frame,state==COMM_VIDEO_SUCCESS,active,ai_first_layer_busy());
+    }
     if(operation==COMM_AI_STATUS){
         if(length)return COMM_BAD_ARGUMENT;
         if(capacity<COMM_AI_WORDS*4)return COMM_IO_ERROR;
@@ -143,7 +151,7 @@ uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
     if(capacity<COMM_VIDEO_WORDS*4)return COMM_IO_ERROR;
     if(operation!=COMM_VIDEO_STATUS){
         status=PP_REG(4);
-        if(ai_first_layer_busy() || state==COMM_VIDEO_CAPTURE || state==COMM_VIDEO_READ_FIRST ||
+        if(ai_network_busy() || ai_first_layer_busy() || state==COMM_VIDEO_CAPTURE || state==COMM_VIDEO_READ_FIRST ||
            state==COMM_VIDEO_READ_LAST || state==COMM_VIDEO_RELEASING ||
            (status&PP_BUSY) || (WINDOW_STATUS&1u))return COMM_BUSY;
         /* A fault may mean an unfinished native DDR transaction. A local
@@ -161,13 +169,15 @@ uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
     return COMM_OK;
 }
 int main(void){
-    rk_comm_init();ai_first_layer_init();start_waiting();
+    rk_comm_init();ai_first_layer_init();ai_network_init();start_waiting();
     for(;;){
-        rk_comm_poll();poll_video();
-        if(state==COMM_VIDEO_SUCCESS && !ai_attempted){
+        rk_comm_poll();
+        if(!ai_network_loading())poll_video();
+        if(state==COMM_VIDEO_SUCCESS && !ai_attempted && !ai_network_busy() && !ai_network_has_model()){
             ai_attempted=1;
             ai_first_layer_start(frame.frame_id,frame.tensor_logical_base,frame.bytes);
         }
         ai_first_layer_poll();
+        ai_network_poll();
     }
 }

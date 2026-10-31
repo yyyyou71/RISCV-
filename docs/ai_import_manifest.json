@@ -110,15 +110,17 @@
       "source": "csrc/software/ai_runtime.c",
       "destination": "csrc/software/ai_runtime.c",
       "upstream_sha256": "fe22c1ed17d5a5b6f11903cc60acd3d99d1263710f10c9d40a00ebb39b3e9568",
-      "ported_sha256": "fe22c1ed17d5a5b6f11903cc60acd3d99d1263710f10c9d40a00ebb39b3e9568",
-      "modified_from_upstream": false
+      "ported_sha256": "137d7bd42463d92237fca7301e5ce591eb50ac3f6fdfd532671e4a05c6eb8341",
+      "modified_from_upstream": true,
+      "change": "Optional retained-input binding and weak service/progress hooks; default runtime API preserved."
     },
     {
       "source": "csrc/software/ai_runtime.h",
       "destination": "csrc/software/ai_runtime.h",
       "upstream_sha256": "2b400e9bbdf6b3122878a3f2b5b20e133caad109c75afa6541351364e1f9f929",
-      "ported_sha256": "2b400e9bbdf6b3122878a3f2b5b20e133caad109c75afa6541351364e1f9f929",
-      "modified_from_upstream": false
+      "ported_sha256": "a768bb7d1f3f5ba563534636bc8020d6cccf453076a0c6b06a10a84e07527605",
+      "modified_from_upstream": true,
+      "change": "Optional retained-input binding and weak service/progress hooks; default runtime API preserved."
     },
     {
       "source": "csrc/software/ai_task_runner.c",

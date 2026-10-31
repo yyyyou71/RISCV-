@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "rk_fspi.h"
 #include "comm_protocol.h"
+#include "network_status.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -77,6 +78,7 @@ static int event(const uint8_t *p){
  if(kind==SPI_TERM_LOG){fwrite(p+16,1,len,stdout);fflush(stdout);}
  else if(kind==SPI_TERM_VIDEO){if(print_video(p+16,len,0))return -1;}
  else if(kind==SPI_TERM_AI){if(print_ai(p+16,len,0))return -1;}
+ else if(kind==SPI_TERM_NETWORK){if(network_print(p+16,len,0))return -1;}
  else if(kind==SPI_TERM_READY){
   if(len!=24 || comm_u32(p+16)!=SPI_TERM_ABI || comm_u32(p+20)!=SPI_TERM_FRAME)return fail(EPROTO);
  }else if(kind==SPI_TERM_RESPONSE){fprintf(stderr,"Previous command response sequence=%u received; no command is replayed.\n",comm_u32(p+4));}
@@ -96,6 +98,7 @@ int main(int argc,char **argv){
  else if(argc==3 && !strcmp(argv[2],"video-retry"))operation=COMM_VIDEO_RETRY;
  else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
  else if(argc==3 && !strcmp(argv[2],"ai-status"))operation=COMM_AI_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"network-status"))operation=COMM_NETWORK_STATUS;
  else if(argc==5 && !strcmp(argv[2],"set") && !number(argv[3],&a) && a<COMM_PARAMS && !number(argv[4],&b)){
   operation=COMM_SET_PARAM;payload=8;comm_put32(tx+16,a);comm_put32(tx+20,b);
  }else if(argc==4 && !strcmp(argv[2],"get") && !number(argv[3],&a) && a<COMM_PARAMS){operation=COMM_GET_PARAM;payload=4;comm_put32(tx+16,a);}
@@ -143,7 +146,9 @@ int main(int argc,char **argv){
  if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
  a=comm_u32(rx+16);
  if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
- if(operation==COMM_AI_STATUS){
+ if(operation==COMM_NETWORK_STATUS){
+  if(network_print(rx+24,payload-8,1))goto io_error;
+ }else if(operation==COMM_AI_STATUS){
   if(print_ai(rx+24,payload-8,1))goto io_error;
  }else if(operation>=COMM_VIDEO_STATUS && operation<=COMM_VIDEO_RELEASE){
   if(print_video(rx+24,payload-8,1))goto io_error;
@@ -158,5 +163,5 @@ int main(int argc,char **argv){
  rc=0;goto done;
 io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
 done:rk_fspi_close(&spi);return rc;
-usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|network-status|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

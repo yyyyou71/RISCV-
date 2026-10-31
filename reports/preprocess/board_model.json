@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "bytes": 13372720,
+  "fnv1a32": "33f1edcd",
+  "sha256": "f60ca150267c99039ce4eab851ebd1ca19a64716e239663e88ed309b00d2d956",
+  "model_address": 65536,
+  "model_sha256": "aa311cdf094592b3692b5d36b24deed7d66d80f0d6343f1c8cfcddf7a18a9589",
+  "tasks": 99,
+  "postprocess_address": 20480,
+  "head_pairs": 3,
+  "head_tensors": 6,
+  "max_detections": 300,
+  "threshold_q16": 16384,
+  "live_input_address": 66060288,
+  "inference_run": false,
+  "note": "Upload the entire file at logical DDR offset 0; original input is rebound at runtime."
+}

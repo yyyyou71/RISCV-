@@ -84,11 +84,19 @@ def main():
             sources.append(ROOT / "firmware" / ("rk_spi_comm.c" if args.application == "video_diagnostic" else "rk_comm.c"))
             options += ["-Wall", "-Wextra", "-Werror"]
         if args.application == "video_diagnostic":
-            sources.append(ROOT / "firmware/ai_first_layer.c")
+            sources += [ROOT / "firmware/ai_first_layer.c", ROOT / "firmware/ai_network.c",
+                        ROOT / "csrc/software/ai_runtime.c", ROOT / "csrc/software/ai_postprocess.c"]
+            options += ["-DAI_DDR_BYTES=0x04000000u", "-fstack-usage"]
+            linker = ROOT / "firmware/ai_link.ld"
     libgcc = subprocess.check_output([args.prefix + "gcc", "-march=rv32i", "-mabi=ilp32",
                                      "-print-libgcc-file-name"], text=True).strip()
     run([args.prefix + "gcc", *flags, *options, "-T", linker,
          "-Wl,-Map=" + str(output / (args.application + ".map")), "-o", elf, *sources, libgcc])
+    if args.application == "video_diagnostic":
+        for source in sources:
+            stack_file=ROOT/(source.stem+".su")
+            if stack_file.exists():
+                stack_file.replace(output/stack_file.name)
     run([args.prefix + "size", elf])
     disassembly = subprocess.check_output([args.prefix + "objdump", "-d", str(elf)], text=True)
     (output / "firmware.dis").write_text(disassembly)
@@ -122,7 +130,8 @@ def main():
         dependencies += [ROOT / "firmware/preprocess_capture.h"]
     if args.application == "video_diagnostic":
         dependencies += [ROOT / "firmware" / name for name in
-                         ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h")]
+                         ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h", "ai_network.h")]
+        dependencies += [ROOT / "csrc/software" / name for name in ("ai_runtime.h", "ai_postprocess.h")]
     if args.application == "coremark":
         dependencies += [ROOT / "csrc/coremark_port/platform.h", ROOT / "csrc/coremark_port/core_portme.h"]
     manifest = {"application": args.application, "mode": args.mode, "iterations": args.iterations,

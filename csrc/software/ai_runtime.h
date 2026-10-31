@@ -10,7 +10,9 @@
 #define AI_RUN_MAGIC 0x31524941u   /* "AIR1" */
 #define AI_BOOT_ADDR 0x1000u
 #define AI_MODEL_MIN 0x10000u     /* 前 64 KiB 留给运行请求、列表和报告 */
+#ifndef AI_DDR_BYTES
 #define AI_DDR_BYTES 0x20000000u
+#endif
 #define AI_OP_CONV2D 1u
 #define AI_OP_ADD 2u
 #define AI_OP_CONCAT 3u
@@ -51,4 +53,15 @@ _Static_assert(sizeof(ai_run_result)==32,"result ABI size");
 uint32_t ai_ddr_read(uint32_t address,uint32_t *words,uint32_t bytes);
 uint32_t ai_ddr_write(uint32_t address,const uint32_t *words,uint32_t bytes);
 uint32_t ai_run_model(uint32_t header_address,ai_run_result *result);
+/* Board integration: bind exact model-input references to a retained external
+ * tensor. It must be outside the model arena and have exactly input_bytes.
+ * Other pointers and the model stored in DDR are unchanged.
+ */
+uint32_t ai_run_model_input(uint32_t header_address,uint32_t input_address,
+                            uint32_t input_bytes,ai_run_result *result);
+/* Default weak hooks are empty. Board firmware uses them for read-only SPI
+ * service/progress during long layers; hooks must not take the DDR window. */
+void ai_runtime_poll(void);
+int ai_runtime_abort_requested(void);
+void ai_runtime_progress(uint32_t task,uint32_t total,const ai_run_result *result);
 #endif
