@@ -1,0 +1,13 @@
+/build/
+/compile/
+/synthesize/
+/device_map/
+/place_route/
+/generate_bitstream/
+/report_timing/
+/report_power/
+/constraint_check/
+/impl.tcl
+*.pds.bak
+*.pds.lock
+/multiseed_summary.csv

@@ -4,6 +4,7 @@ module board_top #(
     parameter integer RESET_HOLD_CYCLES = 250000,
     parameter integer IIC_BOOT_TEST = 0,
     parameter integer ENABLE_DUAL = 0,
+    parameter integer ENABLE_FSPI = 0,
     parameter integer ENABLE_DDR = 0,ENABLE_AI = 0,ENABLE_FRAME_CONTROL = 0,
     parameter integer ENABLE_PREPROCESS = 0,
     parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
@@ -13,6 +14,8 @@ module board_top #(
     output wire [31:0] tensor_wdata,
     input wire [31:0] tensor_rdata,
     input wire sys_clk,
+    input wire spi_clk, spi_cs,
+    inout wire [3:0] spi_data,
     input wire key0_n,
     output wire uart_tx,
     output wire led0,
@@ -75,7 +78,7 @@ module board_top #(
         .rst_n(rst_n)
     );
 
-    soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE), .ENABLE_DUAL(ENABLE_DUAL),
+    soc #(.CLK_FREQ(CLOCK_HZ), .BAUD_RATE(BAUD_RATE), .ENABLE_DUAL(ENABLE_DUAL), .ENABLE_FSPI(ENABLE_FSPI),
         .ENABLE_DDR(ENABLE_DDR),.ENABLE_AI(ENABLE_AI),.ENABLE_FRAME_CONTROL(ENABLE_FRAME_CONTROL),
         .ENABLE_PREPROCESS(ENABLE_PREPROCESS),
         .DDR_LIMIT_BYTES(DDR_LIMIT_BYTES)) u_soc (
@@ -84,6 +87,7 @@ module board_top #(
         .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .rst_n(rst_n),
         .timer_irq(1'b0),
+        .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data),
         // Optional engines and external preprocessing MMIO follow board parameters.
         .core_clk(core_clk), .ddr_init_done(ddr_init_done),
         .frame_available(frame_available),.frame_ids(frame_ids),.frame_wr_slot(frame_wr_slot),

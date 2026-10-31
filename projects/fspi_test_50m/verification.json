@@ -1,0 +1,28 @@
+{
+  "pds": "2022.2-SP6.4",
+  "spi_clock_hz": 50000000,
+  "system_clock_hz": 25000000,
+  "implementation_passed": true,
+  "simulation_passed": true,
+  "host_mock_tests_passed": true,
+  "hardware_tested": false,
+  "spi_setup_wns_ns": 0.062,
+  "spi_hold_fast_ns": 0.101,
+  "io_delays_are_assumptions": true,
+  "bitstream": "build/generate_bitstream/fspi_loopback_top.sbit",
+  "bitstream_sha256": "a211ff4f46363ef43d43bc91e4f3c0484140963c49797c67b5ad38f5789d7fbb",
+  "sources": {
+    "board_reset.v": "092dbb8f27228368c32ceaf9807a592a50433c73dac3d07f4ecad60091cf04b4",
+    "fspi_loopback_top.v": "d6aface69d8a1a49215efa0ee2a00ffdec0b8691c7d31bbd37a87f61bd031b49",
+    "fspi_sck_slave.v": "567201aaaa797ced1fe5eb71c2669f458484babbe21871db4ed3d6442a294f2e",
+    "fspi_test.pds": "c35e51bed015b009e50b919ad7ca6596708952465412a20db38f960cece93f49",
+    "implement.tcl": "d110b03e253b7ae34f3664142780b99153683e092179fa1dac862889b8e77227",
+    "pins.fdc": "e450a65ac3ce1baad3e42091622fba8176608f913e599785cb084bf6ce6a35a1",
+    "TB_fspi_loopback.v": "9d7e7bd071e4a70cc0c0fe3225d0270003ea823ff1fcee02072d96de65a403dc",
+    "timing.fdc": "64112afc58a222d8ff610b8bb0ec3241a833df4421bea476819844833a2f3c68",
+    "rk_tool/rk_fspi.c": "70685e78cebd284e7e07ef1a73cd963a08bfd4a888d848f2e99d15dd2573d33f",
+    "rk_tool/rk_fspi.h": "d27dfcad2f5013e0d91419c0ef069c8facd35b714ebb355921510fa786dab3df",
+    "rk_tool/rk_fspi_demo.c": "3522e1e143de5ccf41167c61b386168d9a54be160a0ada179927ab1b29ba54c6",
+    "rk_tool/test_fspi.c": "ed10f4fd142ca0d4cefabce7a613ba98df056ffedc39f66b0a77783f6d6feefe"
+  }
+}

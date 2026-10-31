@@ -235,7 +235,7 @@ module frame_ring_ddr3 #(
         .dbg_sof_seen     ( dbg_sof_seen      )
     );
 
-    // ======================== 读控制器: DDR3 -> FIFO (含 ddr_2_fifo, 自治) ========================
+    // ======================== 读控制器: DDR3 -> FIFO (含 ddr_2_fifo, 自治) ====================F====
     generate if(ENABLE_PCIE_READER)begin: g_reader
     ddr3_read_ctrl #(
         .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),

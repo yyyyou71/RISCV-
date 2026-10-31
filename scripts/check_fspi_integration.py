@@ -19,8 +19,12 @@ def run(name,tb,defines=()):
 s=(root/'sim/TB_fspi.v').read_text().replace('TB_fspi','TB_fspi_video')
 s=s.replace('.ENABLE_FSPI(1)', '.ENABLE_FSPI(1),.ENABLE_VIDEO(1),.ENABLE_DDR(1)')
 s=s.replace("32'h303","32'h307")
-# Verify video address writes cannot change the FSPI index/data.
-s=s.replace("wr(32'h30700,0);wr(32'h30704,8'h5a);","wr(32'h30700,0);wr(32'h30704,8'h5a);wr(32'h30300,0);wr(32'h30304,8'hff);check(32'h30704,255,8'h5a);")
+# Verify writes to the video aperture cannot change the FSPI index.
+# RX and TX now use independent buffers, so DATA write/read is not loopback.
+s=s.replace("check(32'h3071c,32'hffffffff,32'h46535032);",
+    "check(32'h3071c,32'hffffffff,32'h46535032);"
+    "wr(32'h30700,7);wr(32'h30300,0);wr(32'h30304,255);"
+    "check(32'h30700,2047,7);wr(32'h30700,0);")
 p=out/'TB_fspi_video.v';p.write_text(s)
 defines=['-DPROG_FILE="firmware/rom.hex"','-DDATA_FILE="firmware/ram_bytes.hex"']
 run('TB_fspi_video',p,defines)

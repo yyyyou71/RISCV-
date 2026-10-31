@@ -1,0 +1,12 @@
+# 25 MHz board oscillator; FSPI SCK is sampled as asynchronous data.
+create_clock -name {sys_clk} -period {40.000} -waveform {0.000 20.000} [get_ports {sys_clk}]
+set_clock_uncertainty {0.200} [get_clocks {sys_clk}]
+set_false_path -from [get_ports {key0_n}]
+set_false_path -to [get_ports {led0 led1}]
+# Cut only external-to-sampling-register paths; internal synchronizer paths stay timed.
+set_false_path -from [get_ports {spi_clk}] -to [get_cells -hierarchical {*u_fspi*sck_sync*}]
+set_false_path -from [get_ports {spi_cs}] -to [get_cells -hierarchical {*u_fspi*cs_sync* *cs_sample*}]
+set_false_path -from [get_ports {spi_data[*]}] -to [get_cells -hierarchical {*u_fspi*dq_meta*}]
+# Conservative output budget within the 500 ns half-cycle at 1 MHz.
+set_max_delay 100.000 -from [get_clocks {sys_clk}] -to [get_ports {spi_data[*]}]
+set_max_delay 100.000 -from [get_ports {spi_cs}] -to [get_ports {spi_data[*]}]

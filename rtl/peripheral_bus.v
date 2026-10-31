@@ -61,8 +61,8 @@ module peripheral_bus #(
 
     // Preserve video firmware addresses when video and FSPI are both enabled.
     localparam [31:0] FSPI_BASE = ENABLE_VIDEO ? 32'h00030700 : 32'h00030300;
-    wire fspi_wr_hit = dev_addr_wr >= FSPI_BASE && dev_addr_wr <= FSPI_BASE+12 && dev_addr_wr[1:0]==0;
-    wire fspi_rd_hit = dev_addr_rd >= FSPI_BASE && dev_addr_rd <= FSPI_BASE+12 && dev_addr_rd[1:0]==0;
+    wire fspi_wr_hit = dev_addr_wr >= FSPI_BASE && dev_addr_wr <= FSPI_BASE+28 && dev_addr_wr[1:0]==0;
+    wire fspi_rd_hit = dev_addr_rd >= FSPI_BASE && dev_addr_rd <= FSPI_BASE+28 && dev_addr_rd[1:0]==0;
     wire word_access;
     assign tensor_we=ENABLE_PREPROCESS && dev_we && word_access && dev_addr_wr[31:8]==24'h000308;
     assign tensor_addr_wr=dev_addr_wr[7:0];assign tensor_addr_rd=dev_addr_rd[7:0];

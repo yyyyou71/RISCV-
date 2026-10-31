@@ -2,7 +2,7 @@
 #define RK_FSPI_H
 #include <stddef.h>
 #include <stdint.h>
-/* Initialize fd=-1. Only standard Linux spidev with quad support is supported. */
+/* Initialize fd=-1. SMDT vendor driver API: payload-only, mode 3, directional quad. */
 typedef struct { int fd; uint32_t speed_hz; } rk_fspi;
 int rk_fspi_open(rk_fspi *dev, const char *path, uint32_t speed_hz);
 void rk_fspi_close(rk_fspi *dev);

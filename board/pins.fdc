@@ -593,3 +593,37 @@ define_attribute {p:iic_scl} {PAP_IO_LOC} {P19}
 define_attribute {p:iic_scl} {PAP_IO_VCCIO} {3.3}
 define_attribute {p:iic_scl} {PAP_IO_STANDARD} {LVCMOS33}
 define_attribute {p:iic_scl} {PAP_IO_NONE} {TRUE}
+
+# RK FSPI: pins match the successful 50MHz standalone test.
+define_attribute {p:spi_data[3]} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:spi_data[3]} {PAP_IO_LOC} {L18}
+define_attribute {p:spi_data[3]} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_data[3]} {PAP_IO_STANDARD} {LVCMOS18}
+define_attribute {p:spi_data[3]} {PAP_IO_DRIVE} {12}
+define_attribute {p:spi_data[3]} {PAP_IO_SLEW} {FAST}
+define_attribute {p:spi_data[2]} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:spi_data[2]} {PAP_IO_LOC} {M18}
+define_attribute {p:spi_data[2]} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_data[2]} {PAP_IO_STANDARD} {LVCMOS18}
+define_attribute {p:spi_data[2]} {PAP_IO_DRIVE} {12}
+define_attribute {p:spi_data[2]} {PAP_IO_SLEW} {FAST}
+define_attribute {p:spi_data[1]} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:spi_data[1]} {PAP_IO_LOC} {M22}
+define_attribute {p:spi_data[1]} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_data[1]} {PAP_IO_STANDARD} {LVCMOS18}
+define_attribute {p:spi_data[1]} {PAP_IO_DRIVE} {12}
+define_attribute {p:spi_data[1]} {PAP_IO_SLEW} {FAST}
+define_attribute {p:spi_data[0]} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:spi_data[0]} {PAP_IO_LOC} {N22}
+define_attribute {p:spi_data[0]} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_data[0]} {PAP_IO_STANDARD} {LVCMOS18}
+define_attribute {p:spi_data[0]} {PAP_IO_DRIVE} {12}
+define_attribute {p:spi_data[0]} {PAP_IO_SLEW} {FAST}
+define_attribute {p:spi_clk} {PAP_IO_DIRECTION} {INPUT}
+define_attribute {p:spi_clk} {PAP_IO_LOC} {L19}
+define_attribute {p:spi_clk} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_clk} {PAP_IO_STANDARD} {LVCMOS18}
+define_attribute {p:spi_cs} {PAP_IO_DIRECTION} {INPUT}
+define_attribute {p:spi_cs} {PAP_IO_LOC} {L20}
+define_attribute {p:spi_cs} {PAP_IO_VCCIO} {1.8}
+define_attribute {p:spi_cs} {PAP_IO_STANDARD} {LVCMOS18}

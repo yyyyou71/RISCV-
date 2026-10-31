@@ -1,0 +1,15 @@
+# 25MHz board clock for reset/LEDs, 50MHz external SCK for the protocol.
+create_clock -name {sys_clk} -period {40.000} -waveform {0.000 20.000} [get_ports {sys_clk}]
+create_clock -name {spi_clk} -period {20.000} -waveform {0.000 10.000} [get_ports {spi_clk}]
+set_clock_uncertainty {0.200} [get_clocks {sys_clk spi_clk}]
+# Engineering budgets, not measured board/RK timing: falling-edge data launch,
+# <=5ns input flight/launch budget, >=0ns minimum, 3ns receiver setup budget.
+set_input_delay -clock [get_clocks {spi_clk}] -clock_fall -max 5.000 [get_ports {spi_data[*]}]
+set_input_delay -clock [get_clocks {spi_clk}] -clock_fall -min 0.000 [get_ports {spi_data[*]}]
+set_output_delay -clock [get_clocks {spi_clk}] -max 3.000 [get_ports {spi_data[*]}]
+set_output_delay -clock [get_clocks {spi_clk}] -min 0.000 [get_ports {spi_data[*]}]
+# CS/reset assertions are asynchronous. Host must release CS with SCK stopped,
+# and allow >=1us between frames/reset release and the first command clock.
+set_false_path -from [get_ports {key0_n spi_cs}]
+set_false_path -to [get_ports {led0 led1}]
+set_false_path -from [get_clocks {sys_clk}] -to [get_clocks {spi_clk}]

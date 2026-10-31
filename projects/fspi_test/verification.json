@@ -1,0 +1,24 @@
+{
+  "bitstream": "build/generate_bitstream/fspi_loopback_top.sbit",
+  "sha256": "cbe31c7d148a2d9a78ede0076bb8a09ea26722297eaa199a8cb21bbfca6fc8d7",
+  "pds": "2022.2-SP6.4",
+  "implementation_passed": true,
+  "simulation_passed": true,
+  "hardware_tested": false,
+  "preexisting_files_changed_externally": [
+    "rv32I.pds"
+  ],
+  "system_clock_hz": 25000000,
+  "max_test_spi_hz": 1000000,
+  "external_io_timing_verified": false,
+  "files": {
+    "board_reset.v": "092dbb8f27228368c32ceaf9807a592a50433c73dac3d07f4ecad60091cf04b4",
+    "fspi_loopback_top.v": "e8c8da01c8f3e878102f375e7cd3217cf0611a05db1de672b637e2ea533505e9",
+    "fspi_test.pds": "ddbbe95374fec2d0d25da8297a38e1e2f315b3b102eac7deea476192e30597c4",
+    "implement.tcl": "416496cd5b023f3ea1fc6f0dcee7e83b8ade99659193d27ef33b4934958771d8",
+    "pins.fdc": "e450a65ac3ce1baad3e42091622fba8176608f913e599785cb084bf6ce6a35a1",
+    "rk_fspi_adapter.v": "f920b778504cc06c7979f92ca65764e0a792b747030ff3095b4b6e0a32262d8a",
+    "TB_fspi_loopback.v": "a02f1589ab7db416a817612535d0754e24ecd11c997e591713991d0df95ea8bd",
+    "timing.fdc": "5c1a58da5fd4f605b2c4de3235c4707d7fcb009bae32eaf8d016d888bc017fcf"
+  }
+}

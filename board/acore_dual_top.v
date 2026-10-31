@@ -1,11 +1,14 @@
 // CPU + proven HDMI/PCIe platform, sharing one physical DDR3 controller.
 module acore_dual_top #(
     parameter integer ENABLE_AI=0,
+    parameter integer ENABLE_FSPI=1,
     parameter integer STANDALONE_CAPTURE=1,
     parameter integer RESET_HOLD_CYCLES=250000
 )(
 
     input wire sys_clk,key0_n,iic_scl,
+    input wire spi_clk,spi_cs,
+    inout wire [3:0] spi_data,
     inout wire iic_sda,
     output wire led0,led1,
     input wire ref_clk_p,ref_clk_n,perst_n,
@@ -50,11 +53,12 @@ module acore_dual_top #(
     assign led0=ready_sync[1] ^ (STANDALONE_CAPTURE ? cpu_led0:1'b0);
     assign led1=cpu_led1|fault_sync[1];
     board_top #(.ENABLE_DUAL(1),.ENABLE_DDR(1),.ENABLE_AI(ENABLE_AI),
-        .ENABLE_FRAME_CONTROL(1),.ENABLE_PREPROCESS(1),.RESET_HOLD_CYCLES(RESET_HOLD_CYCLES),
+        .ENABLE_FSPI(ENABLE_FSPI),.ENABLE_FRAME_CONTROL(1),.ENABLE_PREPROCESS(1),.RESET_HOLD_CYCLES(RESET_HOLD_CYCLES),
         .DDR_LIMIT_BYTES(32'h04000000)) u_board (
         .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
         .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .sys_clk(cpu_clk),
+        .spi_clk(spi_clk),.spi_cs(spi_cs),.spi_data(spi_data),
         .key0_n(key0_n&&system_rst_n),
         .uart_tx(),
         .led0(cpu_led0),

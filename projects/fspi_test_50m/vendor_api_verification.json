@@ -1,0 +1,15 @@
+{
+  "vendor_source": "D:\\Projects\\Maximus-project\\fpga\\rv32\\smdt_fpga_fspi_demo\\src\\smdt_spi_rw.c",
+  "vendor_sha256": "12eb1a7f67d2760f661ecacf1f12f4ec73623e26f9d260337c1c501b103c119e",
+  "tool_version": "FSPI_TOOL_SMDT_V3",
+  "host_mock_passed": true,
+  "mode3_behavior_sim_passed": true,
+  "fpga_bitstream_unchanged": true,
+  "hardware_tested": false,
+  "sources": {
+    "rk_fspi.c": "86aae5a40145eb1d815e684db525770afb6f872c93c5501b165f60d7b03f4075",
+    "rk_fspi.h": "65176d73f579e37c111a81266117d4321cb39a8dcd4fbfc7816b4ff6e75cdcad",
+    "rk_fspi_demo.c": "e91f2f597dbed7532a158443c0c5a2c0d0fcba598b12f1efa72da92b6ed669dd",
+    "test_fspi.c": "29a9ace70f89ccf55d1017ae00aa0a5456a7fabbaa647f2648cf2598a2eaa1fa"
+  }
+}
