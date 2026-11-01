@@ -1,6 +1,9 @@
 `default_nettype none
-// Observe actual source geometry; do not infer HDMI mode from an expected label.
-module video_timing_monitor (
+// Report actual source geometry; one missing tail pixel is padded downstream.
+module video_timing_monitor #(
+    parameter integer MIN_LINE_PIXELS=1919,
+    parameter integer MAX_LINE_PIXELS=1920
+) (
     input wire pixel_clk,clk,rst_n,vs,de,
     output reg shape_ok,
     output reg [31:0] shape,period_ticks
@@ -23,13 +26,14 @@ module video_timing_monitor (
             old_vs<=vs;old_de<=de;
             if(de) line_pixels<=line_pixels+1'b1;
             if(old_de && !de) begin
-                if(line_pixels!=1920)bad_line<=1;
+                if(line_pixels<MIN_LINE_PIXELS || line_pixels>MAX_LINE_PIXELS)bad_line<=1;
                 if(line_pixels>max_pixels)max_pixels<=line_pixels;
                 line_pixels<=0;lines<=lines+1'b1;
             end
             if(vs && !old_vs) begin
                 pixel_shape<={lines,max_pixels};
-                shape_ok<=lines==1080 && max_pixels==1920 && !bad_line;
+                shape_ok<=lines==1080 && max_pixels>=MIN_LINE_PIXELS &&
+                    max_pixels<=MAX_LINE_PIXELS && !bad_line;
                 bad_line<=0;
                 toggle<=!toggle;line_pixels<=0;max_pixels<=0;lines<=0;
             end

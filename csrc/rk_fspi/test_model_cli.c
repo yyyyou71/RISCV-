@@ -1,6 +1,27 @@
+#ifdef TEST_RK_CONTROL
+#include "rk_control.c"
+static int model_main(int argc,char **argv){
+    (void)argc;
+    uint32_t v[COMM_NETWORK_WORDS];uint8_t payload[4],reply[SPI_TERM_PAYLOAD];unsigned bytes;
+    if(rk_control_open(argv[1]))return 1;
+    int result;
+    if(!strcmp(argv[2],"load") || !strcmp(argv[2],"resume"))result=rk_control_upload(argv[3],!strcmp(argv[2],"resume"));
+    else{
+        result=rk_control_status(COMM_NETWORK_STATUS,COMM_NETWORK_ABI,v,COMM_NETWORK_WORDS);
+        if(!result && !strcmp(argv[2],"results"))result=rk_control_results(v[10],v[9]);
+        else if(!result && (!strcmp(argv[2],"infer") || !strcmp(argv[2],"abort"))){
+            comm_put32(payload,v[3]);
+            result=rk_control_exchange(!strcmp(argv[2],"infer")?COMM_NETWORK_RUN:COMM_MODEL_ABORT,
+                payload,4,reply,sizeof(reply),&bytes);
+        }
+    }
+    rk_control_close();return result?1:0;
+}
+#else
 #define main model_main
 #include "rk_model_cli.c"
 #undef main
+#endif
 #include <assert.h>
 static uint32_t values[COMM_NETWORK_WORDS],rolling;
 static uint8_t answer[SPI_TERM_FRAME];

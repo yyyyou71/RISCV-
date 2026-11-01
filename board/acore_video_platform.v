@@ -270,7 +270,9 @@ wire ddr_core_clk;
 //   新架构: 所有颜色识别下沉到 DDR3 之后 (ddr3_color_mask), 故写侧存原始彩色帧。
 localparam USE_LPDETECTION = 0;
 
-wire [15:0] raw_hdmi_pixel = {r_in[7:3], g_in[7:2], b_in[7:3]};  // 原始 HDMI RGB565
+wire capture_vs,capture_de;
+wire [23:0] capture_rgb;
+wire [15:0] raw_hdmi_pixel = {capture_rgb[23:19], capture_rgb[15:10], capture_rgb[7:3]};
 wire        ring_vs      = USE_LPDETECTION ? hdmi_vs    : vs_in;
 wire        ring_de      = USE_LPDETECTION ? hdmi_de    : de_in;
 wire [15:0] ring_wr_data = USE_LPDETECTION ? hdmi_pixel : raw_hdmi_pixel;
@@ -462,12 +464,17 @@ assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=application_rst_n;
 video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(application_rst_n),
     .vs(vs_in),.de(de_in),.shape_ok(input_shape_ok),.shape(measured_shape),.period_ticks(measured_period));
+// Keep measured_shape raw (1919 remains visible to SPI diagnostics). Only the
+// shared capture stream is normalized, before the RGB565 / RGB888 paths split.
+hdmi_line_pad u_line_pad (.clk(pixclk_in),.rst_n(application_rst_n),
+    .vs(vs_in),.de(de_in),.rgb({r_in,g_in,b_in}),
+    .out_vs(capture_vs),.out_de(capture_de),.out_rgb(capture_rgb));
 hdmi_tensor_capture u_preprocess (
     .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(application_rst_n),
     .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
     .dev_we(tensor_we&&!tensor_addr_wr[8]),.dev_addr_wr(tensor_addr_wr[7:0]),.dev_addr_rd(tensor_addr_rd[7:0]),
     .dev_wdata(tensor_wdata),.read_data(capture_rdata),
-    .vs(vs_in),.de(de_in),.rgb({r_in,g_in,b_in}),.source_ready(source_ready&&input_shape_ok),
+    .vs(capture_vs),.de(capture_de),.rgb(capture_rgb),.source_ready(source_ready&&input_shape_ok),
     .source_next_id(source_next_id),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
     .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
     .raw_end_ok(raw_end_ok),.raw_end_id(raw_end_id),.raw_end_slot(raw_end_slot),
@@ -514,8 +521,8 @@ frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
   .wr_clk         (hdmi_pixclk),
   .wr_data        (raw_hdmi_pixel),     // 16bit 像素 (USE_LPDETECTION 选择源)
   .wr_en          (1'b0),             // detector 以 de 自门控, 未用
-  .vs             (vs_in),
-  .de             (de_in && input_shape_ok),
+  .vs             (capture_vs),
+  .de             (capture_de && input_shape_ok),
   .wr_almost_full (),                 // 未用(写侧自流控)
 
   // 读侧 (pclk_div2)

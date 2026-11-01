@@ -25,7 +25,7 @@ static const char *video_state(uint32_t s){
  return s<sizeof(names)/sizeof(names[0])?names[s]:"UNKNOWN";
 }
 static const char *video_error(uint32_t s){
- static const char *const names[]={"none","DDR not ready/fault","no 1920x1080 measurement within 10 seconds","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
+ static const char *const names[]={"none","DDR not ready/fault","no 1080p input (1919/1920 pixels per line) within 10 seconds","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
  return s<sizeof(names)/sizeof(names[0])?names[s]:"unknown stage";
 }
 static int print_ai(const uint8_t *p,unsigned size,int detailed){

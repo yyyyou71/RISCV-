@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module TB_rgb888_pool96;
+module TB_rgb888_pool96 #(parameter integer PAD_INPUT=0);
     reg clk=0,rst_n=0,start=0,vs=0,de=0;
     always #3 clk=~clk;
     reg [23:0] rgb=0;
@@ -9,13 +9,21 @@ module TB_rgb888_pool96;
     wire [31:0] id;
     wire [127:0] data;
     wire [15:0] beats;
-    integer cycles=0,got=0,starts=0,pattern=0,x,y;
+    integer cycles=0,got=0,starts=0,pattern=0,x,y,source_width=1920;
     reg finished=0,held=0,held_last=0;
     reg [127:0] held_data;
     reg [127:0] expected[0:18431];
     reg [2047:0] golden_file;
     wire out_ready=cycles%29<23;
-    rgb888_pool96 dut(.clk(clk),.rst_n(rst_n),.start(start),.cancel(1'b0),.vs(vs),.de(de),.rgb(rgb),
+    wire pool_vs,pool_de;
+    wire [23:0] pool_rgb;
+    generate if(PAD_INPUT)begin:g_pad
+        hdmi_line_pad u_pad(.clk(clk),.rst_n(rst_n),.vs(vs),.de(de),.rgb(rgb),
+            .out_vs(pool_vs),.out_de(pool_de),.out_rgb(pool_rgb));
+    end else begin:g_direct
+        assign pool_vs=vs;assign pool_de=de;assign pool_rgb=rgb;
+    end endgenerate
+    rgb888_pool96 dut(.clk(clk),.rst_n(rst_n),.start(start),.cancel(1'b0),.vs(pool_vs),.de(pool_de),.rgb(pool_rgb),
         .source_frame_id(source_id),.ready(ready),.busy(busy),.frame_start(frame_start),
         .done(done),.error(error),.error_code(code),.result_frame_id(id),
         .out_valid(valid),.out_ready(out_ready),.out_data(data),.out_last(last),.out_beats(beats));
@@ -60,17 +68,18 @@ module TB_rgb888_pool96;
     end endtask
     initial begin
         if(!$value$plusargs("pattern=%d",pattern))pattern=0;
+        if(!$value$plusargs("source_width=%d",source_width))source_width=1920;
         if(!$value$plusargs("golden=%s",golden_file))$fatal(1,"missing golden file");
         $readmemh(golden_file,expected);source_id=32'hf0000000+32'(pattern);
         repeat(5)@(negedge clk);rst_n=1;
         @(negedge clk);start=1;@(negedge clk);start=0;mark_frame();
         for(y=0;y<1080;y=y+1)begin
-            for(x=0;x<1920;x=x+1)begin @(negedge clk);de=1;rgb=pixel(pattern,x,y);end
+            for(x=0;x<source_width;x=x+1)begin @(negedge clk);de=1;rgb=pixel(pattern,x,y);end
             @(negedge clk);de=0;repeat(4+y%3)@(negedge clk);
         end
         mark_frame();wait(finished);repeat(4)@(negedge clk);
         if(!ready||valid)$fatal(1,"stream did not return idle");
-        $display("PASS pool96: pattern=%0d 1920x1080 -> 18432 golden HWC16 beats, stalls, frame_id",pattern);$finish;
+        $display("PASS pool96: pattern=%0d source=%0dx1080 pad=%0d -> 18432 golden HWC16 beats, stalls, frame_id",pattern,source_width,PAD_INPUT);$finish;
     end
     initial begin #50000000;$fatal(1,"full frame timeout");end
 endmodule

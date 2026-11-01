@@ -1,0 +1,30 @@
+[
+  {
+    "source": "C:\\Users\\yyyyou71\\Desktop\\yolo-i8\\pcie_dma.c",
+    "destination": "csrc/rk_fspi/video/pcie_dma.c",
+    "source_sha256": "38ce79a6f0b7840bb958b54038efb8d0eb2a6b2c0656819f8d07869cded14aed",
+    "current_sha256": "3b2dd0379b8342476e5747acb5978f55a2e9fcd83738fc715e2db0475976a354",
+    "adaptation": "Preserve BAR1/CMA/WC/DMA implementation; validate actual BAR/config, omit function reset, control DMA reset, add barriers/bounds and portable build fixes."
+  },
+  {
+    "source": "C:\\Users\\yyyyou71\\Desktop\\yolo-i8\\pcie_dma.h",
+    "destination": "csrc/rk_fspi/video/pcie_dma.h",
+    "source_sha256": "bc55f52cfb43a1d7bb06e62dcaac8a7b24d13d72c8578448f4798ee08b088890",
+    "current_sha256": "e02e970d1ab3d0e04c4e0ca94386bbbaac4a1a8358e6d49965e2b3f96b8e7fce",
+    "adaptation": "Add skip_dma_reset for controlled frame presentation; omit function reset API."
+  },
+  {
+    "source": "C:\\Users\\yyyyou71\\Desktop\\yolo-i8\\display.c",
+    "destination": "csrc/rk_fspi/video/display.c",
+    "source_sha256": "07795f39e619a56973932795d6ea89e6d1109f8c794903a04f63876a65639459",
+    "current_sha256": "2d48ef27df31ae6b53d3c54163048dc7665706993dacc0cfb7d465104223d940",
+    "adaptation": "Preserve SDL2 dlopen/RGB565 display; report PPM save errors and clean compiler warnings."
+  },
+  {
+    "source": "C:\\Users\\yyyyou71\\Desktop\\yolo-i8\\display.h",
+    "destination": "csrc/rk_fspi/video/display.h",
+    "source_sha256": "d82c9c70000cb6c6ea5343f2c195f8cf15039b3accb8171a38e5ddc5607b5007",
+    "current_sha256": "df18bee1e420bcb2bbf5895c2ffc2b638c12e015827c12ace9d9e69e81a5d5a6",
+    "adaptation": "Return PPM save result to the combined application."
+  }
+]

@@ -1,5 +1,35 @@
 # RK 纯 SPI 终端
 
+## SPI + PCIe + RK 桌面窗口
+
+新增单一程序 `rk_video_app`，包含 SPI 模型上传/控制/结果、PCIe 图像接收、SDL2 窗口显示。
+将整个本目录（包含 `video/` 子目录）复制到 RK；在 **RK 桌面终端**中执行：
+
+```sh
+make clean
+make all
+sudo -E ./rk_video_app /dev/spidev4.0 --preview
+```
+
+先验证预览，再将 PC 上 `build/board-ai/board_model.bin` 复制到本目录，执行：
+
+```sh
+sudo -E ./rk_video_app /dev/spidev4.0 --model board_model.bin
+```
+
+该命令先通过 SPI 上传并校验整个模型包，然后循环抓帧、FPGA 推理、打印检测结果、
+PCIe 接收同帧带框 RGB565 图像并显示。推理后才抓下一帧，显示帧率由完整处理周期决定。
+模型必须是 `prepare_board_model.py` 生成的包，含权重、99 个任务和后处理配置，
+不能用 `.rknn` 或原始训练权重替代。
+如模型已经成功加载，使用 `--use-loaded-model`，避免重新上传。
+
+`-E` 保留桌面 `DISPLAY` 等环境变量；普通 SSH/串口终端不一定能打开桌面窗口。
+运行时使用已有 SDL2 动态库，编译无需 SDL2 开发头文件、RKNN 或交叉编译器。
+本仓库在 WSL 上编译的可执行文件用于编译检查，必须在 RK 上重新 `make all`。
+同一时间只运行本程序，不要同时运行旧 `video_output` 或其他 SPI 客户端。
+
+更多参数、诊断和验证边界见 [整合程序说明](../../docs/rk_video_app.md)。
+
 配合根工程 rv32I.pds、固件 firmware/video_diagnostic/ 使用。
 这是 CPU 消息通道，不是 projects 下的独立硬件回环。
 只需复制本目录源码到 RK，不依赖 csrc/rk_iic，也不需要连接 IIC。

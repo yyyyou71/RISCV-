@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "scope": "WSL x86_64 compile and mocked SPI/control/PCIe/display orchestration",
+  "rk_arm_compiled": false,
+  "hardware_tested": false,
+  "command": "make all test",
+  "summaries": [
+    "PASS: SMDT mode3 directional quad, payload-only 2KB, bounds, config/short/error handling, no retry",
+    "PASS: SPI-only ready/command/response, empty polling, terminal logs, diagnostics, checksum, bounds, no command retry",
+    "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+    "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+    "PASS video app: SPI capture/infer/present -> PCIe -> display, no reset after queue, frame/count mismatch rejected"
+  ],
+  "sources": {
+    "csrc/rk_fspi/comm_protocol.h": "cfadf68ec231f9004cf992d35b721847c2492b20fa3ea8d1f108731749625956",
+    "csrc/rk_fspi/fspi_v2.h": "e5b0d7f08981ba508d51efdb432f938d660de8035ed92162b0310f95fe4597b0",
+    "csrc/rk_fspi/network_status.h": "c2714ce85e06a375acdc5916dd512aa963be4aecc2e8880b84b0912eb51dd12d",
+    "csrc/rk_fspi/rk_comm_cli.c": "97b731c0a290b8f5163bf22da0db20fc6fbd8705422d72e6049544999f17a484",
+    "csrc/rk_fspi/rk_control.c": "b744e2c0bdf1d2f16551334c034ea482806ffa9d28d91de50a1e040352a4d807",
+    "csrc/rk_fspi/rk_control.h": "31ade41fa6c67375b6b13be748355bfde151344c4418438a888b5f4ab234a143",
+    "csrc/rk_fspi/rk_fspi.c": "18aac31c664ecbf476011cfe0990e6ba4eebd12ba378299773f24ee5bf03ec78",
+    "csrc/rk_fspi/rk_fspi.h": "8626b2548f899d0f58c15f99f33abd910db211f6a738fbb036c32b2769962e1c",
+    "csrc/rk_fspi/rk_fspi_demo.c": "38a26aef9a83076fea0d8de6066008556ba4663855101229e8edb2ec924976fa",
+    "csrc/rk_fspi/rk_model_cli.c": "c590d79095eeadfe8b4dd4bc8776fdbeefdfe2da125c28d87cb165009dc6fbd0",
+    "csrc/rk_fspi/rk_video_app.c": "e9c32ab13e55bf0749db5230f09e364a012e797d39c931f1efbea8f68e074919",
+    "csrc/rk_fspi/test_comm_cli.c": "1267c1e85e9f0a5039b1040deed366de2ada4e882508f786cadeb890bac5f4b3",
+    "csrc/rk_fspi/test_fspi.c": "aedd86468eefa5f9c0f2b23c4b9836df65d3c4ad8a5220040ad2868feb001c81",
+    "csrc/rk_fspi/test_model_cli.c": "c90fdc707b2e29bcf0c1708720583e5fe4b237710a8df038e279a8f33af4d06b",
+    "csrc/rk_fspi/test_video_app.c": "c895513ecc6b679135ad6acb6644f45817c0ef83f1785884eaa35c4a76fb643b",
+    "csrc/rk_fspi/video/display.c": "2d48ef27df31ae6b53d3c54163048dc7665706993dacc0cfb7d465104223d940",
+    "csrc/rk_fspi/video/display.h": "df18bee1e420bcb2bbf5895c2ffc2b638c12e015827c12ace9d9e69e81a5d5a6",
+    "csrc/rk_fspi/video/pcie_dma.c": "3b2dd0379b8342476e5747acb5978f55a2e9fcd83738fc715e2db0475976a354",
+    "csrc/rk_fspi/video/pcie_dma.h": "e02e970d1ab3d0e04c4e0ca94386bbbaac4a1a8358e6d49965e2b3f96b8e7fce",
+    "csrc/rk_fspi/Makefile": "0ff67e2ba2b9be20ab331062d494c294ed3d4a15a8455238e32c6e94c3b737ca"
+  },
+  "model_package": {
+    "path": "build/board-ai/board_model.bin",
+    "bytes": 13372720,
+    "sha256": "f60ca150267c99039ce4eab851ebd1ca19a64716e239663e88ed309b00d2d956",
+    "not_bundled_in_source_folder": true
+  }
+}

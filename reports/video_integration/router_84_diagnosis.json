@@ -1,0 +1,269 @@
+{
+  "timestamp": "2026-11-01T23:18:00.160352+08:00",
+  "current_gui_pid": 41628,
+  "current_gui_start": "2026-11-01 22:14:53 +08:00",
+  "previous_background_pnr_start": "2026-11-01 21:01:41 +08:00",
+  "previous_background_pnr_end": "2026-11-01 23:06:47 +08:00",
+  "overlap_minutes": 51.9,
+  "baseline": {
+    "last_unrouted_nets": 0,
+    "last_iteration": 242,
+    "route_time": [
+      "0h:36m:59s"
+    ],
+    "router_iterations": [
+      "242"
+    ],
+    "completed": true,
+    "errors": []
+  },
+  "previous_background": {
+    "last_unrouted_nets": 0,
+    "last_iteration": 629,
+    "route_time": [
+      "2h:5m:7s"
+    ],
+    "router_iterations": [
+      "629"
+    ],
+    "completed": true,
+    "errors": []
+  },
+  "current_gui": {
+    "last_unrouted_nets": 3777,
+    "last_iteration": 95,
+    "route_time": null,
+    "router_iterations": null,
+    "completed": false,
+    "errors": []
+  },
+  "current_gui_left_running": true,
+  "new_build_started": false,
+  "rtl_modified_in_this_check": false,
+  "synthesis_resources": {
+    "LUT": {
+      "used": 39738,
+      "capacity": 66600,
+      "percent": 59.67
+    },
+    "FF": {
+      "used": 34761,
+      "capacity": 133200,
+      "percent": 26.1
+    },
+    "DRM": {
+      "used": 87.5,
+      "capacity": 155,
+      "percent": 56.45
+    },
+    "APM": {
+      "used": 21,
+      "capacity": 240,
+      "percent": 8.75
+    }
+  },
+  "line_padding_module": {
+    "LUT": 42,
+    "LUT_device_percent": 0.0631,
+    "FF": 42,
+    "FF_device_percent": 0.0315
+  },
+  "causes": {
+    "confirmed": "Two place-route jobs overlapped in one output directory; previous background job needed 629 routing iterations.",
+    "inference": "Local routing congestion/placement sensitivity contributes; exact congested nets not identified from these logs."
+  },
+  "report_warning": "Shared output timestamps and headers must be matched to the individual build, not the GUI progress bar.",
+  "timing_candidates_from_previous_background_build": [
+    {
+      "start": "u_video/u_ips2l_pcie_wrap/U_IPS2L_PCIE_TOP/U_IPS2L_PCIE_HARD_CTRL/u_gtp_pcie/gateop/MEM_CLK",
+      "end": "u_video/u_ips2l_pcie_wrap/U_IPS2L_PCIE_TOP/U_IPS2L_PCIE_HARD_CTRL/pcie2_iip_exrcvhdr_rams/U_ipm2l_sdpram_rcv_header_ram/ADDR_LOOP[0].DATA_LOOP[3].U_GTP_DRM18K_E1/gopdrm_18k_inv/DA[17]",
+      "group": "pclk",
+      "type": "max (slow corner)",
+      "slack_ns": -0.11,
+      "logic_ns": 0.856,
+      "route_ns": 3.117,
+      "route_percent": 78.455
+    },
+    {
+      "start": "u_video/u_ips2l_pcie_wrap/U_IPS2L_PCIE_TOP/U_IPS2L_PCIE_HARD_CTRL/u_gtp_pcie/gateop/PCLK_DIV2",
+      "end": "u_video/u_ips2l_pcie_dma/u_ips2l_pcie_dma_tx_top/u_ips2l_pcie_dma_tx_cpld_rd_ctrl/u_ips2l_pcie_dma_cpld_rd_ctrl/tx_data_cnt[9]/opit_0_inv_L6Q_perm/I4",
+      "group": "pclk_div2",
+      "type": "max (slow corner)",
+      "slack_ns": -0.156,
+      "logic_ns": 2.256,
+      "route_ns": 5.494,
+      "route_percent": 70.89
+    },
+    {
+      "start": "u_video/u_ips2l_pcie_dma/u_ips2l_pcie_dma_rx_top/ips2l_pcie_dma_bar2/U_ipm2l_sdpram_ips2l_pcie_dma_ram/ADDR_LOOP[3].DATA_LOOP[2].U_GTP_DRM18K_E1/gopdrm_18k_inv/CLKB",
+      "end": "u_video/u_ips2l_pcie_dma/u_ips2l_pcie_dma_tx_top/u_ips2l_pcie_dma_tx_mwr_rd_ctrl/u_ips2l_pcie_dma_mwr_rd_ctrl/u_mwr_data_rd_fifo/genblk1.pgs_pciex4_fifo/ipm_distributed_sdpram_distributed_fifo/mem_0_66/ram64x1d/DI",
+      "group": "pclk_div2",
+      "type": "max (slow corner)",
+      "slack_ns": -0.09,
+      "logic_ns": 1.735,
+      "route_ns": 6.435,
+      "route_percent": 78.764
+    },
+    {
+      "start": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/input_channels[8]/opit_0_inv/CLK",
+      "end": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/cat_word[44]/opit_0_inv_L6Q_perm/I2",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -1.28,
+      "logic_ns": 1.361,
+      "route_ns": 6.964,
+      "route_percent": 83.652
+    },
+    {
+      "start": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/y[8]/opit_0_inv_L6QL5Q_perm/CLK",
+      "end": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/u_address/u_mul/N28/gopapm/Y[6]",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -1.266,
+      "logic_ns": 1.964,
+      "route_ns": 6.277,
+      "route_percent": 76.168
+    },
+    {
+      "start": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/y[8]/opit_0_inv_L6QL5Q_perm/CLK",
+      "end": "u_board/u_soc/u_peripheral_bus/g_ddr.u_window/g_ai.u_engine/u_address/u_mul/N28/gopapm/Y[0]",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -1.143,
+      "logic_ns": 1.967,
+      "route_ns": 6.151,
+      "route_percent": 75.77
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[6].u_iobuf_dq/opit_1/ICLKDIV",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_dqs_rddata_align/rddata_r1[51]/opit_0_inv_srl/D",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -0.705,
+      "logic_ns": 1.349,
+      "route_ns": 5.572,
+      "route_percent": 80.509
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[6].u_iobuf_dq/opit_1/ICLKDIV",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_dqs_rddata_align/rddata_r1[52]/opit_0_inv_srl/D",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -0.616,
+      "logic_ns": 1.342,
+      "route_ns": 5.49,
+      "route_percent": 80.357
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/u_ddc_dq/ddc_inst_PHY/CLKB",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_dqs_rddata_align/rdvalid_r1/opit_0_inv/D",
+      "group": "ddrphy_sysclk",
+      "type": "max (slow corner)",
+      "slack_ns": -0.589,
+      "logic_ns": 0.542,
+      "route_ns": 6.508,
+      "route_percent": 92.312
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_dqs_rddata_align/ck_dqs_diff[1]/opit_0_inv_L6QL5Q1_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/u_outbuft_dm/opit_1/TX_DATA[6]",
+      "group": "phy_dq_sysclk_1",
+      "type": "max (slow corner)",
+      "slack_ns": -1.634,
+      "logic_ns": 1.26,
+      "route_ns": 6.392,
+      "route_percent": 83.534
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_dqs_rddata_align/ck_dqs_diff[1]/opit_0_inv_L6QL5Q1_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/u_outbuft_dm/opit_1/TX_DATA[5]",
+      "group": "phy_dq_sysclk_1",
+      "type": "max (slow corner)",
+      "slack_ns": -1.146,
+      "logic_ns": 0.801,
+      "route_ns": 6.363,
+      "route_percent": 88.819
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_wdata_path_adj/phy_wrdata_mask_r[6]/opit_0_inv/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[1].ddrphy_data_slice/u_outbuft_dm/opit_1/TX_DATA[6]",
+      "group": "phy_dq_sysclk_1",
+      "type": "max (slow corner)",
+      "slack_ns": -0.005,
+      "logic_ns": 0.473,
+      "route_ns": 5.529,
+      "route_percent": 92.119
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_dfi/phy_wrdata_d[100]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[7]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (slow corner)",
+      "slack_ns": -0.578,
+      "logic_ns": 0.304,
+      "route_ns": 0.326,
+      "route_percent": 51.746
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_dfi/phy_wrdata_d[20]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[6]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (slow corner)",
+      "slack_ns": -0.569,
+      "logic_ns": 0.236,
+      "route_ns": 0.404,
+      "route_percent": 63.125
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_dfi/phy_wrdata_d[20]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[4]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (slow corner)",
+      "slack_ns": -0.523,
+      "logic_ns": 0.208,
+      "route_ns": 0.478,
+      "route_percent": 69.679
+    },
+    {
+      "start": "u_board/u_soc/u_peripheral_bus/g_fspi.u_fspi/tx_disable[0]/opit_0_inv_L6QL5Q1_perm/CLK",
+      "end": "spi_data[0] (port)",
+      "group": "spi_clk",
+      "type": "max (slow corner)",
+      "slack_ns": -0.089,
+      "logic_ns": 1.444,
+      "route_ns": 1.907,
+      "route_percent": 56.908
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_dfi/phy_wrdata_d[100]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[7]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (fast corner)",
+      "slack_ns": -0.597,
+      "logic_ns": 0.206,
+      "route_ns": 0.235,
+      "route_percent": 53.288
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/ddrphy_wdata_path_adj/phy_wrdata_r[39]/opit_0_inv/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[6]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (fast corner)",
+      "slack_ns": -0.588,
+      "logic_ns": 0.222,
+      "route_ns": 0.227,
+      "route_percent": 50.557
+    },
+    {
+      "start": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_dfi/phy_wrdata_d[20]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_video/u_hdmi_fifo/u_ddr3/u_ddrphy_top/ddrphy_slice_top/i_dqs_group[0].ddrphy_data_slice/dq_loop[4].u_iobuf_dq/opit_1/TX_DATA[4]",
+      "group": "phy_dq_sysclk_1",
+      "type": "min (fast corner)",
+      "slack_ns": -0.559,
+      "logic_ns": 0.137,
+      "route_ns": 0.343,
+      "route_percent": 71.458
+    }
+  ],
+  "timing_candidate_warning": "Timing-critical paths guide investigation but do not identify the nets that delayed detailed routing; current GUI run is still active."
+}

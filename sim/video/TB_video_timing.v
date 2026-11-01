@@ -29,14 +29,18 @@ module TB_video_timing;
         pixels(1920,1080,4000);mark_frame();
         if(!ok || period<=fast_period)$fatal(1,"source period not measured");
         pixels(1919,1080,20);mark_frame();
-        if(ok || shape!={16'd1080,16'd1919})$fatal(1,"short line accepted");
+        if(!ok || shape!={16'd1080,16'd1919})$fatal(1,"padded 1919 input rejected or hidden");
+        pixels(1918,1080,20);mark_frame();
+        if(ok)$fatal(1,"unsupported short input accepted");
+        pixels(1921,1080,20);mark_frame();
+        if(ok)$fatal(1,"unsupported wide input accepted");
         pixels(1920,1079,20);mark_frame();
         if(ok || shape!={16'd1079,16'd1920})$fatal(1,"short frame accepted");
         pixels(1920,1080,20);mark_frame();
         if(!ok)$fatal(1,"geometry recovery failed");
         rst_n=0;repeat(3)@(negedge clk);
         if(ok || shape!=0 || period!=0)$fatal(1,"monitor reset failed");
-        $display("PASS video timing: 1080p, measured period, bad line/frame rejection, recovery/reset");$finish;
+        $display("PASS video timing: raw 1919/1920 accepted, 1918/1921 and bad height rejected, period/reset");$finish;
     end
-    initial begin #100000000;$fatal(1,"timing monitor timeout");end
+    initial begin #120000000;$fatal(1,"timing monitor timeout");end
 endmodule

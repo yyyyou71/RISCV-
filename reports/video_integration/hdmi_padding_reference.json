@@ -1,0 +1,193 @@
+{
+  "source_root": "C:\\Users\\yyyyou71\\Desktop\\purple-light-fpga-main\\purple-light-fpga-main",
+  "files": [
+    {
+      "destination": "rtl/video/hdmi/hdmi_in_demo.v",
+      "source": "source/source/hdmi/hdmi_in_demo.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "0e9e786deb4edd91aa0016d60610e2d69c9d04cfa3ffc1752c43c6eac1090cda"
+    },
+    {
+      "destination": "rtl/video/hdmi/iic_dri.v",
+      "source": "source/source/hdmi/iic_dri.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e"
+    },
+    {
+      "destination": "rtl/video/hdmi/ms7200_ctl.v",
+      "source": "source/source/hdmi/ms7200_ctl.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199"
+    },
+    {
+      "destination": "rtl/video/hdmi/ms7210_ctl.v",
+      "source": "source/source/hdmi/ms7210_ctl.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae"
+    },
+    {
+      "destination": "rtl/video/hdmi/ms72xx_ctl.v",
+      "source": "source/source/hdmi/ms72xx_ctl.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "df3876bc1a3bf3a7efe7adeed56b2f9625af4ac9ba56074925671f49751cf69a"
+    },
+    {
+      "destination": "rtl/video/hdmi_in_detector.v",
+      "source": "hdl/new_ring/hdmi_in_detector.v",
+      "control_logic_matches_ignoring_comments_and_wire_declarations": true,
+      "sha256": "53ab9bdd72c46fff8024b2c6f9d4c59f5720e5aba3b41f8405dcda3c3a7d1975"
+    }
+  ],
+  "hdmi_pin_comparison": {
+    "pixclk_in": {
+      "reference": "W19",
+      "current": "W19",
+      "match": true
+    },
+    "b_in[7]": {
+      "reference": "AB18",
+      "current": "AB18",
+      "match": true
+    },
+    "b_in[6]": {
+      "reference": "P15",
+      "current": "P15",
+      "match": true
+    },
+    "b_in[5]": {
+      "reference": "U20",
+      "current": "U20",
+      "match": true
+    },
+    "b_in[4]": {
+      "reference": "R16",
+      "current": "R16",
+      "match": true
+    },
+    "b_in[3]": {
+      "reference": "V20",
+      "current": "V20",
+      "match": true
+    },
+    "b_in[2]": {
+      "reference": "N13",
+      "current": "N13",
+      "match": true
+    },
+    "b_in[1]": {
+      "reference": "W20",
+      "current": "W20",
+      "match": true
+    },
+    "b_in[0]": {
+      "reference": "N14",
+      "current": "N14",
+      "match": true
+    },
+    "g_in[7]": {
+      "reference": "AB20",
+      "current": "AB20",
+      "match": true
+    },
+    "g_in[6]": {
+      "reference": "R18",
+      "current": "R18",
+      "match": true
+    },
+    "g_in[5]": {
+      "reference": "V17",
+      "current": "V17",
+      "match": true
+    },
+    "g_in[4]": {
+      "reference": "T18",
+      "current": "T18",
+      "match": true
+    },
+    "g_in[3]": {
+      "reference": "W17",
+      "current": "W17",
+      "match": true
+    },
+    "g_in[2]": {
+      "reference": "N17",
+      "current": "N17",
+      "match": true
+    },
+    "g_in[1]": {
+      "reference": "AA18",
+      "current": "AA18",
+      "match": true
+    },
+    "g_in[0]": {
+      "reference": "P17",
+      "current": "P17",
+      "match": true
+    },
+    "r_in[7]": {
+      "reference": "AB21",
+      "current": "AB21",
+      "match": true
+    },
+    "r_in[6]": {
+      "reference": "Y18",
+      "current": "Y18",
+      "match": true
+    },
+    "r_in[5]": {
+      "reference": "AB22",
+      "current": "AB22",
+      "match": true
+    },
+    "r_in[4]": {
+      "reference": "Y19",
+      "current": "Y19",
+      "match": true
+    },
+    "r_in[3]": {
+      "reference": "N15",
+      "current": "N15",
+      "match": true
+    },
+    "r_in[2]": {
+      "reference": "V18",
+      "current": "V18",
+      "match": true
+    },
+    "r_in[1]": {
+      "reference": "AA19",
+      "current": "AA19",
+      "match": true
+    },
+    "r_in[0]": {
+      "reference": "V19",
+      "current": "V19",
+      "match": true
+    },
+    "de_in": {
+      "reference": "P16",
+      "current": "P16",
+      "match": true
+    },
+    "hs_in": {
+      "reference": "U17",
+      "current": "U17",
+      "match": true
+    },
+    "vs_in": {
+      "reference": "R17",
+      "current": "R17",
+      "match": true
+    },
+    "hd_sda": {
+      "reference": "AA20",
+      "current": "AA20",
+      "match": true
+    },
+    "hd_scl": {
+      "reference": "AA21",
+      "current": "AA21",
+      "match": true
+    }
+  }
+}

@@ -11,7 +11,6 @@
 #define VIDEO_SHAPE REG(0x3061cu)
 #define VIDEO_PERIOD REG(0x30620u)
 #define WINDOW_STATUS REG(0x31004u)
-#define EXPECTED_SHAPE ((1080u<<16)|1920u)
 #define DDR_WAIT 75000000u
 #define INPUT_WAIT 250000000u /* Ten seconds; communications remain available. */
 #define JOB_WAIT 6250000u
@@ -50,7 +49,7 @@ static void clear_result(void){
 }
 static void start_waiting(void){
     clear_result();PP_REG(0)=4;enter(COMM_VIDEO_WAIT_DDR);
-    log_text("Video self-test: waiting for DDR and 1920x1080 input.\n");
+    log_text("Video self-test: waiting for DDR and 1080p input (1919/1920 pixels per line).\n");
 }
 static void read_pixel(uint32_t address,uint32_t next){
     REG(0x31008u)=address;REG(0x3100cu)=32;REG(0x31000u)=1;
@@ -75,7 +74,7 @@ static void poll_video(void){
         break;
     case COMM_VIDEO_WAIT_INPUT:
         if(status&PP_FAULT){fail(3);break;}
-        if(VIDEO_SHAPE==EXPECTED_SHAPE){
+        if(pp_input_shape_usable(VIDEO_SHAPE)){
             if(pp_capture_start(PP_DEFAULT_BASE))fail(3);
             else{enter(COMM_VIDEO_CAPTURE);log_text("Video self-test: capture started.\n");}
         }else if(elapsed>INPUT_WAIT)fail(2);

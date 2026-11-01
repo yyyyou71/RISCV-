@@ -1,0 +1,1240 @@
+{
+  "bitstream_generated": true,
+  "timing_passed": false,
+  "resources": {
+    "LUT": {
+      "used": 39469.0,
+      "capacity": 66600,
+      "percent": 59.26
+    },
+    "FF": {
+      "used": 34709.0,
+      "capacity": 133200,
+      "percent": 26.06
+    },
+    "APM": {
+      "used": 21.0,
+      "capacity": 240,
+      "percent": 8.75
+    },
+    "DRM": {
+      "used": 87.5,
+      "capacity": 155,
+      "percent": 56.45
+    }
+  },
+  "timing_sections": {
+    "Setup Summary(Slow Corner)": [
+      {
+        "path": "pclk                   pclk                        -0.110      -0.110              1            981",
+        "slack_ns": -0.11,
+        "total_slack_ns": -0.11,
+        "failing_endpoints": 1,
+        "endpoints": 981
+      },
+      {
+        "path": "pclk_div2              pclk_div2                   -0.156      -0.246              2          20454",
+        "slack_ns": -0.156,
+        "total_slack_ns": -0.246,
+        "failing_endpoints": 2,
+        "endpoints": 20454
+      },
+      {
+        "path": "ref_clk                ref_clk                      6.339       0.000              0           1087",
+        "slack_ns": 6.339,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1087
+      },
+      {
+        "path": "sys_clk                sys_clk                      9.533       0.000              0          31758",
+        "slack_ns": 9.533,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 31758
+      },
+      {
+        "path": "ddrphy_sysclk          sys_clk                     33.755       0.000              0            280",
+        "slack_ns": 33.755,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 280
+      },
+      {
+        "path": "spi_clk                sys_clk                     32.129       0.000              0             18",
+        "slack_ns": 32.129,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 18
+      },
+      {
+        "path": "hdmi_pixel             sys_clk                     38.278       0.000              0             32",
+        "slack_ns": 38.278,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 32
+      },
+      {
+        "path": "rst_clk                rst_clk                     36.912       0.000              0            437",
+        "slack_ns": 36.912,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 437
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk               -1.280    -347.082           1211          73430",
+        "slack_ns": -1.28,
+        "total_slack_ns": -347.082,
+        "failing_endpoints": 1211,
+        "endpoints": 73430
+      },
+      {
+        "path": "sys_clk                ddrphy_sysclk                6.282       0.000              0           7025",
+        "slack_ns": 6.282,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 7025
+      },
+      {
+        "path": "hdmi_pixel             ddrphy_sysclk                0.929       0.000              0             71",
+        "slack_ns": 0.929,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 71
+      },
+      {
+        "path": "phy_dq_sysclk_1        ddrphy_sysclk               -0.705      -3.302              8            130",
+        "slack_ns": -0.705,
+        "total_slack_ns": -3.302,
+        "failing_endpoints": 8,
+        "endpoints": 130
+      },
+      {
+        "path": "phy_dq_sysclk_0        ddrphy_sysclk                3.395       0.000              0              1",
+        "slack_ns": 3.395,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_0              0.383       0.000              0            188",
+        "slack_ns": 0.383,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 188
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1             -1.634      -2.785              3            210",
+        "slack_ns": -1.634,
+        "total_slack_ns": -2.785,
+        "failing_endpoints": 3,
+        "endpoints": 210
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   0.782       0.000              0           2019",
+        "slack_ns": 0.782,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2019
+      },
+      {
+        "path": "ddrphy_sysclk          hdmi_pixel                   5.121       0.000              0             20",
+        "slack_ns": 5.121,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 20
+      },
+      {
+        "path": "spi_clk                spi_clk                     -0.089      -0.089              1            184",
+        "slack_ns": -0.089,
+        "total_slack_ns": -0.089,
+        "failing_endpoints": 1,
+        "endpoints": 184
+      },
+      {
+        "path": "sys_clk                spi_clk                     10.961       0.000              0             10",
+        "slack_ns": 10.961,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 10
+      },
+      {
+        "path": "95.563       0.000              0            838",
+        "slack_ns": 95.563,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 838
+      }
+    ],
+    "Hold Summary(Slow Corner)": [
+      {
+        "path": "pclk                   pclk                         0.308       0.000              0            981",
+        "slack_ns": 0.308,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 981
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    0.280       0.000              0          20454",
+        "slack_ns": 0.28,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 20454
+      },
+      {
+        "path": "ref_clk                ref_clk                      0.295       0.000              0           1087",
+        "slack_ns": 0.295,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1087
+      },
+      {
+        "path": "sys_clk                sys_clk                      0.144       0.000              0          31758",
+        "slack_ns": 0.144,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 31758
+      },
+      {
+        "path": "rst_clk                rst_clk                      0.293       0.000              0            437",
+        "slack_ns": 0.293,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 437
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                0.258       0.000              0          73430",
+        "slack_ns": 0.258,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 73430
+      },
+      {
+        "path": "phy_dq_sysclk_1        ddrphy_sysclk                0.797       0.000              0            130",
+        "slack_ns": 0.797,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 130
+      },
+      {
+        "path": "phy_dq_sysclk_0        ddrphy_sysclk                1.058       0.000              0              1",
+        "slack_ns": 1.058,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_0              0.638       0.000              0            188",
+        "slack_ns": 0.638,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 188
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1             -0.578      -3.906             10            210",
+        "slack_ns": -0.578,
+        "total_slack_ns": -3.906,
+        "failing_endpoints": 10,
+        "endpoints": 210
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   0.285       0.000              0           2019",
+        "slack_ns": 0.285,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2019
+      },
+      {
+        "path": "spi_clk                spi_clk                      0.389       0.000              0            184",
+        "slack_ns": 0.389,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 184
+      },
+      {
+        "path": "0.292       0.000              0            838",
+        "slack_ns": 0.292,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 838
+      }
+    ],
+    "Recovery Summary(Slow Corner)": [
+      {
+        "path": "pclk                   pclk                         1.213       0.000              0            101",
+        "slack_ns": 1.213,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 101
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    0.732       0.000              0           2912",
+        "slack_ns": 0.732,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2912
+      },
+      {
+        "path": "ref_clk                ref_clk                      7.053       0.000              0            200",
+        "slack_ns": 7.053,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 200
+      },
+      {
+        "path": "sys_clk                sys_clk                     33.320       0.000              0           1435",
+        "slack_ns": 33.32,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1435
+      },
+      {
+        "path": "rst_clk                rst_clk                     36.232       0.000              0            102",
+        "slack_ns": 36.232,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 102
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                2.225       0.000              0          11413",
+        "slack_ns": 2.225,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 11413
+      },
+      {
+        "path": "sys_clk                ddrphy_sysclk                9.722       0.000              0           2281",
+        "slack_ns": 9.722,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2281
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   3.721       0.000              0            427",
+        "slack_ns": 3.721,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 427
+      },
+      {
+        "path": "ddrphy_sysclk          hdmi_pixel                   5.815       0.000              0              1",
+        "slack_ns": 5.815,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "sys_clk                spi_clk                     10.192       0.000              0             43",
+        "slack_ns": 10.192,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 43
+      },
+      {
+        "path": "97.533       0.000              0              1",
+        "slack_ns": 97.533,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      }
+    ],
+    "Removal Summary(Slow Corner)": [
+      {
+        "path": "pclk                   pclk                         0.507       0.000              0            101",
+        "slack_ns": 0.507,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 101
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    0.756       0.000              0           2912",
+        "slack_ns": 0.756,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2912
+      },
+      {
+        "path": "ref_clk                ref_clk                      0.350       0.000              0            200",
+        "slack_ns": 0.35,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 200
+      },
+      {
+        "path": "sys_clk                sys_clk                      0.588       0.000              0           1435",
+        "slack_ns": 0.588,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1435
+      },
+      {
+        "path": "rst_clk                rst_clk                      0.501       0.000              0            102",
+        "slack_ns": 0.501,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 102
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                0.350       0.000              0          11413",
+        "slack_ns": 0.35,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 11413
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   0.379       0.000              0            427",
+        "slack_ns": 0.379,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 427
+      },
+      {
+        "path": "0.692       0.000              0              1",
+        "slack_ns": 0.692,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      }
+    ],
+    "Minimum Pulse Width Summary(Slow Corner)": [
+      {
+        "path": "pclk                                                1.040       0.000              0            103",
+        "slack_ns": 1.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 103
+      },
+      {
+        "path": "pclk_div2                                           3.040       0.000              0           3453",
+        "slack_ns": 3.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3453
+      },
+      {
+        "path": "ref_clk                                             4.800       0.000              0            203",
+        "slack_ns": 4.8,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 203
+      },
+      {
+        "path": "sys_clk                                            19.040       0.000              0           8351",
+        "slack_ns": 19.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 8351
+      },
+      {
+        "path": "rst_clk                                            19.800       0.000              0            103",
+        "slack_ns": 19.8,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 103
+      },
+      {
+        "path": "ddrphy_sysclk                                       2.849       0.000              0          16235",
+        "slack_ns": 2.849,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 16235
+      },
+      {
+        "path": "phy_dq_clk_0                                        0.011       0.000              0             34",
+        "slack_ns": 0.011,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 34
+      },
+      {
+        "path": "phy_dq_sysclk_0                                     1.659       0.000              0             34",
+        "slack_ns": 1.659,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 34
+      },
+      {
+        "path": "phy_dq_clk_1                                        0.011       0.000              0             42",
+        "slack_ns": 0.011,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 42
+      },
+      {
+        "path": "phy_dq_sysclk_1                                     2.209       0.000              0             42",
+        "slack_ns": 2.209,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 42
+      },
+      {
+        "path": "hdmi_pixel                                          2.407       0.000              0            438",
+        "slack_ns": 2.407,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 438
+      },
+      {
+        "path": "spi_clk                                             9.040       0.000              0             45",
+        "slack_ns": 9.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 45
+      },
+      {
+        "path": "49.040       0.000              0            148",
+        "slack_ns": 49.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 148
+      }
+    ],
+    "Setup Summary(Fast Corner)": [
+      {
+        "path": "pclk                   pclk                         1.451       0.000              0            981",
+        "slack_ns": 1.451,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 981
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    2.747       0.000              0          20454",
+        "slack_ns": 2.747,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 20454
+      },
+      {
+        "path": "ref_clk                ref_clk                      7.844       0.000              0           1087",
+        "slack_ns": 7.844,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1087
+      },
+      {
+        "path": "sys_clk                sys_clk                     21.342       0.000              0          31758",
+        "slack_ns": 21.342,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 31758
+      },
+      {
+        "path": "ddrphy_sysclk          sys_clk                     35.986       0.000              0            280",
+        "slack_ns": 35.986,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 280
+      },
+      {
+        "path": "spi_clk                sys_clk                     33.308       0.000              0             18",
+        "slack_ns": 33.308,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 18
+      },
+      {
+        "path": "hdmi_pixel             sys_clk                     38.943       0.000              0             32",
+        "slack_ns": 38.943,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 32
+      },
+      {
+        "path": "rst_clk                rst_clk                     38.141       0.000              0            437",
+        "slack_ns": 38.141,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 437
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                2.011       0.000              0          73430",
+        "slack_ns": 2.011,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 73430
+      },
+      {
+        "path": "sys_clk                ddrphy_sysclk                9.615       0.000              0           7025",
+        "slack_ns": 9.615,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 7025
+      },
+      {
+        "path": "hdmi_pixel             ddrphy_sysclk                3.036       0.000              0             71",
+        "slack_ns": 3.036,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 71
+      },
+      {
+        "path": "phy_dq_sysclk_1        ddrphy_sysclk                2.186       0.000              0            130",
+        "slack_ns": 2.186,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 130
+      },
+      {
+        "path": "phy_dq_sysclk_0        ddrphy_sysclk                4.608       0.000              0              1",
+        "slack_ns": 4.608,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_0              2.862       0.000              0            188",
+        "slack_ns": 2.862,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 188
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1              1.631       0.000              0            210",
+        "slack_ns": 1.631,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 210
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   2.940       0.000              0           2019",
+        "slack_ns": 2.94,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2019
+      },
+      {
+        "path": "ddrphy_sysclk          hdmi_pixel                   5.735       0.000              0             20",
+        "slack_ns": 5.735,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 20
+      },
+      {
+        "path": "spi_clk                spi_clk                      1.971       0.000              0            184",
+        "slack_ns": 1.971,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 184
+      },
+      {
+        "path": "sys_clk                spi_clk                     13.581       0.000              0             10",
+        "slack_ns": 13.581,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 10
+      },
+      {
+        "path": "97.309       0.000              0            838",
+        "slack_ns": 97.309,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 838
+      }
+    ],
+    "Hold Summary(Fast Corner)": [
+      {
+        "path": "pclk                   pclk                         0.215       0.000              0            981",
+        "slack_ns": 0.215,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 981
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    0.186       0.000              0          20454",
+        "slack_ns": 0.186,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 20454
+      },
+      {
+        "path": "ref_clk                ref_clk                      0.202       0.000              0           1087",
+        "slack_ns": 0.202,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1087
+      },
+      {
+        "path": "sys_clk                sys_clk                      0.025       0.000              0          31758",
+        "slack_ns": 0.025,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 31758
+      },
+      {
+        "path": "rst_clk                rst_clk                      0.201       0.000              0            437",
+        "slack_ns": 0.201,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 437
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                0.170       0.000              0          73430",
+        "slack_ns": 0.17,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 73430
+      },
+      {
+        "path": "phy_dq_sysclk_1        ddrphy_sysclk                0.257       0.000              0            130",
+        "slack_ns": 0.257,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 130
+      },
+      {
+        "path": "phy_dq_sysclk_0        ddrphy_sysclk                0.400       0.000              0              1",
+        "slack_ns": 0.4,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_0              0.259       0.000              0            188",
+        "slack_ns": 0.259,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 188
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1             -0.597      -4.722             10            210",
+        "slack_ns": -0.597,
+        "total_slack_ns": -4.722,
+        "failing_endpoints": 10,
+        "endpoints": 210
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   0.209       0.000              0           2019",
+        "slack_ns": 0.209,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2019
+      },
+      {
+        "path": "spi_clk                spi_clk                      0.208       0.000              0            184",
+        "slack_ns": 0.208,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 184
+      },
+      {
+        "path": "0.200       0.000              0            838",
+        "slack_ns": 0.2,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 838
+      }
+    ],
+    "Recovery Summary(Fast Corner)": [
+      {
+        "path": "pclk                   pclk                         2.259       0.000              0            101",
+        "slack_ns": 2.259,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 101
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    3.391       0.000              0           2912",
+        "slack_ns": 3.391,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2912
+      },
+      {
+        "path": "ref_clk                ref_clk                      8.161       0.000              0            200",
+        "slack_ns": 8.161,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 200
+      },
+      {
+        "path": "sys_clk                sys_clk                     35.665       0.000              0           1435",
+        "slack_ns": 35.665,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1435
+      },
+      {
+        "path": "rst_clk                rst_clk                     37.710       0.000              0            102",
+        "slack_ns": 37.71,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 102
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                4.057       0.000              0          11413",
+        "slack_ns": 4.057,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 11413
+      },
+      {
+        "path": "sys_clk                ddrphy_sysclk               11.735       0.000              0           2281",
+        "slack_ns": 11.735,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2281
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   4.811       0.000              0            427",
+        "slack_ns": 4.811,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 427
+      },
+      {
+        "path": "ddrphy_sysclk          hdmi_pixel                   6.122       0.000              0              1",
+        "slack_ns": 6.122,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      },
+      {
+        "path": "sys_clk                spi_clk                     13.074       0.000              0             43",
+        "slack_ns": 13.074,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 43
+      },
+      {
+        "path": "98.522       0.000              0              1",
+        "slack_ns": 98.522,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      }
+    ],
+    "Removal Summary(Fast Corner)": [
+      {
+        "path": "pclk                   pclk                         0.355       0.000              0            101",
+        "slack_ns": 0.355,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 101
+      },
+      {
+        "path": "pclk_div2              pclk_div2                    0.473       0.000              0           2912",
+        "slack_ns": 0.473,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 2912
+      },
+      {
+        "path": "ref_clk                ref_clk                      0.247       0.000              0            200",
+        "slack_ns": 0.247,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 200
+      },
+      {
+        "path": "sys_clk                sys_clk                      0.355       0.000              0           1435",
+        "slack_ns": 0.355,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1435
+      },
+      {
+        "path": "rst_clk                rst_clk                      0.347       0.000              0            102",
+        "slack_ns": 0.347,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 102
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk                0.248       0.000              0          11413",
+        "slack_ns": 0.248,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 11413
+      },
+      {
+        "path": "hdmi_pixel             hdmi_pixel                   0.261       0.000              0            427",
+        "slack_ns": 0.261,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 427
+      },
+      {
+        "path": "0.490       0.000              0              1",
+        "slack_ns": 0.49,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1
+      }
+    ],
+    "Minimum Pulse Width Summary(Fast Corner)": [
+      {
+        "path": "pclk                                                1.430       0.000              0            103",
+        "slack_ns": 1.43,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 103
+      },
+      {
+        "path": "pclk_div2                                           3.430       0.000              0           3453",
+        "slack_ns": 3.43,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3453
+      },
+      {
+        "path": "ref_clk                                             4.800       0.000              0            203",
+        "slack_ns": 4.8,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 203
+      },
+      {
+        "path": "sys_clk                                            19.345       0.000              0           8351",
+        "slack_ns": 19.345,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 8351
+      },
+      {
+        "path": "rst_clk                                            19.800       0.000              0            103",
+        "slack_ns": 19.8,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 103
+      },
+      {
+        "path": "ddrphy_sysclk                                       3.154       0.000              0          16235",
+        "slack_ns": 3.154,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 16235
+      },
+      {
+        "path": "phy_dq_clk_0                                        0.011       0.000              0             34",
+        "slack_ns": 0.011,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 34
+      },
+      {
+        "path": "phy_dq_sysclk_0                                     1.659       0.000              0             34",
+        "slack_ns": 1.659,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 34
+      },
+      {
+        "path": "phy_dq_clk_1                                        0.011       0.000              0             42",
+        "slack_ns": 0.011,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 42
+      },
+      {
+        "path": "phy_dq_sysclk_1                                     2.209       0.000              0             42",
+        "slack_ns": 2.209,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 42
+      },
+      {
+        "path": "hdmi_pixel                                          2.797       0.000              0            438",
+        "slack_ns": 2.797,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 438
+      },
+      {
+        "path": "spi_clk                                             9.430       0.000              0             45",
+        "slack_ns": 9.43,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 45
+      },
+      {
+        "path": "49.430       0.000              0            148",
+        "slack_ns": 49.43,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 148
+      }
+    ]
+  },
+  "artifacts_fresh": {
+    "synthesize/acore_dual_top.snr": true,
+    "place_route/acore_dual_top.prr": true,
+    "place_route/acore_dual_top.rtr": true,
+    "generate_bitstream/acore_dual_top.sbit": true
+  },
+  "errors": [],
+  "hardware_tested": false,
+  "scope": "HDMI 1919/1920 normalization; remaining timing violations are reported, not waived",
+  "timing_scope": "internally constrained clocks/CDC; external HDMI input delay budget remains unspecified",
+  "sources": {
+    "board/acore_dual_top.v": "57694fcc0079104e58328571e9830ff1f02c44341e9197341b6f84c3166508c2",
+    "board/acore_video_platform.v": "ba857cb005b56509da76127e0e405dc81534b1d479a54d63b12fd40214f3dcbc",
+    "board/board_fspi_top.v": "7635ce92806478d9dda283b717f12d7617b7b614fb8928842b0c4c3971bd24fd",
+    "board/board_reset.v": "092dbb8f27228368c32ceaf9807a592a50433c73dac3d07f4ecad60091cf04b4",
+    "board/board_top.v": "fc8fb59585538498f35991519161a0bd5f5e6546aee7eb96a7f205f73d86effc",
+    "board/pins.fdc": "2b83d6964b825bbea4feeb68f62f7631541e8c1bc3e8641441e6187bbb160415",
+    "board/timing.fdc": "98f9f0b3714e66be7a3f9c95919805dd931bcacc700832f87635bc64f0ce7cf3",
+    "ipcore/ddr3/ddr3.idf": "843f4366cfc74d1161d2a479c9f6dda9dc9b0a832ed237d0581388c7e5290382",
+    "ipcore/ddr3/ddr3.v": "2c1de517c3585dc2f486fe187f8782add177ebbec41110e038f920c9c96468d1",
+    "ipcore/ddr3/ddr3_ddrphy_top.v": "a4869a22f489f8ee7943f3cfd3225d8faf5917a0850685fc509ea364307d0a45",
+    "ipcore/ddr3/rtl/ddrphy/ddr3_slice_top_v1_10.v": "dd89fc15897b3ceea4fb024aea52a05891d316eb04a26cc75538ec994ba98e13",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_calib_mux_v1_0.vp": "676e36319e7ce80b93e3543e255d53708d9fc71606587a6e692eab1ec82ecaed",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_calib_top_v1_10.vp": "04faf434cef120b5d712911dfc97c8f498901b0679fba720b806f596d688bded",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_control_path_adj_v1_10.vp": "8cdd7b9ec01c143882217b038cbf840d77e52ee3037e629e75e10b03fc223a38",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_cpd_ctrl_v1_3.vp": "56f52683adbe720c7d43da1a9f199f4ab3add3f3b5960e3f687f87f60267c161",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_cpd_lock_v1_0.vp": "a6696f8e79e2d132a6e76ad4997d5366d6c9cf8f05c60f77feff1b47b50d0090",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_data_slice_dqs_gate_cal_v1_10.vp": "8764275d4eeb8d1765b3a09aba527d6d3bf3e46f5e1d17eefc685d7e0dbe1520",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_data_slice_v1_10.vp": "e13e33d97ecbfea1838c4dd28e7f9f1c57dcb974606179523be46bba75344d50",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_data_slice_wrcal_v1_10.vp": "b7a9757c252f74c4b57eb0fb74738c57e4eed3e669ddd7ffeeca1acedd330b2e",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_data_slice_wrlvl_v1_10.vp": "871874f4af0f068571416916898f83eb07052e6e015c5800ffdf65d67620cf7e",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_dfi_v1_3.vp": "9828a1ef43a864d287a7a317910fe330bfc904f44e8f60c8773aafa1d8c1534e",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_dll_update_ctrl_v1_3.vp": "bc4e8f402d2fb98920e050a3c1514d44ec959877217d7865a30b22b7da73cac6",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_dqs_gate_coarse_cal_v1_0.vp": "950a0010929854894c2c92d9f3f8e9dce0fee6985fee70d4160540a058853ede",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_dqs_rddata_align_v1_10.vp": "c0cab4287a7a7b6b720977c1c5f9259c5f48f8da18e9a3ca1173a073b1ccf025",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_dqsi_rdel_cal_v1_3.vp": "ef7e57755ab7558b1b518aa73999384368f349efe7077cf9283e0911e711ac1a",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_drift_ctrl_v1_0.vp": "8ea99ac6decf6fe14c0585b4f121d7a1acc17290d7a1c68725d984e704e277bc",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_eyecal_v1_5.vp": "31977dd34339d163ecbd8b9949ac4b65f0eaa6fbcd9a75d787400ae73f7f51d2",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_gate_update_ctrl_v1_3.vp": "ce20eb3b9cbe3b392d8be0aa1d6787247bc7b2d91af36a1f734f35c9eb03d642",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_gatecal_v1_10.vp": "b6859250ca098e81ff05bcab08dfe8ffee77648218e90c040a1dd3838a0671f2",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_gpll_phase_v1_0.vp": "ef8ebe3742d23848bd2a1492d4901f886ce49aa98dbc295873b67e4116ba8524",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_info_v1_0.vp": "0794201be97885e7695a16b6c35848655b08c4bf191405d26417126512ce4aa8",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_init_v1_0.vp": "817f9f32b2260a4c35af446e89ff4c2d4b065381b25cb2020c538d22b4a45088",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_main_ctrl_v1_10.vp": "39d5024d7364b441340b131d265d0648d8b7c1f92cc417424d7c584413c5f4a6",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_rdcal_v1_10.vp": "6b4c7f3c24a4750ac69b4e7882617105c6e31f02da712aaa87932b8561ccea2b",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_reset_ctrl_v1_3.vp": "17189b59ed5307c4a27ec35485b33af5c98a89e6ee7f9c5d85aaed9c03a77163",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_rst_clk_phase_adj_v1_0.vp": "dd1dbae71726d968df475fe7fbb2b7321411fa67786092c0dc2e065edcf39382",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_rst_debounce_v1_0.vp": "bff7ed95c8d305dfb88e6002c6de8453a21c72c03a5a0521a76ddd105598dc4d",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_slice_rddata_align_v1_0.vp": "befb44f07d851524109a6dc8e17c5b8062694aa274ed8dbc4f7326b8fe1c443e",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_training_ctrl_v1_0.vp": "777e8ee9d8d819fdcf04b39b5a5d6086c52369a7f19f04dbd0d06f7a7d3d6110",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_upcal_v1_0.vp": "afbca3503da609f7951ad7fbef386bd007f403c89f52377211ba521967c94455",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_wdata_path_adj_v1_10.vp": "85f625ed4a09964442e8616074eea9e4757e43b4217589bb9e2f289c9748b272",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_wrcal_v1_7.vp": "0a8cb0bb70bd40809260c50bcb85d092c16fea5d9ab2e4fbbe647ccbd1bfb1b0",
+    "ipcore/ddr3/rtl/ddrphy/ips2l_ddrphy_wrlvl_v1_0.vp": "00c086bd729be3ab8287f6eb786cfb3549c97aa92f8465c608b8fc2477df3edc",
+    "ipcore/ddr3/rtl/ips2l_rst_sync_v1_3.vp": "64b8d83f15f2ff373e6b1040405c42051d8761bd1857dec719c884c2eb59361a",
+    "ipcore/ddr3/rtl/mcdq_ctrl/distributed_fifo/ips2l_distributed_fifo_v1_0.vp": "d6c0b0d8560b0f22128b4883933944fc686fd7597cfea0d6c545cc6af56c0b7a",
+    "ipcore/ddr3/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_ctr_v1_0.vp": "fe31c8f44bea653ab20bb1830ad4f8ed41566e9cfef354bd5e2d48c7682f353d",
+    "ipcore/ddr3/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_fifo_v1_0_distributed_fifo_v1_0.vp": "867ac91a1485dfe613a81f372d788e784bba8cd4b0497e56986135e92685ba73",
+    "ipcore/ddr3/rtl/mcdq_ctrl/distributed_fifo/rtl/ips2l_distributed_sdpram_v1_0_distributed_fifo_v1_0.vp": "3561bbbbd4e4432a538c3d20818d262b4f1e5517c48296f6b1b4cc8afdd19aef",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_apb_cross_v1_2.vp": "62f7d55354a8afe4d02bc6f6d6dc30fc8e9960d3b21709988b887acc99d09cf5",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_calib_delay_v1_2.vp": "a52e992b9766b6cb22ed23aa01d1cc5ac9b6a429a8e49de7a13ac51dd70e9784",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_cfg_apb_v1_2.vp": "482cb280a614f70209f1d07892fdd773a259d2ca0f23e8f38b85a9faf00513b9",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcd_bm_v1_2.vp": "bfbd472dd8b427fe6b003dd510f73db89f915ac92d31fe8a779c40f9d4e56bee",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcd_rowaddr_v1_2.vp": "4ac4721747b13020e1895be6265e55df90968f05beb8056279589039394bb9be",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcd_sm_v1_2.vp": "d7e710e3ed4d1807fb0bdd4d84c264817247a4da41123c72439c555573821f49",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcd_top_v1_2.vp": "26ab4e142f555602c023f62b19df52056c6d51da5052401254066cae0655ddaa",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcp_back_ctrl_v1_2.vp": "fe7b340b41d80ec7428cc38329a41864bcf5c209a6310610d09c7bc8579e541f",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcp_buf_v1_2.vp": "dab35fa172243ecbb5426a8ebccc2c168368ea0a6ea0558c909b815d781b17d6",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcp_out_v1_2.vp": "9471082e23170b144dc619f7f7e08c94b8a03378f72da388f744d6acb728928b",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dcp_top_v1_2.vp": "21b1f0e3b4660e1078b47000bfe50022346414f5d5e713ac9e522a4f39f76548",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_dfi_v1_2.vp": "abf138d692e634fabe5f569b98d897dfece8a8ae66cee1dba830a56d7e255df1",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_lp_v1_2.vp": "7a80ccb1e053e5c9d8f389169359570f256d709ff2e4ad2c51fda7a7a6a4239d",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_mrs_v1_2.vp": "f78133bc021a57cf469773daaf102817fc37069447e8accc80afa1f4b20b0ad6",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_prefetch_fifo_v1_2.vp": "ee3aa91e980fb3dd08231cf1806a28edf759f4ea8248adfd44407d607519b9e4",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_rdatapath_v1_2.vp": "72dd8ece021f4ee74fd576c1628c4f7d3606ef632f0e68b9569a288a092a6b0f",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_reg_fifo2_v1_2.vp": "bc9cff65e4002a51af0c20c2f0a9b9f17dacde5157b58691bbfb1c44348ee08a",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_ui_axi_v1_2a.vp": "145b69395412be2553835f9278cdf1cb1703d3beeb914abf7d985e3c69f817fb",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_wdatapath_v1_2.vp": "db648e90ff607ca2f9e2b5cca048de417439888d0b906288e0cec7cf038d9dee",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_wdp_align_v1_2.vp": "1645e9eb7fac3c9c13cd3e0d7367f132293f9cec16835ce188c6345993d2b730",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_wdp_dcp_v1_2.vp": "3f30be0f49f78f09915743995c950fa6ff8de5f14598ebc8802e73b5c6d140ee",
+    "ipcore/ddr3/rtl/mcdq_ctrl/ips2l_mcdq_wrapper_v1_2b.vp": "d35010f49be551fb15ab2655cbeffcaaaa74fdf3ccb0754b033fc979d615e805",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_com_timing_v1_2.vp": "e3f19c4be6352ab64f07426973387f2876c540ee992f6eac9d3f2d470b3d49c2",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_timing_v1_2.vp": "c632619f042bebb4f059df7f20eee90eb2b51b81210430cb37d01958ad3cd30f",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_tfaw_v1_2.vp": "ab87b7718bffc4fb2a2b27765576187f09b5266bbca7fc393c43c6dec96ff379",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act2wr_pass_v1_2.vp": "1b3874b059923481f292ba382ad156f7dcdd9ad39da6c86dddd480290ccce498",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_act_pass_v1_2.vp": "9f32b6936e039c15f7b07b74480179d39d1b3787965e1b90bd067a7ede7fdd4c",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_pre_pass_v1_2.vp": "e40a64caec9725c231cd88dde69973eab3aca38c9d2e66a2c5c0bbddf3103ae0",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_rd_pass_v1_2.vp": "78b1de719a43ee0fc80e1a5464f7284439d91f1d4b3f83ef2ae5611920293988",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_ref_pass_v1_2.vp": "c79dde6f9a682c55aff7bb89c4863f76a069b874fb154dff7d3e4d4a7a88f9d1",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_timing_wr_pass_v1_2.vp": "ea3470ca984554d4908ec950314f9242042417c6c4c6b3fd05ac5d6daab98c90",
+    "ipcore/ddr3/rtl/mcdq_ctrl/syn_mod/ips2l_mcdq_trc_timing_v1_2.vp": "7234241e5968f91ec6e396794f0bb80f6c7d1bca2038aa004d5078d3937953da",
+    "ipcore/ddr3/rtl/pll/ips2l_ddrphy_gpll_v1_3.vp": "3fecc367573a4b5bd158e1a8ff106c5c401c5f180143e8e5abe6bb068e5078d2",
+    "ipcore/ddr3/rtl/pll/ips2l_ddrphy_ppll_v1_0.vp": "34bb46106b84eab147f130bd7526f1486d35caeb40b0258cd59656e50d19dddd",
+    "ipcore/ddr_2_fifo/ddr_2_fifo.idf": "2a946b82c5c9a6ea4442fc73363c78de53236d17e08e34a232c5159ced5d1289",
+    "ipcore/ddr_2_fifo/ddr_2_fifo.v": "899157df7de796c0a9005cf194fb7e990b5b6e7fe37529df5007bafc69886f74",
+    "ipcore/ddr_2_fifo/rtl/ipm2l_fifo_ctrl_v1_1_ddr_2_fifo.v": "3e13f8f164b26571c08352b91db20413e5861e5d8c17d3714ebef23397bd59df",
+    "ipcore/ddr_2_fifo/rtl/ipm2l_fifo_v1_10_ddr_2_fifo.v": "decaa5a8749a33190f5078180fce8348e713bf303310dc5eeea8096119b769ca",
+    "ipcore/ddr_2_fifo/rtl/ipm2l_sdpram_v1_10_ddr_2_fifo.v": "fc2826c06e338d598487aeeebcc1685b097998c533768a8c3de518eb58ad3328",
+    "ipcore/fifo_2_ddr/fifo_2_ddr.idf": "20683e61cd7c443a95b1a425d4587e2869651e31fa3223e3c6b668ac6892fb12",
+    "ipcore/fifo_2_ddr/fifo_2_ddr.v": "88ffe05716e283640b267db38d9fd818a5031771697cbba811993ab647f2c4d3",
+    "ipcore/fifo_2_ddr/rtl/ipm2l_fifo_ctrl_v1_1_fifo_2_ddr.v": "bf2d4750b3af4aae3eac237d3ae8ee92a2d161ea820769210c712b0fb89d7b17",
+    "ipcore/fifo_2_ddr/rtl/ipm2l_fifo_v1_10_fifo_2_ddr.v": "d17d2c976722288c4b2f1bfbb983519af2359893a225abf2307b13fb52a93ed9",
+    "ipcore/fifo_2_ddr/rtl/ipm2l_sdpram_v1_10_fifo_2_ddr.v": "f646eddbea137b1520dde81884ff9483d4c152eeda0460c7bd757bfbf36ae83a",
+    "ipcore/pango_acore_fetch/pango_acore_fetch.idf": "907c8fa45d24f1d8286509b9bbb5671cc0303a0db8ca8d9d04e4d9baab60c9f9",
+    "ipcore/pango_acore_fetch/pango_acore_fetch.v": "d026a2d79a60c00e96c6e2213afc728f3c1df12ab458cb2ac8365d091e86bbb3",
+    "ipcore/pango_acore_fetch/rtl/ipm2l_dpram_v1_9_pango_acore_fetch.v": "5728e86735f12527150fcb13cb28f543e65813e7a152b45d3cb9fa1f87b6d90f",
+    "ipcore/pango_acore_ram/pango_acore_ram.idf": "fbd7428a7b82ffd7e2f10c1c52bfef69620ebd7af1e608992318257d7767de55",
+    "ipcore/pango_acore_ram/pango_acore_ram.v": "aa02763e4d8d2aba683ada4aecea31f73e04a5add7a9f39800393d4021c45870",
+    "ipcore/pango_acore_ram/rtl/ipm2l_dpram_v1_9_pango_acore_ram.v": "061dbb601b685f8ed1c3b68a44ba4f580c0b66ad90254b8dd0f19bf50a46c5e5",
+    "ipcore/pango_ai_multadd/pango_ai_multadd.idf": "9166dacddeba9e2113bedf703ae644136431807e6375eb48baf792799c32f6fb",
+    "ipcore/pango_ai_multadd/pango_ai_multadd.v": "69840b291930b16fa286ed75dc9c5bbaa32ba1c30e5edb560e6c5527d4df3871",
+    "ipcore/pango_ai_multadd/rtl/ipm2l_multadd_v1_3_pango_ai_multadd.v": "45ec012286d699ed61a8a52f5e0b431099adeb587ec1070e1a952829cf472316",
+    "ipcore/pango_multiplier_ip/pango_multiplier_ip.idf": "95dbf9890dd2374aa7e946b53a7310191740597e74b515b0adb419b0d6a6c271",
+    "ipcore/pango_multiplier_ip/pango_multiplier_ip.v": "5920312d13665871163673193936898140c47ed86dd54b557b83f815f7b49d41",
+    "ipcore/pango_multiplier_ip/rtl/ipm2l_apm_data_pipeline/ipm2l_apm_data_pipeline.v": "de6205cd1dd12b04cc8c2eab595aec4900c74506c5f74a5014ccf7597aac627d",
+    "ipcore/pango_multiplier_ip/rtl/ipm2l_apm_data_pipeline/ipm2l_apm_distributed_sdpram.v": "3a72f2099aed40ab0035701fa54e04148e13ea4047ee2939db5ebf542391f345",
+    "ipcore/pango_multiplier_ip/rtl/ipm2l_apm_data_pipeline/ipm2l_apm_distributed_shiftregister.v": "6739127e7f379a000ef514fcf0a8bce52aea69f98ac67cffd639363ea469d4d8",
+    "ipcore/pango_multiplier_ip/rtl/ipm2l_mult_v1_3_pango_multiplier_ip.v": "e75d57b8f69bc639334145428231b4d54c6bf844c620486dc3607a42980bdb39",
+    "ipcore/pango_pool_sum_ram/pango_pool_sum_ram.idf": "24ae287b94f98c25c251be6eaad6f19832ba0f0920b461e020d6e9365a252fbb",
+    "ipcore/pango_pool_sum_ram/pango_pool_sum_ram.v": "62729e531da3f571509ca0730a99fcc137bbacf47ea3182a0dcdda1dd42f1e4b",
+    "ipcore/pango_pool_sum_ram/rtl/ipm2l_sdpram_v1_10_pango_pool_sum_ram.v": "621345ed82420b9d2ebf9a9d032886e94b0b14090295f1ba45e3aa1fa3a887fa",
+    "ipcore/pango_ram/pango_ram.idf": "dbaef8ad3c6672883f1027d4eed64bb49d0f576a8ae186fff3abd29a0aa07729",
+    "ipcore/pango_ram/pango_ram.v": "634e31f5cc36a34212edc90d86eba99b61f340879aa6b984a15dc06a54024eba",
+    "ipcore/pango_ram/rtl/ipm2l_dpram_v1_9_pango_ram.v": "4133ff5c1611811b6c9a4c5d1e0f81202f3bf1bb3d5832bdf67c56fe1ee0c5e4",
+    "ipcore/pango_rom/pango_rom.idf": "c2562e50caf17829b87318d5c3c0cb6b7d75e4eb3b7c6b899a00b23b049a75b8",
+    "ipcore/pango_rom/pango_rom.v": "fb3a988f7853a260e9a1e3aa8bbff4e9155ed29c6e392bae3a6af66afd9fc3b7",
+    "ipcore/pango_rom/rtl/ipm2l_rom_v1_8_pango_rom.v": "6d0dd12d8a14e1eb690a0c61d251f2ce402f614e9e520afd3842a5ccfc73fa78",
+    "ipcore/pango_rom/rtl/ipm2l_spram_v1_8_pango_rom.v": "42868dae8314f531568f73ea3cdc1e257f4f482bb3c6b368e4702b72f41153bc",
+    "ipcore/pcie_test/pcie_test.idf": "75a4e7a222dc32574d7ad10c76526baea288c72dbeadb683a532b41df7b6f864",
+    "ipcore/pcie_test/pcie_test.v": "531fb18344e27e5a489fd31826b6aa106fa20336559ea6ed11ac78ef03cb95b4",
+    "ipcore/pcie_test/rtl/external_ram/rcv_data_ram/rcv_data_ram.v": "fb60fa792e6368b9d86ac48ff9455add16b60b2f6268e97f4bca24506e453138",
+    "ipcore/pcie_test/rtl/external_ram/rcv_data_ram/rtl/ipm2l_sdpram_v1_0_rcv_data_ram.v": "1bba4fd79b55682e6bea9e4a961514a400656e39ce350db656518a63050a1ad7",
+    "ipcore/pcie_test/rtl/external_ram/rcv_header_ram/rcv_header_ram.v": "c2bc3b24e470b9502d9becfbafac29b3710ddfeefe6119e19160994ed40ac93a",
+    "ipcore/pcie_test/rtl/external_ram/rcv_header_ram/rtl/ipm2l_sdpram_v1_0_rcv_header_ram.v": "34030ac9c93d977c14c6177c071fc7907eb55b9f09bec9ed4f76642e5e1f4689",
+    "ipcore/pcie_test/rtl/external_ram/retry_data_ram/retry_data_ram.v": "e9404a5580a7a0e33e090f8659303b11defa5a2b61885befbd17b286a5daf96d",
+    "ipcore/pcie_test/rtl/external_ram/retry_data_ram/rtl/ipm2l_spram_v1_0_retry_data_ram.v": "0f6957651ddf0902c81b72c135c78b9354fcaf63e9c49a036fa8a3c403f9cd47",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsst_rst_cross_sync_v1_0.v": "7b9da034fdaf1e631558c401c903730ac6346e85c130e56e1b10362f4c7c8f1c",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsst_rst_debounce_v1_0.v": "da2caa66572d01b642279d152cb5ceb036d044b78f851390c7fe40f942b76487",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsst_rst_sync_v1_0.v": "f92c4052d22e72b55b75055149380fdc0670bc901e5d589ff24c21e0bb847f9b",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsst_rst_wtchdg_v1_0.v": "4594eb0810af4ccd7c36a597db34502442f32957630fec024abe91c61836a936",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_phy_mac_rdata_proc.v": "8c52a9c8d9a9205f7fcab3c3e4205f3cb6ac099ca362ec9faee7a4e79b2e51fd",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_rx_init_v1_0.v": "ccdd677ccad1902b4e517e1073045eab441aa341df0f2179207d95bb769fffbc",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_rx_rst_fsm_v1_0.v": "d31c909e9cb164b639f82d3106b129b81617d425bedc9d733b40a097d007fe4e",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_rx_rst_initfsm_v1_0.v": "6114e784c1971b929de0b664c50aeef0fe9fd82427008f070159827a2a2d3d67",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_rx_v1_0.v": "01eb1d520d074cde0329bbb25bc1a1b535935a853988a1228f003e0b588cb827",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_tx_rst_fsm_v1_1.v": "ee49409c76ecd29bca13b5f275b1e68f609af05236262212423dbc62066c3878",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_tx_v1_0.v": "0130f66cfea710af762067bbe770c31f688e67095147c40d1559982c34bda573",
+    "ipcore/pcie_test/rtl/hsst_pipe/hsstl_rst4mcrsw_v1_0.v": "6d821d7756e6d82765672436c39a8fb9d50d7bc2739bb92aaf0834fdf5355cfd",
+    "ipcore/pcie_test/rtl/hsst_pipe/ips_hsst_rst_sync_v1_0.v": "b5a4b94e95e7de30692be9ffcaa783af0aa7d48ca22fd56a5362cddfaeb98012",
+    "ipcore/pcie_test/rtl/hsstlp/ipm2l_pcie_hsstlp_x1_top.v": "4d78c47cdbe3fc603b7b378f4f16ee73bf2ec48a7385fb8ac760d4eb3be92744",
+    "ipcore/pcie_test/rtl/hsstlp/ipm2l_pcie_hsstlp_x2_top.v": "559cfe927bfaf9e9430e80f03476d5ee46a2dbc19069f97790eb1b4830b6cb26",
+    "ipcore/pcie_test/rtl/hsstlp/ipm2l_pcie_hsstlp_x4_top.v": "9af7ac66c2c21aa5e9a169f6d26018e425bffbaac8aec7b955bad597dfbfd68f",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_fifo_clr_v1_3.v": "472655cbe60152c4b7fcb616e6651463f2153887ea08fdcad0d9a7b36346fd67",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_pll_rst_fsm_v1_0.v": "cb45f6616754bd5c9d1dffbc1292a444b830f7c0c9a61cf45554c33b1c219f69",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_debounce_v1_0.v": "afe3391e49f8e6fa2ec5f54a8f73eabe5accb1168afe127b097069f6d2ede57b",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_pll_v1_0.v": "ed8a09b22e2c2a0eed099071596c76e90688bab547f6496c4ac91655c2adfcf6",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_rx_v1_6.v": "2af90c11d4019e124548be21b25b09719aed69c658e95127362b553db1479837",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_sync_v1_0.v": "d9cb82ed74a6d221a35f38fd2559dcab4c48219f6f3810ff58c29863183b04a5",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_tx_v1_6.v": "5b39fd8ef0acab166fa96200093a22d4ddba53792cce9d1df60d312f6268cfd0",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_v1_6.v": "c0260d9c1a314f9cde74fb8e42eaebe6bca3ec2d3bcd8d3db110aa0e30ef80c2",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rst_wtchdg_v1_0.v": "26d85d1620ffc11efcc323ecf2e4299adbe406f6426bf75f6c35ff959e632dbd",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_rxlane_rst_fsm_v1_6.v": "c0e7a662118554577a4dcaa59de47dc689c8594cb514cc586e6c21a30ecba804",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_hsstlp_rst/ipm2l_hsstlp_txlane_rst_fsm_v1_6.v": "c41f32129ad1462f9caad02c1d85da95bc3c18ec7e2a1fc6a759ad909c7dd4a4",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_pcie_hsstlp_apb_bridge_v1_2.v": "b0b7c7eeb79c9dac29534d59eee06c4a61d5a2499a2a5f2a128f17fde8c244bf",
+    "ipcore/pcie_test/rtl/hsstlp/rtl/ipm2l_pcie_hsstlp_wrapper_v1_6.v": "e561c9be62f1b1d3b66fd4f6e0a8740d8d42aaa9b919da062f935e622b1f3f12",
+    "ipcore/pcie_test/rtl/ips2l_pcie_apb2dbi_v1_1.v": "544f74889183264320386227a3dd63600436bc32f806734c62b9cc943a01226d",
+    "ipcore/pcie_test/rtl/ips2l_pcie_apb_cross_v1_0.v": "5f7c005304f6c71bdfc4102b5a03d30202b567b8428ede5254b27fd1c2129a6d",
+    "ipcore/pcie_test/rtl/ips2l_pcie_apb_mux_v1_0.v": "56f3107641ab92a478a6801d1bf5c095eaf334361babb8a64e7518965b141f90",
+    "ipcore/pcie_test/rtl/ips2l_pcie_cfg_init_v1_7.v": "330178a6a82abe30ec55c43ff7f0c5164aed24e47c544d4f182b4a741d5ccd54",
+    "ipcore/pcie_test/rtl/ips2l_pcie_hard_ctrl_v1_8.v": "ed4c6da3518ae16d11c3079c193c0e87c459ae383444ffb6e2b0eb3abd93d2c1",
+    "ipcore/pcie_test/rtl/ips2l_pcie_pll_v1_0.v": "8de83e9cf516ed9e5a5afdaf494e2266d65f1d794277fc875eefd1ec53e7ddc0",
+    "ipcore/pcie_test/rtl/ips2l_pcie_seio_intf_v1_2.v": "60b66e10ecbd33e4d8fe990cdfb4d29bc421a52a5cea2ea9c1854205166f311a",
+    "ipcore/pcie_test/rtl/ips2l_pcie_soft_phy_v1_3.v": "2dd279fee3bde6160439b119d02ef7aadd73d15ade24445779269766ff43ea7e",
+    "ipcore/pcie_test/rtl/ips2l_pcie_top_v1_8.v": "31ee1ae2722dfd9006961f490aa5218d1ae3675427743d355ff61b0357debba5",
+    "ipcore/PLL_CLK/PLL_CLK.idf": "4a79193b910e265890393bbec68696af501607465ec866b65fd371b5ce1586ad",
+    "ipcore/PLL_CLK/PLL_CLK.v": "6e7db22b5a742c6168d19448b244e42a379319a6dfbf290f59ce2c12a83389ee",
+    "rtl/Acore.v": "cd7eef7827e4b7eb30408aa19f7a24ef8725152e9d5bd97aa9ef7d369a9e9a6c",
+    "rtl/acore_fetch_memory.v": "469c67444ca7da5a5a6f1f4fe064ed266f6eadf194f3a6a8365bc0c7e8a8d55d",
+    "rtl/acore_fetch_queue.v": "875a281e0b25c0cac0391827addc604b95b5dd843c00d9dcca7cd5459c794c0c",
+    "rtl/acore_forward.v": "544bc9564eb00466987d79e6fdeebd96fe20bc34d56a3b361056d406e854632e",
+    "rtl/acore_pair.v": "2e75f61253491397e81c8316491bb766b03c22347196faf01c1928f18fc28c11",
+    "rtl/add_int16.v": "314a224bfc6df2d21b2cca9ac5a271139aa1470232478e7ed8730ca5e1c15899",
+    "rtl/ai_address_math.v": "9ccde3785916c9db5305bbb1d49ea69b291f2cb7fc0f2cddc95174dd168c1140",
+    "rtl/ai_config_sizes.v": "8433019ae918d358f7b923a309624a2eb0b4acc18544658687699490f250f1e7",
+    "rtl/ai_mul32_pipeline.v": "8a3ba2e821103e15e0860c03d6a42b309701358ad898e4bfa5692b0925db00d1",
+    "rtl/ALU.v": "ac19f295fc1a7fbe177c82c913a4123c799069fff7a13b62f948d6336407d541",
+    "rtl/branch_predictor.v": "bb406a5bc78751fa1bd74d16523e780aed00ebf956c7916558007d1bd713bbb0",
+    "rtl/conv2d_core.v": "2f4749bf817e0a5fcb49476c68f96e675c95dc32468c9cd2d7f898a4b6b6919a",
+    "rtl/conv2d_ddr_engine.v": "19e8ed9eb4195982cedeed3e4eb682fbd562cd92ec01e6c64008e77695e4c1bb",
+    "rtl/conv2d_w8a16_core.v": "11df5923584688ad04f457d0f279ca24ee2376bb2de88cfce3aa91b7f5dff953",
+    "rtl/conv_mac_tile.v": "10ae0476b9028b77a5bd8f5c9e691db64dfee2ae9ed2281cb9404a03d961d73e",
+    "rtl/CSR.v": "3f6aa82deab134118f6578678870d8a97f0a398fcf2577459ad71566f7d78445",
+    "rtl/ddr_block_transfer.v": "79152008307ff7025fda41fee758082444bf5b496653583acfb8914d4c254fda",
+    "rtl/ddr_chunk_client.v": "44c13ee0369d40b999752148d8d104197cbdc1ad6fb8e287c7c151448cf7deaa",
+    "rtl/ddr_cpu_window.v": "634b726debc19381c394267e179cd07e35849249d932290115f420ef1065d237",
+    "rtl/ddr_native_arbiter.v": "f91c428f558dc0576c113903bf55cab365133711eade644b607e1272ac3092da",
+    "rtl/ddr_region_check.v": "64588a6638ebd5b557954b1f9b21fd4dca7f356265a25a27c0839e037b9ce1f5",
+    "rtl/decoder.v": "7488431d347ade162af2b63b3341795f9050ff0b4cf643dd3a30fdffd82dd063",
+    "rtl/divide_unit.v": "6b79fce9559823d485981685bf60ac5ddf37b75e945d2e3c7df2f5275cd3fef5",
+    "rtl/divider_core.v": "b2981039b71dc2b0846907f4397a0edc792ae900f0ac0c7ca6d36d8b07dfca49",
+    "rtl/frame_mailbox.v": "16202965f74295cd92009292402fa3de4c7f048b88a3a3dd36fcef892f979dd9",
+    "rtl/GPR_matrix.v": "f0921cfe29610b8e3b0587e9a5c49e06da5d47a14256b1a6d3e68c7528559db2",
+    "rtl/hazard_detection_unit.v": "7b7450e197b289ce7a85c955967582bf92f514c32229cfa7d75114aa6aa4bce4",
+    "rtl/memory.v": "aa065816f6e44a66775c8416a2940f4d84c4dd5d2417af62a721d58f1e028c2a",
+    "rtl/memory_core.v": "c48e8af68616dd1bac433d17678df0f774c0e0646aa6fa82a18a1f5c16823027",
+    "rtl/multiplier_core.v": "23098b5d003ca18f08338acdc780befdd0118e86527099369436b579b4bd2eef",
+    "rtl/multiply_adder.v": "e7c2e1d68d4fb8bea046caf71b3938b26cc8da727308c3d67ee00a8e9ad3590e",
+    "rtl/multiply_adder_w8a16.v": "1ece17a2531edf5efbb5b2ebc1adb88475ef2a16a0aad715c7c7f7e7a806ba59",
+    "rtl/multiply_unit.v": "813ab2d4ad4eccd4c42e43912800244b95307d9969d26f2db045800feb751a6e",
+    "rtl/PC.v": "05603f0feed9466abb3296709869836799d7c85d4be1acf75307ee618382a89d",
+    "rtl/pcie/dma/fifo/ipm_distributed_sdpram_v1_2_distributed_fifo.v": "7c454dc965a365c909125d5059021cd9be331b99fc4df178ce9b5d9cd9a2ac22",
+    "rtl/pcie/dma/fifo/pgs_pciex4_fifo_ctrl.v": "884018796bba3493fd2863cc9207288cf780e4bef99675c6b932572a4f4a0c40",
+    "rtl/pcie/dma/fifo/pgs_pciex4_fifo_v1_2.v": "cb34b33d3e995c8c8ecfb637cb01b301e69cf95b7a285cfe5619907cfb204d15",
+    "rtl/pcie/dma/ipm_distributed_sdpram_v1_2.v": "5f0828da1f2e6bf35f6cc60ca75d4351e4caf670af1c855695e7d545b565f5e0",
+    "rtl/pcie/dma/ips2l_expd_apb_mux.v": "639bef2642cf4da0ba5500cf5568040a85d3259e2033aabfb31a0cf26148e3d2",
+    "rtl/pcie/dma/ips2l_pcie_dma.v": "ad8ce8c7f17ad13902f4d19174f6dddd18b54171d2ec98e80bba3c6f54217fec",
+    "rtl/pcie/dma/ips2l_pcie_dma_controller.v": "9f67392d2301f465ece79f52c366625ca1c0660ac17b15e1b4e777d1221f2276",
+    "rtl/pcie/dma/ips2l_pcie_dma_cpld_tx_ctrl.v": "b0d8998d0bf250988db2fbe6a615291e466858593299a28a544267925ebd9ba3",
+    "rtl/pcie/dma/ips2l_pcie_dma_mrd_tx_ctrl.v": "78891308d3f7e1a8487c05e51bfe5a62a4bcb5d5884c1e5f13610ba805ddf304",
+    "rtl/pcie/dma/ips2l_pcie_dma_mwr_tx_ctrl.v": "e8a5cb68ec239820d303252473a83d226235f650352648391e9bf850a820a5fa",
+    "rtl/pcie/dma/ips2l_pcie_dma_ram/ips2l_pcie_dma_ram.v": "6f5c92809fe8ccb2bb03c3e6da39fdc0f8c84441bf83c671a028e6ea4cbfb6c8",
+    "rtl/pcie/dma/ips2l_pcie_dma_ram/rtl/ipm2l_sdpram_v1_1_ips2l_pcie_dma_ram.v": "400a7f141523c8f74f5db5bfd66a9686995db1bf101a81ecf11b1d7bd00621a5",
+    "rtl/pcie/dma/ips2l_pcie_dma_rd_ctrl.v": "7389f01d5024092a4feafc175fb717be12b1464cb029226a06a2ffef1d8a7b9d",
+    "rtl/pcie/dma/ips2l_pcie_dma_rx_cpld_wr_ctrl.v": "797f467342dd4d1c9a985beab21ad8afd844bb47a52d13c5a0e82022d866dc9b",
+    "rtl/pcie/dma/ips2l_pcie_dma_rx_mwr_wr_ctrl.v": "d7f01a2165cc46d7dd1ae6d447df214e7da888ce754d6860ab5d53af044a688c",
+    "rtl/pcie/dma/ips2l_pcie_dma_rx_top.v": "6b896bdca3a659f4e7c750811b7086cd0aa38896a439ae8bcc61f83d2c2f66a7",
+    "rtl/pcie/dma/ips2l_pcie_dma_tlp_rcv.v": "371d0bdd074f671dfed712fcae108c1ff11c88a88c623f129b322821e6d95f37",
+    "rtl/pcie/dma/ips2l_pcie_dma_tlp_tx_mux.v": "fadcb6f52ac5974e31defe66af4d8006d25d0399d4a58f965d4e64cb3ab7bf44",
+    "rtl/pcie/dma/ips2l_pcie_dma_tx_cpld_rd_ctrl.v": "092f9fb735a10d683871e962b119e92ce855c80c2a9ad82768a33d8563a03455",
+    "rtl/pcie/dma/ips2l_pcie_dma_tx_mwr_rd_ctrl.v": "306d56fdf3df9ed4744dc04c3cbae0e542a4f2d286fed2b9f6346df97cff3928",
+    "rtl/pcie/dma/ips2l_pcie_dma_tx_top.v": "83470836e7d1531afcb5d0fdd017dabec4905b93d2977c2d1594338b997f7096",
+    "rtl/pcie/dma/ips2l_pcie_dma_wr_ctrl.v": "f6b1c05137941341de1591a6957125d3f92051f1913c040cd5187987ae82b620",
+    "rtl/pcie/dma/pgs_pciex4_prefetch_fifo_v1_2.v": "3575ea92275cf80503b326f5fec5ea88d1bd5b34126537db4ce27ad4ca63764a",
+    "rtl/pcie/pcie_test_source.v": "48e7f1c024088909c4a3948c7d909f6adf34edbbf83849600894762164793887",
+    "rtl/peripheral_bus.v": "32624ecabe60106c57b407c16ed93f89954df6919d51feef4f547b79469f646c",
+    "rtl/Reg.v": "d9d3cadac23f52000a85f5d612182b6cbb4d3f0fe93071bc38c7ce4f10d7309c",
+    "rtl/requant_int8.v": "67626756087821b002e8709d51dd7d7b11d696c5ea37cbc3b3a742dca53cb9c8",
+    "rtl/requant_q13.v": "20aa11a00239da3f5d05b24b9f5abbe503195d22da94a6db3f7a7fedfd49f0cb",
+    "rtl/rk_fspi/rk_fspi_adapter.v": "9d08a29cdfd6afda364d7f9a8e14a706f39cacf437a15a063e323591fa57e1ab",
+    "rtl/ROM.v": "5ac6e482262caf156fa50a953f6a42c817f47fb0ad026ab3d47bbc6463753a1d",
+    "rtl/ROM_core.v": "c98d0b78cec8e72897a2f6011280a73bee7fd14a292bcf57f4fa4d3693292d68",
+    "rtl/scale_mul64x31.v": "f9fef04b8b58c7cfd399d34cfc3f3de2dbf7777ad6559cad78ce56a2ecc3939f",
+    "rtl/soc.v": "1d725e7ca699fd85baa10d6842e25528849e30c08f749a6b6e3363557a94476e",
+    "rtl/uart_tx.v": "a5842224e3919ae36fbf3bbf91fc45cb36b741e0db2dcd0336af07a0ee6b00b9",
+    "rtl/video/ddr3_read_ctrl.v": "44f812a2fc9941c6a4571e8128359046e475ab23ff643f535a5ae0c35b6fb152",
+    "rtl/video/ddr3_write_ctrl_lite.v": "e392c351705e5123a8414cc587331d80f546d5d6fa14842fa2f75304632a8b0d",
+    "rtl/video/frame_ring_ddr3.v": "f3f496c10bef664f091b7d07b37acd1387cdf7dec6ee5efc418a3cf6d73d50a0",
+    "rtl/video/hdmi/hdmi_in_demo.v": "0e9e786deb4edd91aa0016d60610e2d69c9d04cfa3ffc1752c43c6eac1090cda",
+    "rtl/video/hdmi/iic_dri.v": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e",
+    "rtl/video/hdmi/ms7200_ctl.v": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199",
+    "rtl/video/hdmi/ms7210_ctl.v": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae",
+    "rtl/video/hdmi/ms72xx_ctl.v": "508c3e10c9d092bba78bec75029726fc0d697ae7ee676d69ab1f8bb329e13da3",
+    "rtl/video/hdmi_in_detector.v": "5afced54445a8dff38b29e8ee4d636688f761a36e20b419d07b8a6791fd720b6",
+    "rtl/video/hdmi_line_pad.v": "bc8c67f967265fdffcd2264233ab8b7abaa53e63e2aedeee2db3eda473e76347",
+    "rtl/video/preprocess/hdmi_tensor_capture.v": "063a4d3e094be6dfe00f3479d499bae00af021d97032e1d84167c518a9084ee3",
+    "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
+    "rtl/video/preprocess/rgb888_pool96.v": "3b3482afee94b3e74967640b867c64243e6a1d9d00c52a0a10c918069bc8e432",
+    "rtl/video/preprocess/rgb_mean240.v": "88a09fbcdbe807effee1c30b8f28b3c7b06e8aaf0ed2654d3952ca56c20e2b88",
+    "rtl/video/rgb565_box_overlay.v": "588b7794c09857aedce20e248a98f1fad538b59eddcfc671289c88d0bb4ed49b",
+    "rtl/video/video_present_control.v": "95715132c2190218f71ebbdfd05d3c7e255ef9094619a599653ea86c33061b13",
+    "rtl/video_async_fifo.v": "94a633cb22fed25fd87c14f43c8a9ac72b32c5c086676ad5f6382b83ab534b25",
+    "rtl/video_frame_capture.v": "b82c39799fcc025402c6a55ddb79728f3273ed5f17e509f5739057a06dd8b353",
+    "rtl/video_timing_monitor.v": "d0b708746197924fdbf7b26495a920e65dd4d3fbe4982a5e88aab83554370fe2"
+  },
+  "artifacts": {
+    "synthesize/acore_dual_top.snr": {
+      "bytes": 1265903,
+      "sha256": "2c11f9af2fa61d88be89e04dc82a7317a77912d39618dd310fab039164d2e42c"
+    },
+    "place_route/acore_dual_top.prr": {
+      "bytes": 185014,
+      "sha256": "95758682a0234975e32dfae9dc78635abfb2d0b00e3e30a537e98969966534e0"
+    },
+    "place_route/acore_dual_top.rtr": {
+      "bytes": 1954034,
+      "sha256": "c43610531026bd05be6339266259c7fd02974dc0f4088ce935d44c73689b8180"
+    },
+    "generate_bitstream/acore_dual_top.sbit": {
+      "bytes": 3791112,
+      "sha256": "de1dc915675264fc6d1160d1b8cbca21cf4e2c56978d74462f6e83919d1adcc9"
+    }
+  }
+}

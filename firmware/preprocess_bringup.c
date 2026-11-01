@@ -44,7 +44,7 @@ int main(void){
     started=CYCLES;
     while(!(PP_REG(4)&PP_DDR_READY))if(CYCLES-started>75000000u)fail(1);
     started=CYCLES;
-    while(REG(0x3061cu)!=((1080u<<16)|1920u))if(CYCLES-started>50000000u)fail(2);
+    while(!pp_input_shape_usable(REG(0x3061cu)))if(CYCLES-started>50000000u)fail(2);
     if(pp_capture_start(PP_DEFAULT_BASE))fail(3);
     started=CYCLES;
     for(;;){
