@@ -11,8 +11,12 @@ module video_timing_monitor (
     (* ASYNC_REG="TRUE" *) reg meta,synced;
     reg seen,last;
     reg [31:0] timer;
-    always @(posedge pixel_clk or negedge rst_n) begin
-        if(!rst_n) begin
+    (* ASYNC_REG="TRUE" *) reg [1:0] pixel_reset_sync;
+    always @(posedge pixel_clk or negedge rst_n)
+        if(!rst_n)pixel_reset_sync<=0;else pixel_reset_sync<={pixel_reset_sync[0],1'b1};
+    wire pixel_reset_n=pixel_reset_sync[1];
+    always @(posedge pixel_clk or negedge pixel_reset_n) begin
+        if(!pixel_reset_n) begin
             old_vs<=0;old_de<=0;toggle<=0;line_pixels<=0;max_pixels<=0;lines<=0;
             pixel_shape<=0;shape_ok<=0;bad_line<=0;
         end else begin

@@ -39,3 +39,7 @@ FPGA 侧排空后解除发送附加保护，原抓帧持有位仍需 video-relea
 P1 独立核的验证报告仍保留其独立范围；P2 的实际 HDMI/DDR 接线和统一帧槽归属见 `hdmi_tensor_p2.md`。
 当前 CPU IP 已切换并重新生成为 `firmware/video_diagnostic/` 视频+首层AI+整网服务+画框发送+纯SPI镜像；
 需重新生成位流后才能在板上运行。原 CoreMark hex 保留。
+
+2026-11-01 已完成新的时序修复检查点和位流生成，详情见 `timing_closure_p5.md`。
+配置跨域、SPI 和像素复位检查已通过；整体仍有 DDR/PCIe setup 和一个 CPU 域 hold 违例，
+尚未实板验收，也没有完成上表 P5 的连续运行闭环。

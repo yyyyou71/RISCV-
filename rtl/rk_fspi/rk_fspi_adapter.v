@@ -51,8 +51,10 @@ module rk_fspi_adapter (
  reg [3:0] hi=0;
  reg [11:0] count=0;
  reg rx_accept=0,tx_accept=0;
- reg [3:0] tx_nibble=15;
- reg drive=0;
+ reg [3:0] tx_nibble /* synthesis syn_useioff=1 */ =15;
+ // Active-high tri-state controls connect directly to the four I/O enables.
+ // Preserve one register per pad so placement need not fan out a fabric OE.
+ reg [3:0] tx_disable /* synthesis syn_useioff=1 syn_preserve=1 */ =4'hf;
  wire [11:0] fetch_index=(state==READ && half) ? count+12'd1 : count;
  wire rx_allowed=(count==0 && !half) ? rx_req_sync!=rx_done : rx_accept;
  always @(posedge spi_clk) begin
@@ -90,18 +92,23 @@ module rk_fspi_adapter (
   end
  end
  always @(negedge spi_clk or posedge frame_reset)begin
-  if(frame_reset)begin tx_nibble<=15;drive<=0;tx_accept<=0;end
+  if(frame_reset)begin tx_nibble<=15;tx_disable<=4'hf;tx_accept<=0;end
   else if(state==READ)begin
-   drive<=1;
+   tx_disable<=0;
    if(count==0 && !half)begin
     tx_accept<=tx_req_sync!=tx_done;
     tx_nibble<=(tx_req_sync!=tx_done) ? tx_q[7:4] : 4'hf;
    end else if(tx_accept && count<tx_length)
     tx_nibble<=half ? tx_q[3:0] : tx_q[7:4];
    else tx_nibble<=15;
-  end else drive<=0;
+  end else tx_disable<=4'hf;
  end
- assign spi_data=(!frame_reset && drive) ? tx_nibble : 4'bzzzz;
+ // CS/global reset asynchronously sets these registers, including when SCK
+ // has stopped. No additional LUT is needed between their Q and each pad T.
+ genvar dq_pin;
+ generate for(dq_pin=0;dq_pin<4;dq_pin=dq_pin+1)begin:g_dq
+  assign spi_data[dq_pin]=tx_disable[dq_pin]?1'bz:tx_nibble[dq_pin];
+ end endgenerate
  // Held bundled summary; sample after synchronized CS-high + four CPU clocks.
  reg frame_toggle;
  reg [11:0] report_count;

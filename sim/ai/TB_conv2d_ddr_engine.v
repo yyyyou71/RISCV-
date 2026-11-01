@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 module TB_conv2d_ddr_engine;
     parameter integer QUANT_TEST=0;
+    parameter integer MAX_LAYERS=0; // 0=all fixtures; timing edits use two small layers/operator.
     // 0=原始W8A8，1=INT8量化，2=W8A16卷积，3=INT16 ADD，4=Concat，5=MaxPool5，6=Upsample2x。
     reg ref_clk=0, rst_n=0;
     always #20 ref_clk=~ref_clk;
@@ -254,6 +255,7 @@ module TB_conv2d_ddr_engine;
             endcase
             before_count=aw_count+ar_count;cmd_valid=1;
             @(negedge clk);cmd_valid=0;
+            while(busy) @(negedge clk);
             if(busy || done || !error || error_code!==code || aw_count+ar_count!=before_count)
                 $fatal(1,"invalid engine config accepted which=%0d code=%0d",which,error_code);
             clear_status=1;@(negedge clk);clear_status=0;
@@ -447,6 +449,7 @@ module TB_conv2d_ddr_engine;
                 24:cfg_output_addr=32'h1fffff00;
             endcase
             before_commands=aw_count+ar_count;cmd_valid=1;@(negedge clk);cmd_valid=0;
+            while(busy) @(negedge clk);
             if(busy || done || !error || error_code!==code || aw_count+ar_count!=before_commands || dma_fault)
                 $fatal(1,"bad unary operation case=%0d code=%0d expected=%0d",which,error_code,code);
             clear_status=1;@(negedge clk);clear_status=0;
@@ -467,7 +470,7 @@ module TB_conv2d_ddr_engine;
         $readmemh("initial.mem",initial_memory,0,initial_count-1);
         $readmemh("golden.mem",golden,0,golden_count-1);
         repeat(6) @(negedge ref_clk);rst_n=1;wait(ddr_init_done);
-        for(job=0;job<job_count;job=job+1) begin
+        for(job=0;job<job_count && (MAX_LAYERS==0 || job<MAX_LAYERS);job=job+1) begin
             run_layer(job);
         end
         if(QUANT_TEST<3)begin

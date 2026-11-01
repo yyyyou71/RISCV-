@@ -131,6 +131,7 @@ module frame_ring_ddr3 #(
     assign core_clk = core_clk_i;
 
     // ======================== 前端整形像素流 (pixclk 域) ========================
+    wire                    pixel_reset_n;
     wire                    det_wr_en;
     wire [PIXEL_WIDTH-1:0]  det_wr_data;
 
@@ -183,7 +184,7 @@ module frame_ring_ddr3 #(
         .MAGIC_SOF    ( MAGIC_SOF    )
     ) u_detector (
         .clk          ( wr_clk       ),
-        .rst_n        ( sys_rst_n    ),
+        .rst_n        ( pixel_reset_n ),
         .hdmi_vs      ( vs           ),
         .hdmi_hs      ( 1'b0         ),   // detector 内部不使用 HS
         .hdmi_de      ( de           ),
@@ -206,6 +207,7 @@ module frame_ring_ddr3 #(
         .FRAME_SHIFT    ( FRAME_SHIFT    ),
         .MAGIC_SOF      ( MAGIC_SOF      )
     ) u_write_ctrl (
+        .pixel_reset_n(pixel_reset_n),
         .protect_mask(hold_mask|reader_hold|tensor_hold|(CONTROLLED_READER?present_hold:5'b0)),.capture_ok(stream_sync),
         .frame_ids(frame_ids),.write_active(write_active),
         .source_next_id(source_next_id),.source_fault(video_source_fault),

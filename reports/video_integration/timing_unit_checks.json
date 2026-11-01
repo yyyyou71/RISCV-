@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "scope": "targeted RTL arithmetic/control/protocol checks; not whole-board or full-model simulation",
+  "full_network_run": false,
+  "board_verified": false,
+  "unit_cases": [
+    {
+      "name": "config_sizes",
+      "passed": true,
+      "summary": "128 cases x W8/W16, 64-bit wrap, wide invalid inputs, reset"
+    },
+    {
+      "name": "address_pipeline",
+      "passed": true,
+      "summary": "256 full-width cases, snapshot, wrap, stalls, cancel"
+    },
+    {
+      "name": "add_pipeline",
+      "passed": true,
+      "summary": "256 signed/shift/saturation/invalid cases, snapshot and stalls"
+    },
+    {
+      "name": "ai_control",
+      "passed": true,
+      "summary": "fault CDC, reset in flight, recovery, IIC coexistence"
+    },
+    {
+      "name": "fspi",
+      "passed": true,
+      "summary": "50MHz mode3 1/16/256/2048-byte ownership, retries, overflow, stopped SCK/reset"
+    },
+    {
+      "name": "frame_protection",
+      "passed": true,
+      "summary": "retained slot/data/id, wrap skip, full-pool drop/resume, concurrent mailbox lease"
+    },
+    {
+      "name": "video_timing",
+      "passed": true,
+      "summary": "1080p, measured period, bad line/frame rejection, recovery/reset"
+    }
+  ],
+  "operator_checks": [
+    {
+      "mode": 2,
+      "passed": true,
+      "summary": "PASS conv_ddr layers=12 words=44 AW=66 AR=923",
+      "initial_layers_checked": 2,
+      "fixture_layers": 12
+    },
+    {
+      "mode": 3,
+      "passed": true,
+      "summary": "PASS conv_ddr layers=15 words=66 AW=66 AR=143",
+      "initial_layers_checked": 2,
+      "fixture_layers": 15
+    },
+    {
+      "mode": 4,
+      "passed": true,
+      "summary": "PASS conv_ddr layers=16 words=66 AW=66 AR=67",
+      "initial_layers_checked": 2,
+      "fixture_layers": 16
+    },
+    {
+      "mode": 5,
+      "passed": true,
+      "summary": "PASS conv_ddr layers=16 words=22 AW=22 AR=34",
+      "initial_layers_checked": 2,
+      "fixture_layers": 16
+    },
+    {
+      "mode": 6,
+      "passed": true,
+      "summary": "PASS conv_ddr layers=16 words=80 AW=82 AR=12",
+      "initial_layers_checked": 2,
+      "fixture_layers": 16
+    }
+  ],
+  "updated_add_operator_check": [
+    {
+      "mode": 3,
+      "passed": true,
+      "initial_layers_checked": 2,
+      "fixture_layers": 15,
+      "summary": "PASS conv_ddr layers=15 words=66 AW=66 AR=143"
+    }
+  ],
+  "source_snapshot": {
+    "board/acore_dual_top.v": "92a1ded40b59e337fb32eea72a87488362cd66c59cd2278cdda0d5fddeb52112",
+    "board/timing.fdc": "1f46571b2092cceae3bc5caa4202cfd000c6585d2ac8aace97ab72c33a848f80",
+    "rtl/conv2d_ddr_engine.v": "19e8ed9eb4195982cedeed3e4eb682fbd562cd92ec01e6c64008e77695e4c1bb",
+    "rtl/ai_config_sizes.v": "8433019ae918d358f7b923a309624a2eb0b4acc18544658687699490f250f1e7",
+    "rtl/ai_mul32_pipeline.v": "8a3ba2e821103e15e0860c03d6a42b309701358ad898e4bfa5692b0925db00d1",
+    "rtl/ai_address_math.v": "9ccde3785916c9db5305bbb1d49ea69b291f2cb7fc0f2cddc95174dd168c1140",
+    "rtl/rk_fspi/rk_fspi_adapter.v": "9d08a29cdfd6afda364d7f9a8e14a706f39cacf437a15a063e323591fa57e1ab",
+    "rtl/video/frame_ring_ddr3.v": "f3f496c10bef664f091b7d07b37acd1387cdf7dec6ee5efc418a3cf6d73d50a0",
+    "rtl/video/ddr3_write_ctrl_lite.v": "e392c351705e5123a8414cc587331d80f546d5d6fa14842fa2f75304632a8b0d",
+    "rtl/add_int16.v": "314a224bfc6df2d21b2cca9ac5a271139aa1470232478e7ed8730ca5e1c15899",
+    "rtl/video_timing_monitor.v": "123b731f0bf588f1d7a72dff75bdae987fd15421473cd95e9b596e59b5c2768d"
+  }
+}

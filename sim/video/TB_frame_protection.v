@@ -5,7 +5,8 @@ module TB_frame_protection;
     always #4 core_clk=~core_clk;
     reg [15:0] pixel=0;
     reg [4:0] protect=0;
-    wire [4:0] cpu_hold,protection=protect|cpu_hold;
+    wire [4:0] cpu_hold;
+    wire [4:0] protection=protect|cpu_hold;
     reg cpu_we=0;
     reg [31:0] cpu_command=0;
     wire [31:0] cpu_status;
@@ -77,6 +78,7 @@ module TB_frame_protection;
     reg [31:0] held_id;
     initial begin
         repeat(6)@(negedge core_clk);rst_n=1;
+        wait(dut.pixel_reset_n && dut.core_reset_n);
         send_frame(0);send_frame(1);
         if(!done[0]||ids[31:0]!=0)$fatal(1,"first frame completion/id");
         protect=1;snapshot=first_word;

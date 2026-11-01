@@ -91,3 +91,9 @@ set_false_path -to [get_cells -hierarchical {*u_present*arm_meta*}]
 set_false_path -to [get_cells -hierarchical {*u_present*done_meta*}]
 set_false_path -to [get_cells -hierarchical {*u_present*fault_meta*}]
 set_false_path -to [get_cells -hierarchical {*u_present*pc_req_meta*}]
+
+# Only asynchronous reset arrivals into the release chains are exempted.
+# Stage-1 Q -> stage-2 D and all reset fanout inside each target domain stay timed.
+set_false_path -from [get_clocks {sys_clk}] -to [get_cells -hierarchical {*u_write_ctrl*pixel_reset_sync*}]
+set_false_path -from [get_clocks {sys_clk}] -to [get_cells -hierarchical {*u_write_ctrl*core_reset_sync*}]
+set_false_path -from [get_clocks {sys_clk}] -to [get_cells -hierarchical {*u_video_monitor*pixel_reset_sync*}]

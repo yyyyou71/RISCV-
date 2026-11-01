@@ -47,6 +47,7 @@ module ddr3_write_ctrl_lite #(
     // ---- 前端整形像素流 (pixclk 域) ----
     input                              fifo_wr_en,
     input      [PIXEL_WIDTH-1:0]       fifo_wr_data,
+    output wire                        pixel_reset_n, // shared with the pixel-domain detector
     output                             fifo_almost_full,   // dbg: 溢出预警
 
     // ---- AXI4 写接口 (core_clk 域, Pango 简化 AXI) ----
@@ -75,6 +76,17 @@ module ddr3_write_ctrl_lite #(
     localparam BURST_PER_LINE = WORDS_PER_LINE / BURST_BEAT_CNT;                 // 15
     localparam BURST_BYTES    = BURST_BEAT_CNT * (AXI_DATA_WIDTH / 8);           // 256
 
+    // Assert together; release only on the clock of the consuming domain.
+    // The detector uses pixel_reset_n too, so its first SOF and the source
+    // counter cannot start on different pixel cycles.
+    (* ASYNC_REG="TRUE" *) reg [1:0] pixel_reset_sync,core_reset_sync;
+    always @(posedge wr_clk or negedge rst_n)
+        if(!rst_n)pixel_reset_sync<=0;else pixel_reset_sync<={pixel_reset_sync[0],1'b1};
+    always @(posedge core_clk or negedge rst_n)
+        if(!rst_n)core_reset_sync<=0;else core_reset_sync<={core_reset_sync[0],1'b1};
+    assign pixel_reset_n=pixel_reset_sync[1];
+    wire core_reset_n=core_reset_sync[1];
+
     // ======================== fifo_2_ddr 异步 FIFO ========================
     wire                        rd_en;
     wire [AXI_DATA_WIDTH-1:0]   rd_data;
@@ -86,26 +98,26 @@ module ddr3_write_ctrl_lite #(
     (* ASYNC_REG="TRUE" *) reg overflow_meta,overflow_sync;
     // Both counters count the same in-band SOFs, including intentionally dropped
     // frames. An overflow invalidates that correspondence until common reset.
-    always @(posedge wr_clk or negedge rst_n)
-        if(!rst_n)begin source_next_id<=0;overflow_pixel<=0;end
+    always @(posedge wr_clk or negedge pixel_reset_n)
+        if(!pixel_reset_n)begin source_next_id<=0;overflow_pixel<=0;end
         else if(fifo_wr_en)begin
             if(fifo_wr_data==MAGIC_SOF)source_next_id<=source_next_id+1'b1;
             if(fifo_full)overflow_pixel<=1;
         end
-    always @(posedge core_clk or negedge rst_n)
-        if(!rst_n)begin overflow_meta<=0;overflow_sync<=0;end
+    always @(posedge core_clk or negedge core_reset_n)
+        if(!core_reset_n)begin overflow_meta<=0;overflow_sync<=0;end
         else begin overflow_meta<=overflow_pixel;overflow_sync<=overflow_meta;end
     assign source_fault=overflow_sync;
 
     fifo_2_ddr u_fifo_2_ddr (
         .wr_clk         (wr_clk),
-        .wr_rst         (~rst_n),
-        .wr_en          (fifo_wr_en),
+        .wr_rst         (~pixel_reset_n),
+        .wr_en          (fifo_wr_en && pixel_reset_n),
         .wr_data        (fifo_wr_data),
         .wr_full        (fifo_full),
         .almost_full    (fifo_almost_full),
         .rd_clk         (core_clk),
-        .rd_rst         (~rst_n),
+        .rd_rst         (~core_reset_n),
         .rd_en          (rd_en),
         .rd_data        (rd_data),
         .rd_empty       (rd_empty),
@@ -136,8 +148,8 @@ module ddr3_write_ctrl_lite #(
 
     wire load_done = (state == S_LOAD) && (load_cap == BURST_BEAT_CNT);
 
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) begin
             load_req <= 5'd0;
             load_cap <= 5'd0;
             rd_en_d1 <= 1'b0;
@@ -196,8 +208,8 @@ module ddr3_write_ctrl_lite #(
         end
     end
     assign write_active=have_prev && !drop_frame;
-    always @(posedge core_clk or negedge rst_n)begin
-        if(!rst_n)begin drop_frame<=1;invalid_frame<=1;written_bursts<=0;sequence_id<=0;active_id<=0;end
+    always @(posedge core_clk or negedge core_reset_n)begin
+        if(!core_reset_n)begin drop_frame<=1;invalid_frame<=1;written_bursts<=0;sequence_id<=0;active_id<=0;end
         else begin
             if(!capture_ok)invalid_frame<=1;
             if(state==S_W && axi_wready && axi_wusero_last)written_bursts<=written_bursts+1'b1;
@@ -211,8 +223,8 @@ module ddr3_write_ctrl_lite #(
     wire [AXI_ADDR_WIDTH-1:0] slot_base = {slot_next, {FRAME_SHIFT{1'b0}}};
 
     // load_done 那一拍: 更新地址/帧槽/行内 burst 号
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) begin
             axi_awaddr    <= {AXI_ADDR_WIDTH{1'b0}};
             slot          <= (RING_FRAMES - 1);   // 首个 SOF 推进到槽 0 → 帧头写 0x000000
             burst_in_line <= 4'd0;
@@ -234,8 +246,8 @@ module ddr3_write_ctrl_lite #(
     assign dbg_sof_seen = have_prev;
 
     // ======================== FSM 转移 ========================
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) state <= S_IDLE;
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) state <= S_IDLE;
         else        state <= next_state;
     end
 
@@ -258,8 +270,8 @@ module ddr3_write_ctrl_lite #(
     end
 
     // ---- awvalid + aw_done (E8: 握手后锁存, 不重复拉高) ----
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) begin
             axi_awvalid <= 1'b0;
             aw_done     <= 1'b0;
         end else if (state == S_AW && !aw_done) begin
@@ -281,8 +293,8 @@ module ddr3_write_ctrl_lite #(
     assign axi_wdata = word_reg;                       // C1: 组合直连预取寄存器
     assign axi_wstrb = {(AXI_DATA_WIDTH/8){1'b1}};
 
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) begin
             word_reg <= {AXI_DATA_WIDTH{1'b0}};
             rd_idx   <= 5'd0;
         end else begin
@@ -310,8 +322,8 @@ module ddr3_write_ctrl_lite #(
     // 前一帧完成的判据: 收到下一帧 SOF burst 时(load_done && is_sof),
     // 说明上一帧全部 burst 的 wusero_last 都已在此前 S_W 回来 → 上一帧安全落盘.
     // 新增精确 burst 数和输入形状检查；不完整帧不发布给读侧。
-    always @(posedge core_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge core_clk or negedge core_reset_n) begin
+        if (!core_reset_n) begin
             frame_done <= {RING_FRAMES{1'b0}};frame_ids<=0;
         end else begin
             if (load_done && is_sof)begin

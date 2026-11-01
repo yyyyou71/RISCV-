@@ -30,6 +30,8 @@ module acore_dual_top #(
     // Keep the proven DDR reference input raw; distribute the added CPU domain
     // through its own global network instead of general routing.
     GTP_CLKBUFG u_cpu_clkbuf(.CLKIN(sys_clk),.CLKOUT(cpu_clk));
+    wire fspi_clk;
+    GTP_CLKBUFG u_fspi_clkbuf(.CLKIN(spi_clk),.CLKOUT(fspi_clk));
     wire [4:0] available,hold_mask;
     wire [159:0] frame_ids;
     wire [2:0] write_slot;
@@ -58,7 +60,7 @@ module acore_dual_top #(
         .tensor_we(tensor_we),.tensor_addr_wr(tensor_addr_wr),.tensor_addr_rd(tensor_addr_rd),
         .tensor_wdata(tensor_wdata),.tensor_rdata(tensor_rdata),
         .sys_clk(cpu_clk),
-        .spi_clk(spi_clk),.spi_cs(spi_cs),.spi_data(spi_data),
+        .spi_clk(fspi_clk),.spi_cs(spi_cs),.spi_data(spi_data),
         .key0_n(key0_n&&system_rst_n),
         .uart_tx(),
         .led0(cpu_led0),

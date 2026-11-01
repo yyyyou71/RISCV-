@@ -28,6 +28,13 @@ module conv2d_ddr_engine #(
     input wire dma_rd_valid, output wire dma_rd_ready,
     input wire [127:0] dma_rd_data
 );
+    // The request toggle is synchronized by ddr_cpu_window; capture the held
+    // bundle here before performing any arithmetic in the DDR clock domain.
+    reg [31:0] held_opcode, held_input_addr, held_weight_addr, held_bias_addr, held_output_addr, held_quant_addr, held_post, held_group_split;
+    reg [15:0] held_in_h, held_in_w, held_in_ch, held_out_ch;
+    reg [1:0] held_kernel, held_stride, held_padding;
+    reg held_bias_enable;
+
     localparam [5:0] IDLE=0, B_REQ=1, B_WAIT=2, INIT=3,
         W_REQ=4, W_WAIT=5, P_REQ=6, P_WAIT=7, T_START=8, T_WAIT=9, O_REQ=10, O_WAIT=11,
         QPAR_REQ=12, QPAR_WAIT=13, Q_START=14, Q_WAIT=15, MERGE_REQ=16, MERGE_WAIT=17,
@@ -36,7 +43,8 @@ module conv2d_ddr_engine #(
         ADD_START=26,ADD_WAIT=27,ADD_OREQ=28,ADD_OWAIT=29,
         CAT_PREP=30,CAT_REQ=31,CAT_WAIT=32,CAT_COPY=33,CAT_OREQ=34,CAT_OWAIT=35,
         POOL_INIT=36,POOL_PREP=37,POOL_REQ=38,POOL_WAIT=39,POOL_OREQ=40,POOL_OWAIT=41,
-        UP_PREP=42,UP_REQ=43,UP_WAIT=44,UP_OREQ=45,UP_OWAIT=46;
+        UP_PREP=42,UP_REQ=43,UP_WAIT=44,UP_OREQ=45,UP_OWAIT=46,
+        CFG_PITCH=47,CFG_DIMS=48,CFG_START=49,CFG_WAIT=50,CFG_END=51,CFG_CHECK=52;
     reg [5:0] state;
     reg [31:0] input_addr, weight_addr, bias_addr, output_addr, quant_addr;
     reg [15:0] height, width, input_channels, output_channels;
@@ -45,7 +53,7 @@ module conv2d_ddr_engine #(
     reg output_int8, relu_enable;
     reg [31:0] group_split;
     wire quantized=ACT_WIDTH==16 || output_int8;
-    wire cfg_quantized=ACT_WIDTH==16 || cfg_post[0];
+    wire cfg_quantized=ACT_WIDTH==16 || held_post[0];
     wire current_group=ACT_WIDTH==16 && group_split!=0 && ci_base>=group_split;
     reg [1:0] quant_lane;
     reg [31:0] quant_multiplier[0:3], quant_shift[0:3];
@@ -77,40 +85,30 @@ module conv2d_ddr_engine #(
     reg [31:0] up_x,up_y,up_channel,up_row_bytes;
     reg [1:0] up_copy;
     reg [127:0] up_word;
-    wire [31:0] cfg_ci_pitch=({16'd0,cfg_in_ch}+32'd15)&32'hfffffff0;
-    wire [31:0] cfg_co_pitch=({16'd0,cfg_out_ch}+32'd3)&32'hfffffffc;
-    wire [31:0] cfg_output_pitch=cfg_quantized ?
-        (({16'd0,cfg_out_ch}+32'd15)&32'hfffffff0) : cfg_co_pitch;
-    wire [31:0] padded_h={16'd0,cfg_in_h}+({30'd0,cfg_padding}<<1);
-    wire [31:0] padded_w={16'd0,cfg_in_w}+({30'd0,cfg_padding}<<1);
-    wire [31:0] calc_h=((padded_h-{30'd0,cfg_kernel})>>(cfg_stride==2))+1;
-    wire [31:0] calc_w=((padded_w-{30'd0,cfg_kernel})>>(cfg_stride==2))+1;
-    wire [63:0] input_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_ci_pitch}*(ACT_WIDTH==16 ? 64'd2:64'd1);
-    wire [63:0] weight_size={32'd0,cfg_co_pitch}*{62'd0,cfg_kernel}*{62'd0,cfg_kernel}*{32'd0,cfg_ci_pitch};
-    wire [63:0] bias_size={32'd0,cfg_co_pitch}*64'd4;
-    wire [63:0] output_size={32'd0,calc_h}*{32'd0,calc_w}*{32'd0,cfg_output_pitch}*(cfg_quantized ? (ACT_WIDTH==16 ? 64'd2:64'd1) : 64'd8);
-    wire [63:0] quant_end={32'd0,cfg_quant_addr}+{32'd0,cfg_co_pitch}*(ACT_WIDTH==16 ? 64'd32 : 64'd16);
-    wire [63:0] ie={32'd0,cfg_input_addr}+input_size, we={32'd0,cfg_weight_addr}+weight_size;
-    wire [63:0] be={32'd0,cfg_bias_addr}+bias_size, oe={32'd0,cfg_output_addr}+output_size;
-    wire [63:0] add_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_ci_pitch}*64'd2;
-    wire [63:0] add_ae={32'd0,cfg_input_addr}+add_size,add_be={32'd0,cfg_weight_addr}+add_size,
-        add_oe={32'd0,cfg_output_addr}+add_size,add_qe={32'd0,cfg_quant_addr}+64'd16;
+    reg [31:0] cfg_ci_pitch,cfg_co_pitch,cfg_output_pitch,cfg_cat_b_pitch;
+    reg [31:0] padded_h,padded_w,calc_h,calc_w;
+    wire [63:0] input_size,weight_size,output_size,add_size,cat_b_size,cat_o_size;
+    wire sizes_done;
+    reg [63:0] ie,we,be,oe,quant_end,add_ae,add_be,add_oe,add_qe,cat_be,cat_oe;
+    ai_config_sizes #(.ACT_WIDTH(ACT_WIDTH)) u_config_sizes(
+        .clk(clk),.rst_n(rst_n),.start(state==CFG_START),
+        .in_h(held_in_h),.in_w(held_in_w),.ci_pitch(cfg_ci_pitch),.co_pitch(cfg_co_pitch),
+        .out_h(calc_h),.out_w(calc_w),.out_pitch(cfg_output_pitch),.cat_b_pitch(cfg_cat_b_pitch),
+        .kernel(held_kernel),.quantized(cfg_quantized),.done(sizes_done),
+        .input_size(input_size),.weight_size(weight_size),.output_size(output_size),
+        .add_size(add_size),.cat_b_size(cat_b_size),.cat_o_size(cat_o_size));
     wire add_address_bad=add_ae>64'h20000000 || add_be>64'h20000000 || add_oe>64'h20000000 || add_qe>64'h20000000;
-    wire add_overlap_bad=({32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<add_oe) ||
-        ({32'd0,cfg_output_addr}<add_be && {32'd0,cfg_weight_addr}<add_oe) ||
-        ({32'd0,cfg_output_addr}<add_qe && {32'd0,cfg_quant_addr}<add_oe);
-    wire [31:0] cfg_cat_b_pitch=(cfg_group_split+32'd15)&32'hfffffff0;
-    wire [63:0] cat_b_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_cat_b_pitch}*64'd2;
-    wire [63:0] cat_o_size={48'd0,cfg_in_h}*{48'd0,cfg_in_w}*{32'd0,cfg_output_pitch}*64'd2;
-    wire [63:0] cat_be={32'd0,cfg_weight_addr}+cat_b_size,cat_oe={32'd0,cfg_output_addr}+cat_o_size;
+    wire add_overlap_bad=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe) ||
+        ({32'd0,held_output_addr}<add_be && {32'd0,held_weight_addr}<add_oe) ||
+        ({32'd0,held_output_addr}<add_qe && {32'd0,held_quant_addr}<add_oe);
     wire cat_address_bad=add_ae>64'h20000000 || cat_be>64'h20000000 || cat_oe>64'h20000000;
-    wire cat_overlap_bad=({32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<cat_oe) ||
-        ({32'd0,cfg_output_addr}<cat_be && {32'd0,cfg_weight_addr}<cat_oe);
+    wire cat_overlap_bad=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<cat_oe) ||
+        ({32'd0,held_output_addr}<cat_be && {32'd0,held_weight_addr}<cat_oe);
     wire pool_address_bad=add_ae>64'h20000000 || add_oe>64'h20000000;
-    wire pool_overlap_bad={32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<add_oe;
-    wire [63:0] up_oe={32'd0,cfg_output_addr}+(add_size<<2);
+    wire pool_overlap_bad={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe;
+    wire [63:0] up_oe={32'd0,held_output_addr}+(add_size<<2);
     wire up_address_bad=add_ae>64'h20000000 || up_oe>64'h20000000;
-    wire up_overlap_bad={32'd0,cfg_output_addr}<add_ae && {32'd0,cfg_input_addr}<up_oe;
+    wire up_overlap_bad={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<up_oe;
     wire [31:0] up_write_addr=output_addr+(up_channel<<1)+
         (up_copy[0] ? (ci_pitch<<1):32'd0)+(up_copy[1] ? up_row_bytes:32'd0);
     wire signed [31:0] pool_iy=$signed(pool_y)+$signed({29'd0,pool_ky})-32'sd2;
@@ -130,28 +128,23 @@ module conv2d_ddr_engine #(
     wire [31:0] cat_source_addr=(cat_source_b ? weight_addr:input_addr)+(cat_source_channel&32'hfffffff8)*2;
     wire [31:0] cat_output_addr=output_addr+cat_channel*2;
     wire address_bad=ie>64'h20000000 || we>64'h20000000 || oe>64'h20000000 ||
-        (cfg_bias_enable && be>64'h20000000) || (cfg_quantized && quant_end>64'h20000000);
+        (held_bias_enable && be>64'h20000000) || (cfg_quantized && quant_end>64'h20000000);
     // 只读区域允许相互重叠；输出禁止覆盖任意正在读取的区域。
-    wire overlap_bad=({32'd0,cfg_output_addr}<ie && {32'd0,cfg_input_addr}<oe) ||
-        ({32'd0,cfg_output_addr}<we && {32'd0,cfg_weight_addr}<oe) ||
-        (cfg_bias_enable && {32'd0,cfg_output_addr}<be && {32'd0,cfg_bias_addr}<oe) ||
-        (cfg_quantized && {32'd0,cfg_output_addr}<quant_end && {32'd0,cfg_quant_addr}<oe);
+    wire overlap_bad=({32'd0,held_output_addr}<ie && {32'd0,held_input_addr}<oe) ||
+        ({32'd0,held_output_addr}<we && {32'd0,held_weight_addr}<oe) ||
+        (held_bias_enable && {32'd0,held_output_addr}<be && {32'd0,held_bias_addr}<oe) ||
+        (cfg_quantized && {32'd0,held_output_addr}<quant_end && {32'd0,held_quant_addr}<oe);
     wire [3:0] ty=taps==1 ? 4'd0 : tap/4'd3, tx=taps==1 ? 4'd0 : tap%4'd3;
     wire signed [31:0] iy=$signed(stride==2 ? y<<1 : y)+$signed({28'd0,ty})-$signed({30'd0,padding});
     wire [31:0] ox=x_tile+{29'd0,pixel};
     wire signed [31:0] ix=$signed(stride==2 ? ox<<1 : ox)+$signed({28'd0,tx})-$signed({30'd0,padding});
     wire inside_image=iy>=0 && ix>=0 && iy<$signed({16'd0,height}) && ix<$signed({16'd0,width});
     wire lane_valid=co_base+{30'd0,weight_lane}<{16'd0,output_channels};
-    wire [31:0] weight_pointer=weight_addr+((co_base+{30'd0,weight_lane})*{28'd0,taps}+{28'd0,tap})*ci_pitch+ci_base;
-    wire [31:0] input_pointer=input_addr+(($unsigned(iy)*{16'd0,width}+$unsigned(ix))*ci_pitch+ci_base)*(ACT_WIDTH/8);
     wire [31:0] next_tile_remaining=out_w-x_tile-32'd4;
     wire first_output_group=ACT_WIDTH==16 ? !co_base[2] : co_base[3:0]==0;
     // INT16按16通道分配；最后只有前8通道被覆盖时，额外清零后一个DDR字。
     wire pad_tail=ACT_WIDTH==16 && co_base+4>={16'd0,output_channels} &&
         (({16'd0,output_channels}+32'd7)&32'hfffffff8)<output_pitch;
-    wire [31:0] output_pointer=output_addr+(quantized ?
-        ((y*out_w+ox)*output_pitch+(co_base&(ACT_WIDTH==16 ? 32'hfffffff8 : 32'hfffffff0)))*(ACT_WIDTH/8) :
-        ((y*out_w+ox)*co_pitch+co_base)*8);
     wire creq_ready, crsp_valid, crsp_error;
     wire [3:0] crsp_code;
     wire [255:0] crsp_data;
@@ -162,20 +155,44 @@ module conv2d_ddr_engine #(
         for(up_lane=0;up_lane<8;up_lane=up_lane+1)
             if(up_channel+up_lane>={16'd0,input_channels})up_input[up_lane*16 +: 16]=0;
     end
-    wire creq_valid=(state==B_REQ || (state==W_REQ && lane_valid) ||
+    wire raw_creq_valid=(state==B_REQ || (state==W_REQ && lane_valid) ||
         (state==P_REQ && inside_image) || state==O_REQ || state==MERGE_REQ || state==PAD_REQ ||
         state==ADD_QREQ || state==ADD_AREQ || state==ADD_BREQ || state==ADD_OREQ || state==CAT_REQ || state==CAT_OREQ ||
         state==POOL_REQ || state==POOL_OREQ || state==UP_REQ || state==UP_OREQ ||
         (state==QPAR_REQ && co_base+{30'd0,quant_lane}<{16'd0,output_channels}));
+    // Address operands are captured once per request. The engine remains in
+    // its request state until the registered address and DDR client are ready.
+    wire address_required=(state==W_REQ && lane_valid) || (state==P_REQ && inside_image) ||
+        state==O_REQ || state==MERGE_REQ || state==PAD_REQ;
+    wire address_in_ready,address_valid;
+    wire [31:0] request_address;
+    wire address_weight=state==W_REQ,address_input=state==P_REQ;
+    wire [31:0] address_a=address_weight?co_base+{30'd0,weight_lane}:address_input?$unsigned(iy):y;
+    wire [31:0] address_b=address_weight?{28'd0,taps}:address_input?{16'd0,width}:out_w;
+    wire [31:0] address_index=address_weight?{28'd0,tap}:address_input?$unsigned(ix):ox;
+    wire [31:0] address_pitch=(address_weight || address_input)?ci_pitch:quantized?output_pitch:co_pitch;
+    wire [31:0] address_inner=(address_weight || address_input)?ci_base:
+        quantized?(co_base&(ACT_WIDTH==16?32'hfffffff8:32'hfffffff0)):co_base;
+    wire [31:0] address_base=address_weight?weight_addr:address_input?input_addr:
+        output_addr+(state==PAD_REQ?32'd16:32'd0);
+    wire [1:0] address_shift=address_weight?2'd0:address_input?(ACT_WIDTH==16?2'd1:2'd0):
+        quantized?(ACT_WIDTH==16?2'd1:2'd0):2'd3;
+    ai_address_math u_address(
+        .clk(clk),.rst_n(rst_n),.clear(state==IDLE),.in_valid(address_required),.in_ready(address_in_ready),
+        .a(address_a),.b(address_b),.index_add(address_index),.pitch(address_pitch),.inner(address_inner),
+        .base(address_base),.element_shift(address_shift),.out_valid(address_valid),
+        .out_ready(address_required && creq_ready),.address(request_address));
+    wire unused_address_ready=address_in_ready;
+    wire creq_valid=raw_creq_valid && (!address_required || address_valid);
     wire [31:0] creq_addr=state==B_REQ ? bias_addr+co_base*4 :
-        state==W_REQ ? weight_pointer : state==P_REQ ? input_pointer :
+        state==W_REQ ? request_address : state==P_REQ ? request_address :
         state==QPAR_REQ ? quant_addr+(co_base+{30'd0,quant_lane})*(ACT_WIDTH==16 ? 32'd32 : 32'd16) :
         state==ADD_QREQ ? quant_addr:state==ADD_AREQ ? input_addr+add_offset:
         state==ADD_BREQ ? weight_addr+add_offset:state==ADD_OREQ ? output_addr+add_offset:
         state==CAT_REQ ? cat_read_addr:state==CAT_OREQ ? cat_output_addr:
         state==POOL_REQ ? pool_tap_addr:state==POOL_OREQ ? output_addr:
         state==UP_REQ ? input_addr+(up_channel<<1):state==UP_OREQ ? up_write_addr:
-        state==PAD_REQ ? output_pointer+32'd16 : output_pointer;
+        request_address;
     wire load_ready, tile_start_ready, tile_out_valid, tile_error, tile_busy, issue;
     wire [255:0] tile_result;
     wire tile_load_valid=(state==W_REQ && !lane_valid) || (state==P_REQ && !inside_image) ||
@@ -344,6 +361,26 @@ module conv2d_ddr_engine #(
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             state<=IDLE; done<=0; error<=0; error_code<=0;
+            held_opcode<=0;
+            held_input_addr<=0;
+            held_weight_addr<=0;
+            held_bias_addr<=0;
+            held_output_addr<=0;
+            held_quant_addr<=0;
+            held_post<=0;
+            held_group_split<=0;
+            held_in_h<=0;
+            held_in_w<=0;
+            held_in_ch<=0;
+            held_out_ch<=0;
+            held_kernel<=0;
+            held_stride<=0;
+            held_padding<=0;
+            held_bias_enable<=0;
+            cfg_ci_pitch<=0;cfg_co_pitch<=0;cfg_output_pitch<=0;cfg_cat_b_pitch<=0;
+            padded_h<=0;padded_w<=0;calc_h<=0;calc_w<=0;
+            ie<=0;we<=0;be<=0;oe<=0;quant_end<=0;add_ae<=0;add_be<=0;add_oe<=0;add_qe<=0;cat_be<=0;cat_oe<=0;
+
             input_addr<=0; weight_addr<=0; bias_addr<=0; output_addr<=0;
             quant_addr<=0; output_pitch<=0; output_int8<=0; relu_enable<=0; quant_lane<=0; merge_word<=0;group_split<=0;
             height<=0; width<=0; input_channels<=0; output_channels<=0;
@@ -367,88 +404,137 @@ module conv2d_ddr_engine #(
             if(state==IDLE && clear_status) begin done<=0; error<=0; error_code<=0; end
             case(state)
                 IDLE: if(cmd_valid && cmd_ready) begin
-                    done<=0; error<=0; error_code<=0; total_cycles<=0; mac_issues<=0; out_h<=0; out_w<=0;
-                    if(cfg_opcode==5)begin
-                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_weight_addr!=0 || cfg_bias_addr!=0 || cfg_quant_addr!=0 ||
-                            cfg_group_split!=0 || cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
+                    held_opcode<=cfg_opcode;
+                    held_input_addr<=cfg_input_addr;
+                    held_weight_addr<=cfg_weight_addr;
+                    held_bias_addr<=cfg_bias_addr;
+                    held_output_addr<=cfg_output_addr;
+                    held_quant_addr<=cfg_quant_addr;
+                    held_post<=cfg_post;
+                    held_group_split<=cfg_group_split;
+                    held_in_h<=cfg_in_h;
+                    held_in_w<=cfg_in_w;
+                    held_in_ch<=cfg_in_ch;
+                    held_out_ch<=cfg_out_ch;
+                    held_kernel<=cfg_kernel;
+                    held_stride<=cfg_stride;
+                    held_padding<=cfg_padding;
+                    held_bias_enable<=cfg_bias_enable;
+                    done<=0;error<=0;error_code<=0;total_cycles<=0;mac_issues<=0;out_h<=0;out_w<=0;
+                    state<=CFG_PITCH;
+                end
+                CFG_PITCH:begin
+                    cfg_ci_pitch<=({16'd0,held_in_ch}+32'd15)&32'hfffffff0;
+                    cfg_co_pitch<=({16'd0,held_out_ch}+32'd3)&32'hfffffffc;
+                    cfg_output_pitch<=cfg_quantized?(({16'd0,held_out_ch}+32'd15)&32'hfffffff0):
+                        (({16'd0,held_out_ch}+32'd3)&32'hfffffffc);
+                    cfg_cat_b_pitch<=(held_group_split+32'd15)&32'hfffffff0;
+                    padded_h<={16'd0,held_in_h}+({30'd0,held_padding}<<1);
+                    padded_w<={16'd0,held_in_w}+({30'd0,held_padding}<<1);
+                    state<=CFG_DIMS;
+                end
+                CFG_DIMS:begin
+                    calc_h<=((padded_h-{30'd0,held_kernel})>>(held_stride==2))+1;
+                    calc_w<=((padded_w-{30'd0,held_kernel})>>(held_stride==2))+1;
+                    state<=CFG_START;
+                end
+                CFG_START:state<=CFG_WAIT;
+                CFG_WAIT:if(sizes_done)state<=CFG_END;
+                CFG_END:begin
+                    ie<={32'd0,held_input_addr}+input_size;we<={32'd0,held_weight_addr}+weight_size;
+                    be<={32'd0,held_bias_addr}+({32'd0,cfg_co_pitch}<<2);
+                    oe<={32'd0,held_output_addr}+output_size;
+                    quant_end<={32'd0,held_quant_addr}+({32'd0,cfg_co_pitch}<<(ACT_WIDTH==16?5:4));
+                    add_ae<={32'd0,held_input_addr}+add_size;add_be<={32'd0,held_weight_addr}+add_size;
+                    add_oe<={32'd0,held_output_addr}+add_size;add_qe<={32'd0,held_quant_addr}+64'd16;
+                    cat_be<={32'd0,held_weight_addr}+cat_b_size;cat_oe<={32'd0,held_output_addr}+cat_o_size;
+                    state<=CFG_CHECK;
+                end
+                CFG_CHECK:begin
+                    // Invalid commands complete without issuing any DDR request.
+                    // Valid branches below override this default transition.
+                    state<=IDLE;
+                    if(held_opcode==5)begin
+                        if(ACT_WIDTH!=16 || held_post!=4 || held_weight_addr!=0 || held_bias_addr!=0 || held_quant_addr!=0 ||
+                            held_group_split!=0 || held_kernel!=0 || held_stride!=0 || held_padding!=0 || held_bias_enable)begin error<=1;error_code<=7;end
                         // 倍增后的高宽仍要能装进下一条任务的16位尺寸字段。
-                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_h>32767 || cfg_in_w>32767 ||
-                            cfg_in_ch==0 || cfg_out_ch!=cfg_in_ch)begin error<=1;error_code<=1;end
-                        else if((cfg_input_addr[3:0]|cfg_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                        else if(held_in_h==0 || held_in_w==0 || held_in_h>32767 || held_in_w>32767 ||
+                            held_in_ch==0 || held_out_ch!=held_in_ch)begin error<=1;error_code<=1;end
+                        else if((held_input_addr[3:0]|held_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
                         else if(up_address_bad)begin error<=1;error_code<=3;end
                         else if(up_overlap_bad)begin error<=1;error_code<=5;end
                         else begin
-                            input_addr<=cfg_input_addr;output_addr<=cfg_output_addr;ci_pitch<=cfg_ci_pitch;
-                            height<=cfg_in_h;width<=cfg_in_w;input_channels<=cfg_in_ch;
-                            out_h<=({16'd0,cfg_in_h}<<1);out_w<=({16'd0,cfg_in_w}<<1);
+                            input_addr<=held_input_addr;output_addr<=held_output_addr;ci_pitch<=cfg_ci_pitch;
+                            height<=held_in_h;width<=held_in_w;input_channels<=held_in_ch;
+                            out_h<=({16'd0,held_in_h}<<1);out_w<=({16'd0,held_in_w}<<1);
                             up_x<=0;up_y<=0;up_channel<=0;up_copy<=0;up_word<=0;
-                            up_row_bytes<={16'd0,cfg_in_w}*(cfg_ci_pitch<<2);state<=UP_PREP;
+                            up_row_bytes<={16'd0,held_in_w}*(cfg_ci_pitch<<2);state<=UP_PREP;
                         end
-                    end else if(cfg_opcode==4)begin
+                    end else if(held_opcode==4)begin
                         // 固定K5/S1/P2；不用卷积位域表达5，未使用的字段必须清零。
-                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_weight_addr!=0 || cfg_bias_addr!=0 || cfg_quant_addr!=0 ||
-                            cfg_group_split!=0 || cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
-                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch!=cfg_in_ch)begin error<=1;error_code<=1;end
-                        else if((cfg_input_addr[3:0]|cfg_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                        if(ACT_WIDTH!=16 || held_post!=4 || held_weight_addr!=0 || held_bias_addr!=0 || held_quant_addr!=0 ||
+                            held_group_split!=0 || held_kernel!=0 || held_stride!=0 || held_padding!=0 || held_bias_enable)begin error<=1;error_code<=7;end
+                        else if(held_in_h==0 || held_in_w==0 || held_in_ch==0 || held_out_ch!=held_in_ch)begin error<=1;error_code<=1;end
+                        else if((held_input_addr[3:0]|held_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
                         else if(pool_address_bad)begin error<=1;error_code<=3;end
                         else if(pool_overlap_bad)begin error<=1;error_code<=5;end
                         else begin
-                            input_addr<=cfg_input_addr;output_addr<=cfg_output_addr;ci_pitch<=cfg_ci_pitch;
-                            height<=cfg_in_h;width<=cfg_in_w;input_channels<=cfg_in_ch;
-                            out_h<={16'd0,cfg_in_h};out_w<={16'd0,cfg_in_w};
-                            pool_x<=0;pool_y<=0;pool_channel<=0;pool_pixel_addr<=cfg_input_addr;
-                            pool_row_bytes<={16'd0,cfg_in_w}*(cfg_ci_pitch<<1);state<=POOL_INIT;
+                            input_addr<=held_input_addr;output_addr<=held_output_addr;ci_pitch<=cfg_ci_pitch;
+                            height<=held_in_h;width<=held_in_w;input_channels<=held_in_ch;
+                            out_h<={16'd0,held_in_h};out_w<={16'd0,held_in_w};
+                            pool_x<=0;pool_y<=0;pool_channel<=0;pool_pixel_addr<=held_input_addr;
+                            pool_row_bytes<={16'd0,held_in_w}*(cfg_ci_pitch<<1);state<=POOL_INIT;
                         end
-                    end else if(cfg_opcode==3)begin
+                    end else if(held_opcode==3)begin
                         // group_split在Concat中是B通道数，不是量化分组边界。
-                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_quant_addr!=0 || cfg_bias_addr!=0 ||
-                            cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
-                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_group_split==0 || cfg_group_split>65535 ||
-                            {16'd0,cfg_in_ch}+cfg_group_split!={16'd0,cfg_out_ch})begin error<=1;error_code<=1;end
-                        else if((cfg_input_addr[3:0]|cfg_weight_addr[3:0]|cfg_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                        if(ACT_WIDTH!=16 || held_post!=4 || held_quant_addr!=0 || held_bias_addr!=0 ||
+                            held_kernel!=0 || held_stride!=0 || held_padding!=0 || held_bias_enable)begin error<=1;error_code<=7;end
+                        else if(held_in_h==0 || held_in_w==0 || held_in_ch==0 || held_group_split==0 || held_group_split>65535 ||
+                            {16'd0,held_in_ch}+held_group_split!={16'd0,held_out_ch})begin error<=1;error_code<=1;end
+                        else if((held_input_addr[3:0]|held_weight_addr[3:0]|held_output_addr[3:0])!=0)begin error<=1;error_code<=4;end
                         else if(cat_address_bad)begin error<=1;error_code<=3;end
                         else if(cat_overlap_bad)begin error<=1;error_code<=5;end
                         else begin
-                            input_addr<=cfg_input_addr;weight_addr<=cfg_weight_addr;output_addr<=cfg_output_addr;
-                            input_channels<=cfg_in_ch;output_channels<=cfg_out_ch;ci_pitch<=cfg_ci_pitch;co_pitch<=cfg_cat_b_pitch;
-                            output_pitch<=cfg_output_pitch;out_h<={16'd0,cfg_in_h};out_w<={16'd0,cfg_in_w};
+                            input_addr<=held_input_addr;weight_addr<=held_weight_addr;output_addr<=held_output_addr;
+                            input_channels<=held_in_ch;output_channels<=held_out_ch;ci_pitch<=cfg_ci_pitch;co_pitch<=cfg_cat_b_pitch;
+                            output_pitch<=cfg_output_pitch;out_h<={16'd0,held_in_h};out_w<={16'd0,held_in_w};
                             cat_x<=0;cat_y<=0;cat_channel<=0;cat_lane<=0;
                             cat_cache_valid<=0;cat_word<=0;state<=CAT_PREP;
                         end
-                    end else if(cfg_opcode==2)begin
-                        if(ACT_WIDTH!=16 || cfg_post!=4 || cfg_group_split!=0 || cfg_bias_addr!=0 ||
-                            cfg_kernel!=0 || cfg_stride!=0 || cfg_padding!=0 || cfg_bias_enable)begin error<=1;error_code<=7;end
-                        else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch!=cfg_in_ch)begin error<=1;error_code<=1;end
-                        else if((cfg_input_addr[3:0]|cfg_weight_addr[3:0]|cfg_output_addr[3:0]|cfg_quant_addr[3:0])!=0)begin error<=1;error_code<=4;end
+                    end else if(held_opcode==2)begin
+                        if(ACT_WIDTH!=16 || held_post!=4 || held_group_split!=0 || held_bias_addr!=0 ||
+                            held_kernel!=0 || held_stride!=0 || held_padding!=0 || held_bias_enable)begin error<=1;error_code<=7;end
+                        else if(held_in_h==0 || held_in_w==0 || held_in_ch==0 || held_out_ch!=held_in_ch)begin error<=1;error_code<=1;end
+                        else if((held_input_addr[3:0]|held_weight_addr[3:0]|held_output_addr[3:0]|held_quant_addr[3:0])!=0)begin error<=1;error_code<=4;end
                         else if(add_address_bad)begin error<=1;error_code<=3;end
                         else if(add_overlap_bad)begin error<=1;error_code<=5;end
                         else begin
-                            input_addr<=cfg_input_addr;weight_addr<=cfg_weight_addr;output_addr<=cfg_output_addr;quant_addr<=cfg_quant_addr;
-                            input_channels<=cfg_in_ch;ci_pitch<=cfg_ci_pitch;out_h<={16'd0,cfg_in_h};out_w<={16'd0,cfg_in_w};
+                            input_addr<=held_input_addr;weight_addr<=held_weight_addr;output_addr<=held_output_addr;quant_addr<=held_quant_addr;
+                            input_channels<=held_in_ch;ci_pitch<=cfg_ci_pitch;out_h<={16'd0,held_in_h};out_w<={16'd0,held_in_w};
                             add_bytes<=add_size[31:0];add_offset<=0;add_channel<=0;add_lane<=0;add_word_out<=0;state<=ADD_QREQ;
                         end
-                    end else if(cfg_opcode!=1)begin error<=1;error_code<=7;end
-                    else if(cfg_in_h==0 || cfg_in_w==0 || cfg_in_ch==0 || cfg_out_ch==0) begin error<=1; error_code<=1; end
-                    else if((cfg_kernel!=1 && cfg_kernel!=3) || (cfg_stride!=1 && cfg_stride!=2) || cfg_padding>1 ||
-                        padded_h<{30'd0,cfg_kernel} || padded_w<{30'd0,cfg_kernel}) begin error<=1; error_code<=2; end
-                    else if(cfg_input_addr[3:0]!=0 || cfg_weight_addr[3:0]!=0 || cfg_output_addr[3:0]!=0 ||
-                        (cfg_bias_enable && cfg_bias_addr[3:0]!=0) ||
-                        (cfg_quantized && cfg_quant_addr[3:0]!=0)) begin error<=1; error_code<=4; end
-                    else if(ACT_WIDTH==8 ? (cfg_post[31:2]!=0 || (!cfg_post[0] && cfg_post[1])) :
-                        ((cfg_post!=4 && cfg_post!=6) || (cfg_group_split!=0 &&
-                            (cfg_group_split[3:0]!=0 || cfg_group_split>={16'd0,cfg_in_ch})))) begin error<=1; error_code<=7; end
+                    end else if(held_opcode!=1)begin error<=1;error_code<=7;end
+                    else if(held_in_h==0 || held_in_w==0 || held_in_ch==0 || held_out_ch==0) begin error<=1; error_code<=1; end
+                    else if((held_kernel!=1 && held_kernel!=3) || (held_stride!=1 && held_stride!=2) || held_padding>1 ||
+                        padded_h<{30'd0,held_kernel} || padded_w<{30'd0,held_kernel}) begin error<=1; error_code<=2; end
+                    else if(held_input_addr[3:0]!=0 || held_weight_addr[3:0]!=0 || held_output_addr[3:0]!=0 ||
+                        (held_bias_enable && held_bias_addr[3:0]!=0) ||
+                        (cfg_quantized && held_quant_addr[3:0]!=0)) begin error<=1; error_code<=4; end
+                    else if(ACT_WIDTH==8 ? (held_post[31:2]!=0 || (!held_post[0] && held_post[1])) :
+                        ((held_post!=4 && held_post!=6) || (held_group_split!=0 &&
+                            (held_group_split[3:0]!=0 || held_group_split>={16'd0,held_in_ch})))) begin error<=1; error_code<=7; end
                     else if(address_bad) begin error<=1; error_code<=3; end
                     else if(overlap_bad) begin error<=1; error_code<=5; end
                     else begin
-                        input_addr<=cfg_input_addr; weight_addr<=cfg_weight_addr; bias_addr<=cfg_bias_addr; output_addr<=cfg_output_addr;
-                        height<=cfg_in_h; width<=cfg_in_w; input_channels<=cfg_in_ch; output_channels<=cfg_out_ch;
-                        ci_pitch<=cfg_ci_pitch; co_pitch<=cfg_co_pitch; stride<=cfg_stride; padding<=cfg_padding;
-                        quant_addr<=cfg_quant_addr; output_pitch<=cfg_output_pitch;
-                        output_int8<=cfg_post[0]; relu_enable<=cfg_post[1]; quant_lane<=0;group_split<=ACT_WIDTH==16 ? cfg_group_split:32'd0;
-                        bias_enable<=cfg_bias_enable; taps<=cfg_kernel==3 ? 4'd9 : 4'd1;
+                        input_addr<=held_input_addr; weight_addr<=held_weight_addr; bias_addr<=held_bias_addr; output_addr<=held_output_addr;
+                        height<=held_in_h; width<=held_in_w; input_channels<=held_in_ch; output_channels<=held_out_ch;
+                        ci_pitch<=cfg_ci_pitch; co_pitch<=cfg_co_pitch; stride<=held_stride; padding<=held_padding;
+                        quant_addr<=held_quant_addr; output_pitch<=cfg_output_pitch;
+                        output_int8<=held_post[0]; relu_enable<=held_post[1]; quant_lane<=0;group_split<=ACT_WIDTH==16 ? held_group_split:32'd0;
+                        bias_enable<=held_bias_enable; taps<=held_kernel==3 ? 4'd9 : 4'd1;
                         out_h<=calc_h; out_w<=calc_w; ci_base<=0; co_base<=0; y<=0; x_tile<=0; pixel<=0; tap<=0; weight_lane<=0;
                         tile_width<=calc_w>=4 ? 3'd4 : calc_w[2:0]; biases<=0;
-                        state<=cfg_quantized ? QPAR_REQ : (cfg_bias_enable ? B_REQ : INIT);
+                        state<=cfg_quantized ? QPAR_REQ : (held_bias_enable ? B_REQ : INIT);
                     end
                 end
                 B_REQ: if(creq_valid && creq_ready) state<=B_WAIT;
