@@ -21,8 +21,7 @@ module TB_ai_control;
         .clk(clk),.rst_n(rst_n),.dev_we(dev_we),.dev_re(dev_re),.dev_addr_wr(dev_addr_wr),
         .dev_addr_rd(dev_addr_rd),.dev_wdata(dev_wdata),.dev_size(2'b10),.dev_rdata(dev_rdata),
         .uart_txd(uart_txd),.core_clk(core_clk),.ddr_init_done(ddr_init_done),
-        .rk_tx_data(), .rk_tx_valid(), .rk_tx_ready(1'b0),
-        .rk_param_data(32'd0), .rk_param_update(1'b0), .gpio_out(),
+        .gpio_out(),
         .pixclk_in(1'b0), .vs_in(1'b0), .de_in(1'b0), .rgb_in(24'd0),
         .axi_awaddr(axi_awaddr),
         .axi_awuser_ap(axi_awuser_ap),
@@ -118,9 +117,10 @@ module TB_ai_control;
         reset_all;configure;
         force memory.axi_arready=1'b0;put(32'h30200,1);
         get(32'h30204);if(!value[0])$fatal(1,"AI busy not immediate");
-        // Independent IIC/FIFO access must not alter an in-flight AI request.
+        // Removed RK-IIC MMIO is inert; GPIO access still works during AI ownership.
         put(32'h30400,32'ha5);get(32'h30404);
-        if(value!==32'h101)$fatal(1,"AI/IIC MMIO alias or lost FIFO access");
+        if(value!==0)$fatal(1,"retired IIC MMIO is still active");
+        put(32'h30108,1);get(32'h30108);if(value!==1)$fatal(1,"GPIO access during AI failed");
         put(32'h3021c,0);put(32'h31000,3);put(32'h30200,4);
         wait_idle;
         if(value[5:0]!==6'b101100)$fatal(1,"AI fault did not cross to CPU %h",value);
@@ -132,7 +132,7 @@ module TB_ai_control;
         seed;configure;put(32'h30200,1);
         wait(u_bus.g_ddr.u_window.g_ai.u_engine.u_tile.issue_valid);
         reset_all;run_good;
-        $display("PASS ai_control fault_cdc=1 reset_inflight=1 recovery=2 iic_coexist=1");$finish;
+        $display("PASS ai_control fault_cdc=1 reset_inflight=1 recovery=2 retired_iic_inert=1 gpio_coexist=1");$finish;
     end
     initial begin #5000000;$fatal(1,"global control timeout");end
 endmodule

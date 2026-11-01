@@ -1,115 +1,90 @@
 `timescale 1ns/1ps
-module TB_cpu_fspi;
-    reg clk=0, key0_n=0, scl=1, sda_low=0;
-    reg spi_clk=0, spi_cs=1, drive=0;
+// Short real-CPU smoke test for the current SPI-only SPT1 service.
+module TB_cpu_fspi #(parameter integer ENABLE_DUAL=0);
+    reg clk=0,key_n=1,sck=1,cs=1,drive=0;
     reg [3:0] dq=0;
-    wire [3:0] spi_data;
-    reg [7:0] spi_value;
-    integer k;
-    assign spi_data=drive ? dq : 4'bzzzz;
-    tri1 sda;
-    wire uart_tx, led0, led1;
-    reg [7:0] value;
-    integer updates=0;
-    assign sda = sda_low ? 1'b0 : 1'bz;
+    wire [3:0] bus;
+    assign bus=drive ? dq : 4'bzzzz;
+    wire uart_tx,led0,led1;
+    reg [7:0] request[0:255],reply[0:255];
+    integer i,frames=0;
+    reg [31:0] hash;
     always #20 clk=~clk;
-    board_fspi_top #(.RESET_HOLD_CYCLES(8), .ENABLE_FSPI(1)) dut (
-        .sys_clk(clk), .key0_n(key0_n), .uart_tx(uart_tx),
-        .led0(led0), .led1(led1), .iic_scl(scl), .iic_sda(sda),
-        .spi_clk(spi_clk), .spi_cs(spi_cs), .spi_data(spi_data)
-    );
-    always @(posedge clk) begin
-        if (!dut.rst_n) updates=0;
-        else begin
-            if (dut.rk_param_update) updates=updates+1;
-            if (dut.bus_err) $fatal(1, "Unmapped CPU access during I2C test");
+    board_fspi_top #(.RESET_HOLD_CYCLES(8),.ENABLE_DUAL(ENABLE_DUAL)) dut(
+        .sys_clk(clk),.key0_n(key_n),.uart_tx(uart_tx),.led0(led0),.led1(led1),
+        .spi_clk(sck),.spi_cs(cs),.spi_data(bus));
+    always @(posedge clk)
+        if(dut.rst_n && dut.bus_err) $fatal(1,"CPU bus error");
+    task put32;input integer at;input [31:0] value;begin
+        request[at]=value[7:0];request[at+1]=value[15:8];
+        request[at+2]=value[23:16];request[at+3]=value[31:24];
+    end endtask
+    function [31:0] get32;input integer at;begin
+        get32={reply[at+3],reply[at+2],reply[at+1],reply[at]};
+    end endfunction
+    task nibble;input [3:0] value;begin
+        sck=0;drive=1;dq=value;#10;sck=1;#10;
+    end endtask
+    task send;input [7:0] value;begin nibble(value[7:4]);nibble(value[3:0]);end endtask
+    task recv;output [7:0] value;begin
+        drive=0;sck=0;#10;sck=1;#1;value[7:4]=bus;#9;
+        sck=0;#10;sck=1;#1;value[3:0]=bus;#9;
+    end endtask
+    task finish_frame;begin
+        #3;cs=1;drive=0;#1100;
+        if(bus!==4'bzzzz)$fatal(1,"DQ not released");
+    end endtask
+    task receive_frame;integer j,size;begin
+        // Testbench observes ownership only to avoid pointless polling traffic.
+        // All packet bytes still travel over the physical SPI pins.
+        wait(dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.tx_pending);
+        #1100;cs=0;#7;send(8'h80);
+        for(j=0;j<256;j=j+1)recv(reply[j]);
+        finish_frame;
+        if(get32(0)!==32'h31545053)$fatal(1,"SPT1 magic %h",get32(0));
+        size=16+{reply[11],reply[10]};
+        if(size>256)$fatal(1,"Invalid response size");
+        hash=32'd2166136261;
+        for(j=0;j<size;j=j+1)if(j<12 || j>=16)hash=(hash^reply[j])*32'd16777619;
+        if(hash!==get32(12))$fatal(1,"Response checksum");
+        frames=frames+1;
+    end endtask
+    task transaction;input [15:0] op;input [31:0] seq,value;
+        integer j,size,attempts;reg found;begin
+        for(j=0;j<256;j=j+1)request[j]=0;
+        put32(0,32'h31545053);put32(4,seq);
+        request[8]=op[7:0];request[9]=op[15:8];
+        request[10]=(op==1)?8:4;put32(16,5);put32(20,value);
+        size=16+request[10];hash=32'd2166136261;
+        for(j=0;j<size;j=j+1)if(j<12 || j>=16)hash=(hash^request[j])*32'd16777619;
+        put32(12,hash);
+        wait(dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.rx_armed);
+        #1100;cs=0;#7;send(0);
+        for(j=0;j<256;j=j+1)send(request[j]);
+        finish_frame;found=0;attempts=0;
+        while(!found && attempts<5)begin
+            receive_frame;attempts=attempts+1;
+            found=({reply[9],reply[8]}==16'h8003 && get32(4)==seq);
         end
-    end
-    task start_bus; begin
-        scl=0; sda_low=0; #2500; scl=1; #2500; sda_low=1; #2500; scl=0; #2500;
-    end endtask
-    task stop_bus; begin
-        scl=0; sda_low=1; #2500; scl=1; #2500; sda_low=0; #5000;
-    end endtask
-    task write_byte; input [7:0] data; input expect_ack; integer i; begin
-        for(i=7;i>=0;i=i-1) begin
-            scl=0; sda_low=!data[i]; #2500; scl=1; #5000; scl=0; #2500;
-        end
-        sda_low=0; #2500; scl=1; #2500;
-        if(sda !== !expect_ack) $fatal(1, "ACK mismatch byte=%h sda=%b",data,sda);
-        #2500; scl=0; #2500;
-    end endtask
-    task read_byte; output [7:0] data; integer i; begin
-        sda_low=0;
-        for(i=7;i>=0;i=i-1) begin
-            #2500; scl=1; #2500; data[i]=sda; #2500; scl=0; #2500;
-        end
-        // NACK the final byte.
-        sda_low=0; #2500; scl=1; #5000; scl=0; #2500;
-    end endtask
-    task write_reg; input [7:0] addr,data; begin
-        start_bus; write_byte(8'hcc,1); write_byte(addr,1); write_byte(data,1); stop_bus;
-    end endtask
-    task read_reg; input [7:0] addr; output [7:0] data; begin
-        start_bus; write_byte(8'hcc,1); write_byte(addr,1);
-        start_bus; write_byte(8'hcd,1); read_byte(data); stop_bus;
-    end endtask
-    task expect_reg; input [7:0] addr,expected; reg [7:0] actual; begin
-        read_reg(addr,actual);
-        if(actual !== expected)
-            $fatal(1,"Register %h: expected %h got %h",addr,expected,actual);
-    end endtask
-    task reset_board; begin
-        scl=1; sda_low=0;
-        @(negedge clk); key0_n=0;
-        repeat(10) @(negedge clk);
-        key0_n=1;
-        wait(dut.rst_n === 1'b1);
-        repeat(10) @(negedge clk);
-    end endtask
-    task wait_data; integer tries; reg [7:0] count; begin
-        tries=0; count=0;
-        while(count==0 && tries<30) begin read_reg(8'h20,count); tries=tries+1; end
-        if(count!==1) $fatal(1,"CPU did not enqueue data");
-    end endtask
-    task receive_expected; input [7:0] expected; begin
-        wait_data;
-        expect_reg(8'h21,expected);
-        expect_reg(8'h21,expected); // repeated read must not consume
-        write_reg(8'h22,1);
-    end endtask
-    task nibble;input [3:0] n;begin
-        drive=1;dq=n;#500;spi_clk=1;#500;spi_clk=0;
-    end endtask
-    task spi_send;input [7:0] v;begin nibble(v[7:4]);nibble(v[3:0]);end endtask
-    task spi_recv;output [7:0] v;begin
-        drive=0;#500;spi_clk=1;#1;v[7:4]=spi_data;#499;spi_clk=0;
-        #500;spi_clk=1;#1;v[3:0]=spi_data;#499;spi_clk=0;
-    end endtask
-    task command;input [31:0] v;begin
-        write_reg(8'h10,v[7:0]);write_reg(8'h11,v[15:8]);
-        write_reg(8'h12,v[23:16]);write_reg(8'h13,v[31:24]);write_reg(8'h14,1);
-    end endtask
-    task response;input [7:0] code;input [31:0] v;begin
-        receive_expected(code);receive_expected(v[7:0]);receive_expected(v[15:8]);
-        receive_expected(v[23:16]);receive_expected(v[31:24]);
+        if(!found || get32(16)!==0 || get32(20)!==op || get32(24)!==32'h12345678)
+            $fatal(1,"SPI service response op=%0d status=%h value=%h",op,get32(16),get32(24));
     end endtask
     initial begin
-        reset_board;response(8'h52,256);
-        command(32'h5a);response(8'h50,256);
-        spi_cs=0;#1100;spi_send(8'h80);drive=0;
-        for(k=0;k<256;k=k+1) begin
-            spi_recv(spi_value);
-            if(spi_value!==(k[7:0]^8'h5a)) $fatal(1,"CPU publication mismatch %0d",k);
-        end
-        spi_cs=1;#1100;
-        spi_cs=0;drive=1;#1100;spi_send(0);
-        for(k=0;k<256;k=k+1) spi_send(k[7:0]);
-        spi_cs=1;drive=0;#1100;
-        command(32'h80000000);response(8'h43,32640);
-        expect_reg(8'h20,0);
-        $display("PASS: real RV32 -> FSPI 256B, RK FSPI -> CPU checksum, IIC coordination, no bus errors");
+        // Pulse the board key after initial release, providing a definite reset
+        // edge to the SPI domain even though SCK is stopped at power-up.
+        wait(dut.rst_n);@(negedge clk);key_n=0;
+        repeat(12)@(negedge clk);key_n=1;wait(dut.rst_n);
+        transaction(1,1,32'h12345678);
+        transaction(2,2,0);
+        $display("PASS: CPU dual=%0d SPI-only SPT1 set/get, checksums, frames=%0d",ENABLE_DUAL,frames);
         $finish;
     end
-    initial begin #100000000; $fatal(1,"Board I2C test timeout"); end
+    initial begin #30000000;
+        $display("debug frames=%0d pc=%h rxarmed=%b txpending=%b index=%h proto=%b reject=%b",frames,
+            dut.u_soc.u_core.pc,dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.rx_armed,
+            dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.tx_pending,
+            dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.cpu_index,
+            dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.protocol_error,
+            dut.u_soc.u_peripheral_bus.g_fspi.u_fspi.cpu_rejected);
+        $fatal(1,"SPI-only CPU timeout");end
 endmodule

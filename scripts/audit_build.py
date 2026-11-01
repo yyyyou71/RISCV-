@@ -79,7 +79,6 @@ def main():
     require(bitstream.is_file() and bitstream.stat().st_size > 0, "No nonempty bitstream")
     inputs = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*"))
     inputs = [path for path in inputs if path.is_file()]
-    inputs += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     inputs += sorted((ROOT / "rtl/rk_fspi").glob("*.v"))
     inputs += [ROOT / "firmware/rom.hex", ROOT / "firmware/ram.hex"]
     for name in ("pango_rom", "pango_ram", "pango_multiplier_ip"):

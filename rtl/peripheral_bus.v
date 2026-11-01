@@ -50,11 +50,6 @@ module peripheral_bus #(
     input wire [127:0] axi_rdata,
     input wire axi_rlast, axi_rvalid,
 
-    output wire [7:0] rk_tx_data,
-    output wire rk_tx_valid,
-    input wire rk_tx_ready,
-    input wire [31:0] rk_param_data,
-    input wire rk_param_update,
     output wire        uart_txd,
     output reg [1:0]   gpio_out
 );
@@ -150,52 +145,6 @@ module peripheral_bus #(
         end
     end
 
-    // Same-clock CPU queue; full writes are rejected and flagged.
-    // 0x30200 is reserved for AI, 0x30300 for video capture.
-    // This CPU MMIO base is independent of the I2C slave address (0x66).
-    localparam [31:0] RK_TX=32'h00030400, RK_STATUS=32'h00030404,
-        RK_PARAM=32'h00030408, RK_SEQ=32'h0003040c,
-        RK_ACK=32'h00030410, RK_CLEAR=32'h00030414;
-    reg [7:0] tx_fifo [0:63];
-    reg [5:0] tx_wr_ptr, tx_rd_ptr;
-    reg [6:0] tx_count;
-    reg tx_overflow, param_pending, param_overrun;
-    reg [31:0] param_value, param_seq;
-    wire tx_write = dev_we && word_access && dev_addr_wr == RK_TX;
-    wire tx_push = tx_write && tx_count < 64;
-    wire tx_pop = rk_tx_valid && rk_tx_ready;
-    assign rk_tx_valid = rst_n && tx_count != 0;
-    assign rk_tx_data = tx_fifo[tx_rd_ptr];
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            tx_wr_ptr<=0; tx_rd_ptr<=0; tx_count<=0; tx_overflow<=0;
-            param_value<=0; param_seq<=0; param_pending<=0; param_overrun<=0;
-        end else begin
-            if (dev_we && word_access && dev_addr_wr == RK_CLEAR) begin
-                if (dev_wdata[1]) tx_overflow<=0;
-                if (dev_wdata[3]) param_overrun<=0;
-            end
-            if (tx_push) begin
-                tx_fifo[tx_wr_ptr]<=dev_wdata[7:0]; tx_wr_ptr<=tx_wr_ptr+1'b1;
-            end
-            if (tx_write && !tx_push) tx_overflow<=1;
-            if (tx_pop) tx_rd_ptr<=tx_rd_ptr+1'b1;
-            case ({tx_push,tx_pop})
-                2'b10: tx_count<=tx_count+1'b1;
-                2'b01: tx_count<=tx_count-1'b1;
-                default: begin end
-            endcase
-            if (dev_we && word_access && dev_addr_wr == RK_ACK && dev_wdata == param_seq)
-                param_pending<=0;
-            // New update wins over simultaneous acknowledgment.
-            if (rk_param_update) begin
-                param_value<=rk_param_data; param_seq<=param_seq+1'b1; param_pending<=1;
-                if (param_pending && !(dev_we && word_access &&
-                    dev_addr_wr == RK_ACK && dev_wdata == param_seq)) param_overrun<=1;
-            end
-        end
-    end
-
     wire uart_busy;
     wire uart_tx_start;
 
@@ -232,10 +181,6 @@ module peripheral_bus #(
                 legacy_rdata <= cycle_count;
             else if (word_access && (dev_addr_rd == GPIO_DATA))
                 legacy_rdata <= {30'b0, gpio_out};
-            else if (word_access && dev_addr_rd == RK_STATUS)
-                legacy_rdata <= {16'b0,1'b0,tx_count,4'b0,param_overrun,param_pending,tx_overflow,(tx_count<64)};
-            else if (word_access && dev_addr_rd == RK_PARAM) legacy_rdata <= param_value;
-            else if (word_access && dev_addr_rd == RK_SEQ) legacy_rdata <= param_seq;
             else if(word_access && dev_addr_rd>=32'h30600 && dev_addr_rd<=32'h30620)
                 legacy_rdata<=frame_read_data;
             else if(ENABLE_PREPROCESS && word_access && (dev_addr_rd[31:8]==24'h000308 || dev_addr_rd[31:8]==24'h000309))

@@ -1,4 +1,4 @@
-"""Check merged FSPI/video address isolation and IIC using existing firmware images."""
+"""Check merged FSPI/video address isolation using SPI only."""
 from pathlib import Path
 import subprocess
 root=Path(__file__).resolve().parents[1]
@@ -8,7 +8,7 @@ out=root/'build/fspi-integration'
 out.mkdir(parents=True,exist_ok=True)
 excluded={'ROM_core.v','memory_core.v','multiplier_core.v','acore_fetch_memory.v','MuxKeyInternal.v','multiply_adder.v','multiply_adder_w8a16.v','video_async_fifo.v'}
 rtl=[p for p in sorted((root/'rtl').glob('*.v')) if p.name not in excluded]
-rtl+=list((root/'sim/models').glob('*.v'))+list((root/'rtl/rk_iic').glob('*.v'))+list((root/'rtl/rk_fspi').glob('*.v'))+list((root/'board').glob('*.v'))
+rtl+=list((root/'sim/models').glob('*.v'))+list((root/'rtl/rk_fspi').glob('*.v'))+list((root/'board').glob('*.v'))
 def run(name,tb,defines=()):
     binary=out/(name+'.vvp')
     subprocess.run(['iverilog','-g2012','-s',name,'-DNO_WAVES',*defines,'-o',str(binary),str(tb),*map(str,rtl)],check=True)
@@ -28,5 +28,3 @@ s=s.replace("check(32'h3071c,32'hffffffff,32'h46535032);",
 p=out/'TB_fspi_video.v';p.write_text(s)
 defines=['-DPROG_FILE="firmware/rom.hex"','-DDATA_FILE="firmware/ram_bytes.hex"']
 run('TB_fspi_video',p,defines)
-run('TB_rk_cpu_bus',root/'sim/TB_rk_cpu_bus.v',defines)
-run('TB_cpu_iic',root/'sim/TB_cpu_iic.v',['-DPROG_FILE="firmware/iic_service/rom.hex"','-DDATA_FILE="firmware/iic_service/ram_bytes.hex"'])

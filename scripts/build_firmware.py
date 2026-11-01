@@ -41,7 +41,7 @@ def check_coremark_sources():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
-    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "iic_service", "fspi_service", "video_bringup", "preprocess_bringup", "video_diagnostic"), default="coremark")
+    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "fspi_service", "video_bringup", "preprocess_bringup", "video_diagnostic"), default="coremark")
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     parser.add_argument("--verify-existing", action="store_true")
     parser.add_argument("--mode", choices=("performance", "validation"), default="performance")
@@ -81,7 +81,7 @@ def main():
         linker = ROOT / "firmware/link.ld"
         options = []
         if args.application in ("fspi_service", "video_diagnostic"):
-            sources.append(ROOT / "firmware" / ("rk_spi_comm.c" if args.application == "video_diagnostic" else "rk_comm.c"))
+            sources.append(ROOT / "firmware" / "rk_spi_comm.c")
             options += ["-Wall", "-Wextra", "-Werror"]
         if args.application == "video_diagnostic":
             sources += [ROOT / "firmware/ai_first_layer.c", ROOT / "firmware/ai_network.c", ROOT / "firmware/video_present.c",
@@ -120,8 +120,6 @@ def main():
         else:
             (args.image_dir / (prefix + "ram_bytes.hex")).write_text(byte_image, encoding="ascii")
     dependencies = sources + [linker]
-    if args.application in ("iic_service", "fspi_service"):
-        dependencies += [ROOT / "firmware/rk_link.h"]
     if args.application in ("fspi_service", "video_diagnostic"):
         dependencies += [ROOT / "firmware/rk_comm.h",
                          ROOT / "csrc/rk_fspi/fspi_v2.h",

@@ -8,8 +8,7 @@ module TB_fspi;
  peripheral_bus #(.ENABLE_FSPI(1)) dut(
  .clk(clk),.rst_n(rst_n),.dev_we(we),.dev_re(re),.dev_addr_wr(wa),.dev_addr_rd(ra),
  .dev_wdata(wd),.dev_size(2'b10),.dev_rdata(rd),.spi_clk(sck),.spi_cs(cs),.spi_data(bus),
- .rk_tx_data(),.rk_tx_valid(),.rk_tx_ready(1'b0),.rk_param_data(32'b0),
- .rk_param_update(1'b0),.uart_txd(),.gpio_out());
+ .uart_txd(),.gpio_out());
  task wr;input [31:0] a,v;begin
  @(negedge clk);wa=a;wd=v;we=1;@(negedge clk);we=0;
  end endtask

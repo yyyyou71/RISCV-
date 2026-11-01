@@ -1,3 +1,5 @@
+> 历史记录：下文的 RK IIC 接口和旧通信镜像现已清理；当前接口见 [纯 SPI 通信](rk_cpu_link.md)。
+
 # FSPI / video integration merge
 
 Merge local a5be98f with the already pending origin/ziguang_rv32i merge at 428920d.

@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <stddef.h>
 /* Cooperative service: call poll frequently; no IRQ/other producer may use
- * the same SPI registers or log queue concurrently. video_diagnostic uses
- * rk_spi_comm.c (SPI only); fspi_service retains rk_comm.c (IIC + SPI).
+ * the same SPI registers or log queue concurrently. video_diagnostic and
+ * fspi_service both use the SPI-only rk_spi_comm.c transport.
  * No dynamic allocation. Parameter 0 controls GPIO[1:0]; 1..15 are application values.
  */
 void rk_comm_init(void);

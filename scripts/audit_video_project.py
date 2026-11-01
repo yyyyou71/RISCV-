@@ -77,7 +77,8 @@ def main():
             f'set_clock_uncertainty {{0.4}} -from [get_clocks {{ddrphy_sysclk}}] -to [get_clocks {{phy_dq_sysclk_{bank}}}] -setup -hold',
             f'set_clock_uncertainty {{0.4}} -from [get_clocks {{phy_dq_sysclk_{bank}}}] -to [get_clocks {{ddrphy_sysclk}}] -setup -hold']
     checks['reference_phy_multicycle_and_uncertainty_preserved']=all(line in timing for line in phy_timing)
-    checks['iic_pins_preserved'] = pin_map.get('iic_scl') == 'P19' and pin_map.get('iic_sda') == 'R19'
+    checks['rk_iic_removed'] = all(name not in ports and name not in pin_map for name in ('iic_scl', 'iic_sda')) and 'rtl/rk_iic/' not in pds
+    checks['hdmi_configuration_iic_preserved'] = pin_map.get('hd_scl') == 'AA21' and pin_map.get('hd_sda') == 'AA20'
     bad_parts = []
     for name in ['pcie_test', 'ddr3', 'PLL_CLK', 'fifo_2_ddr', 'ddr_2_fifo',
                  'pango_acore_fetch', 'pango_acore_ram', 'pango_multiplier_ip', 'pango_pool_sum_ram', 'pango_ai_multadd']:
@@ -95,14 +96,13 @@ def main():
     checks['generated_ai_ip_registered'] = 'ipcore/pango_ai_multadd/pango_ai_multadd.idf' in files
     preserved = ['Acore.v', 'ALU.v', 'CSR.v', 'decoder.v', 'GPR_matrix.v',
                  'acore_pair.v', 'acore_forward.v', 'acore_fetch_queue.v', 'multiply_unit.v']
-    preserved += ['rk_iic/' + p.name for p in (ROOT / 'rtl/rk_iic').glob('*.v')]
     changed_core = []
     for name in preserved:
         path = 'rtl/' + name
         old = subprocess.check_output(['git', 'show', '20f4da7:' + path], cwd=ROOT)
         if digest(old) != digest((ROOT / path).read_bytes()):
             changed_core.append(path)
-    checks['own_acore_and_iic_unchanged_from_m1'] = not changed_core
+    checks['own_acore_unchanged_from_m1'] = not changed_core
     manifest = json.loads((ROOT / 'docs/video_import_manifest.json').read_text())
     stale = []
     for item in manifest['files']:

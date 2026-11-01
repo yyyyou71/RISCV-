@@ -42,8 +42,7 @@ module TB_ddr_cpu_window;
         wire bus_err;
         soc #(.ENABLE_DUAL(ENABLE_DUAL),.ENABLE_DDR(1),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH)) u_soc (
             .clk(clk), .rst_n(rst_n), .timer_irq(1'b0), .uart_txd(uart_txd), .bus_err(bus_err),
-            .rk_tx_data(), .rk_tx_valid(), .rk_tx_ready(1'b1),
-            .rk_param_data(32'd0), .rk_param_update(1'b0), .gpio_out(),
+            .gpio_out(),
             .core_clk(core_clk), .ddr_init_done(ddr_init_done),
             // 已有CPU/AI测试不提供视频，顶层新增输入保持空闲。
             .pixclk_in(1'b0),.vs_in(1'b0),.hs_in(1'b0),.de_in(1'b0),
@@ -120,8 +119,7 @@ module TB_ddr_cpu_window;
         assign dev_wdata = host_data; assign dev_size = host_size;
         peripheral_bus #(.ENABLE_DDR(WINDOW_ENABLE),.ENABLE_AI(AI_ENABLE),.AI_ACT_WIDTH(AI_ACT_WIDTH), .DDR_TIMEOUT_CYCLES(128)) u_bus (
             .clk(clk), .rst_n(rst_n), .uart_txd(uart_txd),
-            .rk_tx_data(), .rk_tx_valid(), .rk_tx_ready(1'b1),
-            .rk_param_data(32'd0), .rk_param_update(1'b0), .gpio_out(),
+            .gpio_out(),
             .dev_we(dev_we), .dev_re(dev_re), .dev_addr_wr(dev_addr_wr),
             .dev_addr_rd(dev_addr_rd), .dev_wdata(dev_wdata), .dev_size(dev_size),
             .dev_rdata(dev_rdata), .core_clk(core_clk), .ddr_init_done(ddr_init_done),

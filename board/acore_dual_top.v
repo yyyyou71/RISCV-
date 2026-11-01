@@ -6,10 +6,9 @@ module acore_dual_top #(
     parameter integer RESET_HOLD_CYCLES=250000
 )(
 
-    input wire sys_clk,key0_n,iic_scl,
+    input wire sys_clk,key0_n,
     input wire spi_clk,spi_cs,
     inout wire [3:0] spi_data,
-    inout wire iic_sda,
     output wire led0,led1,
     input wire ref_clk_p,ref_clk_n,perst_n,
     input wire [1:0] rxn,rxp,
@@ -65,8 +64,6 @@ module acore_dual_top #(
         .uart_tx(),
         .led0(cpu_led0),
         .led1(cpu_led1),
-        .iic_scl(iic_scl),
-        .iic_sda(iic_sda),
         .core_clk(core_clk),
         .ddr_init_done(ready),
         .frame_available(available),

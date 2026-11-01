@@ -40,11 +40,6 @@ module soc #(
     output wire [15:0] axi_wstrb,
     input wire [127:0] axi_rdata,
     input wire axi_rlast, axi_rvalid,
-    output wire [7:0] rk_tx_data,
-    output wire rk_tx_valid,
-    input wire rk_tx_ready,
-    input wire [31:0] rk_param_data,
-    input wire rk_param_update,
     output wire uart_txd,
     output wire bus_err,
     output wire [1:0] gpio_out
@@ -106,8 +101,6 @@ module soc #(
         .axi_wusero_id(axi_wusero_id), .axi_rid(axi_rid),
         .axi_wdata(axi_wdata), .axi_wstrb(axi_wstrb),
         .axi_rdata(axi_rdata), .axi_rlast(axi_rlast), .axi_rvalid(axi_rvalid),
-        .rk_tx_data(rk_tx_data), .rk_tx_valid(rk_tx_valid), .rk_tx_ready(rk_tx_ready),
-        .rk_param_data(rk_param_data), .rk_param_update(rk_param_update),
         .uart_txd(uart_txd),
         .gpio_out(gpio_out)
     );

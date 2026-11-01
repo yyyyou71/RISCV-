@@ -45,7 +45,6 @@ def main():
     execute([args.modelsim / "vmap.exe", "-modelsimini", configuration, "work", library],
             output / "mapping.log")
     sources = sorted((ROOT / "rtl").glob("*.v")) + sorted((ROOT / "board").glob("*.v"))
-    sources += sorted((ROOT / "rtl/rk_iic").glob("*.v"))
     sources += sorted((ROOT / "rtl/rk_fspi").glob("*.v"))
     includes = []
     names = ("pango_rom", "pango_ram", "pango_multiplier_ip")

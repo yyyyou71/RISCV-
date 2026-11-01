@@ -2,19 +2,8 @@
 #define RK_COMM_PROTOCOL_H
 #include <stdint.h>
 #include <stddef.h>
-#define COMM_MAGIC 0x31435652u /* little endian RVC1 */
-#define COMM_ABI 0x00010001u
 #define COMM_HEADER 16u
-#define COMM_MAX 2048u
 #define COMM_PARAMS 16u
-#define COMM_INFO 0xa0u
-#define COMM_ARM 0xa1u
-#define COMM_POLL 0xa2u
-#define COMM_ACK_MAGIC 0xc3u
-#define COMM_IDLE 0u
-#define COMM_RX 1u
-#define COMM_TX 2u
-#define COMM_FAULT 4u
 #define COMM_SET_PARAM 1u
 #define COMM_GET_PARAM 2u
 #define COMM_READ_LOG 3u
@@ -59,7 +48,7 @@
 #define COMM_VIDEO_SUCCESS 6u
 #define COMM_VIDEO_ERROR 7u
 #define COMM_VIDEO_RELEASING 8u
-/* SPI-only fixed-size transport; distinct magic prevents mixing IIC clients. */
+/* SPI-only fixed-size transport. */
 #define SPI_TERM_MAGIC 0x31545053u /* little endian SPT1 */
 #define SPI_TERM_ABI 0x00010000u
 #define SPI_TERM_FRAME 256u
@@ -85,14 +74,6 @@ static inline uint32_t comm_hash(const uint8_t *p,size_t n){
  uint32_t h=2166136261u;size_t i;
  for(i=0;i<n;i++)if(i<12 || i>=16)h=(h^p[i])*16777619u;
  return h;
-}
-static inline void comm_seal(uint8_t *p,uint32_t seq,uint16_t kind,uint16_t payload){
- comm_put32(p,COMM_MAGIC);comm_put32(p+4,seq);comm_put16(p+8,kind);
- comm_put16(p+10,payload);comm_put32(p+12,comm_hash(p,COMM_HEADER+payload));
-}
-static inline int comm_valid(const uint8_t *p,size_t n){
- return n>=COMM_HEADER && n<=COMM_MAX && comm_u32(p)==COMM_MAGIC &&
-        (size_t)comm_u16(p+10)+COMM_HEADER==n && comm_u32(p+12)==comm_hash(p,n);
 }
 static inline void spi_term_seal(uint8_t *p,uint32_t seq,uint16_t kind,uint16_t payload){
  comm_put32(p,SPI_TERM_MAGIC);comm_put32(p+4,seq);comm_put16(p+8,kind);

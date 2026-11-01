@@ -1,3 +1,5 @@
+> 历史记录：下文的 RK IIC 接口和旧通信镜像现已清理；当前接口见 [纯 SPI 通信](rk_cpu_link.md)。
+
 # Acore 双发射、IIC、HDMI、DDR 与 AI 板级集成
 
 > 当前以 [阶段表](hdmi_ai_stages.md)、[P3b 整网服务](ai_network_p3b.md) 和 [P4 画框发送](video_present_p4.md) 为准。

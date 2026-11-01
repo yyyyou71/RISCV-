@@ -12,7 +12,6 @@ module TB_board;
     wire uart_tx;
     wire led0;
     wire led1;
-    tri1 iic_sda;
     reg [7:0] received_byte;
     integer bit_index;
     integer character_count = 0;
@@ -29,9 +28,7 @@ module TB_board;
         .key0_n(key0_n),
         .uart_tx(uart_tx),
         .led0(led0),
-        .led1(led1),
-        .iic_scl(1'b1),
-        .iic_sda(iic_sda)
+        .led1(led1)
     );
 
     always begin

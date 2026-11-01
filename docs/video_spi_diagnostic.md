@@ -102,7 +102,7 @@ READ_FIRST/READ_LAST/SUCCESS/ERROR/RELEASING。寄存器顺序采样不是硬件
     make -C csrc/rk_fspi all test
 
 新固件使用 firmware/rk_spi_comm.c，不链接旧 firmware/rk_comm.c 的 IIC 服务。
-旧 fspi_service 和 comm_service 镜像保留，不能配合当前纯 SPI 终端。
+旧 IIC/混合协议的 fspi_service、comm_service、iic_service 镜像已清理；需要独立服务时请从当前纯 SPI 源码重新构建。
 GCC10.2、O2、RV32IM -mno-div；text/data/BSS 以 manifest 对应 ELF 的 size 为准。
 本次只编译固件/主机程序、运行主机 mock 检查、静态检查及核对 IP 初始化。
 未运行 RTL 仿真、PDS 实现或生成新位流，纯 SPI CPU 通道和新抓帧流程等待用户板级验证。

@@ -28,7 +28,6 @@ module TB_shared_ddr;
         .pixclk_in(1'b0),.vs_in(1'b0),.hs_in(1'b0),.de_in(1'b0),.r_in(8'd0),.g_in(8'd0),.b_in(8'd0),
         .frame_available(5'b01100),.frame_ids(ids),.frame_wr_slot(3'd4),.frame_wr_active(1'b1),
         .shared_ddr_fault(fault),.video_shape({16'd1080,16'd1920}),.video_period(32'd416667),.frame_hold_mask(hold_mask),
-        .rk_tx_data(),.rk_tx_valid(),.rk_tx_ready(1'b1),.rk_param_data(32'd0),.rk_param_update(1'b0),
         .uart_txd(),.gpio_out(gpio),.bus_err(buserr),
         .axi_awaddr(ca),.axi_araddr(cr),.axi_awvalid(cav),.axi_arvalid(crv),.axi_awuser_ap(cap),.axi_aruser_ap(crp),
         .axi_awlen(cal),.axi_arlen(crl),.axi_awuser_id(ci),.axi_aruser_id(cri),.axi_awready(car),.axi_arready(crr),

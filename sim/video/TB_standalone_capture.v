@@ -4,9 +4,9 @@ module TB_standalone_capture;
     always #20 clk=~clk;
     always #3.367 pixel_clk=~pixel_clk;
     wire led0,led1;
-    tri1 iic_sda,hd_sda;
+    tri1 hd_sda;
     acore_dual_top #(.STANDALONE_CAPTURE(1),.RESET_HOLD_CYCLES(8)) dut(
-        .sys_clk(clk),.key0_n(key_n),.iic_scl(1'b1),.iic_sda(iic_sda),.led0(led0),.led1(led1),
+        .sys_clk(clk),.key0_n(key_n),.led0(led0),.led1(led1),
         .ref_clk_p(1'b0),.ref_clk_n(1'b0),.perst_n(1'b0),.rxn(2'b0),.rxp(2'b0),.txn(),.txp(),
         .pixclk_in(pixel_clk),.vs_in(1'b0),.hs_in(1'b0),.de_in(1'b0),
         .r_in(8'b0),.g_in(8'b0),.b_in(8'b0),.hd_scl(),.hd_sda(hd_sda),

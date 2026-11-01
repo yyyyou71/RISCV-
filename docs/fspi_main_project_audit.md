@@ -1,3 +1,5 @@
+> 历史记录：下文的 RK IIC 接口和旧通信镜像现已清理；当前接口见 [纯 SPI 通信](rk_cpu_link.md)。
+
 # 主工程 FSPI 与成功测试版本的差异检查
 
 > Update 2026-10-31: FSP2 source integration completed. See fspi_main_50m.md; this document records the pre-change audit.

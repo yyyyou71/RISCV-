@@ -581,18 +581,6 @@ define_attribute {p:mem_dm[0]} {PAP_IO_VCCIO} {1.5}
 define_attribute {p:mem_dm[0]} {PAP_IO_STANDARD} {SSTL15_I}
 define_attribute {p:mem_dm[0]} {PAP_IO_DRIVE} {8.9}
 define_attribute {p:mem_dm[0]} {PAP_IO_SLEW} {FAST}
-define_attribute {p:iic_sda} {PAP_IO_DIRECTION} {INOUT}
-define_attribute {p:iic_sda} {PAP_IO_LOC} {R19}
-define_attribute {p:iic_sda} {PAP_IO_VCCIO} {3.3}
-define_attribute {p:iic_sda} {PAP_IO_STANDARD} {LVCMOS33}
-define_attribute {p:iic_sda} {PAP_IO_DRIVE} {4}
-define_attribute {p:iic_sda} {PAP_IO_NONE} {TRUE}
-define_attribute {p:iic_sda} {PAP_IO_SLEW} {FAST}
-define_attribute {p:iic_scl} {PAP_IO_DIRECTION} {INPUT}
-define_attribute {p:iic_scl} {PAP_IO_LOC} {P19}
-define_attribute {p:iic_scl} {PAP_IO_VCCIO} {3.3}
-define_attribute {p:iic_scl} {PAP_IO_STANDARD} {LVCMOS33}
-define_attribute {p:iic_scl} {PAP_IO_NONE} {TRUE}
 
 # RK FSPI: pins match the successful 50MHz standalone test.
 define_attribute {p:spi_data[3]} {PAP_IO_DIRECTION} {INOUT}

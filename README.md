@@ -5,6 +5,8 @@
 
 2026-11-01：唯一根工程 `rv32I.pds`、顶层 `acore_dual_top` 已接入桌面 `ziguang-fpga2`
 的 HDMI / PCIe / DDR，保留自己的 Acore 双发射；AI 已在活动顶层启用，控制/文本使用纯 SPI，板级 UART 已移除。
+RK 通信用的 IIC（`u_rk_iic`、P19/R19、`0x30400` 邮箱/FIFO）已删除；
+HDMI 芯片配置 IIC（`hd_scl=AA21`、`hd_sda=AA20`）继续保留。
 当前默认 ROM/RAM 初值为 `firmware/video_diagnostic/`，厂商 IP 内嵌数据已同步更新。
 CPU 按需抓取同帧原图和 96×96 张量，支持 SPI 整网模型加载、99 任务及检测结果，
 新增前 16 框硬件叠加与受控 PCIe 发送。HDMI 未检出问题、RK 实板闭环和新版本最终时序仍待验证。
@@ -75,8 +77,8 @@ CPU 基于 `origin/main` 的 `9bd2479b0ce167a77bfa4ca22e1969984f06a236`，导入
 处理器的 33×33 有符号乘法使用官方 Simple Multiplier IP，三拍，四个 Logos2 APM。
 ROM/RAM 同样使用官方 IP，不把仿真数组加入 PDS。
 
-IIC 已接入当前顶层：`iic_scl=P19`、`iic_sda=R19`、LVCMOS33，CPU 发送 FIFO 为 64 字节，
-RK 下发仍是最新 32 位参数邮箱。`TB_cpu_iic` 可分别测试单/双发射；当前没有 IIC 中断。
+历史 IIC 通道现已删除；当前 RK 控制、日志、权重和检测结果均通过纯 SPI。
+旧 `0x30400–0x30414` 地址不再实现；HDMI 配置 IIC 独立保留。
 DDR、AI/YOLO、HDMI、PCIe 尚未接入当前 PDS；PCIe 已有的 RTL/IP 文件仅为移植准备。
 `origin/main` 的 DDR/AI 逻辑现已选择性移入 `rtl/`、`csrc/software/`、`pc_ai/`，
 通过 `soc.ENABLE_DDR/ENABLE_AI` 选择，默认关闭；没有改变 Acore 双发射实现。

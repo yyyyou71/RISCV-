@@ -2,9 +2,9 @@
 #define FSPI_V2_H
 #include <stddef.h>
 #include <stdint.h>
-/* CPU-side driver used by firmware/rk_comm.c; requires comm_service deployment.
+/* CPU-side driver used by firmware/rk_spi_comm.c.
  * Main acore_dual_top uses 0x30300. ENABLE_VIDEO=1 remaps to 0x30700.
- * Applications coordinate readiness either over IIC or fixed SPI-only frames.
+ * Applications coordinate readiness through fixed SPI-only frames.
  * Single CPU owner; no interrupts/second core may interleave INDEX/DATA.
  */
 #ifndef FSPI_V2_BASE

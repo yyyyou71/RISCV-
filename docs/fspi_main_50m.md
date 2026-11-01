@@ -1,3 +1,5 @@
+> 历史记录：下文的 RK IIC 接口和旧通信镜像现已清理；当前接口见 [纯 SPI 通信](rk_cpu_link.md)。
+
 > Application update: CPU communication firmware and automatic RK client are now implemented; see comm_service.md. Existing programmed IP images still require user update.
 
 # 主工程 FSPI 50 MHz 集成（2026-10-31）

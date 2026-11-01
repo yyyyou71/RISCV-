@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "base_commit": "63d9b629399a5615ac4901dbbc3cf7c368983225",
+  "scope": "RK IIC removal; short SPI/CPU and AI control checks, PDS compile only",
+  "checks": {
+    "all_project_sources_exist": true,
+    "no_rk_iic_in_project": true,
+    "no_rk_iic_in_top": true,
+    "hdmi_rtl_unchanged": true,
+    "active_firmware_and_ip_unchanged": true,
+    "pds_compile": true,
+    "spi_video_mmio_isolation": true,
+    "dual_cpu_spi_service": true,
+    "rk_spi_host_build_and_mock_tests": true
+  },
+  "ai_control_check": "PASS retired_iic_inert=1 gpio_coexist=1",
+  "synthesis_run": false,
+  "place_route_run": false,
+  "bitstream_regenerated": false,
+  "hardware_tested": false,
+  "missing_sources": [],
+  "retained_iic": "HDMI configuration, hd_scl=AA21 hd_sda=AA20",
+  "pds_compile_log": "build/iic-cleanup/pds_compile.log"
+}
