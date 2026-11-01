@@ -1,0 +1,22 @@
+{
+  "source": "place_route/run.log from 2026-11-01 00:44",
+  "physical_implementation_before_p4": true,
+  "pnr_wall_seconds": 1577,
+  "placement_seconds": 483.36,
+  "global_routing_seconds": 53.69,
+  "detailed_routing_seconds": 343.59,
+  "detailed_route_iterations": 132,
+  "in_router_hold_seconds": 96.88,
+  "post_route_hold_seconds": 140.2,
+  "worst_ddr_setup_ns": -11.908,
+  "estimated_ddr_frequency_mhz": 51.2108,
+  "worst_path": "requant_q13 shift/round/add/clamp/ReLU through final multiply in one cycle",
+  "recommendations": [
+    "Split wide requant arithmetic into handshake stages",
+    "Register AI command bundle before wide validation",
+    "Keep DDR/PCIe clocks and timing requirements; do not mask setup failures"
+  ],
+  "pds_options_changed": false,
+  "reroute_run": false,
+  "speedup_verified": false
+}

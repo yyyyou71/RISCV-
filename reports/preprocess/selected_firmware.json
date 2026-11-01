@@ -5,14 +5,14 @@
     {
       "instance": "pango_acore_fetch",
       "image": "firmware/video_diagnostic/acore_dual_rom.hex",
-      "sha256": "2810f595860e33301d2047b92b6dcce9b249c0035cda4d479ea1e0326e70a2dc",
+      "sha256": "695bc5553325c64fcbc339ae44869adfcaedfc945235065984b715f4c026dbc1",
       "embedded_words_verified": 8192,
       "other_parameters_preserved": true
     },
     {
       "instance": "pango_acore_ram",
       "image": "firmware/video_diagnostic/acore_dual_ram.hex",
-      "sha256": "e44cb70c5ff37d2ba95ea50fbfdda1ceb331e4ffad54d88236837ce6c75cc9fe",
+      "sha256": "41f2ef5f88d1432c7533f17cc9211f883026c10754e13fb21a03637350e6d4f8",
       "embedded_words_verified": 16384,
       "other_parameters_preserved": true
     }

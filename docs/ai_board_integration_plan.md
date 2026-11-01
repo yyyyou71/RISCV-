@@ -1,8 +1,8 @@
 # Acore 双发射、IIC、HDMI、DDR 与 AI 板级集成
 
-> 当前以 [阶段表](hdmi_ai_stages.md) 和 [P3a 首层集成](ai_first_layer_p3a.md) 为准。
-> 已使用纯 SPI 终端，AI 默认开启、首层已接入；下文保留此前的规划和历史检查。
-> 完整模型加载、99 任务后处理和画框仍未完成，首层检查不等于整网板测通过。
+> 当前以 [阶段表](hdmi_ai_stages.md)、[P3b 整网服务](ai_network_p3b.md) 和 [P4 画框发送](video_present_p4.md) 为准。
+> 纯 SPI 终端、模型装载、99 任务后处理、前16框与受控PCIe发送已代码接入；下文保留历史规划。
+> HDMI未检出仍待诊断，RK整网及图像闭环未板测通过，新版本最终时序尚待实现核验。
 
 更新：2026-10-30。分支 `ziguang_rv32i`，唯一 PDS 入口为根目录 `rv32I.pds`。
 已完成 M1 的 DDR/AI 逻辑移植；M2 的参考 HDMI/PCIe/物理 DDR、共享仲裁和帧锁定现已接入根顶层并通过新增逻辑短测试。

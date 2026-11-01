@@ -1,0 +1,14 @@
+{
+  "TB_rgb565_box_overlay": {
+    "passed": true,
+    "log": "PASS overlay: 512 pixels, gaps, overlap priority, 16 boxes and bypass\nsim/video/TB_rgb565_box_overlay.v:43: $finish called at 1030000 (1ps)"
+  },
+  "TB_video_present_control": {
+    "passed": true,
+    "log": "PASS presentation: no-RK, frame identity, DMA drain, underflow and link-loss leases\nsim/video/TB_video_present_control.v:50: $finish called at 5340000 (1ps)"
+  },
+  "TB_requant_pipeline": {
+    "passed": true,
+    "log": "PASS quantization: 512 exact comparisons with pre-P4 implementation + backpressure\nsim/ai/TB_requant_pipeline.v:36: $finish called at 304670000 (1ps)"
+  }
+}

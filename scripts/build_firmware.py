@@ -84,7 +84,7 @@ def main():
             sources.append(ROOT / "firmware" / ("rk_spi_comm.c" if args.application == "video_diagnostic" else "rk_comm.c"))
             options += ["-Wall", "-Wextra", "-Werror"]
         if args.application == "video_diagnostic":
-            sources += [ROOT / "firmware/ai_first_layer.c", ROOT / "firmware/ai_network.c",
+            sources += [ROOT / "firmware/ai_first_layer.c", ROOT / "firmware/ai_network.c", ROOT / "firmware/video_present.c",
                         ROOT / "csrc/software/ai_runtime.c", ROOT / "csrc/software/ai_postprocess.c"]
             options += ["-DAI_DDR_BYTES=0x04000000u", "-fstack-usage"]
             linker = ROOT / "firmware/ai_link.ld"
@@ -130,7 +130,7 @@ def main():
         dependencies += [ROOT / "firmware/preprocess_capture.h"]
     if args.application == "video_diagnostic":
         dependencies += [ROOT / "firmware" / name for name in
-                         ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h", "ai_network.h")]
+                         ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h", "ai_network.h", "video_present.h")]
         dependencies += [ROOT / "csrc/software" / name for name in ("ai_runtime.h", "ai_postprocess.h")]
     if args.application == "coremark":
         dependencies += [ROOT / "csrc/coremark_port/platform.h", ROOT / "csrc/coremark_port/core_portme.h"]

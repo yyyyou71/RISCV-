@@ -4,7 +4,7 @@ module acore_video_platform #(
 )(
     input wire monitor_clk,
     input wire tensor_we,
-    input wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    input wire [8:0] tensor_addr_wr,tensor_addr_rd,
     input wire [31:0] tensor_wdata,
     output wire [31:0] tensor_rdata,
     output wire cpu_ddr_clk,cpu_ddr_ready,system_rst_n,shared_fault,
@@ -443,6 +443,21 @@ wire tensor_awvalid,tensor_awap,tensor_awready,tensor_wready,tensor_wlast;
 wire [3:0] tensor_awlen,tensor_awid,tensor_wid;
 wire [127:0] tensor_write_data;
 wire [15:0] tensor_wstrb;
+wire [31:0] capture_rdata,present_rdata;
+wire [4:0] present_frames,present_hold,present_box_count;
+wire [1023:0] present_boxes;
+wire presentation_read_busy,presentation_read_done;
+assign tensor_rdata=tensor_addr_rd[8]?present_rdata:capture_rdata;
+video_present_control u_present(
+    .clk(monitor_clk),.core_clk(ddr_core_clk),.pcie_clk(pclk_div2),.rst_n(application_rst_n),
+    .pcie_rst_n(core_rst_n),.pcie_link_up(smlh_link_up&&rdlh_link_up),.ddr_ready(cpu_ddr_ready),
+    .dev_we(tensor_we&&tensor_addr_wr[8]),.addr_wr(tensor_addr_wr[7:0]),.addr_rd(tensor_addr_rd[7:0]),
+    .wdata(tensor_wdata),.rdata(present_rdata),.frame_available(frame_available),.frame_held(frame_hold_mask|tensor_hold),
+    .frame_ids(frame_ids),.write_slot(frame_wr_slot),.write_active(frame_wr_active),
+    .reader_busy(presentation_read_busy),.reader_done(presentation_read_done),
+    .pixel_valid(dma_user_data_vld),.pixel_ready(user_data_rdy),.dma_busy(dma_mwr_tx_busy),
+    .stream_empty(fifo_rd_empty&&!pipe_valid&&!shadow_valid&&!fifo_rd_en_d1),
+    .reader_frames(present_frames),.protect_mask(present_hold),.active_count(present_box_count),.active_boxes(present_boxes));
 assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=application_rst_n;
 video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(application_rst_n),
@@ -450,8 +465,8 @@ video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.r
 hdmi_tensor_capture u_preprocess (
     .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(application_rst_n),
     .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
-    .dev_we(tensor_we),.dev_addr_wr(tensor_addr_wr),.dev_addr_rd(tensor_addr_rd),
-    .dev_wdata(tensor_wdata),.read_data(tensor_rdata),
+    .dev_we(tensor_we&&!tensor_addr_wr[8]),.dev_addr_wr(tensor_addr_wr[7:0]),.dev_addr_rd(tensor_addr_rd[7:0]),
+    .dev_wdata(tensor_wdata),.read_data(capture_rdata),
     .vs(vs_in),.de(de_in),.rgb({r_in,g_in,b_in}),.source_ready(source_ready&&input_shape_ok),
     .source_next_id(source_next_id),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
     .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
@@ -461,7 +476,8 @@ hdmi_tensor_capture u_preprocess (
     .axi_awlen(tensor_awlen),.axi_awid(tensor_awid),.axi_awready(tensor_awready),
     .axi_wdata(tensor_write_data),.axi_wstrb(tensor_wstrb),
     .axi_wready(tensor_wready),.axi_wlast(tensor_wlast),.axi_wid(tensor_wid));
-frame_ring_ddr3 #(.ENABLE_PCIE_READER(!STANDALONE_CAPTURE)) u_hdmi_fifo (
+frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
+  .present_frames(present_frames),.present_hold(present_hold),.present_box_count(present_box_count),.present_boxes(present_boxes),
   .tensor_awaddr(tensor_awaddr),.tensor_awvalid(tensor_awvalid),.tensor_awap(tensor_awap),
   .tensor_awlen(tensor_awlen),.tensor_awid(tensor_awid),.tensor_awready(tensor_awready),
   .tensor_wdata(tensor_write_data),.tensor_wstrb(tensor_wstrb),.tensor_wready(tensor_wready),
@@ -509,8 +525,8 @@ frame_ring_ddr3 #(.ENABLE_PCIE_READER(!STANDALONE_CAPTURE)) u_hdmi_fifo (
   .rd_en          (fifo_rd_en),       // 读使能 = pipeline 有空间
   .rd_empty       (fifo_rd_empty),    // 读空标志
   .rd_almost_empty(fifo_almost_empty),// FIFO 数据不足标志(TLP 发起门控)
-  .read_busy      (),
-  .read_done      (),
+  .read_busy      (presentation_read_busy),
+  .read_done      (presentation_read_done),
 
   // 状态(未用)
   .frame_valid    (),

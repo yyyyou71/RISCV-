@@ -80,3 +80,14 @@ set_max_delay -datapath_only 18.0 -from [get_clocks {sys_clk}] -to [get_clocks {
 set_max_delay -datapath_only 35.0 -from [get_clocks {spi_clk}] -to [get_clocks {sys_clk}]
 set_false_path -hold -from [get_clocks {sys_clk}] -to [get_clocks {spi_clk}]
 set_false_path -hold -from [get_clocks {spi_clk}] -to [get_clocks {sys_clk}]
+
+# Controlled presentation mailbox: waive only first-stage control synchronizers.
+set_false_path -to [get_cells -hierarchical {*u_present*req_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*ack_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*ready_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*lock_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*link_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*arm_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*done_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*fault_meta*}]
+set_false_path -to [get_cells -hierarchical {*u_present*pc_req_meta*}]

@@ -16,6 +16,8 @@ Ctrl+C 停止监听后，可以执行：
     ./rk_comm_cli /dev/spidev4.0 video-status
     ./rk_comm_cli /dev/spidev4.0 ai-status
     ./rk_comm_cli /dev/spidev4.0 network-status
+    ./rk_comm_cli /dev/spidev4.0 present-status
+    ./rk_comm_cli /dev/spidev4.0 present
     ./rk_comm_cli /dev/spidev4.0 video-retry
     ./rk_comm_cli /dev/spidev4.0 video-release
     ./rk_comm_cli /dev/spidev4.0 status
@@ -36,6 +38,12 @@ board_model.bin 用 scripts/prepare_board_model.py 在 PC 生成后另行复制�
 infer 需要已经持有有效 HDMI 帧；运行后查询到 DONE 才读取结果。
 断传不自动重发，可 status 后显式 resume 同一文件，或 abort 取消装载。
 见 [P3b 说明](../../docs/ai_network_p3b.md)。RK 暂缺联调条件，当前只完成主机侧检查。
+
+present 使用持有的同帧原图，若有整网结果则画置信度前 16 框，否则发送 0 框原图。
+PCIe 已连接时整网 DONE 后会自动排队一次；RK 还需用原工程的 PCIe 接收程序发起 DMA，
+接收完整 1920×1080 RGB565（4,147,200 字节）。SPI 命令成功只表示排队，present-status 的 DONE 才表示 FPGA 发送排空。
+未连 RK 时不会启动该读取；发送中禁止 video-release/retry，断链或欠载锁住槽位直到全局复位。
+每次 present 消耗一帧，下一次先 video-retry。详见 [P4 说明](../../docs/video_present_p4.md)。
 
 沿用已验证 SMDT 接口：50MHz、mode3、按读写分别设置 quad 标志、单段 payload-only transfer。
 没有修改 projects/fspi_test_50m/rk_tool 或其独立位流。

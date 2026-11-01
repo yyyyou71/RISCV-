@@ -22,6 +22,7 @@
 // =============================================================================
 module frame_ring_ddr3 #(
     parameter integer ENABLE_PCIE_READER = 1,
+    parameter integer CONTROLLED_READER = 0,
     parameter MEM_ROW_WIDTH    = 15,
     parameter MEM_COLUMN_WIDTH = 10,
     parameter MEM_BANK_WIDTH   = 3,
@@ -39,6 +40,8 @@ module frame_ring_ddr3 #(
     parameter FRAME_SHIFT      = 22,           // 原生地址槽步长 2^22，保留参考写读布局
     parameter [PIXEL_WIDTH-1:0] MAGIC_SOF = 16'h0001
 )(
+    input wire [4:0] present_frames,present_hold,present_box_count,
+    input wire [1023:0] present_boxes,
     input wire [27:0] tensor_awaddr,
     input wire tensor_awvalid,tensor_awap,tensor_fault,
     input wire [3:0] tensor_awlen,tensor_awid,
@@ -203,7 +206,7 @@ module frame_ring_ddr3 #(
         .FRAME_SHIFT    ( FRAME_SHIFT    ),
         .MAGIC_SOF      ( MAGIC_SOF      )
     ) u_write_ctrl (
-        .protect_mask(hold_mask|reader_hold|tensor_hold),.capture_ok(stream_sync),
+        .protect_mask(hold_mask|reader_hold|tensor_hold|(CONTROLLED_READER?present_hold:5'b0)),.capture_ok(stream_sync),
         .frame_ids(frame_ids),.write_active(write_active),
         .source_next_id(source_next_id),.source_fault(video_source_fault),
         .frame_begin(raw_begin),.frame_begin_accepted(raw_accepted),
@@ -238,6 +241,7 @@ module frame_ring_ddr3 #(
     // ======================== 读控制器: DDR3 -> FIFO (含 ddr_2_fifo, 自治) ====================F====
     generate if(ENABLE_PCIE_READER)begin: g_reader
     ddr3_read_ctrl #(
+        .ENABLE_OVERLAY(CONTROLLED_READER),
         .AXI_DATA_WIDTH ( AXI_DATA_WIDTH ),
         .AXI_ADDR_WIDTH ( AXI_ADDR_WIDTH ),
         .BURST_BEAT_CNT ( BURST_BEAT_CNT ),
@@ -247,11 +251,12 @@ module frame_ring_ddr3 #(
         .FRAME_SHIFT    ( FRAME_SHIFT    )
     ) u_read_ctrl (
         .protect_mask(reader_hold),
+        .box_count(present_box_count),.boxes(present_boxes),
         .rst_n            ( sys_rst_n      ),
         .clk_w            ( rd_clk         ),
         .clk_r            ( core_clk_i     ),
 
-        .frame_done       ( frame_done        ),
+        .frame_done       ( CONTROLLED_READER ? present_frames:frame_done ),
         .frame_consumed   ( frame_consumed    ),
         .consumed_frame_id( consumed_frame_id ),
 

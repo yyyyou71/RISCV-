@@ -14,7 +14,7 @@ module soc #(
     parameter [31:0] DDR_LIMIT_BYTES = 32'h20000000
 ) (
     output wire tensor_we,
-    output wire [7:0] tensor_addr_wr,tensor_addr_rd,
+    output wire [8:0] tensor_addr_wr,tensor_addr_rd,
     output wire [31:0] tensor_wdata,
     input wire [31:0] tensor_rdata,
     input wire clk,

@@ -18,6 +18,7 @@
 //   C3: R 无 rready — IP push 型, 反压前移到 AR 侧 (S_WAIT_ROOM)
 // =============================================================================
 module ddr3_read_ctrl #(
+    parameter integer ENABLE_OVERLAY = 0,
     parameter AXI_DATA_WIDTH     = 128,
     parameter AXI_ADDR_WIDTH     = 28,
     parameter BURST_BEAT_CNT     = 16,
@@ -37,6 +38,8 @@ module ddr3_read_ctrl #(
     parameter FIFO_RD_ADDR_WIDTH = 6
 ) (
     output wire [4:0] protect_mask,
+    input wire [4:0] box_count,
+    input wire [1023:0] boxes,
     input                          rst_n,
     input                          clk_w,                    // 用户读时钟 (pclk_div2)
     input                          clk_r,                    // AXI/核心时钟 (core_clk)
@@ -120,7 +123,7 @@ module ddr3_read_ctrl #(
     always @(posedge clk_r or negedge rst_n) begin
         if (!rst_n)
             ddr_rd_rq <= 1'b0;
-        else if (fifo_wr_water_level <= (FIFO_WR_DEPTH - BURST_BEAT_CNT))
+        else if (fifo_wr_water_level <= (FIFO_WR_DEPTH - BURST_BEAT_CNT - (ENABLE_OVERLAY?4:0)))
             ddr_rd_rq <= 1'b1;
         else
             ddr_rd_rq <= 1'b0;
@@ -239,8 +242,15 @@ module ddr3_read_ctrl #(
     end
 
     // ====================== FIFO 写使能 (push 型: 无条件收每一个 rvalid) ======================
-    assign fifo_wr_en   = (state == S_R) && axi_rvalid;
-    assign fifo_wr_data = axi_rdata;
+    generate if(ENABLE_OVERLAY)begin:g_overlay
+        rgb565_box_overlay #(.WIDTH(H_ACTIVE),.HEIGHT(V_ACTIVE)) u_overlay(
+            .clk(clk_r),.rst_n(rst_n),.frame_start(state==S_IDLE&&ddr_init_done&&frame_done_any),
+            .in_valid(state==S_R&&axi_rvalid),.in_data(axi_rdata),.box_count(box_count),.boxes(boxes),
+            .out_valid(fifo_wr_en),.out_data(fifo_wr_data));
+    end else begin:g_raw
+        assign fifo_wr_en=(state==S_R)&&axi_rvalid;
+        assign fifo_wr_data=axi_rdata;
+    end endgenerate
 
     // ====================== 读 FIFO 例化 ======================
     ddr_2_fifo u_ddr_2_fifo (

@@ -36,6 +36,10 @@ void ai_network_init(void){
 int ai_network_busy(void){return state==NW_LOADING || state==NW_QUEUED || state==NW_RUNNING || state==NW_POSTPROCESS;}
 int ai_network_loading(void){return state==NW_LOADING;}
 int ai_network_has_model(void){return ready!=0;}
+int ai_network_result(uint32_t *run,uint32_t *frame,uint32_t *slot,uint32_t *count){
+    if(state!=NW_DONE)return 0;
+    *run=run_id;*frame=frame_id;*slot=raw_slot;*count=post_result.count;return 1;
+}
 void ai_network_clear_result(void){
     if(ai_network_busy())return;
     clear_results();error=0;state=ready?NW_READY:NW_EMPTY;

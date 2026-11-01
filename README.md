@@ -3,14 +3,15 @@
 当前分支为 `ziguang_rv32i`。目标沿用已经确认的 RK3568_MES2L100H：
 **Logos2 / PG2L100H / FBG484 / -6，25 MHz，PDS 2022.2-SP6.1**。
 
-2026-10-30：唯一根工程 `rv32I.pds`、顶层 `acore_dual_top` 已接入桌面 `ziguang-fpga2`
-的 HDMI / PCIe / DDR，保留自己的 Acore 双发射。新增共享 DDR 仲裁、64 MiB CPU/AI 隔离区和帧锁定。
-板级 UART 已移除，IIC 保留，SPI 暂缓；AI 逻辑已导入但物理顶层仍关闭。
+2026-11-01：唯一根工程 `rv32I.pds`、顶层 `acore_dual_top` 已接入桌面 `ziguang-fpga2`
+的 HDMI / PCIe / DDR，保留自己的 Acore 双发射；AI 已在活动顶层启用，控制/文本使用纯 SPI，板级 UART 已移除。
+当前默认 ROM/RAM 初值为 `firmware/video_diagnostic/`，厂商 IP 内嵌数据已同步更新。
+CPU 按需抓取同帧原图和 96×96 张量，支持 SPI 整网模型加载、99 任务及检测结果，
+新增前 16 框硬件叠加与受控 PCIe 发送。HDMI 未检出问题、RK 实板闭环和新版本最终时序仍待验证。
 
-当前移植来源、层级、寄存器、上板步骤与完整短测报告见 [M2 说明](docs/video_integration_m2.md)。
-新自检程序在 `firmware/video_bringup.c`，镜像在 `firmware/video_bringup/`；
-必须在 PDS 中选择新 ROM/RAM 初值并重新生成 IP，现有生成 HDL 仍包含历史 CoreMark。
-PDS 资源/时序看本次实现后的 `place_route/acore_dual_top.prr`、`acore_dual_top.rtr`。
+最新设计/寄存器/验证边界见 [P4 同帧画框与发送](docs/video_present_p4.md)，
+模型服务见 [P3b 说明](docs/ai_network_p3b.md)，移植来源见 [M2 说明](docs/video_integration_m2.md)。
+资源/时序看本次实现后的 `place_route/acore_dual_top.prr`、`place_route/acore_dual_top.rtr`，请核对报告时间。
 
 下文保留 **M2 以前的 CPU / CoreMark 基线记录**。其中 UART、CPU-only 顶层、旧一键构建和部署步骤
 不适用于当前 HDMI 系统；历史一键脚本已加保护，避免覆盖根工程。

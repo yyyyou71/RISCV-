@@ -45,6 +45,16 @@ static int print_ai(const uint8_t *p,unsigned size,int detailed){
  }
  return 0;
 }
+static int print_present(const uint8_t *p,unsigned size){
+ uint32_t v[COMM_PRESENT_WORDS];
+ static const char *const names[]={"IDLE","PREPARING","WAIT_DMA","DONE","ERROR"};
+ if(size!=COMM_PRESENT_WORDS*4)return fail(EPROTO);
+ for(unsigned i=0;i<COMM_PRESENT_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_PRESENT_ABI)return fail(EPROTO);
+ printf("[present] state=%s error=%u hw=0x%08x PCIe_ready=%u locked=%u run=%u frame=%u slot=%u boxes=%u/16 hw_error=%u acknowledged_frame=%u words128=%u\n",
+  v[1]<5?names[v[1]]:"UNKNOWN",v[2],v[3],(v[3]>>3)&1u,(v[3]>>5)&1u,v[4],v[5],v[6],v[7],v[8],v[9],v[10]);
+ return 0;
+}
 static int print_video(const uint8_t *p,unsigned size,int detailed){
  uint32_t v[COMM_VIDEO_WORDS];unsigned i;
  if(size!=COMM_VIDEO_WORDS*4)return fail(EPROTO);
@@ -99,6 +109,8 @@ int main(int argc,char **argv){
  else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
  else if(argc==3 && !strcmp(argv[2],"ai-status"))operation=COMM_AI_STATUS;
  else if(argc==3 && !strcmp(argv[2],"network-status"))operation=COMM_NETWORK_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"present-status"))operation=COMM_PRESENT_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"present"))operation=COMM_PRESENT_RUN;
  else if(argc==5 && !strcmp(argv[2],"set") && !number(argv[3],&a) && a<COMM_PARAMS && !number(argv[4],&b)){
   operation=COMM_SET_PARAM;payload=8;comm_put32(tx+16,a);comm_put32(tx+20,b);
  }else if(argc==4 && !strcmp(argv[2],"get") && !number(argv[3],&a) && a<COMM_PARAMS){operation=COMM_GET_PARAM;payload=4;comm_put32(tx+16,a);}
@@ -146,7 +158,10 @@ int main(int argc,char **argv){
  if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
  a=comm_u32(rx+16);
  if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
- if(operation==COMM_NETWORK_STATUS){
+ if(operation==COMM_PRESENT_STATUS || operation==COMM_PRESENT_RUN){
+  if(print_present(rx+24,payload-8))goto io_error;
+  if(operation==COMM_PRESENT_RUN)puts("Queued; RK must arm the original PCIe DMA for 4147200 bytes (RGB565). Query present-status for completion.");
+ }else if(operation==COMM_NETWORK_STATUS){
   if(network_print(rx+24,payload-8,1))goto io_error;
  }else if(operation==COMM_AI_STATUS){
   if(print_ai(rx+24,payload-8,1))goto io_error;
@@ -163,5 +178,5 @@ int main(int argc,char **argv){
  rc=0;goto done;
 io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
 done:rk_fspi_close(&spi);return rc;
-usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|network-status|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|network-status|present-status|present|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

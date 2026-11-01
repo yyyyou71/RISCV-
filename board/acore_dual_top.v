@@ -42,7 +42,7 @@ module acore_dual_top #(
     wire [15:0] wstrb;
     wire cpu_led0,cpu_led1;
     wire tensor_we;
-    wire [7:0] tensor_addr_wr,tensor_addr_rd;
+    wire [8:0] tensor_addr_wr,tensor_addr_rd;
     wire [31:0] tensor_wdata,tensor_rdata;
     (* ASYNC_REG="TRUE" *) reg [1:0] ready_sync,fault_sync;
     always @(posedge cpu_clk or negedge system_rst_n)

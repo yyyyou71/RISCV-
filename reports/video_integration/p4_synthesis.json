@@ -1,0 +1,72 @@
+{
+  "stage": "P4 working tree - synthesis only, not a routed build",
+  "base_commit": "ff07f4327f28153c079009b67a28d280bfad0264",
+  "top": "acore_dual_top",
+  "part": "PG2L100H FBG484 -6",
+  "groute_seed": 3,
+  "pds_compile_passed": true,
+  "pds_synthesize_passed": true,
+  "new_place_route_run": false,
+  "new_bitstream_generated": false,
+  "board_verified": false,
+  "resources": {
+    "stage": "PDS ADS synthesis",
+    "LUT": 39391,
+    "LUT_total": 66600,
+    "LUT_percent": 59.15,
+    "FF": 32506,
+    "FF_total": 133200,
+    "FF_percent": 24.4,
+    "APM": 50,
+    "APM_total": 240,
+    "APM_percent": 20.83,
+    "DRM36K_equivalent": 87.5,
+    "DRM36K_total": 155,
+    "DRM_percent": 56.45
+  },
+  "synthesis_setup_wns_ns": {
+    "ddr_to_ddr": -9.191,
+    "cpu_to_ddr_bundle": -10.942,
+    "spi": -2.22
+  },
+  "timing_closed": false,
+  "routing_speedup_verified": false,
+  "timing_notes": [
+    "Quantization combinational chain was split; ready/valid latency increased, exact numeric checks passed.",
+    "Remaining DDR critical path includes convolution input-address multiplication.",
+    "CPU-to-DDR configuration validation still exceeds the present bundled-bus maximum-delay budget.",
+    "Synthesis estimates are not routed timing results; old routed reports still describe the pre-P4 build."
+  ],
+  "firmware": {
+    "directory": "firmware/video_diagnostic",
+    "ROM_text_bytes": 25460,
+    "ROM_capacity_bytes": 32768,
+    "RAM_data_bytes": 6964,
+    "RAM_bss_bytes": 2272,
+    "reserved_stack_bytes": 16384,
+    "embedded_IP_words_verified": {
+      "ROM": 8192,
+      "RAM": 16384
+    }
+  },
+  "unit_checks_passed": true,
+  "rk_host_mock_checks_passed": true,
+  "full_network_simulation_run": false,
+  "known_board_issue": "Two LEDs steady; HDMI dimensions not yet diagnosed over SPI.",
+  "raw_report": "synthesize/acore_dual_top.snr",
+  "raw_report_sha256": "a455369f56920ff2e6188cbb5cb56431d787a570b718b3328b21cfdbfb5cc755",
+  "source_normalized_sha256": {
+    "board/acore_dual_top.v": "18c19d828435503ad8430e33d4b697ac4ac1b098dd35679d9a20aaaa2161b7a0",
+    "board/acore_video_platform.v": "0fe8409bb998e96f2f60500d28695c120f7b884a901d4530708b5f5f1cc78656",
+    "board/board_top.v": "db6310589b3103552c41962f49f7b2590f6cc44c7b4863d180f9d0964485f055",
+    "rtl/soc.v": "0c6ebbcc35dccd32647c40cf730098380f3a9ce17e84ffca87050c41cb5b9fe7",
+    "rtl/peripheral_bus.v": "b1c1e4426e16040709a5cd2962c1e35f6f2a45a85dba511d13d8ef3e40ce23e9",
+    "rtl/video/frame_ring_ddr3.v": "67e7d192a5b08ab870722688bcafe45c35d9694ab961d6d24267997212124ad9",
+    "rtl/video/ddr3_read_ctrl.v": "44f812a2fc9941c6a4571e8128359046e475ab23ff643f535a5ae0c35b6fb152",
+    "rtl/video/rgb565_box_overlay.v": "588b7794c09857aedce20e248a98f1fad538b59eddcfc671289c88d0bb4ed49b",
+    "rtl/video/video_present_control.v": "95715132c2190218f71ebbdfd05d3c7e255ef9094619a599653ea86c33061b13",
+    "rtl/requant_q13.v": "e2b249402cdf8cadc39407aa1527a6ec5b53850dd49d95e4bd5a85708b0d5147",
+    "rtl/scale_mul64x31.v": "73d5a91d9a6f74d2c3acf2ad57efbb0ee183873e80800b44873f2d6839144486",
+    "board/timing.fdc": "37df1dfb0f45170a5b8a9a89c1177eb6498991ecac7ce1824d8b43eda3ead12d"
+  }
+}
