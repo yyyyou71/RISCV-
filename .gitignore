@@ -50,3 +50,8 @@ digital_sim
 pc_ai/outputs/
 pc_ai/__pycache__/
 pc_ai/picture/
+pc_ai/datasets/
+pc_ai/weights/
+pc_ai/**/__pycache__/
+!pc_ai/face/README.md
+!docs/ziguang_face_model_review.md

@@ -1,0 +1,44 @@
+{
+  "reference": "TridentVision",
+  "license": "AGPL-3.0; see LICENSE",
+  "changes": {
+    "rearch_export.py": "Only local paths and package imports; integer math unchanged."
+  },
+  "files": {
+    "patches.py": {
+      "source": "training/patches.py",
+      "source_sha256": "6138f62ba37629f778d4e040a9f33c092a501dac448a089934614af89ea40548",
+      "local_sha256": "6138f62ba37629f778d4e040a9f33c092a501dac448a089934614af89ea40548"
+    },
+    "qat.py": {
+      "source": "training/qat.py",
+      "source_sha256": "bd337be7add01a4e820babdc64f3f78af26b2ffb23ea233064e2df1a444bd5a8",
+      "local_sha256": "bd337be7add01a4e820babdc64f3f78af26b2ffb23ea233064e2df1a444bd5a8"
+    },
+    "rearch_export.py": {
+      "source": "training/export/rearch_export.py",
+      "source_sha256": "a4a25f20239c40d88ea32a8045186adadda14e7e70e1136d09331ded345330ef",
+      "local_sha256": "34337dea5880dc19e7ba74dc6baddf5505eed264cfff010292e35af972eca7fb"
+    },
+    "yolo26m_fpga.yaml": {
+      "source": "tools/yolo26m_fpga.yaml",
+      "source_sha256": "f076d154e33ff35a5d4a58320de9c89e310cc3c336250a0d450d91a7e0a56548",
+      "local_sha256": "f076d154e33ff35a5d4a58320de9c89e310cc3c336250a0d450d91a7e0a56548"
+    },
+    "lut_sigmoid_y.mem": {
+      "source": "c_model/lut_sigmoid_y.mem",
+      "source_sha256": "eb73e97c46161e04d85d79dd948356a48c663a8ff4a3a62f0ae7657e4dbf18ab",
+      "local_sha256": "eb73e97c46161e04d85d79dd948356a48c663a8ff4a3a62f0ae7657e4dbf18ab"
+    },
+    "lut_sigmoid_dy.mem": {
+      "source": "c_model/lut_sigmoid_dy.mem",
+      "source_sha256": "2a769e30e549f713a64520a3920446f98e728b18c688c96363969b6ed702f6f7",
+      "local_sha256": "2a769e30e549f713a64520a3920446f98e728b18c688c96363969b6ed702f6f7"
+    },
+    "LICENSE": {
+      "source": "LICENSE",
+      "source_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+      "local_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee"
+    }
+  }
+}

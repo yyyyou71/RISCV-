@@ -1,0 +1,74 @@
+# yolo26m_fpga.yaml — yolo26m FPGA 友好重构（REARCH-v1，定稿宽度 [32,64,128,288,384]）
+# ======================================================================================
+# 与 YOLO26M_FPGA_REARCH_SPEC.md 配套；逐层 MACs/参数由 specs/yolo26m_fpga_macs.py 计算：
+#   403.3M MACs / 11.836M params @96² 引擎输入（预算区间 350~450M 内）
+#
+# ▶ 部署口径：引擎输入 96×96（pool_feed 5×5 均值池化从 640² 降采样，管线与现网 yolo26m 一致）
+#   stride 8/16/32 = 引擎 96² 坐标（12×12 / 6×6 / 3×3 格），等效原生 stride 53/107/213
+#
+# ▶ 与官方 yolo26.yaml 的结构差异（全部为 ISA 合规改造，逐条见 SPEC §2）：
+#   1. L10 C2PSA → C3（普通瓶颈块，移除 PSA 注意力）
+#   2. 所有 C3k2(c3k=True / attn=True) → C3（全 1×1+3×3+ADD，零超集算子）
+#   3. SPPF n=3 → n=1（2 路 concat，唯一硬连池化 5×5 s1 原生支持）
+#   4. 宽度全部 32 倍数 → C3 e=0.5 隐藏通道必为 16 倍数（MAC 阵列零 padding 拍）
+#   5. 检测头 cv3 官方为 DWConv（引擎不支持）→ 普通 3×3 Conv（见下方补丁②）
+#
+# ▶ 训练前必须打的两处补丁（ ultralytics-main 源码级，SPEC §5 有完整说明）：
+#
+#   ① SiLU→ReLU 全局替换（训练/推理一致，引擎 requant LUT 重烧为 ReLU）：
+#        在训练脚本（train.py）model 构建前加：
+#          import torch.nn as nn
+#          from ultralytics.nn.modules.conv import Conv
+#          Conv.default_act = nn.ReLU(inplace=True)
+#
+#   ② Detect cv3 DWConv → 普通 Conv（引擎无 depthwise 支持）：
+#        在 ultralytics/nn/modules/head.py Detect.__init__ 中，将 cv3 的
+#        legacy 分支（普通 3×3 Conv 版，ISA 合规）设为默认，即把
+#          if self.legacy ... else (DWConv 版)
+#        改为强制走 legacy 分支结构（c2/c3 通道规则不变）：
+#          self.cv3 = nn.ModuleList(
+#              nn.Sequential(Conv(x, c3, 3), Conv(c3, c3, 3), nn.Conv2d(c3, self.nc, 1))
+#              for x in ch)
+#        （one2one_cv3 为 deepcopy，自动跟随）
+#        注意：Detect 头部中间通道 c2=max(16,ch0//4,4·reg_max)=32、c3=max(ch0,80)=128
+#        均为 16 倍数 ✓（本 yaml ch=(128,288,384)，已核对）
+#
+# ▶ 训练输入：COCO 640² 图 → 数据管线内 5×5 均值池化至 96²（模拟 pool_feed，
+#   复用现网 yolo26m 的 96² 训练管线，见 SPEC §5.2）
+
+nc: 80          # COCO 80 类全保留
+end2end: True   # 沿用 yolo26 one2one 端到端（无 NMS 后处理依赖）
+reg_max: 1      # 无 DFL（直接 4ch 回归，引擎 RQ 直出）
+
+backbone:
+  # [from, repeats, module, args]
+  - [-1, 1, Conv, [32, 3, 2]]             # 0-P1/2   96→48²
+  - [-1, 1, Conv, [64, 3, 2]]             # 1-P2/4   48→24²
+  - [-1, 1, C3, [128, True, 1, 0.5]]   # 2        C3k2→C3 @24²
+  - [-1, 1, Conv, [128, 3, 2]]            # 3-P3/8   24→12²
+  - [-1, 1, C3, [288, True, 1, 0.5]]   # 4        C3k2→C3 @12²
+  - [-1, 1, Conv, [288, 3, 2]]            # 5-P4/16  12→6²
+  - [-1, 1, C3, [288, True, 1, 0.5]]   # 6        C3k2(c3k)→C3 @6²
+  - [-1, 1, Conv, [384, 3, 2]]            # 7-P5/32  6→3²
+  - [-1, 1, C3, [384, True, 1, 0.5]]   # 8        C3k2(c3k)→C3 @3²
+  - [-1, 1, SPPF, [384, 5, 1, True]]      # 9        SPPF n=1（2 路 concat + 残差 ADD）
+  - [-1, 1, C3, [384, True, 1, 0.5]]   # 10       C2PSA→C3（注意力移除）
+
+head:
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]   # 11  3→6²
+  - [[-1, 6], 1, Concat, [1]]                    # 12  cat(384, 288) = 672ch
+  - [-1, 1, C3, [288, True, 1, 0.5]]          # 13  @6²
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]   # 14  6→12²
+  - [[-1, 4], 1, Concat, [1]]                    # 15  cat(288, 288) = 576ch
+  - [-1, 1, C3, [128, True, 1, 0.5]]          # 16  (P3/8-small)  12×12 格
+
+  - [-1, 1, Conv, [128, 3, 2]]                   # 17  12→6²
+  - [[-1, 13], 1, Concat, [1]]                   # 18  cat(128, 288) = 416ch
+  - [-1, 1, C3, [288, True, 1, 0.5]]          # 19  (P4/16-medium) 6×6 格
+
+  - [-1, 1, Conv, [288, 3, 2]]                   # 20  6→3²
+  - [[-1, 10], 1, Concat, [1]]                   # 21  cat(288, 384) = 672ch
+  - [-1, 1, C3, [384, True, 1, 0.5]]          # 22  (P5/32-large)  3×3 格，attn 移除
+
+  - [[16, 19, 22], 1, Detect, [nc]]              # 23  Detect(P3, P4, P5) reg_max=1 end2end

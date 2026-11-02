@@ -2,6 +2,13 @@
 
 日期：2026-10-26。PC 端环境、推理、后续训练入口和使用说明统一放在本目录。
 
+2026-11-02：已增加[自定义REARCH-v1人脸检测训练入口](face/README.md)，支持板端1080p→96预处理、
+WIDER FACE、浮点→W8A16 QAT、续训、实拍预览及板端SPI模型包导出。
+保留80物理类别通道，类别0训练为face。当前只完成CPU短接口检查，尚未安装GPU驱动或正式训练。
+板端 `origin/ziguang_rv32i` 的当前审阅与验证边界见[模型检查报告](../docs/ziguang_face_model_review.md)。
+下文为此前CPU推理/RTL工具的历史记录；GPU准备使用新增的 `requirements-gpu.txt`，
+最小参考训练源保存在 `face/vendor/`，附来源哈希和许可证，没有复制整个第三方工程。
+
 ## 目录
 
 ```text

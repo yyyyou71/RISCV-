@@ -1,0 +1,10 @@
+# 同一个yolo-fpga Conda环境，替换CPU版torch，锁定已测试的框架版本。
+# 驱动须先安装；cu130运行库要求NVIDIA驱动至少580系列。
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch==2.13.0+cu130
+torchvision==0.28.0+cu130
+ultralytics==8.4.115
+numpy==2.2.6
+Pillow==11.3.0
+opencv-python==4.12.0.88
+scipy==1.16.3
