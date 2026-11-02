@@ -10,7 +10,7 @@
     {
       "name": "TB_video_timing",
       "passed": true,
-      "summary": "PASS video timing: raw 1919/1920 accepted, 1918/1921 and bad height rejected, period/reset"
+      "summary": "PASS video timing: diagnostic-only raw 1918/1919/1920/1921 and height/period/reset"
     },
     {
       "name": "TB_rgb888_pool96",
@@ -20,12 +20,12 @@
   ],
   "hardware_tested": false,
   "sources": {
-    "rtl/video/preprocess/hdmi_tensor_capture.v": "063a4d3e094be6dfe00f3479d499bae00af021d97032e1d84167c518a9084ee3",
+    "rtl/video/hdmi_line_pad.v": "bc8c67f967265fdffcd2264233ab8b7abaa53e63e2aedeee2db3eda473e76347",
     "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
     "rtl/video/preprocess/rgb888_pool96.v": "3b3482afee94b3e74967640b867c64243e6a1d9d00c52a0a10c918069bc8e432",
-    "rtl/video_timing_monitor.v": "d0b708746197924fdbf7b26495a920e65dd4d3fbe4982a5e88aab83554370fe2",
-    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2",
     "rtl/video/preprocess/rgb_mean240.v": "88a09fbcdbe807effee1c30b8f28b3c7b06e8aaf0ed2654d3952ca56c20e2b88",
-    "rtl/video/hdmi_line_pad.v": "bc8c67f967265fdffcd2264233ab8b7abaa53e63e2aedeee2db3eda473e76347"
+    "rtl/video_timing_monitor.v": "b4f718183e7790e09904546e03753b6faccdd50817da464f0b07cc025b70f80e",
+    "rtl/video/preprocess/hdmi_tensor_capture.v": "063a4d3e094be6dfe00f3479d499bae00af021d97032e1d84167c518a9084ee3",
+    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2"
   }
 }

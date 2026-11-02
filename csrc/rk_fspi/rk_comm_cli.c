@@ -25,7 +25,7 @@ static const char *video_state(uint32_t s){
  return s<sizeof(names)/sizeof(names[0])?names[s]:"UNKNOWN";
 }
 static const char *video_error(uint32_t s){
- static const char *const names[]={"none","DDR not ready/fault","no 1080p input (1919/1920 pixels per line) within 10 seconds","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
+ static const char *const names[]={"none","DDR not ready/fault","reserved (legacy input precheck)","capture start rejected","capture/preprocessor fault","capture timed out","invalid frame descriptor","first tensor pixel read/format failed","last tensor pixel read/format failed","frame release failed/timed out"};
  return s<sizeof(names)/sizeof(names[0])?names[s]:"unknown stage";
 }
 static int print_ai(const uint8_t *p,unsigned size,int detailed){
@@ -60,7 +60,7 @@ static int print_video(const uint8_t *p,unsigned size,int detailed){
  if(size!=COMM_VIDEO_WORDS*4)return fail(EPROTO);
  for(i=0;i<COMM_VIDEO_WORDS;i++)v[i]=comm_u32(p+i*4);
  if(v[0]!=COMM_VIDEO_ABI)return fail(EPROTO);
- printf("[video] state=%s measured=%ux%u error_stage=%u PP_STATUS=0x%08x PP_ERROR=0x%08x",video_state(v[1]),v[5]&65535u,v[5]>>16,v[2],v[7],v[8]);
+ printf("[video] state=%s measured=%ux%u error_stage=%u CAPTURE_STATUS=0x%08x CAPTURE_ERROR=0x%08x",video_state(v[1]),v[5]&65535u,v[5]>>16,v[2],v[7],v[8]);
  if(v[6])printf(" last_frame_hz=%.3f",25000000.0/v[6]);
  putchar('\n');
  if(!detailed)return 0;
@@ -68,10 +68,11 @@ static int print_video(const uint8_t *p,unsigned size,int detailed){
  printf("last_period_ticks=%u (latched measurement; not a source-alive indicator)\n",v[6]);
  printf("DDR_READY=%u BUSY=%u DONE=%u HELD=%u ERROR=%u FAULT=%u written_bytes=%u\n",(v[7]>>4)&1u,v[7]&1u,(v[7]>>1)&1u,(v[7]>>3)&1u,(v[7]>>2)&1u,(v[7]>>5)&1u,v[9]);
  printf("frame_mailbox=0x%08x DDR_WINDOW_STATUS=0x%08x DDR_WINDOW_ERROR=0x%08x state_elapsed_ms=%.3f\n",v[10],v[11],v[12],v[4]/25000.0);
- if(v[2])printf("failure_snapshot: measured=%ux%u period_ticks=%u PP_STATUS=0x%08x PP_ERROR=0x%08x cycles=%u\n",v[13]&65535u,v[13]>>16,v[14],v[15],v[16],v[23]);
+ if(v[2])printf("failure_snapshot: measured=%ux%u period_ticks=%u CAPTURE_STATUS=0x%08x CAPTURE_ERROR=0x%08x cycles=%u\n",v[13]&65535u,v[13]>>16,v[14],v[15],v[16],v[23]);
  if(v[1]==COMM_VIDEO_SUCCESS){
   printf("held_frame: id=%u raw_slot=%u raw_native_base=0x%08x tensor_logical_base=0x%08x bytes=%u\n",v[17],v[18],v[19],v[20],v[21]);
-  printf("tensor_first_RGB=(%u,%u,%u) tensor_last_RGB=(%u,%u,%u)\n",v[24]&65535u,v[24]>>16,v[25]&65535u,v[26]&65535u,v[26]>>16,v[27]&65535u);
+  if(v[21])printf("tensor_first_RGB=(%u,%u,%u) tensor_last_RGB=(%u,%u,%u)\n",v[24]&65535u,v[24]>>16,v[25]&65535u,v[26]&65535u,v[26]>>16,v[27]&65535u);
+  else puts("RAW frame: tensor preprocessing/AI bypassed; PCIe image bytes=4147200");
  }
  return 0;
 }

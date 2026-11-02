@@ -14,6 +14,10 @@ CPU 按需抓取同帧原图和 96×96 张量，支持 SPI 整网模型加载、
 HDMI 现支持实测每行 1919/1920 像素：共用前端补黑到 1920 后分别送原图 DDR 和 AI 预处理，
 SPI 诊断继续显示原始测量值。视频参考现采用桌面 `purple-light-fpga-main`；见 [1919 像素适配](docs/hdmi_padding_1919.md)。
 
+2026-11-02：取消起采前的宽高预判门控，保留完整帧与同帧匹配检查。
+固件默认 RAW，可由 RK `rk_video_app --output raw|ai` 选择直接原图或 AI 同帧画框输出。
+RAW 绕过张量抓取和 AI；软件、固件初值和 FPGA 位流需要一并更新，见 [RK 操作](docs/rk_video_app.md)。
+
 最新设计/寄存器/验证边界见 [P4 同帧画框与发送](docs/video_present_p4.md)，
 模型服务见 [P3b 说明](docs/ai_network_p3b.md)，移植来源见 [M2 说明](docs/video_integration_m2.md)。
 资源/时序看本次实现后的 `place_route/acore_dual_top.prr`、`place_route/acore_dual_top.rtr`，请核对报告时间。

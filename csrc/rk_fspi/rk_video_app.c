@@ -41,7 +41,7 @@ static int video_status(uint32_t *v){return rk_control_status(COMM_VIDEO_STATUS,
 static int present_status(uint32_t *v){return rk_control_status(COMM_PRESENT_STATUS,COMM_PRESENT_ABI,v,COMM_PRESENT_WORDS);}
 static int network_status(uint32_t *v){return rk_control_status(COMM_NETWORK_STATUS,COMM_NETWORK_ABI,v,COMM_NETWORK_WORDS);}
 
-static int wait_video(uint32_t *frame_id,int new_capture){
+static int wait_video(uint32_t *frame_id,int new_capture,int ai){
     uint32_t v[COMM_VIDEO_WORDS];uint64_t until=now_ms()+15000;unsigned last=UINT32_MAX;
     if(video_status(v))return -1;
     if(new_capture || v[1]==COMM_VIDEO_ERROR || v[1]==COMM_VIDEO_IDLE){
@@ -55,18 +55,9 @@ static int wait_video(uint32_t *frame_id,int new_capture){
         }
         if(v[1]==COMM_VIDEO_ERROR)return fail(EIO);
         if(v[1]==COMM_VIDEO_SUCCESS){
-            if(!(v[7]&8u) || v[18]>=5 || v[21]!=294912u)return fail(EPROTO);
+            if(!(v[7]&8u) || v[18]>=5 || v[21]!=(ai?294912u:0u))return fail(EPROTO);
             *frame_id=v[17];return 0;
         }
-        if(pause_status())return -1;
-    }while(now_ms()<until);
-    return fail(ETIMEDOUT);
-}
-static int wait_first_layer(void){
-    uint32_t v[COMM_AI_WORDS];uint64_t until=now_ms()+timeout_ms;
-    do{
-        if(rk_control_status(COMM_AI_STATUS,COMM_AI_ABI,v,COMM_AI_WORDS))return -1;
-        if(v[1]==0 || v[1]==9 || v[1]==10)return 0;
         if(pause_status())return -1;
     }while(now_ms()<until);
     return fail(ETIMEDOUT);
@@ -124,10 +115,49 @@ static int finish_present(uint32_t frame_id){
     }while(now_ms()<until);
     return fail(ETIMEDOUT);
 }
+/* A previous process may have left a known frame queued. Drain it before
+ * changing leases; never reset the prefetched stream or replay uncertain DMA. */
+static int drain_pending(pcie_ctx_t *ctx,int *dma_pending){
+    uint32_t v[COMM_PRESENT_WORDS];
+    if(present_status(v))return -1;
+    if(v[1]!=1 && v[1]!=2)return 0;
+    if(prepare_present(v[5],v[4]))return -1;
+    *dma_pending=1;
+    if(transfer_frame(ctx) || finish_present(v[5]))return -1;
+    *dma_pending=0;
+    printf("[output] drained previously queued frame=%u before selecting mode\n",v[5]);
+    return 0;
+}
+static int select_output(pcie_ctx_t *ctx,int *dma_pending,int ai){
+    uint32_t v[COMM_VIDEO_MODE_WORDS];uint8_t request[4],reply[16];unsigned size;
+    uint32_t mode=ai?VIDEO_OUTPUT_AI:VIDEO_OUTPUT_RAW;
+    uint64_t until=now_ms()+timeout_ms;
+    comm_put32(request,mode);
+    do{
+        if(drain_pending(ctx,dma_pending))return -1;
+        if(!rk_control_exchange(COMM_VIDEO_MODE,request,4,reply,sizeof(reply),&size)){
+            if(size!=sizeof(reply) || comm_u32(reply)!=COMM_VIDEO_MODE_ABI ||
+               comm_u32(reply+8)!=mode)return fail(EPROTO);
+            break;
+        }
+        /* Only an explicit BUSY rejection is safe to retry. */
+        if(errno!=EBUSY || pause_status())return -1;
+        if(now_ms()>=until)return fail(ETIMEDOUT);
+    }while(1);
+    do{
+        if(rk_control_status(COMM_VIDEO_MODE,COMM_VIDEO_MODE_ABI,v,COMM_VIDEO_MODE_WORDS))return -1;
+        if(v[1]==mode && v[2]==mode && v[3]!=COMM_VIDEO_RELEASING){
+            printf("[output] %s\n",ai?"AI inference + same-frame detection boxes":"RAW original frame; preprocessing/AI bypassed");
+            return 0;
+        }
+        if(pause_status())return -1;
+    }while(now_ms()<until);
+    return fail(ETIMEDOUT);
+}
 
 int main(int argc,char **argv){
     const char *model=0,*save=0;uint32_t frames=0,frame_id=0,run_id=0,completed=0;
-    int ai=0,resume=0,headless=0,rc=1,spi_open=0,pcie_open=0,dma_allocated=0,dma_pending=0;
+    int ai=0,explicit_mode=-1,resume=0,headless=0,rc=1,spi_open=0,pcie_open=0,dma_allocated=0,dma_pending=0;
     pcie_ctx_t ctx={0};ctx.dma_drv_fd=ctx.cma_buf_fd=ctx.cma_heap_fd=-1;
     memset(&screen,0,sizeof(screen));have_screen=0;g_running=1;
     if(argc<2)goto usage;
@@ -135,19 +165,31 @@ int main(int argc,char **argv){
         if(!strcmp(argv[i],"--model") && i+1<argc){model=argv[++i];ai=1;}
         else if(!strcmp(argv[i],"--use-loaded-model"))ai=1;
         else if(!strcmp(argv[i],"--resume"))resume=1;
-        else if(!strcmp(argv[i],"--preview"))ai=0;
+        else if(!strcmp(argv[i],"--preview"))explicit_mode=VIDEO_OUTPUT_RAW;
+        else if(!strcmp(argv[i],"--output") && i+1<argc){
+            const char *mode=argv[++i];
+            if(!strcmp(mode,"raw"))explicit_mode=VIDEO_OUTPUT_RAW;
+            else if(!strcmp(mode,"ai"))explicit_mode=VIDEO_OUTPUT_AI;
+            else goto usage;
+        }
         else if(!strcmp(argv[i],"--headless"))headless=1;
         else if(!strcmp(argv[i],"--frames") && i+1<argc){if(number(argv[++i],&frames))goto usage;}
         else if(!strcmp(argv[i],"--wait-ms") && i+1<argc){if(number(argv[++i],&timeout_ms) || timeout_ms<1000)goto usage;}
         else if(!strcmp(argv[i],"--save") && i+1<argc)save=argv[++i];
         else goto usage;
     }
+    if(explicit_mode>=0)ai=explicit_mode==VIDEO_OUTPUT_AI;
     if((resume&&!model) || (model&&!ai))goto usage;
     if(headless&&!save){fprintf(stderr,"--headless requires --save PREFIX for captured images.\n");goto usage;}
     signal(SIGINT,stop);signal(SIGTERM,stop);
     rk_control_set_idle_hook(window_poll);
     if(rk_control_open(argv[1]))goto error;
     spi_open=1;
+    uint32_t mode_info[COMM_VIDEO_MODE_WORDS];
+    if(rk_control_status(COMM_VIDEO_MODE,COMM_VIDEO_MODE_ABI,mode_info,COMM_VIDEO_MODE_WORDS)){
+        fprintf(stderr,"Output selection requires the updated RAW/AI soft-core firmware and FPGA bitstream.\n");
+        goto error;
+    }
     uint64_t bar=find_bar1_addr();if(!bar)goto error;
     if(pcie_bar1_init(&ctx,bar))goto error;
     pcie_open=1;ctx.transfer_dw=FRAME_BYTES/4;ctx.skip_dma_reset=1;
@@ -167,15 +209,15 @@ int main(int argc,char **argv){
         }
         have_screen=1;
     }
-    if(wait_video(&frame_id,0) || wait_first_layer())goto error;
+    if(select_output(&ctx,&dma_pending,ai) || wait_video(&frame_id,0,ai))goto error;
     if(model){
         if(rk_control_upload(model,resume))goto error;
         // Upload can take time. Infer a fresh frame, not the boot self-test image.
-        if(wait_video(&frame_id,1) || wait_first_layer())goto error;
+        if(wait_video(&frame_id,1,ai))goto error;
     }
     printf("[video-app] %s; SPI controls/results, PCIe RGB565 %ux%u, desktop SDL2 display\n",ai?"FPGA inference":"preview",WIDTH,HEIGHT);
     while(g_running && (!frames || completed<frames)){
-        if(completed && (wait_video(&frame_id,1) || wait_first_layer()))goto error;
+        if(completed && wait_video(&frame_id,1,ai))goto error;
         run_id=0;
         if(ai && infer(frame_id,&run_id))goto error;
         if(prepare_present(frame_id,run_id))goto error;
@@ -207,6 +249,6 @@ done:
     if(spi_open)rk_control_close();
     return rc;
 usage:
-    fprintf(stderr,"Usage: %s SPI_DEVICE [--preview|--model FILE|--use-loaded-model] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
+    fprintf(stderr,"Usage: %s SPI_DEVICE [--output raw|ai] [--model FILE|--use-loaded-model] [--preview] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
     return 2;
 }

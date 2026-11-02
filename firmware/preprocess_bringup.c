@@ -39,12 +39,10 @@ int main(void){
     struct pp_frame frame;
     uint32_t started,previous;
     unsigned level=0;
-    /* Let the reference HDMI configuration finish before the short capture
-       deadline begins. The frame monitor reports geometry from actual input. */
+    /* Dimensions are diagnostic only. The capture engine waits for the source
+       and validates a complete tensor and its matching retained raw frame. */
     started=CYCLES;
     while(!(PP_REG(4)&PP_DDR_READY))if(CYCLES-started>75000000u)fail(1);
-    started=CYCLES;
-    while(!pp_input_shape_usable(REG(0x3061cu)))if(CYCLES-started>50000000u)fail(2);
     if(pp_capture_start(PP_DEFAULT_BASE))fail(3);
     started=CYCLES;
     for(;;){

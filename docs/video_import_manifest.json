@@ -12,17 +12,17 @@
       "source": "hdl/new_ring/frame_ring_ddr3.v",
       "destination": "rtl/video/frame_ring_ddr3.v",
       "sha256": "26fea8b2593372f7171397ca912e834e19ff1e71756636f1fcaaa3cc74b30c29",
-      "current_normalized_sha256": "67e7d192a5b08ab870722688bcafe45c35d9694ab961d6d24267997212124ad9",
+      "current_normalized_sha256": "e54cc824d6b3c7eab2a001889d5a31889f613985a2271a90824733638ed60370",
       "modified": true,
-      "change": "Keep original native DDR layout; controlled PCIe reader and presentation slot lease coexist with CPU/tensor holds."
+      "change": "Keep original native DDR layout; controlled PCIe reader and presentation slot lease coexist with CPU/tensor holds. Provenance refreshed for the existing 63d9b62 frame-completion/stream qualification implementation; no RTL change in this update."
     },
     {
       "source": "hdl/new_ring/ddr3_write_ctrl_lite.v",
       "destination": "rtl/video/ddr3_write_ctrl_lite.v",
       "sha256": "a8dd7682c7af4ab9caa8c2c98ba3d3ae6e9ab4e11191c473e7aee5d2962a7498",
-      "current_normalized_sha256": "e390a61b9c08a4af715e9ee6481744cb261d459275c8436e779c255c771b7fd1",
+      "current_normalized_sha256": "e9d7dc07e1c37244f29437b012de7d89b1b875f66a80d648366ff24a45b24a8a",
       "modified": true,
-      "change": "Retain reference burst FSM; export matching SOF frame identities and completion events, detect source FIFO overflow, and preserve held slots."
+      "change": "Retain reference burst FSM; export matching SOF frame identities and completion events, detect source FIFO overflow, and preserve held slots. Provenance refreshed for the existing 63d9b62 frame-completion/stream qualification implementation; no RTL change in this update."
     },
     {
       "source": "hdl/new_ring/ddr3_read_ctrl.v",
@@ -1235,8 +1235,8 @@
       "destination": "board/acore_video_platform.v",
       "modified": true,
       "sha256": "9073e4fbeec5846ca203f5f4b50cefb9f831f277025107593986b323d48b5fc4",
-      "current_normalized_sha256": "0fe8409bb998e96f2f60500d28695c120f7b884a901d4530708b5f5f1cc78656",
-      "change": "Preserve reference PCIe clocks/reset/DMA; local application reset remains independent, controlled reader only starts on CPU presentation requests."
+      "current_normalized_sha256": "8ff964da74730e2d20e7499a778b31b8fe0510bb2c9f2b9804d25ffd4a361f16",
+      "change": "Preserve reference PCIe clocks/reset/DMA; independent application reset and controlled reader. Normalize HDMI row length once before RGB565/RGB888 split; measured geometry is diagnostic and does not gate capture."
     }
   ],
   "sha256_definition": "sha256: exact original desktop bytes; current_normalized_sha256: imported/adapted LF-normalized bytes",

@@ -8,13 +8,13 @@
 ```sh
 make clean
 make all
-sudo -E ./rk_video_app /dev/spidev4.0 --preview
+sudo -E ./rk_video_app /dev/spidev4.0 --output raw --frames 30
 ```
 
 先验证预览，再将 PC 上 `build/board-ai/board_model.bin` 复制到本目录，执行：
 
 ```sh
-sudo -E ./rk_video_app /dev/spidev4.0 --model board_model.bin
+sudo -E ./rk_video_app /dev/spidev4.0 --output ai --model board_model.bin
 ```
 
 该命令先通过 SPI 上传并校验整个模型包，然后循环抓帧、FPGA 推理、打印检测结果、
@@ -22,6 +22,11 @@ PCIe 接收同帧带框 RGB565 图像并显示。推理后才抓下一帧，显�
 模型必须是 `prepare_board_model.py` 生成的包，含权重、99 个任务和后处理配置，
 不能用 `.rknn` 或原始训练权重替代。
 如模型已经成功加载，使用 `--use-loaded-model`，避免重新上传。
+
+原图模式直接持有 DDR 原图，不启动张量预处理或 AI；`--preview` 仍保留为原图模式别名。
+固件上电默认原图模式。退出程序后换另一种 `--output` 重新启动即可切换；
+已加载模型在 FPGA 不复位时保留。两端必须一起更新，并生成/烧录包含新固件的新位流。
+宽高诊断不再门控起采，但完整帧、同帧匹配和 PCIe 长度检查仍保留。
 
 `-E` 保留桌面 `DISPLAY` 等环境变量；普通 SSH/串口终端不一定能打开桌面窗口。
 运行时使用已有 SDL2 动态库，编译无需 SDL2 开发头文件、RKNN 或交叉编译器。
@@ -65,9 +70,10 @@ once 只等待并打印一条日志/视频消息；logs 是持续监听的别名
     ./rk_model_cli /dev/spidev4.0 results
 
 board_model.bin 用 scripts/prepare_board_model.py 在 PC 生成后另行复制。
-infer 需要已经持有有效 HDMI 帧；运行后查询到 DONE 才读取结果。
+infer 需要 AI 模式已经持有有效原图/张量；默认 RAW 不能直接 infer，建议使用上面的 rk_video_app 命令。
+运行后查询到 DONE 才读取结果。
 断传不自动重发，可 status 后显式 resume 同一文件，或 abort 取消装载。
-见 [P3b 说明](../../docs/ai_network_p3b.md)。RK 暂缺联调条件，当前只完成主机侧检查。
+见 [P3b 说明](../../docs/ai_network_p3b.md)。本次模式切换完成主机检查，仍待 RK/FPGA 实测。
 
 present 使用持有的同帧原图，若有整网结果则画置信度前 16 框，否则发送 0 框原图。
 PCIe 已连接时整网 DONE 后会自动排队一次；RK 还需用原工程的 PCIe 接收程序发起 DMA，

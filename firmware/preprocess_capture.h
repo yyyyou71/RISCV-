@@ -13,11 +13,6 @@
 struct pp_frame {
     uint32_t frame_id,raw_slot,raw_native_base,tensor_logical_base,bytes;
 };
-/* Raw input measurement; hardware pads the missing rightmost pixel to black. */
-static inline int pp_input_shape_usable(uint32_t shape) {
-    uint32_t width=shape&0xffffu;
-    return (shape>>16)==1080u && width>=1919u && width<=1920u;
-}
 static inline int pp_capture_start(uint32_t logical_base) {
     uint32_t status=PP_REG(4);
     if((status&(PP_BUSY|PP_HELD|PP_FAULT)) || !(status&PP_DDR_READY))return -1;

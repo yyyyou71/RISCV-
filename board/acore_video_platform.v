@@ -426,7 +426,6 @@ assign cca_dbg_valid_pix=1'b0;
 //   写侧(hdmi_pixclk): 喂 vs/de/16bit像素(由 USE_LPDETECTION 选择数据源)。
 //   读侧(pclk_div2)  : 128bit, 呈现与 a_fifi 相同的 rd_data/rd_empty/almost_empty 接口。
 //   帧对齐由内部 marker 驱动, 读侧自治, 无需外部 wr_rst/rd_rst/frame_active。
-wire input_shape_ok;
 wire application_rst_n;
 generate if(STANDALONE_CAPTURE)begin: g_local_application_reset
     // CPU, DDR and preprocessing must run with no PCIe reference clock/PERST#.
@@ -463,7 +462,7 @@ video_present_control u_present(
 assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=application_rst_n;
 video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(application_rst_n),
-    .vs(vs_in),.de(de_in),.shape_ok(input_shape_ok),.shape(measured_shape),.period_ticks(measured_period));
+    .vs(vs_in),.de(de_in),.shape(measured_shape),.period_ticks(measured_period));
 // Keep measured_shape raw (1919 remains visible to SPI diagnostics). Only the
 // shared capture stream is normalized, before the RGB565 / RGB888 paths split.
 hdmi_line_pad u_line_pad (.clk(pixclk_in),.rst_n(application_rst_n),
@@ -474,7 +473,7 @@ hdmi_tensor_capture u_preprocess (
     .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
     .dev_we(tensor_we&&!tensor_addr_wr[8]),.dev_addr_wr(tensor_addr_wr[7:0]),.dev_addr_rd(tensor_addr_rd[7:0]),
     .dev_wdata(tensor_wdata),.read_data(capture_rdata),
-    .vs(capture_vs),.de(capture_de),.rgb(capture_rgb),.source_ready(source_ready&&input_shape_ok),
+    .vs(capture_vs),.de(capture_de),.rgb(capture_rgb),.source_ready(source_ready),
     .source_next_id(source_next_id),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
     .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
     .raw_end_ok(raw_end_ok),.raw_end_id(raw_end_id),.raw_end_slot(raw_end_slot),
@@ -497,7 +496,9 @@ frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
   .cpu_awid(cpu_awid),.cpu_arid(cpu_arid),.cpu_awready(cpu_awready),.cpu_arready(cpu_arready),
   .cpu_wready(cpu_wready),.cpu_wlast(cpu_wlast),.cpu_wid(cpu_wid),.cpu_rvalid(cpu_rvalid),
   .cpu_rlast(cpu_rlast),.cpu_rid(cpu_rid),.cpu_wdata(cpu_wdata),.cpu_wstrb(cpu_wstrb),.cpu_rdata(cpu_rdata),
-  .hold_mask(frame_hold_mask),.stream_ok(input_shape_ok),.available(frame_available),.frame_ids(frame_ids),
+  // Accept the normalized stream like the proven reference. The monitor is
+  // diagnostic; raw completion and tensor integrity qualify the retained pair.
+  .hold_mask(frame_hold_mask),.stream_ok(1'b1),.available(frame_available),.frame_ids(frame_ids),
   .write_slot(frame_wr_slot),.write_active(frame_wr_active),.shared_fault(shared_fault),
   // 时钟与复位
   .sys_clk        (sys_clk),          // 25MHz -> DDR3 参考时钟
@@ -522,7 +523,7 @@ frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
   .wr_data        (raw_hdmi_pixel),     // 16bit 像素 (USE_LPDETECTION 选择源)
   .wr_en          (1'b0),             // detector 以 de 自门控, 未用
   .vs             (capture_vs),
-  .de             (capture_de && input_shape_ok),
+  .de             (capture_de),
   .wr_almost_full (),                 // 未用(写侧自流控)
 
   // 读侧 (pclk_div2)

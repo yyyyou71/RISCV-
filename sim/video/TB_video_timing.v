@@ -3,11 +3,10 @@ module TB_video_timing;
     reg pixel_clk=0,clk=0,rst_n=0,vs=0,de=0;
     always #3 pixel_clk=~pixel_clk;
     always #20 clk=~clk;
-    wire ok;
     wire [31:0] shape,period;
     reg [31:0] fast_period;
     video_timing_monitor dut(.pixel_clk(pixel_clk),.clk(clk),.rst_n(rst_n),
-        .vs(vs),.de(de),.shape_ok(ok),.shape(shape),.period_ticks(period));
+        .vs(vs),.de(de),.shape(shape),.period_ticks(period));
     task mark_frame;begin
         @(negedge pixel_clk);vs=1;
         repeat(2)@(negedge pixel_clk);
@@ -24,23 +23,23 @@ module TB_video_timing;
     initial begin
         repeat(6)@(negedge clk);rst_n=1;mark_frame();
         pixels(1920,1080,20);mark_frame();
-        if(!ok || shape!={16'd1080,16'd1920})$fatal(1,"valid geometry rejected");
+        if(shape!={16'd1080,16'd1920})$fatal(1,"valid geometry mismeasured");
         fast_period=period;
         pixels(1920,1080,4000);mark_frame();
-        if(!ok || period<=fast_period)$fatal(1,"source period not measured");
+        if(period<=fast_period)$fatal(1,"source period not measured");
         pixels(1919,1080,20);mark_frame();
-        if(!ok || shape!={16'd1080,16'd1919})$fatal(1,"padded 1919 input rejected or hidden");
+        if(shape!={16'd1080,16'd1919})$fatal(1,"raw 1919 measurement hidden");
         pixels(1918,1080,20);mark_frame();
-        if(ok)$fatal(1,"unsupported short input accepted");
+        if(shape!={16'd1080,16'd1918})$fatal(1,"raw short measurement hidden");
         pixels(1921,1080,20);mark_frame();
-        if(ok)$fatal(1,"unsupported wide input accepted");
+        if(shape!={16'd1080,16'd1921})$fatal(1,"raw wide measurement hidden");
         pixels(1920,1079,20);mark_frame();
-        if(ok || shape!={16'd1079,16'd1920})$fatal(1,"short frame accepted");
+        if(shape!={16'd1079,16'd1920})$fatal(1,"raw short height hidden");
         pixels(1920,1080,20);mark_frame();
-        if(!ok)$fatal(1,"geometry recovery failed");
+        if(shape!={16'd1080,16'd1920})$fatal(1,"geometry recovery failed");
         rst_n=0;repeat(3)@(negedge clk);
-        if(ok || shape!=0 || period!=0)$fatal(1,"monitor reset failed");
-        $display("PASS video timing: raw 1919/1920 accepted, 1918/1921 and bad height rejected, period/reset");$finish;
+        if(shape!=0 || period!=0)$fatal(1,"monitor reset failed");
+        $display("PASS video timing: diagnostic-only raw 1918/1919/1920/1921 and height/period/reset");$finish;
     end
     initial begin #120000000;$fatal(1,"timing monitor timeout");end
 endmodule

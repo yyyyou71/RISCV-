@@ -13,9 +13,11 @@ int video_present_busy(void){return state==1 || state==2 || (P(4)&33u);}
 static uint16_t start(const struct pp_frame *frame){
     uint32_t result_id,result_slot,detections,result_run;
     if(video_present_busy())return COMM_BUSY;
-    if(!(P(4)&8u) || !(PP_REG(4)&PP_HELD) || frame->raw_slot>=5)return COMM_BUSY;
+    int tensor=frame->bytes==PP_TENSOR_BYTES;
+    int held=tensor?(PP_REG(4)&PP_HELD):(*(volatile uint32_t *)0x30604u&2u);
+    if(!(P(4)&8u) || !held || frame->raw_slot>=5 || (frame->bytes && !tensor))return COMM_BUSY;
     run=0;limit=0;
-    if(ai_network_result(&result_run,&result_id,&result_slot,&detections) &&
+    if(tensor && ai_network_result(&result_run,&result_id,&result_slot,&detections) &&
        result_id==frame->frame_id && result_slot==frame->raw_slot){
         run=result_run;limit=detections<16?detections:16;
     }
@@ -45,7 +47,7 @@ uint16_t video_present_command(int submit,uint8_t *out,const struct pp_frame *fr
     }
     snapshot(out);return code;
 }
-void video_present_poll(void){
+void video_present_poll(int allow_ai_auto){
     static const uint16_t colors[8]={0x07e0,0xf800,0x001f,0xffe0,0xf81f,0x07ff,0xffff,0xfd20};
     if(state==1){
         if(index<limit){
@@ -74,10 +76,10 @@ void video_present_poll(void){
         if(!(P(4)&4u) && P(0x28)!=frame_id)error=6;
         state=error?4:3;
         log_text(error?"Presentation failed; read present-status.\n":"Presentation DMA drained; original frame lease remains held.\n");
-    }else if(state!=1 && state!=2 && !(P(4)&32u)){
+    }else if(allow_ai_auto && state!=1 && state!=2 && !(P(4)&32u)){
         uint32_t r,f,s,n;
         if(ai_network_result(&r,&f,&s,&n) && r!=auto_run && (P(4)&8u)){
-            struct pp_frame retained={0};retained.frame_id=f;retained.raw_slot=s;
+            struct pp_frame retained={0};retained.frame_id=f;retained.raw_slot=s;retained.bytes=PP_TENSOR_BYTES;
             auto_run=r;(void)start(&retained);
         }
     }

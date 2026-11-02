@@ -1,13 +1,14 @@
 # HDMI 抓帧与纯 SPI 终端诊断
 
-> 当前固件在视频通过后还会运行真实模型第 1 层并输出 [ai] 状态，默认已启用 AI。
-> 新增范围见 [P3a 说明](ai_first_layer_p3a.md)。AI 运行时拒绝 video-release/retry，新增 ai-status。
+> 2026-11-02：上电默认 RAW 原图模式，不运行张量预处理、首层诊断或整网推理。
+> RK 使用 `rk_video_app --output raw|ai` 选择模式，操作见 [整合程序](rk_video_app.md)。
+> 原始宽高只作诊断，不再门控起采；完整帧和同帧配对检查仍保留。
 
 当前根 rv32I.pds 的 ROM/RAM 初始化选择 firmware/video_diagnostic/。
 运行双发射 Acore、视频自检和纯 SPI 消息服务，不运行 CoreMark。
 RK 工具位于 csrc/rk_fspi，只连接 SPI 即可收消息、查询和重试，不使用 IIC。
-原有 IIC RTL 留在工程内；本固件不访问它。CPU、HDMI、DDR、SPI/IIC RTL 保持；
-P3a 开启原有 AI，并适配新生成的乘加 IP 端口。
+RK 通信 IIC RTL 已删除，HDMI 芯片配置 IIC 独立保留。
+AI 硬件仍在活动顶层，只有 AI 模式启动张量捕获和由 RK 请求整网推理。
 groute_seed=3，顶层仍为 acore_dual_top，STANDALONE_CAPTURE=1。
 
 ## 上板操作
@@ -17,7 +18,7 @@ groute_seed=3，顶层仍为 acore_dual_top，STANDALONE_CAPTURE=1。
    旧位流仍包含旧程序，独立 SPI 回环位流也不能运行此软核应用。
 2. 接 HDMI 和 RK 的 SPI。沿用现有 SCK L19、CS L20、
    DQ0 N22、DQ1 M22、DQ2 M18、DQ3 L18、1.8V 约束。
-   默认独立模式不依赖 PCIe 枚举，仍关闭 PCIe 原图读出，SPI 通信不受影响。
+   默认独立复位不依赖 PCIe 枚举；PCIe 原图读出已启用，由 presentation 单帧命令控制。
 3. 复制 csrc/rk_fspi 的源码到 RK，在该文件夹内执行：
 
     make all
@@ -47,15 +48,16 @@ once 只打印一条日志/视频消息后退出，logs 为持续监听的别名
 
 ## 自检状态机
 
-启动自动等 DDR ready（最多 3 秒），再等每行 1919 或 1920 像素、1080 行的输入（最多 10 秒），然后抓取一帧，
-核对原图/张量描述符、通过 CPU DDR 窗口读回张量首/末像素并检查 RGB INT16 补零格式。
-捕获、读回、释放的 CPU 等待期限各为 250 ms。
+启动自动等 DDR ready（最多 3 秒），然后直接实际抓帧，不先等待尺寸。
+RAW 模式经原图邮箱申请完整 DDR 帧（最多 10 秒），期间没有完整帧时每 10 ms 重试申请，
+不启动张量预处理。AI 模式抓取同帧原图/张量，核对描述符、通过 CPU DDR 窗口读回
+张量首/末像素并检查 RGB INT16 补零格式。AI 捕获、读回、释放期限各为 250 ms。
 通信和视频使用协作式状态机，没有等待视频或错误闪码的阻塞循环。
 
-SUCCESS_HELD 表示该次自检成功、原图和张量仍持有，LED1 每 0.5 秒翻转。
+SUCCESS_HELD 表示完整原图仍持有；AI 模式还持有配对张量，LED1 每 0.5 秒翻转。
 ERROR 保存失败时快照，继续输出诊断；错误不再通过 LED0 发送组闪码。
 阶段 1..8 与旧闪码对应：DDR、尺寸、启动、硬件错误、抓帧超时、描述符、
-首像素检查、末像素检查；新增 9 为释放失败/超时。阶段 2 现在是十秒等待期限。
+首像素检查、末像素检查；新增 9 为释放失败/超时。阶段 2 为旧尺寸预判保留，不再产生。
 
 last measured 和 last frame hz 是最近锁存结果，不保证输入此刻仍在运行。
 仍使用已有 0x3061c/0x30620，没有新增像素时钟活性、VS/DE 计数或 HDMI 配置完成寄存器。
@@ -75,7 +77,8 @@ last measured 和 last frame hz 是最近锁存结果，不保证输入此刻仍
 类型 8000=READY（ABI、帧长、所有权、包数、日志丢弃数），8001=文本，
 8002=视频状态，8003=命令响应。CPU 自动 ARM RX，RK 看到 READY 后才写命令；
 响应负载为 status/op 各 32 位，加对应操作的数据。请求类型 1=set、2=get、
-4=通信状态、5=视频状态、6=retry、7=release。
+4=通信状态、5=视频状态、6=retry、7=release；18=查询/设置 RAW/AI 模式。
+18 的无负载请求查询，4 字节请求设置 0=RAW/1=AI，响应为 ABI、当前模式、请求模式、视频状态。
 状态/参数 ABI 延续文档定义，纯 SPI 通道 ABI 为 00010000。
 RK 空轮询得到整帧 FF 时等待下一轮，不需要 IIC 或额外 ready 引脚。
 
@@ -95,6 +98,8 @@ CS 高期间无需 SCK，沿用底层工具的帧间间隔。每次数据完成�
 13..16 失败时 shape/帧周期/PP状态/PP错误；
 17..21 frameID/raw槽/原生地址/张量逻辑地址/字节；
 22..23 retry次数/失败周期；24..27 首末像素各两字。
+RAW 的张量地址/字节和首末张量像素均为 0，第 7 字仍按 PP 位布局返回当前捕获路径的状态。
+AI 模式字节为 294912；原图 PCIe 长度在两种模式都固定为 4147200。
 视频 ABI=00010000，状态0..8分别为 IDLE/WAIT_DDR/WAIT_VIDEO/CAPTURE/
 READ_FIRST/READ_LAST/SUCCESS/ERROR/RELEASING。寄存器顺序采样不是硬件原子快照，
 32位周期计数在约171.8秒回卷，长时间停留的 elapsed 也会回卷。
@@ -107,8 +112,9 @@ READ_FIRST/READ_LAST/SUCCESS/ERROR/RELEASING。寄存器顺序采样不是硬件
 新固件使用 firmware/rk_spi_comm.c，不链接旧 firmware/rk_comm.c 的 IIC 服务。
 旧 IIC/混合协议的 fspi_service、comm_service、iic_service 镜像已清理；需要独立服务时请从当前纯 SPI 源码重新构建。
 GCC10.2、O2、RV32IM -mno-div；text/data/BSS 以 manifest 对应 ELF 的 size 为准。
-本次只编译固件/主机程序、运行主机 mock 检查、静态检查及核对 IP 初始化。
-未运行 RTL 仿真、PDS 实现或生成新位流，纯 SPI CPU 通道和新抓帧流程等待用户板级验证。
+验证结果请按时间阅读当前报告：`reports/video_integration/hdmi_padding_checks.json` 为前端短检查，
+`reports/preprocess/selected_firmware.json` 为 IP 初值检查；模式切换的主机检查与实际板级结果分开记录。
+位流与资源时序请核对生成时间，不能将旧位流结果作为当前 RAW/AI 固件已上板的证明。
 projects 下已跑通的回环工程保持原样；不能用它的板级结果替代新应用验收。
 
 建议提交：feat: 增加纯SPI软核终端和HDMI抓帧诊断重试。

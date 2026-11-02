@@ -16,14 +16,15 @@
     "no_duplicate_pins_or_ports": true,
     "ab21_hdmi_only": true,
     "reference_phy_multicycle_and_uncertainty_preserved": true,
-    "iic_pins_preserved": true,
+    "rk_iic_removed": true,
+    "hdmi_configuration_iic_preserved": true,
     "all_active_ip_parts_match": true,
     "groute_seed_is_3": true,
     "preprocess_sources_registered": true,
     "physical_preprocess_enabled": true,
     "physical_ai_enabled": true,
     "generated_ai_ip_registered": true,
-    "own_acore_and_iic_unchanged_from_m1": true,
+    "own_acore_unchanged_from_m1": true,
     "import_manifest_hashes_match": true,
     "build_acore_dual.ps1_guards_root_project": true,
     "build_fpga.ps1_guards_root_project": true
@@ -41,7 +42,7 @@
   "bad_ip_parts": [],
   "changed_core": [],
   "stale_imports": [],
-  "general_io_pins": 94,
+  "general_io_pins": 92,
   "imported_files": 175,
   "desktop_source_verified": false
 }

@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "scope": "Short host tests for RAW/AI control and firmware leases; no AI RTL rerun.",
+  "cases": [
+    {
+      "name": "rk_clients",
+      "passed": true
+    },
+    {
+      "name": "firmware_compile",
+      "passed": true
+    },
+    {
+      "name": "firmware_modes",
+      "passed": true
+    }
+  ],
+  "hardware_tested": false,
+  "sources": {
+    "firmware/video_diagnostic.c": "00f9c09bf2aec7cbff242125cb02cc283d3b949aa1b241613016a4736d50d392",
+    "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158",
+    "firmware/video_present.c": "4db08d54b4e2f615389a2cff9585a7a549e2d65e74e1d1f4e115eddceb57c807",
+    "firmware/video_present.h": "9caaa4eebc2de31c0ff851b102f02a467cba0527b2f302b0a54a4bce7f23526b",
+    "csrc/rk_fspi/rk_video_app.c": "1f8e1cec834dd3e60c74925d4e00b78662cd32f1ca5fa717e1c2bd46b50cb353",
+    "csrc/rk_fspi/comm_protocol.h": "1c24412470bdafdfbd7960a97daad2e3f7b31e2896c7d8f42fa7709ea5df50fd",
+    "csrc/rk_fspi/rk_comm_cli.c": "c92d713e822283c22721b3c70d95cdce0adaff3a52184d49c36a955e4fcefbd3",
+    "csrc/rk_fspi/test_video_app.c": "d86c6ffd4607a8a59d6ad3da0276dbcfa432cd7054810a6a3889aee86c42697f",
+    "sim/video/test_video_direct_capture.c": "6704a22c9fe925aa0f53526b35528b413c3cd1ebef44f0f1469a8bc2f3bb99f7",
+    "board/acore_video_platform.v": "8ff964da74730e2d20e7499a778b31b8fe0510bb2c9f2b9804d25ffd4a361f16",
+    "rtl/video_timing_monitor.v": "b4f718183e7790e09904546e03753b6faccdd50817da464f0b07cc025b70f80e"
+  }
+}
