@@ -14,7 +14,11 @@ static uint16_t start(const struct pp_frame *frame){
     uint32_t result_id,result_slot,detections,result_run;
     if(video_present_busy())return COMM_BUSY;
     int tensor=frame->bytes==PP_TENSOR_BYTES;
+#ifdef SPI_IMAGE_INPUT
+    int held=PP_REG(4)&PP_HELD;
+#else
     int held=tensor?(PP_REG(4)&PP_HELD):(*(volatile uint32_t *)0x30604u&2u);
+#endif
     if(!(P(4)&8u) || !held || frame->raw_slot>=5 || (frame->bytes && !tensor))return COMM_BUSY;
     run=0;limit=0;
     if(tensor && ai_network_result(&result_run,&result_id,&result_slot,&detections) &&
@@ -28,8 +32,8 @@ static uint16_t start(const struct pp_frame *frame){
 /* Q16 model coordinates -> inclusive original-image bounds. The current
  * preprocessor resizes the complete 1920x1080 image to 96x96, without padding. */
 static uint32_t coordinate(int32_t q,int vertical,int upper){
-    uint32_t size=vertical?1080u:1920u,shift=vertical?18u:16u;
-    uint32_t factor=vertical?45u:20u;
+    uint32_t size=vertical?FRAME_HEIGHT:FRAME_WIDTH,shift=vertical?18u:16u;
+    uint32_t factor=vertical?FRAME_HEIGHT/24u:FRAME_WIDTH/96u;
     if(q<=0)return 0;
     if(q>=96*65536)return upper?size-1:size;
     uint32_t product=(uint32_t)q*factor;

@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "physical_hardware_verified": false,
+  "full_model_regression_run": false,
+  "cases": [
+    {
+      "test": "TB_spi_image",
+      "passed": true,
+      "seconds": 5.037420796000001,
+      "summary": [
+        "PASS SPI image mode=0: 82944 pixels, raw=10368 words, tensor=0 words, stalls + lease protection",
+        "PASS SPI image mode=1: 82944 pixels, raw=10368 words, tensor=18432 words, stalls + lease protection"
+      ]
+    },
+    {
+      "test": "TB_spi_image_pcie",
+      "passed": true,
+      "seconds": 0.2361253879999996,
+      "summary": [
+        "PASS shared DDR/PCIe integration: uploaded image -> hardware RAW storage -> top-16 overlay -> async output FIFO, 256 pixels"
+      ]
+    },
+    {
+      "test": "RK clients + actual firmware C service",
+      "passed": true,
+      "seconds": 0.3602192619999993,
+      "summary": [
+        "PASS: SMDT mode3 directional quad, payload-only 2KB, bounds, config/short/error handling, no retry",
+        "PASS: SPI-only ready/command/response, empty polling, terminal logs, diagnostics, checksum, bounds, no command retry",
+        "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+        "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+        "PASS SPI image app: 1296-block frame uploads, RAW/AI directory flow, same-frame DMA/display, bad counts/IDs and old firmware rejected",
+        "PASS real image firmware: sequential upload, DDR RGBX packing/readback, checksum rejection, COMMIT, same-frame AI/presentation, release",
+        "PASS image input: RGB ordering, identity resize, 1x1 enlargement, directory enumeration"
+      ]
+    }
+  ],
+  "sources": {
+    "rtl/ddr_block_transfer.v": "79152008307ff7025fda41fee758082444bf5b496653583acfb8914d4c254fda",
+    "rtl/ddr_native_arbiter.v": "f91c428f558dc0576c113903bf55cab365133711eade644b607e1272ac3092da",
+    "rtl/ddr_region_check.v": "64588a6638ebd5b557954b1f9b21fd4dca7f356265a25a27c0839e037b9ce1f5",
+    "rtl/video/ddr3_read_ctrl.v": "44f812a2fc9941c6a4571e8128359046e475ab23ff643f535a5ae0c35b6fb152",
+    "rtl/video/frame_ring_ddr3.v": "051aa2f1f7cf0e0abb654f75fbbfc41056c954b334b1a6764b64cc388dac14d3",
+    "rtl/video/preprocess/pool_sum_ram.v": "5862532e85b1df0400a324c2017053afeefe994524adb3553767fbbbeb6ed2d0",
+    "rtl/video/preprocess/rgb888_pool96_stream.v": "84345ca14fdceed0948607b89b6f36d5ce990ec0dad8f0eec392421c480571c0",
+    "rtl/video/rgb565_box_overlay.v": "588b7794c09857aedce20e248a98f1fad538b59eddcfc671289c88d0bb4ed49b",
+    "rtl/video/spi_image_capture.v": "9fba7cb13759485df31334fe1ea6ed7b2aedb614f747016313623cc140d97c51",
+    "sim/ddr3/ddr3.sv": "dd978ddad9b9b1adc09de5c9bcde8393304ae1fe0b745b5385cd8881c5447a1d",
+    "sim/models/pango_pool_sum_ram.v": "3dd22db4a0b5cfa679e796fb412c16cf7b31d65aa1f752c483988e7918111eb2",
+    "sim/models/pango_video_fifo_model.v": "9abb063faab1ed7355b6e089f12f5df7a0a921dec581138aec6e101e0d76ceec",
+    "sim/video/TB_spi_image.v": "b967e494a8ed9562945902a7b4a401eb78c24eec9082781369ed643d5b7dc5d3",
+    "sim/video/TB_spi_image_pcie.v": "be62f1cd8710b4df449b51ff5ca90b385c1b7ee9fcb718f12bf5fa000bb37226",
+    "sim/video/fifo_2_ddr_model.v": "c443f54bd7f092dadae8844fa907a0f450783fd2dcb068b54b82ba37e806c745",
+    "sim/video/spi_tensor_fifo_model.v": "8ffe55392aac01c28feb01321c851bf6f92587fa5c2de3f342f8338fc196455c"
+  }
+}

@@ -387,25 +387,12 @@ assign xadm_cpld_cdts	=	12'b0;		// 完成数据信用量清零
 
 
 // ===================== HDMI Input (MS7210) =====================
-hdmi_in_demo u_hdmi_in (
-    .sys_clk        (sys_clk),
-    .rstn_out       (rstn_out),
-    .hd_scl         (hd_scl),
-    .hd_sda         (hd_sda),
-    .rx_rst_n       (rx_rst_n),
-    .pixclk_in      (pixclk_in),
-    .vs_in          (vs_in),
-    .hs_in          (hs_in),
-    .de_in          (de_in),
-    .r_in           (r_in),
-    .g_in           (g_in),
-    .b_in           (b_in),
-    .pixclk_out     (hdmi_pixclk),
-    .vs_out         (),                 // 悬空: 改走 lpdetection
-    .hs_out         (),
-    .de_out         (),                 // 悬空: 改走 lpdetection
-    .pixel_16bit_out()                  // 悬空: 改走 lpdetection
-);
+// SPI image build: all pixel processing runs from committed DDR data.
+assign hd_scl=1'b1;
+assign hd_sda=1'bz;
+assign rx_rst_n=1'b0;
+assign rstn_out=1'b1;
+assign hdmi_pixclk=monitor_clk;
 
 
 
@@ -449,7 +436,7 @@ wire [4:0] present_frames,present_hold,present_box_count;
 wire [1023:0] present_boxes;
 wire presentation_read_busy,presentation_read_done;
 assign tensor_rdata=tensor_addr_rd[8]?present_rdata:capture_rdata;
-video_present_control u_present(
+video_present_control #(.WIDTH(384),.HEIGHT(216)) u_present(
     .clk(monitor_clk),.core_clk(ddr_core_clk),.pcie_clk(pclk_div2),.rst_n(application_rst_n),
     .pcie_rst_n(core_rst_n),.pcie_link_up(smlh_link_up&&rdlh_link_up),.ddr_ready(cpu_ddr_ready),
     .dev_we(tensor_we&&tensor_addr_wr[8]),.addr_wr(tensor_addr_wr[7:0]),.addr_rd(tensor_addr_rd[7:0]),
@@ -461,28 +448,38 @@ video_present_control u_present(
     .reader_frames(present_frames),.protect_mask(present_hold),.active_count(present_box_count),.active_boxes(present_boxes));
 assign cpu_ddr_clk=ddr_core_clk;
 assign system_rst_n=application_rst_n;
-video_timing_monitor u_video_monitor (.pixel_clk(pixclk_in),.clk(monitor_clk),.rst_n(application_rst_n),
-    .vs(vs_in),.de(de_in),.shape(measured_shape),.period_ticks(measured_period));
-// Keep measured_shape raw (1919 remains visible to SPI diagnostics). Only the
-// shared capture stream is normalized, before the RGB565 / RGB888 paths split.
-hdmi_line_pad u_line_pad (.clk(pixclk_in),.rst_n(application_rst_n),
-    .vs(vs_in),.de(de_in),.rgb({r_in,g_in,b_in}),
-    .out_vs(capture_vs),.out_de(capture_de),.out_rgb(capture_rgb));
-hdmi_tensor_capture u_preprocess (
-    .clk(monitor_clk),.core_clk(ddr_core_clk),.pixel_clk(pixclk_in),.rst_n(application_rst_n),
-    .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),
-    .dev_we(tensor_we&&!tensor_addr_wr[8]),.dev_addr_wr(tensor_addr_wr[7:0]),.dev_addr_rd(tensor_addr_rd[7:0]),
-    .dev_wdata(tensor_wdata),.read_data(capture_rdata),
-    .vs(capture_vs),.de(capture_de),.rgb(capture_rgb),.source_ready(source_ready),
-    .source_next_id(source_next_id),.raw_begin(raw_begin),.raw_accepted(raw_accepted),
-    .raw_begin_id(raw_begin_id),.raw_begin_slot(raw_begin_slot),.raw_end(raw_end),
-    .raw_end_ok(raw_end_ok),.raw_end_id(raw_end_id),.raw_end_slot(raw_end_slot),
-    .hold_mask(tensor_hold),.fault(tensor_fault),
-    .axi_awaddr(tensor_awaddr),.axi_awvalid(tensor_awvalid),.axi_awap(tensor_awap),
-    .axi_awlen(tensor_awlen),.axi_awid(tensor_awid),.axi_awready(tensor_awready),
-    .axi_wdata(tensor_write_data),.axi_wstrb(tensor_wstrb),
-    .axi_wready(tensor_wready),.axi_wlast(tensor_wlast),.axi_wid(tensor_wid));
-frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
+assign measured_shape=(32'd216<<16)|32'd384;
+assign measured_period=0;
+assign capture_vs=0;assign capture_de=0;assign capture_rgb=0;
+wire image_active,image_held,image_available,image_fault;
+wire [31:0] image_id;
+wire [27:0] image_awaddr,image_araddr;
+wire image_awvalid,image_arvalid,image_awap,image_arap;
+wire [3:0] image_awlen,image_arlen,image_awid,image_arid,image_wid,image_rid;
+wire image_awready,image_arready,image_wready,image_wlast,image_rvalid,image_rlast;
+wire [127:0] image_wdata,image_rdata;
+wire [15:0] image_wstrb;
+assign tensor_awaddr=0;assign tensor_awvalid=0;assign tensor_awap=0;
+assign tensor_awlen=0;assign tensor_awid=0;assign tensor_write_data=0;assign tensor_wstrb=0;
+assign tensor_hold={4'b0,image_held};assign tensor_fault=image_fault;
+spi_image_capture u_preprocess (
+    .clk(monitor_clk),.core_clk(ddr_core_clk),.rst_n(application_rst_n),
+    .ddr_ready(cpu_ddr_ready),.shared_fault(shared_fault),.external_hold(frame_hold_mask|present_hold),
+    .dev_we(tensor_we&&!tensor_addr_wr[8]),.addr_wr(tensor_addr_wr[7:0]),.addr_rd(tensor_addr_rd[7:0]),
+    .wdata(tensor_wdata),.rdata(capture_rdata),
+    .active(image_active),.held(image_held),.available(image_available),.frame_id(image_id),.fault(image_fault),
+    .axi_awaddr(image_awaddr),.axi_araddr(image_araddr),.axi_awvalid(image_awvalid),.axi_arvalid(image_arvalid),
+    .axi_awap(image_awap),.axi_arap(image_arap),.axi_awlen(image_awlen),.axi_arlen(image_arlen),
+    .axi_awid(image_awid),.axi_arid(image_arid),.axi_awready(image_awready),.axi_arready(image_arready),
+    .axi_wdata(image_wdata),.axi_wstrb(image_wstrb),.axi_wready(image_wready),.axi_wlast(image_wlast),.axi_wid(image_wid),
+    .axi_rdata(image_rdata),.axi_rvalid(image_rvalid),.axi_rlast(image_rlast),.axi_rid(image_rid));
+frame_ring_ddr3 #(.SPI_IMAGE(1),.H_ACTIVE(384),.V_ACTIVE(216),.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
+  .image_active(image_active),.image_held(image_held),.image_available(image_available),.image_fault(image_fault),.image_id(image_id),
+  .image_awaddr(image_awaddr),.image_araddr(image_araddr),.image_awvalid(image_awvalid),.image_arvalid(image_arvalid),
+  .image_awap(image_awap),.image_arap(image_arap),.image_awlen(image_awlen),.image_arlen(image_arlen),.image_arid(image_arid),
+  .image_wdata(image_wdata),.image_wstrb(image_wstrb),.image_awready(image_awready),.image_arready(image_arready),
+  .image_wready(image_wready),.image_wlast(image_wlast),.image_wid(image_wid),
+  .image_rvalid(image_rvalid),.image_rlast(image_rlast),.image_rid(image_rid),.image_rdata(image_rdata),
   .present_frames(present_frames),.present_hold(present_hold),.present_box_count(present_box_count),.present_boxes(present_boxes),
   .tensor_awaddr(tensor_awaddr),.tensor_awvalid(tensor_awvalid),.tensor_awap(tensor_awap),
   .tensor_awlen(tensor_awlen),.tensor_awid(tensor_awid),.tensor_awready(tensor_awready),

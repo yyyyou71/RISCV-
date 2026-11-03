@@ -144,8 +144,8 @@ static int results(void){
             if(comm_u32(d+28) || comm_u32(d+16)>65535 || comm_u32(d+20)>=128)return fail(EPROTO);
             printf("%u,%.6f,%.4f,%.4f,%.4f,%.4f,%.2f,%.2f,%.2f,%.2f\n",comm_u32(d+20),comm_u32(d+16)/65536.0,
               (int32_t)comm_u32(d)/65536.0,(int32_t)comm_u32(d+4)/65536.0,(int32_t)comm_u32(d+8)/65536.0,(int32_t)comm_u32(d+12)/65536.0,
-              original_coordinate(comm_u32(d),1920),original_coordinate(comm_u32(d+4),1080),
-              original_coordinate(comm_u32(d+8),1920),original_coordinate(comm_u32(d+12),1080));
+              original_coordinate(comm_u32(d),v[27]&65535),original_coordinate(comm_u32(d+4),v[27]>>16),
+              original_coordinate(comm_u32(d+8),v[27]&65535),original_coordinate(comm_u32(d+12),v[27]>>16));
         }
         start+=n;
     }

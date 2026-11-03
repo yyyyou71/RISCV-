@@ -6,10 +6,11 @@
 #include "network_status.h"
 #include "video/pcie_dma.h"
 #include "video/display.h"
+#include "image_input.h"
 #include <time.h>
 
-#define WIDTH 1920u
-#define HEIGHT 1080u
+#define WIDTH IMAGE_WIDTH
+#define HEIGHT IMAGE_HEIGHT
 #define FRAME_BYTES (WIDTH*HEIGHT*2u)
 static display_ctx_t screen;
 static int have_screen;
@@ -37,30 +38,68 @@ static int command(unsigned op,const uint8_t *request,unsigned length){
     uint8_t reply[SPI_TERM_PAYLOAD];unsigned bytes;
     return rk_control_exchange(op,request,length,reply,sizeof(reply),&bytes);
 }
-static int video_status(uint32_t *v){return rk_control_status(COMM_VIDEO_STATUS,COMM_VIDEO_ABI,v,COMM_VIDEO_WORDS);}
 static int present_status(uint32_t *v){return rk_control_status(COMM_PRESENT_STATUS,COMM_PRESENT_ABI,v,COMM_PRESENT_WORDS);}
 static int network_status(uint32_t *v){return rk_control_status(COMM_NETWORK_STATUS,COMM_NETWORK_ABI,v,COMM_NETWORK_WORDS);}
 
-static int wait_video(uint32_t *frame_id,int new_capture,int ai){
-    uint32_t v[COMM_VIDEO_WORDS];uint64_t until=now_ms()+15000;unsigned last=UINT32_MAX;
-    if(video_status(v))return -1;
-    if(new_capture || v[1]==COMM_VIDEO_ERROR || v[1]==COMM_VIDEO_IDLE){
-        if(command(COMM_VIDEO_RETRY,0,0))return -1;
+static int image_status(uint32_t *v){return rk_control_status(COMM_IMAGE_STATUS,COMM_IMAGE_ABI,v,COMM_IMAGE_WORDS);}
+static int input_empty(void){
+    uint32_t v[COMM_IMAGE_WORDS];uint64_t until=now_ms()+timeout_ms;
+    if(image_status(v))return -1;
+    while(v[1]==IMAGE_PROCESSING||v[1]==IMAGE_RELEASING){
+        if(now_ms()>=until)return fail(ETIMEDOUT);
+        if(pause_status()||image_status(v))return -1;
     }
+    if(v[1]!=IMAGE_EMPTY){
+        if(command(COMM_VIDEO_RELEASE,0,0))return -1;
+        do{
+            if(image_status(v))return -1;
+            if(v[1]==IMAGE_EMPTY)return 0;
+            if(v[1]==IMAGE_ERROR)return fail(EIO);
+            if(pause_status())return -1;
+        }while(now_ms()<until);
+        return fail(ETIMEDOUT);
+    }
+    return 0;
+}
+static int image_exchange(unsigned op,const uint8_t *p,unsigned n,uint32_t session,uint32_t id,uint32_t committed){
+    uint8_t reply[SPI_TERM_PAYLOAD];unsigned bytes;
+    if(rk_control_exchange(op,p,n,reply,sizeof(reply),&bytes))return -1;
+    if(bytes!=COMM_IMAGE_WORDS*4||comm_u32(reply)!=COMM_IMAGE_ABI||comm_u32(reply+12)!=session||
+       comm_u32(reply+16)!=id||comm_u32(reply+20)!=committed)return fail(EPROTO);
+    return 0;
+}
+static int upload_image(const uint8_t *rgb,uint32_t session,uint32_t id,int ai){
+    uint8_t request[12+IMAGE_CHUNK_BYTES];uint32_t hash=2166136261u,v[COMM_IMAGE_WORDS];
+    for(unsigned i=0;i<IMAGE_BYTES;i++)hash=(hash^rgb[i])*16777619u;
+    comm_put32(request,session);comm_put32(request+4,id);comm_put32(request+8,WIDTH);
+    comm_put32(request+12,HEIGHT);comm_put32(request+16,IMAGE_RGB888);comm_put32(request+20,IMAGE_BYTES);
+    comm_put32(request+24,hash);comm_put32(request+28,0);
+    uint64_t started=now_ms();rk_control_set_quiet(1);int result=-1;
+    if(image_exchange(COMM_IMAGE_BEGIN,request,32,session,id,0))goto done;
+    for(unsigned offset=0;offset<IMAGE_BYTES;offset+=IMAGE_CHUNK_BYTES){
+        comm_put32(request,session);comm_put32(request+4,id);comm_put32(request+8,offset);
+        memcpy(request+12,rgb+offset,IMAGE_CHUNK_BYTES);
+        if(image_exchange(COMM_IMAGE_DATA,request,sizeof(request),session,id,offset+IMAGE_CHUNK_BYTES))goto done;
+    }
+    comm_put32(request,session);comm_put32(request+4,id);comm_put32(request+8,IMAGE_BYTES);comm_put32(request+12,hash);
+    if(image_exchange(COMM_IMAGE_COMMIT,request,16,session,id,IMAGE_BYTES))goto done;
+    uint64_t uploaded=now_ms(),until=uploaded+timeout_ms;
     do{
-        if(video_status(v))return -1;
-        if(v[1]!=last){
-            printf("[capture] state=%u measured=%ux%u error=%u\n",v[1],v[5]&65535,v[5]>>16,v[2]);
-            last=v[1];
+        if(image_status(v))goto done;
+        if(v[3]!=session||v[4]!=id||v[5]!=IMAGE_BYTES||v[7]!=hash||v[8]!=hash){errno=EPROTO;goto done;}
+        if(v[1]==IMAGE_ERROR){fprintf(stderr,"[image] error=%u hw_status=%08x hw_error=%u\n",v[2],v[10],v[11]);errno=EIO;goto done;}
+        if(v[1]==IMAGE_READY){
+            if((v[10]&0x2du)!=8u||v[12]!=(ai?294912u:0u)||v[13]!=FRAME_BYTES||
+               v[15]!=((HEIGHT<<16)|WIDTH)||v[9]!=(uint32_t)ai){errno=EPROTO;goto done;}
+            printf("[input] frame=%u upload=%.3fs prepare=%.3fs hw_cycles=%u RGB888=%u RGB565=%u\n",
+                id,(uploaded-started)/1000.0,(now_ms()-uploaded)/1000.0,v[14],IMAGE_BYTES,FRAME_BYTES);
+            result=0;goto done;
         }
-        if(v[1]==COMM_VIDEO_ERROR)return fail(EIO);
-        if(v[1]==COMM_VIDEO_SUCCESS){
-            if(!(v[7]&8u) || v[18]>=5 || v[21]!=(ai?294912u:0u))return fail(EPROTO);
-            *frame_id=v[17];return 0;
-        }
-        if(pause_status())return -1;
+        if(pause_status())goto done;
     }while(now_ms()<until);
-    return fail(ETIMEDOUT);
+    errno=ETIMEDOUT;
+done:
+    rk_control_set_quiet(0);return result;
 }
 static int infer(uint32_t frame_id,uint32_t *run_id){
     uint32_t v[COMM_NETWORK_WORDS];uint8_t request[4];unsigned last=UINT32_MAX;
@@ -134,7 +173,7 @@ static int select_output(pcie_ctx_t *ctx,int *dma_pending,int ai){
     uint64_t until=now_ms()+timeout_ms;
     comm_put32(request,mode);
     do{
-        if(drain_pending(ctx,dma_pending))return -1;
+        if(drain_pending(ctx,dma_pending) || input_empty())return -1;
         if(!rk_control_exchange(COMM_VIDEO_MODE,request,4,reply,sizeof(reply),&size)){
             if(size!=sizeof(reply) || comm_u32(reply)!=COMM_VIDEO_MODE_ABI ||
                comm_u32(reply+8)!=mode)return fail(EPROTO);
@@ -156,13 +195,16 @@ static int select_output(pcie_ctx_t *ctx,int *dma_pending,int ai){
 }
 
 int main(int argc,char **argv){
-    const char *model=0,*save=0;uint32_t frames=0,frame_id=0,run_id=0,completed=0;
+    const char *model=0,*save=0,*input=0;uint32_t frames=0,frame_id=0,run_id=0,completed=0;
+    image_list images={0};int loop=0;uint8_t *rgb=0;
     int ai=0,explicit_mode=-1,resume=0,headless=0,rc=1,spi_open=0,pcie_open=0,dma_allocated=0,dma_pending=0;
     pcie_ctx_t ctx={0};ctx.dma_drv_fd=ctx.cma_buf_fd=ctx.cma_heap_fd=-1;
     memset(&screen,0,sizeof(screen));have_screen=0;g_running=1;
     if(argc<2)goto usage;
     for(int i=2;i<argc;i++){
-        if(!strcmp(argv[i],"--model") && i+1<argc){model=argv[++i];ai=1;}
+        if(!strcmp(argv[i],"--input") && i+1<argc)input=argv[++i];
+        else if(!strcmp(argv[i],"--loop"))loop=1;
+        else if(!strcmp(argv[i],"--model") && i+1<argc){model=argv[++i];ai=1;}
         else if(!strcmp(argv[i],"--use-loaded-model"))ai=1;
         else if(!strcmp(argv[i],"--resume"))resume=1;
         else if(!strcmp(argv[i],"--preview"))explicit_mode=VIDEO_OUTPUT_RAW;
@@ -179,12 +221,17 @@ int main(int argc,char **argv){
         else goto usage;
     }
     if(explicit_mode>=0)ai=explicit_mode==VIDEO_OUTPUT_AI;
-    if((resume&&!model) || (model&&!ai))goto usage;
+    if(!input || (resume&&!model) || (model&&!ai))goto usage;
+    if(image_list_open(&images,input))goto error;
     if(headless&&!save){fprintf(stderr,"--headless requires --save PREFIX for captured images.\n");goto usage;}
     signal(SIGINT,stop);signal(SIGTERM,stop);
     rk_control_set_idle_hook(window_poll);
     if(rk_control_open(argv[1]))goto error;
     spi_open=1;
+    uint32_t input_info[COMM_IMAGE_WORDS];
+    if(image_status(input_info) || input_info[15]!=((HEIGHT<<16)|WIDTH) || input_info[19]!=IMAGE_CHUNK_BYTES){
+        fprintf(stderr,"This app requires the SPI image FPGA/firmware build.\n");goto error;
+    }
     uint32_t mode_info[COMM_VIDEO_MODE_WORDS];
     if(rk_control_status(COMM_VIDEO_MODE,COMM_VIDEO_MODE_ABI,mode_info,COMM_VIDEO_MODE_WORDS)){
         fprintf(stderr,"Output selection requires the updated RAW/AI soft-core firmware and FPGA bitstream.\n");
@@ -209,22 +256,31 @@ int main(int argc,char **argv){
         }
         have_screen=1;
     }
-    if(select_output(&ctx,&dma_pending,ai) || wait_video(&frame_id,0,ai))goto error;
+    if(select_output(&ctx,&dma_pending,ai))goto error;
     if(model){
         if(rk_control_upload(model,resume))goto error;
-        // Upload can take time. Infer a fresh frame, not the boot self-test image.
-        if(wait_video(&frame_id,1,ai))goto error;
+
     }
     printf("[video-app] %s; SPI controls/results, PCIe RGB565 %ux%u, desktop SDL2 display\n",ai?"FPGA inference":"preview",WIDTH,HEIGHT);
-    while(g_running && (!frames || completed<frames)){
-        if(completed && wait_video(&frame_id,1,ai))goto error;
+    uint32_t session=(uint32_t)(now_ms()^((uint32_t)getpid()<<16));if(!session)session=1;
+    while(g_running && (!frames || completed<frames) && (loop || completed<images.count)){
+        uint64_t frame_started=now_ms();
+        const char *path=images.paths[completed%images.count];
+        printf("[input] file=%s\n",path);
+        rgb=image_load_384(path);if(!rgb)goto error;
+        frame_id=completed+1;
+        if(upload_image(rgb,session,frame_id,ai))goto error;
+        free(rgb);rgb=0;
+        uint64_t prepared=now_ms();
         run_id=0;
         if(ai && infer(frame_id,&run_id))goto error;
+        uint64_t inferred=now_ms();
         if(prepare_present(frame_id,run_id))goto error;
         dma_pending=1;
         if(transfer_frame(&ctx))goto error;
         if(finish_present(frame_id))goto error;
         dma_pending=0;
+        uint64_t returned=now_ms();
         const uint8_t *pixels=ctx.staging_buf?ctx.staging_buf:ctx.dma_buf;
         if(have_screen){display_show_frame(&screen,pixels,WIDTH,HEIGHT,WIDTH);if(display_poll_quit(&screen))g_running=0;}
         if(save){
@@ -232,7 +288,9 @@ int main(int argc,char **argv){
             if(snprintf(filename,sizeof(filename),"%s-%010u.ppm",save,frame_id)>=(int)sizeof(filename)){errno=ENAMETOOLONG;goto error;}
             if(save_ppm(filename,pixels,WIDTH,HEIGHT,WIDTH))goto error;
         }
-        completed++;printf("[frame] displayed=%u frame_id=%u run_id=%u bytes=%u\n",completed,frame_id,run_id,FRAME_BYTES);
+        completed++;printf("[frame] displayed=%u frame_id=%u run_id=%u infer+results=%.3fs PCIe=%.3fs total=%.3fs bytes=%u\n",
+            completed,frame_id,run_id,(inferred-prepared)/1000.0,(returned-inferred)/1000.0,(now_ms()-frame_started)/1000.0,FRAME_BYTES);
+        if(command(COMM_VIDEO_RELEASE,0,0) || input_empty())goto error;
     }
     rc=0;goto done;
 error:
@@ -243,12 +301,13 @@ done:
         write_bar1_reg(&ctx,BAR1_REG_DMA_SOFT_RST,1);usleep(100000);
         fprintf(stderr,"DMA interrupted: retained FPGA frame was not released; inspect/reset before restarting.\n");
     }
+    free(rgb);image_list_close(&images);
     if(have_screen)display_cleanup(&screen);
     if(dma_allocated){if(ctx.use_cma)free_dma_buffer_cma(&ctx);else free_dma_buffer(&ctx);}
     if(pcie_open)pcie_bar1_cleanup(&ctx);
     if(spi_open)rk_control_close();
     return rc;
 usage:
-    fprintf(stderr,"Usage: %s SPI_DEVICE [--output raw|ai] [--model FILE|--use-loaded-model] [--preview] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
+    fprintf(stderr,"Usage: %s SPI_DEVICE --input FILE_OR_DIR [--loop] [--output raw|ai] [--model FILE|--use-loaded-model] [--preview] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
     return 2;
 }

@@ -8,3 +8,6 @@ test_model_cli
 /rk_video_app
 /test_video_app
 /test_control
+
+/test_image_input
+/test_image_service

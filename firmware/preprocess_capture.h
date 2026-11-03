@@ -10,6 +10,13 @@
 #define PP_FAULT 32u
 #define PP_DEFAULT_BASE 0x03f00000u
 #define PP_TENSOR_BYTES 294912u
+#ifdef SPI_IMAGE_INPUT
+#define FRAME_WIDTH 384u
+#define FRAME_HEIGHT 216u
+#else
+#define FRAME_WIDTH 1920u
+#define FRAME_HEIGHT 1080u
+#endif
 struct pp_frame {
     uint32_t frame_id,raw_slot,raw_native_base,tensor_logical_base,bytes;
 };

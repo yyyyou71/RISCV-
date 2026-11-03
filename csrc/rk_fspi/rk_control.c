@@ -15,6 +15,7 @@ static rk_fspi model_spi={.fd=-1};
 static uint32_t sequence;
 static int credit,quiet;
 static int (*idle_hook)(void);
+void rk_control_set_quiet(int value){quiet=value!=0;}
 void rk_control_set_idle_hook(int (*hook)(void)){idle_hook=hook;}
 static uint64_t milliseconds(void){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);return (uint64_t)t.tv_sec*1000+t.tv_nsec/1000000;}
 static int fail(int e){errno=e;return -1;}
@@ -150,8 +151,8 @@ int rk_control_results(uint32_t frame_id,uint32_t run_id){
             if(comm_u32(d+28) || comm_u32(d+16)>65535 || comm_u32(d+20)>=128)return fail(EPROTO);
             printf("%u,%.6f,%.4f,%.4f,%.4f,%.4f,%.2f,%.2f,%.2f,%.2f\n",comm_u32(d+20),comm_u32(d+16)/65536.0,
               (int32_t)comm_u32(d)/65536.0,(int32_t)comm_u32(d+4)/65536.0,(int32_t)comm_u32(d+8)/65536.0,(int32_t)comm_u32(d+12)/65536.0,
-              original_coordinate(comm_u32(d),1920),original_coordinate(comm_u32(d+4),1080),
-              original_coordinate(comm_u32(d+8),1920),original_coordinate(comm_u32(d+12),1080));
+              original_coordinate(comm_u32(d),v[27]&65535),original_coordinate(comm_u32(d+4),v[27]>>16),
+              original_coordinate(comm_u32(d+8),v[27]&65535),original_coordinate(comm_u32(d+12),v[27]>>16));
         }
         start+=n;
     }

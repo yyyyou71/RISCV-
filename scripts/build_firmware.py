@@ -41,7 +41,7 @@ def check_coremark_sources():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prefix", default="riscv64-unknown-elf-")
-    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "fspi_service", "video_bringup", "preprocess_bringup", "video_diagnostic"), default="coremark")
+    parser.add_argument("--application", "--app", choices=("coremark", "selftest", "fspi_service", "video_bringup", "preprocess_bringup", "video_diagnostic", "spi_image"), default="coremark")
     parser.add_argument("--core", choices=("single", "acore_dual"), default="single")
     parser.add_argument("--verify-existing", action="store_true")
     parser.add_argument("--mode", choices=("performance", "validation"), default="performance")
@@ -80,19 +80,20 @@ def main():
         sources = [ROOT / "firmware/start.S", ROOT / "firmware" / (args.application + ".c")]
         linker = ROOT / "firmware/link.ld"
         options = []
-        if args.application in ("fspi_service", "video_diagnostic"):
+        if args.application in ("fspi_service", "video_diagnostic", "spi_image"):
             sources.append(ROOT / "firmware" / "rk_spi_comm.c")
             options += ["-Wall", "-Wextra", "-Werror"]
-        if args.application == "video_diagnostic":
-            sources += [ROOT / "firmware/ai_first_layer.c", ROOT / "firmware/ai_network.c", ROOT / "firmware/video_present.c",
+        if args.application in ("video_diagnostic", "spi_image"):
+            sources += ([ROOT / "firmware/ai_first_layer.c"] if args.application == "video_diagnostic" else []) + [ROOT / "firmware/ai_network.c", ROOT / "firmware/video_present.c",
                         ROOT / "csrc/software/ai_runtime.c", ROOT / "csrc/software/ai_postprocess.c"]
             options += ["-DAI_DDR_BYTES=0x04000000u", "-fstack-usage"]
             linker = ROOT / "firmware/ai_link.ld"
+            if args.application == "spi_image": options += ["-DSPI_IMAGE_INPUT=1"]
     libgcc = subprocess.check_output([args.prefix + "gcc", "-march=rv32i", "-mabi=ilp32",
                                      "-print-libgcc-file-name"], text=True).strip()
     run([args.prefix + "gcc", *flags, *options, "-T", linker,
          "-Wl,-Map=" + str(output / (args.application + ".map")), "-o", elf, *sources, libgcc])
-    if args.application == "video_diagnostic":
+    if args.application in ("video_diagnostic", "spi_image"):
         for source in sources:
             stack_file=ROOT/(source.stem+".su")
             if stack_file.exists():
@@ -120,13 +121,13 @@ def main():
         else:
             (args.image_dir / (prefix + "ram_bytes.hex")).write_text(byte_image, encoding="ascii")
     dependencies = sources + [linker]
-    if args.application in ("fspi_service", "video_diagnostic"):
+    if args.application in ("fspi_service", "video_diagnostic", "spi_image"):
         dependencies += [ROOT / "firmware/rk_comm.h",
                          ROOT / "csrc/rk_fspi/fspi_v2.h",
                          ROOT / "csrc/rk_fspi/comm_protocol.h"]
-    if args.application in ("preprocess_bringup", "video_diagnostic"):
+    if args.application in ("preprocess_bringup", "video_diagnostic", "spi_image"):
         dependencies += [ROOT / "firmware/preprocess_capture.h"]
-    if args.application == "video_diagnostic":
+    if args.application in ("video_diagnostic", "spi_image"):
         dependencies += [ROOT / "firmware" / name for name in
                          ("ai_first_layer.h", "ai_first_layer_quant.h", "ai_first_layer_assets.h", "ai_network.h", "video_present.h")]
         dependencies += [ROOT / "csrc/software" / name for name in ("ai_runtime.h", "ai_postprocess.h")]

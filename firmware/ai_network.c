@@ -67,7 +67,7 @@ static void snapshot(uint8_t *out){
     values[20]=current_task;values[21]=(uint32_t)elapsed;values[22]=(uint32_t)(elapsed>>32);
     values[23]=ready|((s&8u)?2u:0u)|((s&1u)?4u:0u)|((PP_REG(4)&PP_FAULT)?8u:0u);
     values[24]=input_base;values[25]=raw_slot;values[26]=AI_POST_OUTPUT_MIN;
-    values[27]=(1080u<<16)|1920u;
+    values[27]=(FRAME_HEIGHT<<16)|FRAME_WIDTH;
     for(i=0;i<COMM_NETWORK_WORDS;i++)comm_put32(out+i*4,values[i]);
 }
 static uint16_t load_chunk(const uint8_t *request,uint16_t length){
@@ -116,7 +116,7 @@ static uint16_t commit_model(void){
         error=0x1003u;state=NW_ERROR;return COMM_BAD_ARGUMENT;
     }
     total_tasks=h.task_count;ready=1;error=0;state=NW_READY;
-    log_text("Full model received and verified in DDR; infer uses the retained HDMI frame.\n");
+    log_text("Full model received and verified in DDR; inference uses the retained input.\n");
     return COMM_OK;
 }
 uint16_t ai_network_command(uint16_t op,const uint8_t *request,uint16_t length,
@@ -180,7 +180,7 @@ void ai_network_poll(void){
         error=AI_DDR_ERROR;state=NW_ERROR;return;
     }
     state=NW_RUNNING;task_tick=last_cycle=CYCLES;elapsed=0;
-    log_text("AI network running: 99 tasks, retained HDMI input; SPI queries remain active.\n");
+    log_text("AI network running: 99 tasks, retained input; SPI queries remain active.\n");
     error=ai_run_model_input(MODEL_ADDRESS,input_base,PP_TENSOR_BYTES,&run_result);
     if(!error){
         state=NW_POSTPROCESS;log_text("AI network complete; CPU detection postprocess started.\n");

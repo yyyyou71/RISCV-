@@ -1,0 +1,112 @@
+{
+  "branch": "codex/spi-image-input",
+  "baseline": "15c1e4f",
+  "date": "2026-11-03",
+  "synthesis_passed": true,
+  "pds_run": {
+    "started": "2026-11-03T01:10:31.366783+08:00",
+    "command": [
+      "C:\\diskE\\FPGA_Learning\\PGenvironment\\PDS_2022.2-SP6.1\\bin\\pds_shell.exe",
+      "-project",
+      "C:\\diskE\\FPGA_Learning\\mywork\\PG\\RV32I\\rv32I\\rv32I.pds",
+      "-run",
+      "synthesize",
+      "-skip_actions",
+      "report_power gen_netlist"
+    ],
+    "phase": "finished",
+    "worker_pid": 32300,
+    "finished": "2026-11-03T01:15:41.355847+08:00",
+    "exit_code": 0,
+    "errors": []
+  },
+  "synthesis_report": "synthesize/acore_dual_top.snr",
+  "synthesis_report_sha256": "7dbfb311ec886482a75bbef213d5168429cc1a726abf46ee4caca26f4fda5dde",
+  "resources": {
+    "lut": {
+      "used": 38232.0,
+      "total": 66600.0,
+      "percent": 57.41
+    },
+    "registers": {
+      "used": 33274.0,
+      "total": 133200.0,
+      "percent": 24.98
+    },
+    "drm36k_equivalent": {
+      "used": 84.5,
+      "total": 155.0,
+      "percent": 54.52
+    },
+    "apm": {
+      "used": 21.0,
+      "total": 240.0,
+      "percent": 8.75
+    }
+  },
+  "firmware": {
+    "application": "spi_image",
+    "text_bytes": 22984,
+    "data_bytes": 808,
+    "bss_bytes": 2072,
+    "rom_bytes": 32768,
+    "ram_bytes": 65536,
+    "embedded_rom_words_verified": 8192,
+    "embedded_ram_words_verified": 16384
+  },
+  "checks": {
+    "rtl_raw_full_frame": {
+      "passed": true,
+      "pixels": 82944,
+      "raw_words128": 10368
+    },
+    "rtl_ai_full_frame": {
+      "passed": true,
+      "pixels": 82944,
+      "raw_words128": 10368,
+      "tensor_words128": 18432
+    },
+    "shared_ddr_pcie_facing_stream": {
+      "passed": true,
+      "pixels": 256,
+      "model": "existing DDR behavior model"
+    },
+    "host_passes": [
+      "PASS: SMDT mode3 directional quad, payload-only 2KB, bounds, config/short/error handling, no retry",
+      "PASS: SPI-only ready/command/response, empty polling, terminal logs, diagnostics, checksum, bounds, no command retry",
+      "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+      "PASS RK model client: fixed frames, persistent RX credit, upload/hash/offsets, uncertain-write explicit resume, frame-bound results, CRC no replay",
+      "PASS SPI image app: 1296-block frame uploads, RAW/AI directory flow, same-frame DMA/display, bad counts/IDs and old firmware rejected",
+      "PASS real image firmware: sequential upload, DDR RGBX packing/readback, checksum rejection, COMMIT, same-frame AI/presentation, release",
+      "PASS image input: RGB ordering, identity resize, 1x1 enlargement, directory enumeration"
+    ]
+  },
+  "full_model_regression_run": false,
+  "physical_hardware_verified": false,
+  "post_route_timing_verified": false,
+  "bitstream_generated": false,
+  "sources": {
+    "board/acore_dual_top.v": "9ff63c6d235c45f8ce38c7521dcc33ee144c6c917657368e4cd268daf4d018aa",
+    "board/acore_video_platform.v": "f922cf1b0a0357c6ba1e5f6fb99303e2ed6fb733fd12bd8dd378dbc512a90601",
+    "board/pins.fdc": "d6a10cd8b15079c21cab29657a3e0811dc2b06309e9fd05ee9fac40a190608bb",
+    "board/timing.fdc": "cd6c99f79b7cd964e54f59714aed080c4a068ecbfb672e764ba5792dc6c785a6",
+    "rv32I.pds": "60883e324fc199319db0506383a0d65fe234087fd40534d27c5c1d994001d4fc",
+    "rtl/video/spi_image_capture.v": "9fba7cb13759485df31334fe1ea6ed7b2aedb614f747016313623cc140d97c51",
+    "rtl/video/frame_ring_ddr3.v": "051aa2f1f7cf0e0abb654f75fbbfc41056c954b334b1a6764b64cc388dac14d3",
+    "rtl/video/preprocess/rgb888_pool96_stream.v": "84345ca14fdceed0948607b89b6f36d5ce990ec0dad8f0eec392421c480571c0",
+    "firmware/spi_image.c": "b2809278990562704bb4c47e5f45a48fddef171efeb2730ec75b4456647215ae",
+    "firmware/ai_network.c": "a6a36859cf01d9aea4ab643e7e4c21d316142b4f14f98786dd4e2e5b264e25b3",
+    "firmware/video_present.c": "c0995ef14ae4ec9e2c2a490c61cf55a1d36a7c81b4b3d85c62b2db60a69e9a2e",
+    "firmware/acore_dual_rom.hex": "2d9ebad2d70b832f2386799b5221b2536229df1410089654cfd035e9ac3edd37",
+    "firmware/acore_dual_ram.hex": "4186791d3b69a574710c3d9c0cf74e41637ce675b694bf701ac08428bfb74eb2",
+    "csrc/rk_fspi/rk_video_app.c": "a024a0e0a95dac4c9037189f540046896ad39ea842556f026e74a02312459e24",
+    "csrc/rk_fspi/image_input.c": "54bf7be41cae4216c1c6bef435d234e4e69d0b003af6fce87b12a4a3dbd43cc5",
+    "csrc/rk_fspi/rk_control.c": "6c2403c25608814dd4ad7e581d98547f47ca743582366e586689c5cff91cfc8f",
+    "csrc/rk_fspi/comm_protocol.h": "2639068bbe4e119c4bbafd1771a7f69135b5dee113c49629569b1e5a109106fe",
+    "sim/video/TB_spi_image.v": "b967e494a8ed9562945902a7b4a401eb78c24eec9082781369ed643d5b7dc5d3",
+    "sim/video/TB_spi_image_pcie.v": "be62f1cd8710b4df449b51ff5ca90b385c1b7ee9fcb718f12bf5fa000bb37226"
+  },
+  "short_checks_report": "reports/spi_image/short_checks.json",
+  "rk_bundle": "build/spi-image/rk_spi_image_bundle.zip",
+  "rk_bundle_sha256": "26d40c089937235b456b1f8f378871f19f8c5af160505443ac7101ebe3bee14c"
+}

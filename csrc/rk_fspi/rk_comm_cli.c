@@ -72,8 +72,20 @@ static int print_video(const uint8_t *p,unsigned size,int detailed){
  if(v[1]==COMM_VIDEO_SUCCESS){
   printf("held_frame: id=%u raw_slot=%u raw_native_base=0x%08x tensor_logical_base=0x%08x bytes=%u\n",v[17],v[18],v[19],v[20],v[21]);
   if(v[21])printf("tensor_first_RGB=(%u,%u,%u) tensor_last_RGB=(%u,%u,%u)\n",v[24]&65535u,v[24]>>16,v[25]&65535u,v[26]&65535u,v[26]>>16,v[27]&65535u);
-  else puts("RAW frame: tensor preprocessing/AI bypassed; PCIe image bytes=4147200");
+  else puts("RAW frame: tensor preprocessing/AI bypassed; PCIe image bytes=165888 (SPI image build)");
  }
+ return 0;
+}
+static int print_image(const uint8_t *p,unsigned size){
+ static const char *const names[]={"EMPTY","UPLOADING","PROCESSING","READY_HELD","ERROR","RELEASING"};
+ uint32_t v[COMM_IMAGE_WORDS];
+ if(size!=sizeof(v))return fail(EPROTO);
+ for(unsigned i=0;i<COMM_IMAGE_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_IMAGE_ABI)return fail(EPROTO);
+ printf("[image] state=%s error=0x%x session=%08x frame=%u mode=%s size=%ux%u received=%u/%u\n",
+  v[1]<6?names[v[1]]:"UNKNOWN",v[2],v[3],v[4],v[9]?"AI":"RAW",v[15]&65535,v[15]>>16,v[5],v[6]);
+ printf("hash=%08x expected=%08x hw_status=%08x hw_error=%u raw_bytes=%u tensor_bytes=%u hw_cycles=%u upload_ms=%.3f prepare_ms=%.3f\n",
+  v[7],v[8],v[10],v[11],v[13],v[12],v[14],v[17]/25000.0,v[18]/25000.0);
  return 0;
 }
 /* Empty hardware reads return a complete FF frame; no TX ownership is used. */
@@ -106,6 +118,7 @@ int main(int argc,char **argv){
  else if(argc==3 && !strcmp(argv[2],"once")){listen=1;once=1;}
  else if(argc==3 && !strcmp(argv[2],"status"))operation=COMM_GET_STATUS;
  else if(argc==3 && !strcmp(argv[2],"video-status"))operation=COMM_VIDEO_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"image-status"))operation=COMM_IMAGE_STATUS;
  else if(argc==3 && !strcmp(argv[2],"video-retry"))operation=COMM_VIDEO_RETRY;
  else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
  else if(argc==3 && !strcmp(argv[2],"ai-status"))operation=COMM_AI_STATUS;
@@ -159,9 +172,11 @@ int main(int argc,char **argv){
  if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
  a=comm_u32(rx+16);
  if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
- if(operation==COMM_PRESENT_STATUS || operation==COMM_PRESENT_RUN){
+ if(operation==COMM_IMAGE_STATUS){
+  if(print_image(rx+24,payload-8))goto io_error;
+ }else if(operation==COMM_PRESENT_STATUS || operation==COMM_PRESENT_RUN){
   if(print_present(rx+24,payload-8))goto io_error;
-  if(operation==COMM_PRESENT_RUN)puts("Queued; RK must arm the original PCIe DMA for 4147200 bytes (RGB565). Query present-status for completion.");
+  if(operation==COMM_PRESENT_RUN)puts("Queued; use rk_video_app for the matching PCIe DMA size. Query present-status for completion.");
  }else if(operation==COMM_NETWORK_STATUS){
   if(network_print(rx+24,payload-8,1))goto io_error;
  }else if(operation==COMM_AI_STATUS){
@@ -177,7 +192,7 @@ int main(int argc,char **argv){
   printf("parameter value = 0x%08x (%u)\n",comm_u32(rx+24),comm_u32(rx+24));
  }
  rc=0;goto done;
-io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
+io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root SPI image bitstream, not the standalone loopback bitstream.\n");
 done:rk_fspi_close(&spi);return rc;
-usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|network-status|present-status|present|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|image-status|video-status|video-retry|video-release|ai-status|network-status|present-status|present|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

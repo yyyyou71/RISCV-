@@ -6,6 +6,7 @@
 int rk_control_open(const char *device);
 void rk_control_close(void);
 void rk_control_set_idle_hook(int (*hook)(void));
+void rk_control_set_quiet(int value);
 int rk_control_exchange(unsigned operation,const uint8_t *request,unsigned size,
                         uint8_t *reply,unsigned capacity,unsigned *bytes);
 int rk_control_status(unsigned operation,uint32_t abi,uint32_t *values,unsigned words);

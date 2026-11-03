@@ -21,6 +21,7 @@
 // (clr / wr_en / dma_start) 保留但内部未用, 见各处标注。
 // =============================================================================
 module frame_ring_ddr3 #(
+    parameter integer SPI_IMAGE = 0,
     parameter integer ENABLE_PCIE_READER = 1,
     parameter integer CONTROLLED_READER = 0,
     parameter MEM_ROW_WIDTH    = 15,
@@ -40,6 +41,16 @@ module frame_ring_ddr3 #(
     parameter FRAME_SHIFT      = 22,           // 原生地址槽步长 2^22，保留参考写读布局
     parameter [PIXEL_WIDTH-1:0] MAGIC_SOF = 16'h0001
 )(
+    input wire image_active,image_held,image_available,image_fault,
+    input wire [31:0] image_id,
+    input wire [27:0] image_awaddr,image_araddr,
+    input wire image_awvalid,image_arvalid,image_awap,image_arap,
+    input wire [3:0] image_awlen,image_arlen,image_arid,
+    input wire [127:0] image_wdata,
+    input wire [15:0] image_wstrb,
+    output wire image_awready,image_arready,image_wready,image_wlast,image_rvalid,image_rlast,
+    output wire [3:0] image_wid,image_rid,
+    output wire [127:0] image_rdata,
     input wire [4:0] present_frames,present_hold,present_box_count,
     input wire [1023:0] present_boxes,
     input wire [27:0] tensor_awaddr,
@@ -176,6 +187,7 @@ module frame_ring_ddr3 #(
     wire                         r_rvalid;
 
     // ======================== 前端: HDMI 整形/标记注入 ========================
+    generate if(!SPI_IMAGE)begin:g_hdmi_writer
     hdmi_in_detector #(
         .H_ACTIVE     ( H_ACTIVE     ),
         .V_ACTIVE     ( V_ACTIVE     ),
@@ -239,6 +251,16 @@ module frame_ring_ddr3 #(
         .wr_frame_id      ( wr_frame_id       ),
         .dbg_sof_seen     ( dbg_sof_seen      )
     );
+    end else begin:g_image_writer
+        assign w_awaddr=image_awaddr;assign w_awvalid=image_awvalid;assign w_awuser_ap=image_awap;
+        assign w_awlen=image_awlen;assign w_wdata=image_wdata;assign w_wstrb=image_wstrb;
+        assign frame_done={4'b0,image_available};assign frame_ids={128'b0,image_id};
+        assign wr_frame_id=0;assign write_active=image_active;assign source_next_id=image_id;
+        assign source_ready=ddr_init_done;assign raw_begin=0;assign raw_accepted=0;
+        assign raw_end=0;assign raw_end_ok=0;assign raw_begin_id=0;assign raw_end_id=0;
+        assign raw_begin_slot=0;assign raw_end_slot=0;assign video_source_fault=image_fault;
+        assign wr_almost_full=0;assign dbg_sof_seen=image_held;
+    end endgenerate
 
     // ======================== 读控制器: DDR3 -> FIFO (含 ddr_2_fifo, 自治) ====================F====
     generate if(ENABLE_PCIE_READER)begin: g_reader
@@ -368,11 +390,11 @@ module frame_ring_ddr3 #(
     assign cpu_rdata=c_rdata[127:0];
     ddr_native_arbiter u_arbiter (
         .clk(core_clk_i),.rst_n(sys_rst_n),
-        .s_awaddr({client_awaddr,w_awaddr}),.s_araddr({client_araddr,r_araddr}),
-        .s_awvalid({client_awvalid,w_awvalid}),.s_arvalid({client_arvalid,r_arvalid}),
-        .s_awap({client_awap,w_awuser_ap}),.s_arap({client_arap,r_aruser_ap}),
-        .s_awlen({client_awlen,w_awlen}),.s_arlen({client_arlen,r_arlen}),
-        .s_awid({client_awid,4'd0}),.s_arid({client_arid,r_aruser_id}),
+        .s_awaddr({client_awaddr,w_awaddr}),.s_araddr({client_araddr,(SPI_IMAGE&&image_active)?image_araddr:r_araddr}),
+        .s_awvalid({client_awvalid,w_awvalid}),.s_arvalid({client_arvalid,(SPI_IMAGE&&image_active)?image_arvalid:r_arvalid}),
+        .s_awap({client_awap,w_awuser_ap}),.s_arap({client_arap,(SPI_IMAGE&&image_active)?image_arap:r_aruser_ap}),
+        .s_awlen({client_awlen,w_awlen}),.s_arlen({client_arlen,(SPI_IMAGE&&image_active)?image_arlen:r_arlen}),
+        .s_awid({client_awid,4'd0}),.s_arid({client_arid,(SPI_IMAGE&&image_active)?image_arid:r_aruser_id}),
         .s_awready(s_awready),.s_arready(s_arready),.s_wready(s_wready),.s_wlast(s_wlast),
         .s_rvalid(s_rvalid),.s_rlast(s_rlast),.s_wid(s_wid),.s_rid(s_rid),
         .s_wdata({client_wdata,w_wdata}),.s_wstrb({client_wstrb,w_wstrb}),.s_rdata(s_rdata),
@@ -382,10 +404,15 @@ module frame_ring_ddr3 #(
         .m_wready(m_wready),.m_wlast(m_wlast),.m_rvalid(m_rvalid),.m_rlast(m_rlast),
         .m_wid(m_wid),.m_rid(m_rid),.m_wdata(m_wdata),.m_wstrb(m_wstrb),.m_rdata(m_rdata),.fault(arb_error)
     );
-    assign w_awready=s_awready[0];assign r_arready=s_arready[0];
+    assign w_awready=s_awready[0];assign r_arready=s_arready[0]&&!(SPI_IMAGE&&image_active);
     assign w_wready=s_wready[0];assign w_wlast=s_wlast[0];
-    assign r_rvalid=s_rvalid[0];assign r_rlast=s_rlast[0];
+    assign r_rvalid=s_rvalid[0]&&!(SPI_IMAGE&&image_active);assign r_rlast=s_rlast[0];
     assign r_rid=s_rid[3:0];assign r_rdata=s_rdata[127:0];
+    assign image_awready=SPI_IMAGE&&s_awready[0];assign image_wready=SPI_IMAGE&&s_wready[0];
+    assign image_wlast=SPI_IMAGE&&s_wlast[0];assign image_wid=s_wid[3:0];
+    assign image_arready=SPI_IMAGE&&image_active&&s_arready[0];
+    assign image_rvalid=SPI_IMAGE&&image_active&&s_rvalid[0];assign image_rlast=s_rlast[0];
+    assign image_rid=s_rid[3:0];assign image_rdata=s_rdata[127:0];
     ddr3 u_ddr3 (
         .ref_clk                ( sys_clk          ),
         .resetn                 ( sys_rst_n        ),
