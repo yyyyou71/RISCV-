@@ -20,8 +20,15 @@ GPU 不会让模型自动兼容硬件；结构、预处理、量化和部署包�
 
 2026-11-02 已完成本机 CPU 短自检：61,201 种均值舍入、窗口/RGB检查、WIDER边界数据、
 浮点及 QAT 两次合成前向/反向、检查点往返、新权重首层的 NumPy/C 逐值对拍。
-驱动已安装并重启，`nvidia-smi` 已识别 RTX 4050（6GB）；Conda 环境仍为 CPU 版 PyTorch。
-**尚未下载完整数据、安装 GPU 版 PyTorch、执行正式人脸训练、运行新权重整网导出或验收精度。**
+驱动已安装并重启，RTX 4050（6GB）与 torch 2.13.0+cu130 的CUDA前向/反向检查通过。
+WIDER完整数据已校验、解压并缓存：训练12,880张、156,994个人脸框，验证3,226张、39,112个人脸框。
+真实数据GPU短联调已完成：batch=16，浮点和QAT各训练1个批次、各验证1个批次，检查点保存成功；
+约4.35秒，PyTorch峰值分配391MiB、保留458MiB。结果见`outputs/face/gpu_training_smoke.json`，
+短检查点单独放在`outputs/face/runs/face96_gpu_smoke/`，只用于验证训练链路。
+全量WIDER的`face96`正式训练已完整完成60轮（40轮浮点、20轮QAT）；近景子集已准备，`face96_close`微调尚未启动。
+训练日志及完成标记已核对，两个最佳检查点加载、参数有限值及部署结构检查通过。
+2026-11-02 对同一近景验证子集复测，结果见`outputs/face/review_face96/review.json`。
+**新权重整网导出及人脸精度验收尚未完成。**
 
 | 文件/模块 | 功能 |
 | --- | --- |
@@ -29,6 +36,7 @@ GPU 不会让模型自动兼容硬件；结构、预处理、量化和部署包�
 | `audit_board.py` | 只读审阅指定Git分支的模型契约/报告哈希 |
 | `download_wider.py` | 显式下载、断点续传、SHA256、解压 |
 | `prepare_wider.py` / `data.py` | WIDER标注、板端预处理、96缓存、批次拼接 |
+| `filter_wider.py` | 按整图筛选近景、少量人脸，生成独立清单并复用缓存 |
 | `model.py` / `assets.py` | 结构、部署权重解析及近似恢复初始化 |
 | `train.py` / `evaluate.py` | 浮点→QAT训练、续训、AP50、最优检查点 |
 | `predict.py` | 图片/目录的预处理、浮点/QAT检查点画框预览 |
@@ -43,7 +51,8 @@ GPU 不会让模型自动兼容硬件；结构、预处理、量化和部署包�
 
 当前为 Ubuntu 22.04.5 / 内核 6.8.0-138，Secure Boot 已关闭。
 2026-11-02 用户已安装驱动并重启，`nvidia-smi` 显示驱动 595.99.02、RTX 4050、6141MiB 显存。
-Conda 环境仍为 torch 2.13.0+cpu / torchvision 0.28.0+cpu / ultralytics 8.4.115。
+Conda 环境已更换为 torch 2.13.0+cu130 / torchvision 0.28.0+cu130 / ultralytics 8.4.115，
+`python -m pc_ai.face.check_gpu --require-cuda` 已通过。
 
 以下为 [Ubuntu 官方驱动安装方式](https://ubuntu.com/server/docs/how-to/graphics/install-nvidia-drivers/)，
 本机已完成，留作新机器配置参考：
@@ -55,8 +64,8 @@ sudo ubuntu-drivers install
 sudo reboot
 ```
 
-重启后先单独执行 `nvidia-smi`，确认能看到显卡；若失败，先解决驱动，不继续正式训练。
-再替换同一个 Conda 环境里的 CPU PyTorch：
+新机器重启后先单独执行 `nvidia-smi`，确认能看到显卡；若失败，先解决驱动，不继续正式训练。
+以下为同一个 Conda 环境替换 GPU PyTorch 的命令，本机也已完成，保留供新机器参考：
 
 ```bash
 source ~/anaconda3/etc/profile.d/conda.sh
@@ -81,6 +90,9 @@ GPU requirements 固定为 torch 2.13.0+cu130 / torchvision 0.28.0+cu130，未�
 ```bash
 python -m pc_ai.face.download_wider --run
 ```
+
+临时TLS断连、超时或部分服务器错误会自动重连，默认每个文件最多尝试5次，可用`--attempts`调整。
+重跑会校验并复用已完成的ZIP与解压标记，未完成的`.part`尝试续传；收到数据时约每2秒更新进度。
 
 如果官方 HF 网络不可用，可自行选择镜像并传 `--endpoint https://你的镜像域名`，同样强制校验 SHA256。
 不需要平台账号密钥，也不把数据集/大模型写进源码目录。数据的原始来源/许可见官方数据卡。
@@ -110,6 +122,58 @@ python -m pc_ai.face.prepare_wider --root pc_ai/datasets/wider_face --run
 
 标签同步按归一化比例映射；有效小人脸不直接删除，缓存报告统计小于4个输入像素的脸。
 无脸图片保留。96输入对密集/远距离小脸有先天信息限制，初期演示优先近景、少量人脸。
+
+### 3.1 当前演示目标：近景、少量人脸
+
+用户已明确以对照图中第一、第三类较大人脸为目标。默认筛选规则为：
+每张图片最多5个有效人脸框，每个框在96输入中的**宽和高都至少8像素**。
+只要有一个有效框过小，就剔除整张图片；保留图片的全部有效标注不变，沿用原有invalid框处理规则。
+原有空标注图片原样保留，不通过删除小脸标注生成新的空图。
+
+```bash
+python -m pc_ai.face.filter_wider --run
+```
+
+输出`pc_ai/outputs/face/wider96_close/dataset.json`。此操作只写新清单，使用相对路径引用原`wider96/`缓存，
+不重复下载、复制或预处理图片；需要同时保留这两个目录。`--min-face-side`和`--max-faces`可调整规则。
+本机默认筛选保留训练4,436张/5,908个人脸框、验证1,098张/1,485个人脸框，各含原有4张空标注图片。
+预览见`pc_ai/outputs/face/dataset_preview/close_examples.png`，绿框为人工标注；宽高各放大3倍仅用于显示。
+训练/验证划分保持不变，两组应用相同规则。新的AP50衡量该近景子集，不能直接与全量WIDER的AP50作提升对比；
+比较模型改进时，应把旧、新检查点都放到同一验证子集评估。
+
+全量训练得到的两个最佳检查点，已在同一近景验证子集（1,098张、1,485个人脸框）复测，作为后续微调的基线：
+
+| 检查点 | 日志epoch | 近景AP50 | 精确率 | 召回率 |
+| --- | --- | --- | --- | --- |
+| `face96/best_float.pt` | 38 | 84.34% | 79.27% | 81.62% |
+| `face96/best_qat.pt` | 56 | 83.88% | 79.07% | 81.68% |
+
+精确率/召回率使用置信度0.25、IoU0.5；该近景评估沿用原验证划分，模型尚未在筛选后的训练子集上微调。
+全量WIDER最佳QAT的AP50为18.53%，与上述子集的范围不同。QAT结果为PC端fake-quant推理，尚未运行完整整数导出或板端人脸验收。
+预测预览在`pc_ai/outputs/face/review_face96/close_validation_predictions.png`，从近景验证集等间隔抽取8张；
+绿框为人工标注，红框为预测；有手部误检、重复框，仍需改善并结合真实HDMI输入验收。
+
+原`face96`已正常结束并保留结果。下一次可用已学过人脸的浮点检查点做近景微调：
+
+```bash
+python -m pc_ai.face.train --name face96_close \
+  --data pc_ai/outputs/face/wider96_close/dataset.json \
+  --init pc_ai/outputs/face/runs/face96/best_float.pt \
+  --epochs 30 --qat-start 20 --lr 0.001 \
+  --batch 16 --workers 2 --device cuda:0 --run
+```
+
+新run使用20轮浮点适应加10轮QAT；从`best_float.pt`初始化模型，优化器和训练轮数重新开始。
+更换数据集用`--init`新建run，不能用`--resume`冒充原训练续跑。原`face96`结果完整保留。
+若需中断后继续这一近景run，沿用相同配置：
+
+```bash
+python -m pc_ai.face.train --name face96_close \
+  --data pc_ai/outputs/face/wider96_close/dataset.json \
+  --resume pc_ai/outputs/face/runs/face96_close/last.pt \
+  --epochs 30 --qat-start 20 --lr 0.001 \
+  --batch 16 --workers 2 --device cuda:0 --run
+```
 
 ## 4. 正式训练
 

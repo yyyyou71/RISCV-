@@ -1,8 +1,12 @@
 """下载WIDER训练/验证图像与标注，支持断点续传及固定SHA256；只有--run才下载。"""
 import argparse
 import hashlib
+from http.client import IncompleteRead
 from pathlib import Path
+import ssl
 import stat
+import time
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import zipfile
 
@@ -34,14 +38,75 @@ def extract(archive, root):
         z.extractall(root)  # ZipFile读取时同时检查每个成员CRC。
 
 
+def download(url, archive, size, digest, attempts=5):
+    """连接或传输临时失败时重连；仅将长度和哈希都正确的文件转正。"""
+    part = archive.with_name(archive.name + '.part')
+    for attempt in range(1, attempts + 1):
+        offset = part.stat().st_size if part.exists() else 0
+        if offset > size:
+            raise ValueError(f'{part}比预期文件大，请检查该临时文件')
+        if offset == size:
+            break
+        request = Request(url, headers={'Range': f'bytes={offset}-'} if offset else {})
+        print(f'  连接 {attempt}/{attempts}；已保留 {offset / (1024 * 1024):.1f} MiB', flush=True)
+        failure = None
+        try:
+            with urlopen(request, timeout=60) as response:
+                resumed = offset > 0 and response.status == 206
+                if response.status == 206 and not response.headers.get('Content-Range', '').startswith(f'bytes {offset}-'):
+                    raise ValueError('服务器断点范围不符')
+                # 服务器不支持Range时覆盖临时文件，避免把完整响应追加成重复数据。
+                written = offset if resumed else 0
+                print(f'  已连接：{written / size:.1%}，单次网络操作超时60秒', flush=True)
+                with part.open('ab' if resumed else 'wb') as output:
+                    previous_time = time.monotonic()
+                    previous_written = written
+                    for block in iter(lambda: response.read(1024 * 1024), b''):
+                        output.write(block); written += len(block)
+                        now = time.monotonic()
+                        # 按时间显示进度，慢速网络不必等到64MiB才有输出。
+                        if now - previous_time >= 2 or written >= size:
+                            speed = (written - previous_written) / max(now - previous_time, 1e-9) / (1024 * 1024)
+                            print(f'  {written / size:.1%}（{written / (1024 * 1024):.1f}/{size / (1024 * 1024):.1f} MiB，{speed:.2f} MiB/s）', flush=True)
+                            previous_time, previous_written = now, written
+            if written < size:
+                raise ConnectionError('连接提前结束，已保留收到的数据')
+        except HTTPError as exc:
+            # 只重试临时HTTP错误；地址、权限或断点错误需直接报告。
+            exc.close()
+            if exc.code not in {408, 429, 500, 502, 503, 504}:
+                raise
+            failure = exc
+        except (URLError, TimeoutError, ConnectionError, IncompleteRead, ssl.SSLEOFError) as exc:
+            # 证书验证失败不能靠重试或跳过验证来掩盖。
+            if isinstance(getattr(exc, 'reason', exc), ssl.SSLCertVerificationError):
+                raise
+            failure = exc
+        if failure is None:
+            break
+        if attempt == attempts:
+            raise RuntimeError(f'{archive.name}连接/传输失败{attempts}次；已保留临时文件，可稍后重跑同一命令') from failure
+        delay = min(2 ** (attempt - 1), 8)
+        detail = f'HTTP {failure.code}' if isinstance(failure, HTTPError) else str(getattr(failure, 'reason', failure))
+        print(f'  临时网络错误：{detail}；{delay}秒后重新连接并尝试续传', flush=True)
+        time.sleep(delay)
+    print('  正在校验长度和SHA256', flush=True)
+    if part.stat().st_size != size or checksum(part) != digest:
+        raise ValueError(f'{part}长度/SHA256不符；保留临时文件供检查，不进行解压')
+    part.replace(archive)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root', type=Path, default=PROJECT / 'pc_ai/datasets/wider_face')
     p.add_argument('--endpoint', default='https://huggingface.co', help='可显式指定HF镜像；仍校验相同固定SHA256')
+    p.add_argument('--attempts', type=int, default=5, help='每个文件最多连接尝试次数，默认5次')
     p.add_argument('--run', action='store_true')
     args = p.parse_args()
     if not args.endpoint.startswith('https://'):
         p.error('--endpoint需要HTTPS地址')
+    if args.attempts < 1:
+        p.error('--attempts须至少为1')
     for name, (size, digest) in FILES.items():
         url = f'{args.endpoint.rstrip("/")}/datasets/CUHK-CSE/wider_face/resolve/{REVISION}/data/{name}'
         print(name, size, 'bytes', url, flush=True)
@@ -50,33 +115,7 @@ def main():
         root = args.root.expanduser().resolve(); root.mkdir(parents=True, exist_ok=True)
         archive = root / name
         if not archive.is_file() or archive.stat().st_size != size or checksum(archive) != digest:
-            part = root / (name + '.part')
-            offset = part.stat().st_size if part.exists() else 0
-            if offset > size:
-                raise ValueError(f'{part}比预期文件大，请检查该临时文件')
-            if offset == size:
-                if checksum(part) != digest:
-                    raise ValueError(f'{part}已下载完整但SHA256错误，请检查或移走该临时文件后重试')
-                part.replace(archive)
-                extract(archive, root)
-                (root / (name + '.extracted.sha256')).write_text(digest + '\n')
-                continue
-            request = Request(url, headers={'Range': f'bytes={offset}-'} if offset else {})
-            with urlopen(request, timeout=60) as response:
-                resumed = offset > 0 and response.status == 206
-                if resumed and not response.headers.get('Content-Range', '').startswith(f'bytes {offset}-'):
-                    raise ValueError('服务器断点范围不符')
-                written = offset if resumed else 0
-                with part.open('ab' if resumed else 'wb') as output:
-                    previous = written // (64 * 1024 * 1024)
-                    for block in iter(lambda: response.read(4 * 1024 * 1024), b''):
-                        output.write(block); written += len(block)
-                        current = written // (64 * 1024 * 1024)
-                        if current != previous:
-                            print(f'  {written / size:.1%}', flush=True); previous = current
-            if part.stat().st_size != size or checksum(part) != digest:
-                raise ValueError(f'{part}长度/SHA256不符；保留临时文件供检查，不进行解压')
-            part.replace(archive)
+            download(url, archive, size, digest, attempts=args.attempts)
         marker = root / (name + '.extracted.sha256')
         if not marker.is_file() or marker.read_text().strip() != digest:
             extract(archive, root); marker.write_text(digest + '\n')
