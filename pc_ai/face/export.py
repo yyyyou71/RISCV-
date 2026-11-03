@@ -16,6 +16,32 @@ from .assets import read_y26f
 from .model import load_checkpoint, check_structure, PROFILE, PREPROCESS
 
 
+def validate_integer_export(report, asset):
+    """检查当前DDR分块引擎的约束，区分参考工程的整层片上权重容量提示。"""
+    legacy_limits = []
+    for violation in report['isa_violations']:
+        name, separator, rule = violation.partition(':')
+        if not separator or rule != 'w_le_512KB':
+            raise ValueError('整数导出算子不受支持：' + violation)
+        records = [item for item in report['convs'] if item['name'] == name]
+        reference = asset['convs'].get(name)
+        if len(records) != 1 or reference is None:
+            raise ValueError('权重容量提示没有匹配的已部署卷积：' + name)
+        record = records[0]
+        shape = [record['O'], record['C'], record['k'], record['k']]
+        if shape != reference['shape'] or record['w_bytes'] != int(np.prod(shape)):
+            raise ValueError('卷积形状或权重长度与已部署结构不符：' + name)
+        # 当前引擎只缓存co=4、ci=16的权重块，不要求把整层权重放进512KiB片上存储。
+        # pack_model、check_descriptors及board_image继续检查实际布局、地址范围和模型大小。
+        legacy_limits.append(dict(layer=name, weight_bytes=record['w_bytes'],
+                                  reference_limit=512 * 1024,
+                                  handling='DDR tiled weight loading; same deployed convolution shape'))
+    if any(report['y13_clamp'].values()) or any(not item['int48_ok'] for item in report['overflow'].values()):
+        raise ValueError('整数导出超出Q13或INT48范围，禁止生成板端镜像')
+    return dict(passed=True, target='my_core DDR tiled W8A16 engine',
+                legacy_onchip_weight_limits=legacy_limits)
+
+
 def board_image(prepared, output, threshold):
     from pc_ai.postprocess_tools import make_blocks
     model = (prepared / 'model.bin').read_bytes()
@@ -95,9 +121,9 @@ def main():
     finally:
         sys.argv = original_argv
     exp = json.loads((out / 'quantized/export_report.json').read_text())
-    if (exp['isa_violations'] or any(exp['y13_clamp'].values()) or
-            any(not v['int48_ok'] for v in exp['overflow'].values())):
-        raise ValueError('整数导出范围/算子检查失败，禁止生成板端镜像')
+    compatibility = validate_integer_export(exp, asset)
+    for entry in compatibility['legacy_onchip_weight_limits']:
+        print(f"[board] {entry['layer']}: {entry['weight_bytes']}字节权重按DDR分块加载；参考512KiB整层限制不适用于此引擎", flush=True)
     ref = out / 'reference'
     (ref / 'training/export').mkdir(parents=True, exist_ok=True)
     (ref / 'c_model').mkdir(exist_ok=True)
@@ -112,14 +138,19 @@ def main():
                     '--out', str(prepared), '--input', str(out / 'diagnostic.npy'), '--golden'], check=True, cwd=PROJECT)
     agreement = compare_numpy_c(out / 'quantized', prepared)
     image = board_image(prepared, out / 'board_model.bin', args.threshold)
+    # 单独命名人脸上传文件，便于RK端与原色块模型区分；内容与board_model.bin一致。
+    shutil.copyfile(out / 'board_model.bin', out / 'face_model.bin')
+    (out / 'face_model.bin.sha256').write_text(image['sha256'] + '  face_model.bin\n')
     result = dict(schema=1, profile=PROFILE, preprocess=PREPROCESS, checkpoint=str(args.checkpoint.resolve()),
         checkpoint_sha256=hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
-        active_classes={'0': 'face'}, physical_classes=80, numpy_c_agreement=agreement, board_image=image,
+        active_classes={'0': 'face'}, physical_classes=80, target_compatibility=compatibility,
+        numpy_c_agreement=agreement, board_image=image, upload_file='face_model.bin',
         trained_epoch=ck['epoch'], trained_dataset=ck['dataset_sha256'], best_validation=ck['best'],
         full_network_rtl_verified=False, board_verified=False, face_accuracy_accepted=False,
         note='整数导出/C对拍通过仍不等于人脸精度或当前板端RTL已验收')
     (out / 'deployment.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
     print('板端SPI镜像：', out / 'board_model.bin')
+    print('人脸上传文件：', out / 'face_model.bin')
     print('部署报告：', out / 'deployment.json')
 
 

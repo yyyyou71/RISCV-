@@ -28,7 +28,9 @@ WIDER完整数据已校验、解压并缓存：训练12,880张、156,994个人�
 全量WIDER的`face96`正式训练已完整完成60轮（40轮浮点、20轮QAT）；近景子集已准备，`face96_close`微调尚未启动。
 训练日志及完成标记已核对，两个最佳检查点加载、参数有限值及部署结构检查通过。
 2026-11-02 对同一近景验证子集复测，结果见`outputs/face/review_face96/review.json`。
-**新权重整网导出及人脸精度验收尚未完成。**
+2026-11-04 人脸整数模型已导出至`outputs/face/deploy_spi/`，99任务C前向、82个卷积/ADD点的
+NumPy/C逐值对拍通过；输入照片的C整数推理检出前景两张脸（约0.7610、0.3588）。
+**新权重的RTL整网验证及人脸板端精度验收尚未完成。**
 
 | 文件/模块 | 功能 |
 | --- | --- |
@@ -226,15 +228,19 @@ python -m pc_ai.face.export --checkpoint pc_ai/outputs/face/runs/face96/best_qat
 确定检查点后执行完整导出（可能较久）：
 
 ```bash
-python -m pc_ai.face.export --checkpoint pc_ai/outputs/face/runs/face96/best_qat.pt --run
+python -m pc_ai.face.export --checkpoint pc_ai/outputs/face/runs/face96/best_qat.pt --out pc_ai/outputs/face/deploy_spi --run
 ```
 
 链路为：QAT范围/BN折叠 → Y26F W8A16 → 原C 99任务及原前向对拍 →
-NumPy/C 的72卷积及10ADD逐值核对 → AIM1/AIP1 → `pc_ai/outputs/face/deploy/board_model.bin`。
+NumPy/C 的72卷积及10ADD逐值核对 → AIM1/AIP1 → `pc_ai/outputs/face/deploy_spi/board_model.bin`。
+同内容的人脸上传文件为`face_model.bin`，SHA256在`face_model.bin.sha256`，上板命令见该目录`DEPLOY.md`。
+当前文件13,372,720字节，SHA256为`2d2e6d839a37cc31d745dfbb2e4d1cb4c3a0e1c619f12be496d048f62417bc87`。
 使用诊断输入对拍只证明整数实现一致，不能替代人脸验证集准确率。
 QAT浮点fake-quant与真实整数重定标仍有舍入和SPPF add量化差异，继承自参考方案；部署前须看整数实拍结果。
 
-`deployment.json` 绑定检查点、数据集和镜像SHA，当前正式整网导出未运行。
+`deployment.json` 绑定检查点、数据集和镜像SHA，当前正式整网导出/C对拍已运行，结果覆盖847,908个中间值。
+参考导出器还会提示三个整层权重大于512KiB的层；当前DDR分块引擎不要求整层片上驻留。
+入口仅对与既有部署资产形状一致的这些层记录提示，仍检查其它算子、Q13/INT48范围、实际描述符和DDR布局。
 保留原80通道布局后，预计仍为原99任务模型大小和板端内存配置；脚本实际检查低32MiB装载限制。
 将最终 `board_model.bin` 交给Windows/RK已有SPI加载工具。不是把 `.pt`、Y26F二进制直接上传到模型装载地址。
 板端模型运行前加载成功、原图/张量归属和结果frame_id仍按已有服务处理。
