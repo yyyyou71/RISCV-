@@ -122,7 +122,24 @@ static int upload(const char *path,int resume){
         }
     }
     comm_put32(data,session);
-    if(exchange(COMM_MODEL_COMMIT,data,4,reply,&count))goto done;
+    quiet=0;fputc('\n',stderr);count=0;
+    if(exchange(COMM_MODEL_COMMIT,data,4,reply,&count)){
+        int saved=errno;
+        if(count==COMM_NETWORK_WORDS*4 && comm_u32(reply)==COMM_NETWORK_ABI &&
+           comm_u32(reply+4)==NW_ERROR && comm_u32(reply+8)==0x1003u){
+            (void)network_print(reply,count,1);
+            /* A rejected command is acknowledged and must not be replayed.
+             * Drain only read-only events: firmware publishes the response
+             * ahead of its cached failing-header log. Old firmware has none. */
+            uint64_t until=milliseconds()+300;
+            while(milliseconds()<until){
+                uint8_t packet[SPI_TERM_FRAME];int r=read_packet(packet);
+                if(r<0 || (r && event(packet)))break;
+                if(pause_poll())break;
+            }
+        }
+        errno=saved;goto done;
+    }
     if(network_decode(reply,count,values) || values[1]!=NW_READY || !(values[23]&1u) || values[7]!=hash){errno=EPROTO;goto done;}
     fprintf(stderr,"\nUpload verified in DDR, %.3f seconds.\n",(milliseconds()-started)/1000.0);
     network_print(reply,count,1);result=0;

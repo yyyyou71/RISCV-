@@ -36,5 +36,8 @@ video-retry 属于旧 HDMI 路线，本版本由图片上传触发。
 PCIe 回图修复需要重新生成并烧录本版位流，同时重新上传本目录、执行 make all。
 RK 等待呈现状态 bit 6（PCIe 已应答且 DDR 读出器已启动）后才开始 DMA；bit 5 是故障锁定，正常回图为 0。
 模型由仓库 scripts/prepare_board_model.py 生成，或使用提供的 board_model.bin。
+若完整上传后 COMMIT 返回 error=4099，新固件会缓存并打印实际读取的 model/post 各 16 个十六进制字段。
+更新后的 rk_video_app 会在提交失败后继续只读轮询 300 ms，显示这两行；不会重放提交或 DMA。
+该诊断需要更新 FPGA 内的软核 ROM/RAM 初始化并重新生成位流；只更新 RK 程序无法让旧固件输出字段。
 make test 是仓库开发检查，其中软核服务测试需要仓库 firmware/、csrc/software/；只复制本目录时执行 make all 即可。
 完整说明在仓库 docs/spi_image_input.md，综合报告在 synthesize/acore_dual_top.snr。

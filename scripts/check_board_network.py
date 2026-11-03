@@ -23,6 +23,10 @@ def main():
         run(name+'_build',['gcc','-O2','-std=c11','-Wall','-Wextra','-Werror',*options,
             '-I',ROOT/'firmware','-I',ROOT/'csrc/software','-I',ROOT/'csrc/rk_fspi',ROOT/source,ROOT/extra,'-o',out/name])
         checks[name]='PASS' in run(name,[out/name])
+        model=ROOT/'build/board-ai/board_model.bin'
+        if name=='loader' and model.is_file():
+            checks['actual_board_model']='PASS' in run('loader_actual',[out/name,model])
+            checks['later_ddr_corruption']='PASS' in run('loader_corruption',[out/name,model,'--corrupt-after-upload'])
     sources=['firmware/ai_network.c','firmware/ai_network.h','csrc/software/ai_runtime.c',
              'csrc/software/ai_runtime.h','csrc/rk_fspi/rk_model_cli.c','firmware/rk_spi_comm.c']
     report=dict(passed=all(checks.values()),scope='software loader/control/host and runtime input rebinding',checks=checks,

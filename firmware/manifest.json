@@ -25,14 +25,14 @@
     "-nostartfiles"
   ],
   "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
-  "elf_sha256": "f64a4651ed339734e771b8c6c7fa4003a79e955e8c24c1cd66fa9a9995930edc",
-  "rom_sha256": "2d9ebad2d70b832f2386799b5221b2536229df1410089654cfd035e9ac3edd37",
-  "ram_sha256": "4186791d3b69a574710c3d9c0cf74e41637ce675b694bf701ac08428bfb74eb2",
+  "elf_sha256": "1b398354a936c58974b7f228d5ac09a7d826111326d8117b0bf39fbd0d6604ab",
+  "rom_sha256": "c58d589c89f8eb88c1ad1464a0da16a78e7d2faf7c53f982ed59fcc7c3057b40",
+  "ram_sha256": "b021365bc0724fe9c0a137b1d468c4f4c149b53bd5fcd4509b5514b041eb3662",
   "sources": {
     "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
     "firmware/spi_image.c": "b2809278990562704bb4c47e5f45a48fddef171efeb2730ec75b4456647215ae",
     "firmware/rk_spi_comm.c": "73b75a32f40552aa53ecb94b93c57223c83997d2fb26df3a0bab6f2bbdd70f35",
-    "firmware/ai_network.c": "a6a36859cf01d9aea4ab643e7e4c21d316142b4f14f98786dd4e2e5b264e25b3",
+    "firmware/ai_network.c": "01a543c1c372fe251bee28686d128f4521ed88877c49beadb49e1dce25dd70c5",
     "firmware/video_present.c": "c0995ef14ae4ec9e2c2a490c61cf55a1d36a7c81b4b3d85c62b2db60a69e9a2e",
     "csrc/software/ai_runtime.c": "137d7bd42463d92237fca7301e5ce591eb50ac3f6fdfd532671e4a05c6eb8341",
     "csrc/software/ai_postprocess.c": "f8b8f7fd8089fdd056f5b439f177b31b20be2225a1d4bf21c6962cdacd1eeb65",

@@ -9,6 +9,8 @@
 #include "comm_protocol.h"
 static unsigned char *memory;
 static unsigned writes,network_calls;
+static char log_capture[4096];
+static size_t log_bytes;
 uint32_t ai_ddr_read(uint32_t address,uint32_t *data,uint32_t bytes){assert(address+bytes<=0x2000000);memcpy(data,memory+address,bytes);return 0;}
 uint32_t ai_ddr_write(uint32_t address,const uint32_t *data,uint32_t bytes){assert(address+bytes<=0x2000000);memcpy(memory+address,data,bytes);writes++;return 0;}
 uint32_t ai_run_model_input(uint32_t address,uint32_t input,uint32_t size,ai_run_result *r){
@@ -16,11 +18,20 @@ uint32_t ai_run_model_input(uint32_t address,uint32_t input,uint32_t size,ai_run
     r->completed=99;r->code=0;return 0;
 }
 uint32_t ai_postprocess(uint32_t config,uint32_t model,ai_post_result *r){assert(config==0x5000 && model==0x10000);r->count=r->written=1;return 0;}
-size_t rk_comm_send(const uint8_t *data,size_t size){(void)data;return size;}
+size_t rk_comm_send(const uint8_t *data,size_t size){
+    assert(log_bytes+size<sizeof(log_capture));memcpy(log_capture+log_bytes,data,size);
+    log_bytes+=size;log_capture[log_bytes]=0;return size;
+}
 void rk_comm_poll(void){}
-int main(void){
+int main(int argc,char **argv){
     uint8_t request[240]={0},reply[240];uint16_t size;
-    const unsigned total=0x60000;uint32_t hash=2166136261u;struct pp_frame frame={7,2,0x800000,0x3f00000,294912};
+    unsigned total=0x60000;uint32_t hash=2166136261u;struct pp_frame frame={7,2,0x800000,0x3f00000,294912};
+    FILE *model=NULL;
+    if(argc>=2){
+        model=fopen(argv[1],"rb");assert(model && !fseek(model,0,SEEK_END));
+        long bytes=ftell(model);assert(bytes>0 && bytes<=0x2000000 && !(bytes&15));
+        total=(unsigned)bytes;rewind(model);
+    }
     memory=calloc(1,0x2000000);assert(memory);
     void *mapped=mmap((void *)0x30000,0x2000,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED,-1,0);assert(mapped!=(void *)-1);
     *(volatile uint32_t *)0x31004=16;*(volatile uint32_t *)0x30804=PP_DDR_READY|PP_HELD;
@@ -28,6 +39,7 @@ int main(void){
     /* Use a tiny structurally matching profile to exercise upload, not tasks. */
     ai_post_config p={AI_POST_MAGIC,1,64,64,3,0x5100,16384,300,0x8000,9600,0x10000,0x5200,96,96,0,0};
     unsigned char *blob=calloc(1,total);assert(blob);memcpy(blob+0x10000,&h,64);memcpy(blob+0x5000,&p,64);
+    if(model){assert(fread(blob,1,total,model)==total);assert(!fclose(model));}
     for(unsigned i=0;i<total;i++)hash=(hash^blob[i])*16777619u;
     ai_network_init();comm_put32(request,123);comm_put32(request+4,total);comm_put32(request+8,hash);comm_put32(request+12,9);
     assert(ai_network_command(COMM_MODEL_BEGIN,request,16,reply,240,&size,&frame,1,0,0)==0);
@@ -43,6 +55,17 @@ int main(void){
         offset+=bytes;
     }
     comm_put32(request,123);
+    if(argc==3){
+        assert(!strcmp(argv[2],"--corrupt-after-upload"));
+        memory[0x10000]^=1; /* Later DDR overwrite, after every chunk readback passed. */
+        assert(ai_network_command(COMM_MODEL_COMMIT,request,4,reply,240,&size,&frame,1,0,0)==COMM_BAD_ARGUMENT);
+        assert(comm_u32(reply+4)==NW_ERROR && comm_u32(reply+8)==0x1003u);
+        assert(comm_u32(reply+28)==hash && comm_u32(reply+32)==hash);
+        assert(strstr(log_capture,"model: 314d4940") && strstr(log_capture,"post:  31504941"));
+        assert(strlen(strstr(log_capture,"Model validation failed:"))<512);
+        puts("PASS model commit: later DDR corruption rejects header despite matching upload FNV; failing model/post words retained in SPI logs");
+        return 0;
+    }
     assert(ai_network_command(COMM_MODEL_COMMIT,request,4,reply,240,&size,&frame,1,0,0)==0 && ai_network_has_model());
     assert(ai_network_command(COMM_NETWORK_RUN,request,4,reply,240,&size,&frame,0,0,0)==COMM_BUSY);
     assert(ai_network_command(COMM_NETWORK_RUN,request,4,reply,240,&size,&frame,1,0,0)==0 && ai_network_busy());

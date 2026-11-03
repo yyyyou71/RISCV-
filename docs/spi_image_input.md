@@ -79,6 +79,25 @@ bit 5 是故障锁定，不能用作正常就绪条件。本次握手修复需�
 均需按设备权限使用 sudo。旧 `video-retry` 不用于本分支。
 未确认的写入/DMA 不自动重放；DDR 原生接口故障锁定后需要复位 FPGA。
 
+### 模型提交失败（4099 / 0x1003）
+
+这是模型头或后处理配置校验失败，尚未进入网络推理。上传 FNV 来自收到的字节，每块写入后也会立即读回比较；
+它不等于上传完毕后再对整份 DDR 模型做一次校验，不能据此排除后来覆盖、地址别名或读出异常。
+完整网络计算仿真预先装入了模型，不能代替实板 SPI 上传、DDR 保留和 COMMIT 的验收。
+
+诊断固件保留原有全部校验条件，失败时通过 SPI 打印当时实际读到的两行：
+
+```text
+Model validation failed: DDR header words ...
+model: 314d4941 ...  (16 words)
+post:  31504941 ...  (16 words)
+```
+
+RK 程序在明确收到提交拒绝后只读轮询 300 ms，取出响应之后排队的日志。
+字段顺序为 `ai_model_header` / `ai_post_config`，本模型预期值见 `reports/spi_image/model_commit_diagnostic.json`。
+需要重新实现烧录含新软核固件的根工程，并更新 RK 源码、执行 `make all`。先用 `--frames 1` 测试即可。
+这次增加的是定位手段；实际哪一个字段异常，需要新的上板日志确认。
+
 ## RTL 与固件
 
 `rtl/video/spi_image_capture.v` 通过 CPU/DDR 双时钟邮箱接受已提交图片。

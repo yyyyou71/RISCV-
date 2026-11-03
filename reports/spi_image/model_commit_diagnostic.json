@@ -1,0 +1,180 @@
+{
+  "model_bytes": 13372720,
+  "model_sha256": "f60ca150267c99039ce4eab851ebd1ca19a64716e239663e88ed309b00d2d956",
+  "upload_fnv": "33f1edcd",
+  "reported_board_error": "0x1003",
+  "physical_cause_confirmed": false,
+  "validation_rules_relaxed": false,
+  "new_bitstream_generated": false,
+  "checks": {
+    "host_actual_model_upload_commit": true,
+    "host_later_corruption_with_matching_upload_hash": true,
+    "rk_rejection_event_drain_no_command_replay": true,
+    "cpu_single_and_dual_header_commit_behavioral_ddr": true
+  },
+  "scope": "CPU probe preloads only the two real headers; host test uploads the full model. Neither certifies physical DDR retention, timing or SPI wiring.",
+  "model": {
+    "magic": "314d4941",
+    "version": "00000002",
+    "header_bytes": "00000040",
+    "task_bytes": "00000040",
+    "task_count": "00000063",
+    "tasks_addr": "00010040",
+    "arena_begin": "00010000",
+    "arena_end": "00cc0d30",
+    "input_addr": "00011900",
+    "input_bytes": "00048000",
+    "output_addr": "00cc0780",
+    "output_bytes": "000005a0",
+    "readonly_end": "00a6f510",
+    "flags": "00000001",
+    "reserved0": "00000000",
+    "reserved1": "00000000"
+  },
+  "post": {
+    "magic": "31504941",
+    "version": "00000001",
+    "header_bytes": "00000040",
+    "head_bytes": "00000040",
+    "head_count": "00000003",
+    "heads_addr": "00005100",
+    "threshold_q16": "00004000",
+    "max_detections": "0000012c",
+    "output_addr": "00008000",
+    "output_bytes": "00002580",
+    "model_addr": "00010000",
+    "lut_addr": "00005200",
+    "input_h": "00000060",
+    "input_w": "00000060",
+    "flags": "00000000",
+    "reserved": "00000000"
+  },
+  "baseline_commit": "2f4a706",
+  "synthesis": {
+    "started": "2026-11-03T13:52:22.495860+08:00",
+    "command": [
+      "C:\\diskE\\FPGA_Learning\\PGenvironment\\PDS_2022.2-SP6.1\\bin\\pds_shell.exe",
+      "-project",
+      "C:\\diskE\\FPGA_Learning\\mywork\\PG\\RV32I\\rv32I\\rv32I.pds",
+      "-run",
+      "synthesize",
+      "-skip_actions",
+      "report_power gen_netlist"
+    ],
+    "phase": "finished",
+    "worker_pid": 37152,
+    "finished": "2026-11-03T13:58:40.451699+08:00",
+    "exit_code": 0,
+    "errors": []
+  },
+  "synthesis_report": "synthesize/acore_dual_top.snr",
+  "synthesis_report_sha256": "db75e928064377ad9a245df5e2e61f9ad39f5ab002af4c9428c15cb2f25fde1a",
+  "resources": {
+    "lut": {
+      "used": 38334.0,
+      "total": 66600.0,
+      "percent": 57.56
+    },
+    "registers": {
+      "used": 33275.0,
+      "total": 133200.0,
+      "percent": 24.98
+    },
+    "drm36k_equivalent": {
+      "used": 84.5,
+      "total": 155.0,
+      "percent": 54.52
+    },
+    "apm": {
+      "used": 21.0,
+      "total": 240.0,
+      "percent": 8.75
+    }
+  },
+  "firmware": {
+    "application": "spi_image",
+    "text_bytes": 23340,
+    "data_bytes": 944,
+    "bss_bytes": 2072,
+    "embedded_rom_words_verified": 8192,
+    "embedded_ram_words_verified": 16384
+  },
+  "prior_implementation_timing": {
+    "report": "report_timing/bak/acore_dual_top.rtr",
+    "report_time": "2026-11-03 13:07:53 +08:00",
+    "sha256": "c80ba5cc29784a7277fe691dafd90f9766e3e5cc56c89c864c9bb486374a488a",
+    "ai_address_setup_wns_ns": -2.391,
+    "ddr_phy_control_setup_wns_ns": -0.123,
+    "pcie_dma_setup_wns_ns": -0.061,
+    "cpu_domain_setup_wns_ns": 9.836,
+    "inference_not_yet_started_at_failure": true,
+    "causal_link_to_model_rejection_confirmed": false
+  },
+  "reproduce_checks": [
+    "python3 scripts/check_board_network.py",
+    "python3 scripts/check_model_commit_cpu.py"
+  ],
+  "sources": {
+    "firmware/ai_network.c": "01a543c1c372fe251bee28686d128f4521ed88877c49beadb49e1dce25dd70c5",
+    "firmware/acore_dual_rom.hex": "c58d589c89f8eb88c1ad1464a0da16a78e7d2faf7c53f982ed59fcc7c3057b40",
+    "firmware/acore_dual_ram.hex": "b021365bc0724fe9c0a137b1d468c4f4c149b53bd5fcd4509b5514b041eb3662",
+    "csrc/rk_fspi/rk_control.c": "16593b2efae71ee5aa1c2129d5cc7ad164445c9f63b8c90a697db3a71074baca",
+    "csrc/rk_fspi/test_model_cli.c": "e7297b4c04021a84f63c4a545f950cb00f33c7bf26055711eebaee927e697e7c",
+    "scripts/test_ai_board.c": "179b139aee01588e2366f9fa6aee3673de2f77a7ea3b0259df45ce29b28c7785",
+    "scripts/check_board_network.py": "406c512066390b5a77dbdc082e5bd44341d3f896e6cc22f7bf1e4bd8f158c631",
+    "scripts/check_model_commit_cpu.py": "b405002b07f8047188f7ffd3c711126a8fe88b1cb4b77ca942dcab0a118ccfc7",
+    "scripts/prepare_model_address_probe.py": "b298996f530cd01fb0a6c0a432db90c1f8261835aca905d18e5226826d0896fc"
+  },
+  "observed_board_headers": {
+    "model_words": [
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7"
+    ],
+    "post_words": [
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7",
+      "a7a7a7a7"
+    ],
+    "received_bytes": 13372720,
+    "received_fnv": "33f1edcd",
+    "expected_fnv": "33f1edcd",
+    "inference_started": false
+  },
+  "investigation": {
+    "a7_origin": "pc_ai/prepare_trident_network.py: output_fill=0xa7 in writable output arena",
+    "physical_cause_confirmed": false,
+    "cpu_later_output_writes_and_window_reuse_single_dual_behavioral_test_passed": true,
+    "address_probe": "build/board-ai/board_model_addrprobe.bin",
+    "address_probe_fnv": "0289a14d",
+    "address_probe_loader_host_check_passed": true,
+    "address_probe_readonly_and_guard_preserved": true,
+    "address_probe_requires_fpga_rebuild": false
+  }
+}

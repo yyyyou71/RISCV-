@@ -17,6 +17,16 @@ static ai_run_result run_result;
 static ai_post_result post_result;
 
 static void log_text(const char *s){const char *p=s;while(*p)p++;rk_comm_send((const uint8_t *)s,(unsigned)(p-s));}
+static void log_header(const char *name,const uint32_t *words){
+    static const char digits[]="0123456789abcdef";
+    char line[16*9+1];
+    for(unsigned i=0;i<16;i++){
+        uint32_t value=words[i];
+        for(unsigned j=0;j<8;j++)line[i*9+j]=digits[(value>>(28-j*4))&15u];
+        line[i*9+8]=i==15?'\n':' ';
+    }
+    line[16*9]=0;log_text(name);log_text(line);
+}
 static uint32_t hash_data(uint32_t value,const uint8_t *data,uint32_t size){
     for(uint32_t i=0;i<size;i++)value=(value^data[i])*16777619u;
     return value;
@@ -113,6 +123,11 @@ static uint16_t commit_model(void){
        p.flags || p.reserved || p.threshold_q16>65535 ||
        p.input_h!=96 || p.input_w!=96 || p.head_count!=3 || p.output_addr!=AI_POST_OUTPUT_MIN ||
        !p.max_detections || p.max_detections>300 || p.output_bytes!=p.max_detections*32){
+        /* Capture the values from the failing reads, not a later reread.
+         * Both lines fit the 512-byte SPI log ring. Validation stays strict. */
+        log_text("Model validation failed: DDR header words (hex, field order in ai_runtime.h / ai_postprocess.h).\n");
+        log_header("model: ",(const uint32_t *)&h);
+        log_header("post:  ",(const uint32_t *)&p);
         error=0x1003u;state=NW_ERROR;return COMM_BAD_ARGUMENT;
     }
     total_tasks=h.task_count;ready=1;error=0;state=NW_READY;
