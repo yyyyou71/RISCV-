@@ -10,6 +10,9 @@ static uint32_t boxes[16][3];
 static void log_text(const char *s){const char *p=s;while(*p)p++;rk_comm_send((const uint8_t *)s,(unsigned)(p-s));}
 void video_present_init(void){state=error=run=frame_id=count=index=limit=auto_run=0;slot=0xffffffffu;}
 int video_present_busy(void){return state==1 || state==2 || (P(4)&33u);}
+void video_present_debug_status(uint32_t values[4]){
+    values[0]=state;values[1]=error;values[2]=P(4);values[3]=frame_id;
+}
 static uint16_t start(const struct pp_frame *frame){
     uint32_t result_id,result_slot,detections,result_run;
     if(video_present_busy())return COMM_BUSY;

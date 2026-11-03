@@ -76,6 +76,84 @@ static int print_video(const uint8_t *p,unsigned size,int detailed){
  }
  return 0;
 }
+static int print_writer(const uint8_t *p,unsigned size){
+ static const char *const states[]={"IDLE","LOAD_FIFO","WAIT_AW","PREPARE_W","WRITE_DDR"};
+ uint32_t v[COMM_VIDEO_WRITER_WORDS],flags,slots;
+ if(size!=sizeof(v))return fail(EPROTO);
+ for(unsigned i=0;i<COMM_VIDEO_WRITER_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_VIDEO_WRITER_ABI || v[1]!=0x56444731u)return fail(EPROTO);
+ flags=v[2];slots=v[12];
+ printf("[writer] pixel_SOF=%u decoded_SOF=%u completed_bursts=%u published=%u rejected=%u\n",
+  v[3],v[4],v[5],v[8],v[9]);
+ printf("last_frame_bursts=%u expected=%u last_invalid=%u last_dropped=%u last_source_fault=%u current_bursts=%u\n",
+  v[6]&65535u,v[7],(v[6]>>16)&1u,(v[6]>>17)&1u,(v[6]>>18)&1u,(slots>>14)&65535u);
+ printf("state=%s FIFO_words128=%u empty=%u source_fault=%u have_frame=%u drop=%u invalid=%u capture_ok=%u\n",
+  (flags&7u)<5?states[flags&7u]:"UNKNOWN",(flags>>16)&1023u,(flags>>11)&1u,
+  (flags>>12)&1u,(flags>>3)&1u,(flags>>4)&1u,(flags>>5)&1u,(flags>>6)&1u);
+ printf("AWVALID=%u AWREADY=%u WREADY=%u WLAST=%u native_address=0x%08x last_burst_head=0x%08x\n",
+  (flags>>7)&1u,(flags>>8)&1u,(flags>>9)&1u,(flags>>10)&1u,v[11],v[10]);
+ printf("available=0x%02x protected=0x%02x write_slot=%u free_slot=%u\n",
+  slots&31u,(slots>>5)&31u,(slots>>10)&7u,(slots>>13)&1u);
+ puts("Counters are cumulative since FPGA reset. Compare two snapshots several seconds apart; RAW written_bytes is not a DDR write counter.");
+ return 0;
+}
+static const char *debug_hint(uint32_t step){
+ switch(step){
+ case VD_WAIT_DDR:return "等待 DDR 初始化完成。";
+ case VD_WAIT_SOURCE:return "等待整形模块输出帧头：检查输入时钟、VS/DE、复位及初始跳帧。";
+ case VD_WAIT_FIFO:return "输入侧已有帧头，等待 FIFO 后的写控制器找到帧头。";
+ case VD_WAIT_WRITE:return "写侧已找到帧头，等待 DDR 完成第一个写突发。";
+ case VD_WAIT_PUBLISH:return "DDR 已有写入活动，等待完整帧通过计数检查并发布。";
+ case VD_WAIT_LEASE:return "完整帧已有发布活动，等待软核取得可读帧。";
+ case VD_WAIT_TENSOR:return "原图已有发布活动，等待对应张量及同帧检查完成。";
+ case VD_CHECK_TENSOR:return "检查张量首尾数据格式。";
+ case VD_FRAME_READY:return "原图/张量已保留，可以启动推理或 PCIe 回传。";
+ case VD_MODEL_UPLOAD:return "正在接收并校验模型参数。";
+ case VD_AI_RUNNING:return "正在执行 AI 任务；查看 task 当前任务号。";
+ case VD_AI_POSTPROCESS:return "软核正在执行检测后处理。";
+ case VD_AI_DONE:return "推理完成，等待画框和图像回传。";
+ case VD_PRESENT_PREPARE:return "准备对应帧的画框和 PCIe 回传。";
+ case VD_WAIT_PCIE_LINK:return "回传请求正在等待 PCIe 链路。";
+ case VD_WAIT_PCIE_DMA:return "等待 PCIe 整帧发送完成；RK 需要启动 DMA 接收。";
+ case VD_PCIE_DONE:return "FPGA 发送完成；RK 显示是否正确仍需检查接收端。";
+ case VD_RELEASING:return "正在释放帧缓冲。";
+ case VD_ERROR:return "流程失败；查看 last_stage 和错误前保留的硬件快照。";
+ case VD_DIAG_UNAVAILABLE:return "尚未取得硬件诊断；检查是否烧录了包含诊断模块的新位流。";
+ default:return "流程空闲。";
+ }
+}
+static int print_debug(const uint8_t *p,unsigned size){
+ uint32_t v[COMM_VIDEO_DEBUG_WORDS];uint8_t writer[COMM_VIDEO_WRITER_WORDS*4];
+ if(size!=sizeof(v))return fail(EPROTO);
+ for(unsigned i=0;i<COMM_VIDEO_DEBUG_WORDS;i++)v[i]=comm_u32(p+i*4);
+ if(v[0]!=COMM_VIDEO_DEBUG_ABI)return fail(EPROTO);
+ printf("[pipeline] step=%s output=%s video=%s error_stage=%u stage_elapsed_ms=%.3f frame=%u\n",
+  video_debug_step_name(v[1]),v[5]==VIDEO_OUTPUT_AI?"AI":"RAW",video_state(v[3]),v[4],v[6]/25000.0,v[12]);
+ printf("说明：%s\n",debug_hint(v[1]));
+ printf("observed: DDR=%u input_SOF=%u FIFO_SOF=%u DDR_write=%u published=%u frame_held=%u tensor_ready=%u AI=%u present=%u PCIe_done=%u\n",
+  v[11]&1u,(v[11]>>1)&1u,(v[11]>>2)&1u,(v[11]>>3)&1u,(v[11]>>4)&1u,
+  (v[11]>>5)&1u,(v[11]>>6)&1u,(v[11]>>7)&1u,(v[11]>>8)&1u,(v[11]>>9)&1u);
+ printf("sample: valid=%u pending=%u diagnostic_error=%u (1=timeout 2=signature) sequence=%u last_writer_progress_ms=%.3f\n",
+  v[8]&1u,(v[8]>>1)&1u,v[51],v[10],v[50]/25000.0);
+ if(v[8]&1u){
+  printf("sample_age_ms=%.3f; hardware sampled approximately once per second\n",v[9]/25000.0);
+  comm_put32(writer,COMM_VIDEO_WRITER_ABI);
+  for(unsigned i=0;i<12;i++)comm_put32(writer+(i+1)*4,v[24+i]);
+  if(print_writer(writer,sizeof(writer)))return -1;
+ }
+ printf("AI state=%u error=%u task=%u/%u; presentation state=%u error=%u hw=0x%08x; PP_STATUS=0x%08x PP_ERROR=0x%08x\n",
+  v[13],v[14],v[15],v[16],v[17],v[18],v[19],v[20],v[21]);
+ if(v[8]&8u){
+  printf("last_stage=%s; snapshot retained until retry/reset\n",video_debug_step_name(v[2]));
+  if(v[48]&1u){
+   printf("last_sample_before_error_age_ms=%.3f (not a cycle-exact failure trace)\n",v[49]/25000.0);
+   comm_put32(writer,COMM_VIDEO_WRITER_ABI);
+   for(unsigned i=0;i<12;i++)comm_put32(writer+(i+1)*4,v[36+i]);
+   if(print_writer(writer,sizeof(writer)))return -1;
+  }else puts("No valid writer sample existed before this error.");
+ }
+ return 0;
+}
 /* Empty hardware reads return a complete FF frame; no TX ownership is used. */
 static int receive(uint8_t *p){
  unsigned i;if(rk_fspi_read(&spi,p,SPI_TERM_FRAME))return -1;
@@ -106,6 +184,8 @@ int main(int argc,char **argv){
  else if(argc==3 && !strcmp(argv[2],"once")){listen=1;once=1;}
  else if(argc==3 && !strcmp(argv[2],"status"))operation=COMM_GET_STATUS;
  else if(argc==3 && !strcmp(argv[2],"video-status"))operation=COMM_VIDEO_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"video-writer"))operation=COMM_VIDEO_WRITER_STATUS;
+ else if(argc==3 && !strcmp(argv[2],"video-debug"))operation=COMM_VIDEO_DEBUG;
  else if(argc==3 && !strcmp(argv[2],"video-retry"))operation=COMM_VIDEO_RETRY;
  else if(argc==3 && !strcmp(argv[2],"video-release"))operation=COMM_VIDEO_RELEASE;
  else if(argc==3 && !strcmp(argv[2],"ai-status"))operation=COMM_AI_STATUS;
@@ -158,8 +238,17 @@ int main(int argc,char **argv){
  payload=comm_u16(rx+10);
  if(payload<8 || comm_u32(rx+20)!=operation){errno=EPROTO;goto io_error;}
  a=comm_u32(rx+16);
- if(a!=COMM_OK){fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);goto done;}
- if(operation==COMM_PRESENT_STATUS || operation==COMM_PRESENT_RUN){
+ if(a!=COMM_OK){
+  if(operation==COMM_VIDEO_WRITER_STATUS || operation==COMM_VIDEO_DEBUG)
+   fprintf(stderr,"Writer diagnostic unavailable: status=%u. Requires the updated HDMI FPGA bitstream with diagnostic firmware; updating this RK client alone is insufficient.\n",a);
+  else fprintf(stderr,"CPU application error=%u (4=busy; 5=hardware fault, inspect status/reset).\n",a);
+  goto done;
+ }
+ if(operation==COMM_VIDEO_DEBUG){
+  if(print_debug(rx+24,payload-8))goto io_error;
+ }else if(operation==COMM_VIDEO_WRITER_STATUS){
+  if(print_writer(rx+24,payload-8))goto io_error;
+ }else if(operation==COMM_PRESENT_STATUS || operation==COMM_PRESENT_RUN){
   if(print_present(rx+24,payload-8))goto io_error;
   if(operation==COMM_PRESENT_RUN)puts("Queued; RK must arm the original PCIe DMA for 4147200 bytes (RGB565). Query present-status for completion.");
  }else if(operation==COMM_NETWORK_STATUS){
@@ -179,5 +268,5 @@ int main(int argc,char **argv){
  rc=0;goto done;
 io_error:perror("SPI communication");fprintf(stderr,"No automatic command retry. Use the root video_diagnostic bitstream, not the standalone loopback bitstream.\n");
 done:rk_fspi_close(&spi);return rc;
-usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-retry|video-release|ai-status|network-status|present-status|present|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
+usage:fprintf(stderr,"Usage: %s SPI_DEVICE [listen|once|status|video-status|video-writer|video-debug|video-retry|video-release|ai-status|network-status|present-status|present|get INDEX|set INDEX VALUE]\nExample: %s /dev/spidev4.0\n",argv[0],argv[0]);return 2;
 }

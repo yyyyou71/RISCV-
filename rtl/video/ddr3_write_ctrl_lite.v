@@ -32,6 +32,7 @@ module ddr3_write_ctrl_lite #(
 )(
     input wire [4:0] protect_mask,
     input wire capture_ok,
+    output wire [383:0] diagnostic,
     output reg [159:0] frame_ids,
     output wire write_active,
     output reg [31:0] source_next_id,
@@ -108,6 +109,22 @@ module ddr3_write_ctrl_lite #(
         if(!core_reset_n)begin overflow_meta<=0;overflow_sync<=0;end
         else begin overflow_meta<=overflow_pixel;overflow_sync<=overflow_meta;end
     assign source_fault=overflow_sync;
+
+    // Observe the pixel-domain SOF count without sampling a changing binary bus.
+    reg [31:0] source_gray;
+    (* ASYNC_REG="TRUE" *) reg [31:0] source_gray_meta,source_gray_sync;
+    wire [31:0] source_next=source_next_id+1'b1;
+    always @(posedge wr_clk or negedge pixel_reset_n)
+        if(!pixel_reset_n)source_gray<=0;
+        else if(fifo_wr_en && fifo_wr_data==MAGIC_SOF)source_gray<=(source_next>>1)^source_next;
+    always @(posedge core_clk or negedge core_reset_n)
+        if(!core_reset_n)begin source_gray_meta<=0;source_gray_sync<=0;end
+        else begin source_gray_meta<=source_gray;source_gray_sync<=source_gray_meta;end
+    wire [31:0] source_count;
+    genvar diagnostic_bit;
+    generate for(diagnostic_bit=0;diagnostic_bit<32;diagnostic_bit=diagnostic_bit+1)begin: g_source_count
+        assign source_count[diagnostic_bit]=^(source_gray_sync>>diagnostic_bit);
+    end endgenerate
 
     fifo_2_ddr u_fifo_2_ddr (
         .wr_clk         (wr_clk),
@@ -196,6 +213,37 @@ module ddr3_write_ctrl_lite #(
     assign frame_end_id=active_id;
     assign frame_end_slot=slot;
     assign frame_end_ok=!drop_frame&&!invalid_frame&&written_bursts==FRAME_BURSTS&&!source_fault;
+    reg [31:0] diagnostic_bursts,diagnostic_published,diagnostic_rejected;
+    reg [31:0] diagnostic_previous_bursts,diagnostic_head;
+    always @(posedge core_clk or negedge core_reset_n)begin
+        if(!core_reset_n)begin
+            diagnostic_bursts<=0;diagnostic_published<=0;diagnostic_rejected<=0;
+            diagnostic_previous_bursts<=0;diagnostic_head<=0;
+        end else begin
+            if(state==S_W && axi_wready && axi_wusero_last)diagnostic_bursts<=diagnostic_bursts+1'b1;
+            if(load_done)diagnostic_head<=wbuf[0][31:0];
+            if(frame_end)begin
+                diagnostic_previous_bursts<={13'b0,source_fault,drop_frame,invalid_frame,written_bursts};
+                // Match the existing publication condition exactly; observation only.
+                if(!drop_frame && !invalid_frame && written_bursts==FRAME_BURSTS)
+                    diagnostic_published<=diagnostic_published+1'b1;
+                else diagnostic_rejected<=diagnostic_rejected+1'b1;
+            end
+        end
+    end
+    assign diagnostic[0*32+:32]=32'h56444731; // VDG1 hardware signature
+    assign diagnostic[1*32+:32]={6'b0,rd_water_level,3'b0,source_fault,rd_empty,
+        axi_wusero_last,axi_wready,axi_awready,axi_awvalid,capture_ok,invalid_frame,drop_frame,have_prev,state};
+    assign diagnostic[2*32+:32]=source_count;
+    assign diagnostic[3*32+:32]=sequence_id;
+    assign diagnostic[4*32+:32]=diagnostic_bursts;
+    assign diagnostic[5*32+:32]=diagnostic_previous_bursts;
+    assign diagnostic[6*32+:32]=FRAME_BURSTS;
+    assign diagnostic[7*32+:32]=diagnostic_published;
+    assign diagnostic[8*32+:32]=diagnostic_rejected;
+    assign diagnostic[9*32+:32]=diagnostic_head;
+    assign diagnostic[10*32+:32]={{(32-AXI_ADDR_WIDTH){1'b0}},axi_awaddr};
+    assign diagnostic[11*32+:32]={2'b0,written_bursts,free_slot,slot,protect_mask,frame_done};
     integer search,choice;
     always @(*) begin
         free_slot=0;slot_next=0;

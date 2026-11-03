@@ -5,7 +5,7 @@
 #include "video_present.h"
 #include "../csrc/rk_fspi/comm_protocol.h"
 
-#define REG(a) (*(volatile uint32_t *)(a))
+#define REG(a) (*(volatile uint32_t *)(uintptr_t)(a))
 #define GPIO REG(0x30108u)
 #define CYCLES REG(0x3000cu)
 #define VIDEO_SHAPE REG(0x3061cu)
@@ -16,6 +16,7 @@
 #define DDR_WAIT 75000000u
 #define JOB_WAIT 6250000u
 #define RAW_JOB_WAIT 250000000u
+#define DEBUG_INTERVAL 25000000u
 
 static uint32_t state,entered,error_stage,retries,failure_cycle;
 static uint32_t failure_shape,failure_period,failure_status,failure_error;
@@ -39,10 +40,110 @@ static void log_text(const char *s){
     while(*p)p++;
     rk_comm_send((const uint8_t *)s,(size_t)(p-s));
 }
+/* Coarse observation only: counters prove activity, not pixel correctness.
+ * One asynchronous snapshot every second; never wait here for DDR or HDMI. */
+static uint32_t debug_writer[12],debug_failure_writer[12],debug_base[4];
+static uint32_t debug_network[4],debug_present[4];
+static uint32_t debug_step,debug_entered,debug_seen,debug_sample_tick,debug_progress_tick;
+static uint32_t debug_request_tick,debug_log_tick,debug_sequence,debug_code,debug_failure_step,debug_failure_age,debug_failure_flags;
+static unsigned debug_valid,debug_pending,debug_requested,debug_failed;
+static void debug_set_step(uint32_t next){
+    uint32_t now=CYCLES;
+    if(next==debug_step && now-debug_log_tick<DEBUG_INTERVAL)return;
+    if(next!=debug_step){debug_step=next;debug_entered=now;}
+    debug_log_tick=now;
+    log_text("[pipeline] ");log_text(video_debug_step_name(next));
+    if(next==VD_ERROR){log_text("; last observed stage: ");log_text(video_debug_step_name(debug_failure_step));}
+    log_text("\n");
+}
+static void debug_freeze(void){
+    if(debug_failed)return;
+    debug_failed=1;debug_failure_step=debug_step;
+    debug_failure_age=debug_valid?CYCLES-debug_sample_tick:0xffffffffu;
+    debug_failure_flags=debug_valid|(debug_code?4u:0u);
+    for(unsigned i=0;i<12;i++)debug_failure_writer[i]=debug_writer[i];
+}
+static void debug_reset(void){
+    debug_seen=0;debug_failed=0;debug_failure_step=VD_IDLE;debug_failure_flags=0;
+    debug_failure_age=0xffffffffu;debug_progress_tick=CYCLES;
+    debug_base[0]=debug_writer[2];debug_base[1]=debug_writer[3];
+    debug_base[2]=debug_writer[4];debug_base[3]=debug_writer[7];
+    for(unsigned i=0;i<12;i++)debug_failure_writer[i]=0;
+    debug_set_step(VD_WAIT_DDR);
+}
+static void debug_poll(void){
+    uint32_t now=CYCLES,next;
+    if(debug_pending){
+        if((REG(0x309c0u)&3u)==2u){
+            debug_pending=0;
+            if(REG(0x309c4u)!=0x56444731u)debug_code=2;
+            else{
+                if(debug_writer[2]!=REG(0x309ccu) || debug_writer[3]!=REG(0x309d0u) ||
+                   debug_writer[4]!=REG(0x309d4u) || debug_writer[7]!=REG(0x309e0u))debug_progress_tick=now;
+                for(unsigned i=0;i<12;i++)debug_writer[i]=REG(0x309c4u+i*4);
+                // Timestamp the request, rather than a potentially delayed CPU read.
+                debug_sample_tick=debug_request_tick;debug_sequence++;debug_valid=1;debug_code=0;
+            }
+        }else if(now-debug_request_tick>=25000u){debug_pending=0;debug_code=1;}
+    }
+    if(!debug_pending && (!debug_requested || now-debug_request_tick>=DEBUG_INTERVAL)){
+        REG(0x309c0u)=1;debug_pending=debug_requested=1;debug_request_tick=now;
+    }
+    ai_network_debug_status(debug_network);video_present_debug_status(debug_present);
+    if(RAW_STATUS&16u)debug_seen|=1u;
+    if(debug_valid && !debug_code){
+        if(debug_writer[2]!=debug_base[0])debug_seen|=2u;
+        if(debug_writer[3]!=debug_base[1])debug_seen|=4u;
+        if(debug_writer[4]!=debug_base[2])debug_seen|=8u;
+        if(debug_writer[7]!=debug_base[3])debug_seen|=16u;
+    }
+    if(state==COMM_VIDEO_SUCCESS){debug_seen|=32u;if(frame.bytes==PP_TENSOR_BYTES)debug_seen|=64u;}
+    if(debug_network[0]==NW_RUNNING || debug_network[0]==NW_POSTPROCESS || debug_network[0]==NW_DONE)debug_seen|=128u;
+    int presentation=state==COMM_VIDEO_SUCCESS && debug_present[3]==frame.frame_id;
+    if(presentation && (debug_present[0]==1 || debug_present[0]==2 || debug_present[0]==3))debug_seen|=256u;
+    if(presentation && debug_present[0]==3)debug_seen|=512u;
+    if(state==COMM_VIDEO_ERROR || (state==COMM_VIDEO_SUCCESS && debug_network[0]==NW_ERROR) ||
+       (presentation && debug_present[0]==4))next=VD_ERROR;
+    else if(state==COMM_VIDEO_RELEASING)next=VD_RELEASING;
+    else if(debug_network[0]==NW_LOADING)next=VD_MODEL_UPLOAD;
+    else if(debug_network[0]==NW_QUEUED || debug_network[0]==NW_RUNNING)next=VD_AI_RUNNING;
+    else if(debug_network[0]==NW_POSTPROCESS)next=VD_AI_POSTPROCESS;
+    else if(presentation && debug_present[0]==1)next=VD_PRESENT_PREPARE;
+    else if(presentation && debug_present[0]==2)next=(debug_present[2]&8u)?VD_WAIT_PCIE_DMA:VD_WAIT_PCIE_LINK;
+    else if(presentation && debug_present[0]==3)next=VD_PCIE_DONE;
+    else if(state==COMM_VIDEO_SUCCESS)next=debug_network[0]==NW_DONE?VD_AI_DONE:VD_FRAME_READY;
+    else if(state==COMM_VIDEO_READ_FIRST || state==COMM_VIDEO_READ_LAST)next=VD_CHECK_TENSOR;
+    else if(state==COMM_VIDEO_IDLE)next=VD_IDLE;
+    else if(state==COMM_VIDEO_WAIT_DDR || !(RAW_STATUS&16u))next=VD_WAIT_DDR;
+    else if(!debug_valid || debug_code)next=VD_DIAG_UNAVAILABLE;
+    else if(!(debug_seen&2u))next=VD_WAIT_SOURCE;
+    else if(!(debug_seen&4u))next=VD_WAIT_FIFO;
+    else if(!(debug_seen&8u))next=VD_WAIT_WRITE;
+    else if(!(debug_seen&16u))next=VD_WAIT_PUBLISH;
+    else next=output_mode==VIDEO_OUTPUT_AI?VD_WAIT_TENSOR:VD_WAIT_LEASE;
+    if(next==VD_ERROR)debug_freeze();
+    debug_set_step(next);
+}
+static void debug_snapshot(uint8_t *out){
+    uint32_t v[COMM_VIDEO_DEBUG_WORDS];
+    v[0]=COMM_VIDEO_DEBUG_ABI;v[1]=debug_step;v[2]=debug_failure_step;
+    v[3]=state;v[4]=error_stage;v[5]=output_mode;v[6]=CYCLES-debug_entered;v[7]=CYCLES;
+    v[8]=debug_valid|(debug_pending?2u:0u)|(debug_code?4u:0u)|(debug_failed?8u:0u);
+    v[9]=debug_valid?CYCLES-debug_sample_tick:0xffffffffu;v[10]=debug_sequence;v[11]=debug_seen;
+    v[12]=frame.frame_id;
+    for(unsigned i=0;i<4;i++)v[13+i]=debug_network[i];
+    for(unsigned i=0;i<3;i++)v[17+i]=debug_present[i];
+    v[20]=PP_REG(4);v[21]=PP_REG(0x18);v[22]=VIDEO_SHAPE;v[23]=VIDEO_PERIOD;
+    for(unsigned i=0;i<12;i++){v[24+i]=debug_writer[i];v[36+i]=debug_failure_writer[i];}
+    v[48]=debug_failure_flags;v[49]=debug_failure_age;
+    v[50]=CYCLES-debug_progress_tick;v[51]=debug_code;
+    for(unsigned i=0;i<COMM_VIDEO_DEBUG_WORDS;i++)comm_put32(out+i*4,v[i]);
+}
 static void enter(uint32_t next){
     state=next;entered=CYCLES;led_tick=entered;led_phase=0;GPIO=0;
 }
 static void fail(unsigned stage){
+    debug_freeze();
     error_stage=stage;failure_cycle=CYCLES;
     failure_shape=VIDEO_SHAPE;failure_period=VIDEO_PERIOD;
     failure_status=capture_status();failure_error=capture_error();
@@ -60,6 +161,7 @@ static void clear_result(void){
 }
 static void start_waiting(void){
     clear_result();
+    debug_reset();
     if(output_mode==VIDEO_OUTPUT_AI)PP_REG(0)=4;else RAW_CONTROL=4;
     enter(COMM_VIDEO_WAIT_DDR);
     log_text(output_mode==VIDEO_OUTPUT_AI?
@@ -190,6 +292,18 @@ static uint16_t set_output_mode(uint32_t mode){
 uint16_t rk_comm_application_command(uint16_t operation,const uint8_t *request,
  uint16_t length,uint8_t *response,uint16_t capacity,uint16_t *response_length){
     *response_length=0;
+    debug_poll();
+    if(operation==COMM_VIDEO_DEBUG){
+        if(length || capacity<COMM_VIDEO_DEBUG_WORDS*4)return COMM_BAD_ARGUMENT;
+        debug_snapshot(response);*response_length=COMM_VIDEO_DEBUG_WORDS*4;return COMM_OK;
+    }
+    if(operation==COMM_VIDEO_WRITER_STATUS){
+        if(length || capacity<COMM_VIDEO_WRITER_WORDS*4)return COMM_BAD_ARGUMENT;
+        if(!debug_valid)return debug_code?COMM_IO_ERROR:COMM_BUSY;
+        comm_put32(response,COMM_VIDEO_WRITER_ABI);
+        for(unsigned i=0;i<12;i++)comm_put32(response+(i+1)*4,debug_writer[i]);
+        *response_length=COMM_VIDEO_WRITER_WORDS*4;return COMM_OK;
+    }
     if(operation==COMM_VIDEO_MODE){
         if((length!=0 && length!=4) || capacity<COMM_VIDEO_MODE_WORDS*4)return COMM_BAD_ARGUMENT;
         uint16_t code=length?set_output_mode(comm_u32(request)):COMM_OK;
@@ -234,5 +348,6 @@ int main(void){
         ai_first_layer_poll();
         ai_network_poll();
         video_present_poll(output_mode==VIDEO_OUTPUT_AI && state==COMM_VIDEO_SUCCESS);
+        debug_poll();
     }
 }

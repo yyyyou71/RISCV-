@@ -19,6 +19,17 @@ int rk_fspi_write(rk_fspi *d,const uint8_t *p,size_t n){
   comm_put32(answer+24,3);len=4;
  }else if(op==COMM_GET_PARAM){comm_put32(answer+24,3);len=4;}
  else if(op==COMM_GET_STATUS){comm_put32(answer+24,SPI_TERM_ABI);len=24;}
+ else if(op==COMM_VIDEO_WRITER_STATUS){
+  len=COMM_VIDEO_WRITER_WORDS*4;comm_put32(answer+24,COMM_VIDEO_WRITER_ABI);
+  comm_put32(answer+28,0x56444731u);comm_put32(answer+24+6*4,16200);
+  comm_put32(answer+24+7*4,16200);
+ }
+ else if(op==COMM_VIDEO_DEBUG){
+  len=COMM_VIDEO_DEBUG_WORDS*4;comm_put32(answer+24,COMM_VIDEO_DEBUG_ABI);
+  comm_put32(answer+24+1*4,VD_ERROR);comm_put32(answer+24+2*4,VD_WAIT_PUBLISH);
+  comm_put32(answer+24+8*4,9);comm_put32(answer+24+24*4,0x56444731u);
+  comm_put32(answer+24+36*4,0x56444731u);comm_put32(answer+24+48*4,1);
+ }
  else if(op==COMM_AI_STATUS){
   len=COMM_AI_WORDS*4;comm_put32(answer+24,COMM_AI_ABI);comm_put32(answer+28,9);
   comm_put32(answer+24+13*4,32);comm_put32(answer+24+14*4,0xffffffffu);
@@ -56,6 +67,8 @@ int main(void){
  char *retry[]={"rk_comm_cli","spi","video-retry",0};
  char *release[]={"rk_comm_cli","spi","video-release",0};
  char *ai[]={"rk_comm_cli","spi","ai-status",0};
+ char *writer[]={"rk_comm_cli","spi","video-writer",0};
+ char *debug[]={"rk_comm_cli","spi","video-debug",0};
  reset_mock();assert(cli_main(5,set)==0 && writes==1 && committed==1);
  reset_mock();assert(cli_main(4,get)==0 && writes==1);
  reset_mock();assert(cli_main(3,status)==0);
@@ -64,6 +77,8 @@ int main(void){
  reset_mock();assert(cli_main(3,retry)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_RETRY);
  reset_mock();assert(cli_main(3,release)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_RELEASE);
  reset_mock();assert(cli_main(3,ai)==0 && writes==1 && comm_u16(sent+8)==COMM_AI_STATUS);
+ reset_mock();assert(cli_main(3,writer)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_WRITER_STATUS);
+ reset_mock();assert(cli_main(3,debug)==0 && writes==1 && comm_u16(sent+8)==COMM_VIDEO_DEBUG);
  reset_mock();assert(cli_main(5,bad)==2 && !writes);
  reset_mock();write_error=1;assert(cli_main(5,set)==1 && writes==1);
  reset_mock();corrupt=1;assert(cli_main(5,set)==1 && writes==1 && committed==1);

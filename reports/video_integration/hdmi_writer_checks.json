@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "scope": "Short writer-counter/CDC test; no model inference or physical DDR verification.",
+  "hardware_tested": false,
+  "sources": {
+    "sim/video/TB_video_writer_diagnostic.v": "593ddfabf899733ac5c5dec2f3200ed04b564fa24246f75a8d794e9da7261738",
+    "rtl/video/video_writer_diagnostic.v": "4ed699017ad5d8119130a2249a96a157c8a77c231d1b1501d4696c19d9109a32",
+    "rtl/video/ddr3_write_ctrl_lite.v": "76b66b89b94ef5f1b498a4d1fa0e1a40fc75cad5e8cea5948a7238ab871f62a9",
+    "sim/video/fifo_2_ddr_model.v": "c443f54bd7f092dadae8844fa907a0f450783fd2dcb068b54b82ba37e806c745"
+  }
+}

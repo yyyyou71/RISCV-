@@ -444,11 +444,18 @@ wire tensor_awvalid,tensor_awap,tensor_awready,tensor_wready,tensor_wlast;
 wire [3:0] tensor_awlen,tensor_awid,tensor_wid;
 wire [127:0] tensor_write_data;
 wire [15:0] tensor_wstrb;
-wire [31:0] capture_rdata,present_rdata;
+wire [31:0] capture_rdata,present_rdata,diagnostic_rdata;
+wire [383:0] writer_diagnostic;
 wire [4:0] present_frames,present_hold,present_box_count;
 wire [1023:0] present_boxes;
 wire presentation_read_busy,presentation_read_done;
-assign tensor_rdata=tensor_addr_rd[8]?present_rdata:capture_rdata;
+assign tensor_rdata=tensor_addr_rd[8] ?
+    (tensor_addr_rd[7:6]==2'b11 ? diagnostic_rdata:present_rdata):capture_rdata;
+video_writer_diagnostic u_writer_diagnostic(
+    .clk(monitor_clk),.core_clk(ddr_core_clk),.rst_n(application_rst_n),
+    .dev_we(tensor_we&&tensor_addr_wr[8]),.addr_wr(tensor_addr_wr[7:0]),
+    .addr_rd(tensor_addr_rd[7:0]),.wdata(tensor_wdata),
+    .diagnostic(writer_diagnostic),.rdata(diagnostic_rdata));
 video_present_control u_present(
     .clk(monitor_clk),.core_clk(ddr_core_clk),.pcie_clk(pclk_div2),.rst_n(application_rst_n),
     .pcie_rst_n(core_rst_n),.pcie_link_up(smlh_link_up&&rdlh_link_up),.ddr_ready(cpu_ddr_ready),
@@ -500,6 +507,7 @@ frame_ring_ddr3 #(.ENABLE_PCIE_READER(1),.CONTROLLED_READER(1)) u_hdmi_fifo (
   // diagnostic; raw completion and tensor integrity qualify the retained pair.
   .hold_mask(frame_hold_mask),.stream_ok(1'b1),.available(frame_available),.frame_ids(frame_ids),
   .write_slot(frame_wr_slot),.write_active(frame_wr_active),.shared_fault(shared_fault),
+  .writer_diagnostic(writer_diagnostic),
   // 时钟与复位
   .sys_clk        (sys_clk),          // 25MHz -> DDR3 参考时钟
   .sys_rst_n      (application_rst_n), // local or original PCIe application reset

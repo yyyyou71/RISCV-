@@ -35,6 +35,9 @@ void ai_network_init(void){
 }
 int ai_network_busy(void){return state==NW_LOADING || state==NW_QUEUED || state==NW_RUNNING || state==NW_POSTPROCESS;}
 int ai_network_loading(void){return state==NW_LOADING;}
+void ai_network_debug_status(uint32_t values[4]){
+    values[0]=state;values[1]=error;values[2]=current_task;values[3]=total_tasks;
+}
 int ai_network_has_model(void){return ready!=0;}
 int ai_network_result(uint32_t *run,uint32_t *frame,uint32_t *slot,uint32_t *count){
     if(state!=NW_DONE)return 0;

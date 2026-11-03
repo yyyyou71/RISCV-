@@ -35,7 +35,7 @@ PCIe 接收同帧带框 RGB565 图像并显示。推理后才抓下一帧，显�
 
 更多参数、诊断和验证边界见 [整合程序说明](../../docs/rk_video_app.md)。
 
-配合根工程 rv32I.pds、固件 firmware/video_diagnostic/ 使用。
+配合根工程 rv32I.pds、固件 firmware/video_diagnostic.c 使用。
 这是 CPU 消息通道，不是 projects 下的独立硬件回环。
 只需复制本目录源码到 RK，不依赖 csrc/rk_iic，也不需要连接 IIC。
 
@@ -48,7 +48,9 @@ PCIe 接收同帧带框 RGB565 图像并显示。推理后才抓下一帧，显�
 默认持续读取软核日志并打印到终端，每秒左右显示视频/AI 状态。
 Ctrl+C 停止监听后，可以执行：
 
-    ./rk_comm_cli /dev/spidev4.0 video-status
+    sudo ./rk_comm_cli /dev/spidev4.0 video-status
+    sudo ./rk_comm_cli /dev/spidev4.0 video-writer
+    sudo ./rk_comm_cli /dev/spidev4.0 video-debug
     ./rk_comm_cli /dev/spidev4.0 ai-status
     ./rk_comm_cli /dev/spidev4.0 network-status
     ./rk_comm_cli /dev/spidev4.0 present-status
@@ -60,6 +62,13 @@ Ctrl+C 停止监听后，可以执行：
 仍支持 get INDEX / set INDEX VALUE（0..15）；0 为 GPIO，可能被视频应用后续更新。
 once 只等待并打印一条日志/视频消息；logs 是持续监听的别名。
 重试命令返回接收成功后，用 video-status 或监听观察实际完成结果。
+`video-writer` 仅适用于更新后的 HDMI 位流，读取输入侧/写侧帧头计数、DDR 写突发数、
+完整帧发布/拒绝数及 FIFO/状态机快照。间隔 2 秒读取两次，把完整输出用于定位抓帧超时。
+读取不会重启抓帧；需要重新生成并烧录根 PDS，单独更新 RK 程序不能增加硬件计数。
+此 HDMI 命令与 SPI 图片分支的 image-status 不能混用。
+`video-debug` 返回软核判断的流程阶段、每秒采样的硬件计数、AI 任务号和 PCIe 回传状态，
+并保存最近一次失败前的阶段和快照，直到重新抓帧或复位。`listen` 每秒显示当前阶段日志。
+快照年龄会一起输出；这是阶段定位，不是像素级正确性校验或周期级波形。
 设备路径按 RK 实际设备调整；同一时间只运行一个客户端，设备锁避免合作客户端竞争。
 
 完整模型工具（仅复制本目录即可编译）：

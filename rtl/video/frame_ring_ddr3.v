@@ -66,6 +66,7 @@ module frame_ring_ddr3 #(
     input wire stream_ok,
     output wire [4:0] available,
     output wire [159:0] frame_ids,
+    output wire [383:0] writer_diagnostic,
     output wire [2:0] write_slot,
     output wire write_active,shared_fault,
 
@@ -209,7 +210,7 @@ module frame_ring_ddr3 #(
     ) u_write_ctrl (
         .pixel_reset_n(pixel_reset_n),
         .protect_mask(hold_mask|reader_hold|tensor_hold|(CONTROLLED_READER?present_hold:5'b0)),.capture_ok(stream_sync),
-        .frame_ids(frame_ids),.write_active(write_active),
+        .frame_ids(frame_ids),.write_active(write_active),.diagnostic(writer_diagnostic),
         .source_next_id(source_next_id),.source_fault(video_source_fault),
         .frame_begin(raw_begin),.frame_begin_accepted(raw_accepted),
         .frame_begin_id(raw_begin_id),.frame_begin_slot(raw_begin_slot),

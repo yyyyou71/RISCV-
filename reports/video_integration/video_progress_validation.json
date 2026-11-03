@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-03T10:18:30.539517+08:00",
+  "branch": "ziguang_rv32i",
+  "sampling_seconds": 1,
+  "stage_transition_logs": true,
+  "retained_failure_snapshot": true,
+  "nonblocking_hardware_sampling": true,
+  "rtl_changed_for_this_feature": false,
+  "software_checks_passed": true,
+  "hardware_tested": false,
+  "new_pds_run": false,
+  "new_bitstream_generated": false,
+  "text_bytes": 29052,
+  "data_bytes": 7688,
+  "bss_bytes": 2488,
+  "firmware": {
+    "application": "video_diagnostic",
+    "mode": "performance",
+    "iterations": 2700,
+    "core": "acore_dual",
+    "isa": "rv32i_zmmul",
+    "enable_div": 0,
+    "mul_pipeline_stages": 3,
+    "clock_hz": 25000000,
+    "baud_rate": 115200,
+    "flags": [
+      "-march=rv32im",
+      "-mno-div",
+      "-mabi=ilp32",
+      "-O2",
+      "-mno-relax",
+      "-msmall-data-limit=0",
+      "-ffreestanding",
+      "-fno-builtin",
+      "-fno-common",
+      "-fno-stack-protector",
+      "-fno-pic",
+      "-fno-pie",
+      "-nostdlib",
+      "-nostartfiles"
+    ],
+    "compiler": "riscv64-unknown-elf-gcc () 10.2.0",
+    "elf_sha256": "4b1c43de04ef509af7256e781f5f31307a09220dc4f082ca21abec03b7fabeaf",
+    "rom_sha256": "f5746d303cc3a79eefe5a884a7a45d8d5676ff1de30c517c983fd842cd71b278",
+    "ram_sha256": "2b0bacf30863c9aec020af1a66865df2fbdd90ef4834c097662d2f70d235eeec",
+    "sources": {
+      "firmware/start.S": "f97b2dcef2f3910659705085e5dfa9c0a2928aa576fc4fe6d921597ceb09f10c",
+      "firmware/video_diagnostic.c": "55917646168c2d571e643aa7798e3b4226725d733941749b4956eddd19b8033d",
+      "firmware/rk_spi_comm.c": "73b75a32f40552aa53ecb94b93c57223c83997d2fb26df3a0bab6f2bbdd70f35",
+      "firmware/ai_first_layer.c": "b58141568067c06e4482803fadca6c9c060c925bd17b36def32743da5da67b51",
+      "firmware/ai_network.c": "bab4ee37869601ff2180600d521c76b5aaab8da669459f5ed788a9d7b88c2b86",
+      "firmware/video_present.c": "650bed10dac65f4f9fe9a8dade497ec9058a91d7681dae7678c03c6efa5e8ca1",
+      "csrc/software/ai_runtime.c": "137d7bd42463d92237fca7301e5ce591eb50ac3f6fdfd532671e4a05c6eb8341",
+      "csrc/software/ai_postprocess.c": "f8b8f7fd8089fdd056f5b439f177b31b20be2225a1d4bf21c6962cdacd1eeb65",
+      "firmware/ai_link.ld": "fabc5711de2f50fd1a6761e903845fed015cbf45427e45599b91d4ba49bc40e2",
+      "firmware/rk_comm.h": "b7dc9ec044838d988bb700d3b3b74347f23cf6c721c5dceb0824147ba804f386",
+      "csrc/rk_fspi/fspi_v2.h": "e5b0d7f08981ba508d51efdb432f938d660de8035ed92162b0310f95fe4597b0",
+      "csrc/rk_fspi/comm_protocol.h": "c39b07217da62899602e48649bd540fd20694c67357f5eef0b39875e2575bb62",
+      "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158",
+      "firmware/ai_first_layer.h": "afc89b8247f90a671a5201f1373c473924da4278ab5e7273a94350094feecab9",
+      "firmware/ai_first_layer_quant.h": "3532d1b79f657a3fd1cfb3b6b2d125e5d3485593b2ce99cdcce6af01c418033a",
+      "firmware/ai_first_layer_assets.h": "a870aa071eb38c227a975e2dd9f97c4a799e76082bed773f3941d93122d2d14d",
+      "firmware/ai_network.h": "589986848d88246ec8082196d8b7560caf6c911ab549604a6f7430533350702e",
+      "firmware/video_present.h": "41f8bfac046210051da9042a0d18946033b4aa9f54a7be9af1310d45d13f8074",
+      "csrc/software/ai_runtime.h": "a768bb7d1f3f5ba563534636bc8020d6cccf453076a0c6b06a10a84e07527605",
+      "csrc/software/ai_postprocess.h": "d3bdc626a05fa846b5c27046a351f8f3881f79a0093e83bbab0f4a7bab1c0e3f"
+    }
+  },
+  "initialization": {
+    "passed": true,
+    "application": "video_diagnostic",
+    "ips": [
+      {
+        "instance": "pango_acore_fetch",
+        "image": "firmware/acore_dual_rom.hex",
+        "sha256": "f5746d303cc3a79eefe5a884a7a45d8d5676ff1de30c517c983fd842cd71b278",
+        "embedded_words_verified": 8192,
+        "other_parameters_preserved": true
+      },
+      {
+        "instance": "pango_acore_ram",
+        "image": "firmware/acore_dual_ram.hex",
+        "sha256": "2b0bacf30863c9aec020af1a66865df2fbdd90ef4834c097662d2f70d235eeec",
+        "embedded_words_verified": 16384,
+        "other_parameters_preserved": true
+      }
+    ],
+    "bitstream_generated": false,
+    "note": "Rebuild root PDS before programming; existing bitstreams still contain their old images."
+  },
+  "notes": [
+    "Physical PDS flow owned by user; already compiled flows retain their earlier firmware.",
+    "Snapshot age uses request time; not a cycle-exact failure trace.",
+    "AI full-network DDR simulation is the next separately authorized task."
+  ],
+  "sources": {
+    "firmware/video_diagnostic.c": "55917646168c2d571e643aa7798e3b4226725d733941749b4956eddd19b8033d",
+    "firmware/ai_network.c": "bab4ee37869601ff2180600d521c76b5aaab8da669459f5ed788a9d7b88c2b86",
+    "firmware/ai_network.h": "589986848d88246ec8082196d8b7560caf6c911ab549604a6f7430533350702e",
+    "firmware/video_present.c": "650bed10dac65f4f9fe9a8dade497ec9058a91d7681dae7678c03c6efa5e8ca1",
+    "firmware/video_present.h": "41f8bfac046210051da9042a0d18946033b4aa9f54a7be9af1310d45d13f8074",
+    "csrc/rk_fspi/comm_protocol.h": "c39b07217da62899602e48649bd540fd20694c67357f5eef0b39875e2575bb62",
+    "csrc/rk_fspi/rk_comm_cli.c": "8d5408d60fbb74b47bf3265602ae3e1509e898d6df4a336632d744e56aae1c79",
+    "csrc/rk_fspi/test_comm_cli.c": "1cc25cf99e76e89be238eafe698fef46fa6afbaf6937bbbf4ae5588c731789a9",
+    "sim/video/test_video_direct_capture.c": "f4dd448b5f40bc392f84cb242b7dc5567a361e002178edef4007a74c899ce05f",
+    "scripts/check_video_modes.py": "19ef8ca4e89d9412290ed98f66570e3acbecdc84b96d3e7b7ab39f28457cf56c"
+  }
+}

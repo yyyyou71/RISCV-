@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-03T09:48:21.801151+08:00",
+  "branch": "ziguang_rv32i",
+  "baseline": "15c1e4f",
+  "preserved_spi_branch": "codex/spi-image-input",
+  "preserved_spi_commit": "a5f6320",
+  "purpose": "Observe HDMI RAW timeout; capture failure root cause NOT established or repaired",
+  "checks": {
+    "writer_short_simulation": true,
+    "frame_protection": true,
+    "rk_client_tests": true,
+    "firmware_modes": true,
+    "structural_lint": true,
+    "firmware_embedded_words": true
+  },
+  "synthesis": {
+    "started": "2026-11-03T09:42:04.227254+08:00",
+    "command": [
+      "C:\\diskE\\FPGA_Learning\\PGenvironment\\PDS_2022.2-SP6.1\\bin\\pds_shell.exe",
+      "-project",
+      "C:\\diskE\\FPGA_Learning\\mywork\\PG\\RV32I\\rv32I\\rv32I.pds",
+      "-run",
+      "synthesize",
+      "-skip_actions",
+      "report_power gen_netlist"
+    ],
+    "phase": "finished",
+    "worker_pid": 16200,
+    "finished": "2026-11-03T09:47:50.614309+08:00",
+    "exit_code": 0,
+    "errors": []
+  },
+  "synthesis_report_sha256": "6551ff232bd3ac07afdc3c37459be40a6e5c0e6f811aaeadef1395e7789ef18c",
+  "synthesis_estimate": {
+    "LUT": {
+      "used": 39977,
+      "total": 66600,
+      "percent": 60.03
+    },
+    "FF": {
+      "used": 35584,
+      "total": 133200,
+      "percent": 26.71
+    },
+    "DRM36K": {
+      "used": 87.5,
+      "total": 155,
+      "percent": 56.45
+    },
+    "APM": {
+      "used": 21,
+      "total": 240,
+      "percent": 8.75
+    }
+  },
+  "hardware_tested": false,
+  "place_route_run": false,
+  "bitstream_generated": false,
+  "firmware": {
+    "application": "video_diagnostic",
+    "text_bytes": 26772,
+    "data_bytes": 7216,
+    "bss_bytes": 2280
+  },
+  "sources": {
+    "rtl/video/ddr3_write_ctrl_lite.v": "76b66b89b94ef5f1b498a4d1fa0e1a40fc75cad5e8cea5948a7238ab871f62a9",
+    "rtl/video/frame_ring_ddr3.v": "9c2fa7fa4d4fb501093d242365f6d60251aa5a5e353907c884e0bd84259a345b",
+    "rtl/video/video_writer_diagnostic.v": "4ed699017ad5d8119130a2249a96a157c8a77c231d1b1501d4696c19d9109a32",
+    "board/acore_video_platform.v": "0704cd4b6b565ac14b85c7b9f62efb58263d558e9a00d3f5221bdbe392469243",
+    "board/timing.fdc": "c5387ff977c12971ea3d87e7c5c636cabdb41c8b4646f737afa9e7609304ec7e",
+    "rv32I.pds": "543f5e15dc2e7b0ce58b36fe9c2c89e36520ea2f32a65cedda3a2c1744f88867",
+    "firmware/video_diagnostic.c": "109cca4d87ea3be291fe86b4e44e0f5984914166e5f6420ea3008e398ace541f",
+    "firmware/acore_dual_rom.hex": "d375a05a9f84a0387bd107561b7b099cabd7eb5e9a43a7334273f4e590259636",
+    "firmware/acore_dual_ram.hex": "19a2499235cc5f47a1518820c3ebde5b6d7b5995ec887a66cb514bff2209eb71",
+    "csrc/rk_fspi/rk_comm_cli.c": "560a03b4029d5761ddefab6990c3b7133c1c5089a545ae47b8b553b488a1820a",
+    "csrc/rk_fspi/comm_protocol.h": "bbe4a7e2ec6fb0845b8684cb7d95cced71e6c0b91f00ab5bfcd77ed08207bc31",
+    "csrc/rk_fspi/test_comm_cli.c": "1c898cd7ed86865a2fe8aa0999d826ec733499279006e2147139cf2316845518",
+    "sim/video/TB_video_writer_diagnostic.v": "593ddfabf899733ac5c5dec2f3200ed04b564fa24246f75a8d794e9da7261738",
+    "scripts/check_video_writer.py": "f26038c4747791deaab4ac20f489ef9dcba93017b2d4ad0bf17c8839b48f7ac7"
+  }
+}

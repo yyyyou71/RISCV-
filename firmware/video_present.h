@@ -5,5 +5,6 @@
 void video_present_init(void);
 int video_present_busy(void);
 void video_present_poll(int allow_ai_auto);
+void video_present_debug_status(uint32_t values[4]);
 uint16_t video_present_command(int start,uint8_t *out,const struct pp_frame *frame,int video_ready,int blocked);
 #endif

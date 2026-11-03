@@ -17,16 +17,19 @@
   ],
   "hardware_tested": false,
   "sources": {
-    "firmware/video_diagnostic.c": "00f9c09bf2aec7cbff242125cb02cc283d3b949aa1b241613016a4736d50d392",
+    "firmware/video_diagnostic.c": "55917646168c2d571e643aa7798e3b4226725d733941749b4956eddd19b8033d",
     "firmware/preprocess_capture.h": "14872ae862c82cd2730aca9d969842e8c24a4e105056bbff6746c378bcc52158",
-    "firmware/video_present.c": "4db08d54b4e2f615389a2cff9585a7a549e2d65e74e1d1f4e115eddceb57c807",
-    "firmware/video_present.h": "9caaa4eebc2de31c0ff851b102f02a467cba0527b2f302b0a54a4bce7f23526b",
+    "firmware/video_present.c": "650bed10dac65f4f9fe9a8dade497ec9058a91d7681dae7678c03c6efa5e8ca1",
+    "firmware/video_present.h": "41f8bfac046210051da9042a0d18946033b4aa9f54a7be9af1310d45d13f8074",
+    "firmware/ai_network.c": "bab4ee37869601ff2180600d521c76b5aaab8da669459f5ed788a9d7b88c2b86",
+    "firmware/ai_network.h": "589986848d88246ec8082196d8b7560caf6c911ab549604a6f7430533350702e",
     "csrc/rk_fspi/rk_video_app.c": "1f8e1cec834dd3e60c74925d4e00b78662cd32f1ca5fa717e1c2bd46b50cb353",
-    "csrc/rk_fspi/comm_protocol.h": "1c24412470bdafdfbd7960a97daad2e3f7b31e2896c7d8f42fa7709ea5df50fd",
-    "csrc/rk_fspi/rk_comm_cli.c": "c92d713e822283c22721b3c70d95cdce0adaff3a52184d49c36a955e4fcefbd3",
+    "csrc/rk_fspi/comm_protocol.h": "c39b07217da62899602e48649bd540fd20694c67357f5eef0b39875e2575bb62",
+    "csrc/rk_fspi/rk_comm_cli.c": "8d5408d60fbb74b47bf3265602ae3e1509e898d6df4a336632d744e56aae1c79",
+    "csrc/rk_fspi/test_comm_cli.c": "1cc25cf99e76e89be238eafe698fef46fa6afbaf6937bbbf4ae5588c731789a9",
     "csrc/rk_fspi/test_video_app.c": "d86c6ffd4607a8a59d6ad3da0276dbcfa432cd7054810a6a3889aee86c42697f",
-    "sim/video/test_video_direct_capture.c": "6704a22c9fe925aa0f53526b35528b413c3cd1ebef44f0f1469a8bc2f3bb99f7",
-    "board/acore_video_platform.v": "8ff964da74730e2d20e7499a778b31b8fe0510bb2c9f2b9804d25ffd4a361f16",
+    "sim/video/test_video_direct_capture.c": "f4dd448b5f40bc392f84cb242b7dc5567a361e002178edef4007a74c899ce05f",
+    "board/acore_video_platform.v": "0704cd4b6b565ac14b85c7b9f62efb58263d558e9a00d3f5221bdbe392469243",
     "rtl/video_timing_monitor.v": "b4f718183e7790e09904546e03753b6faccdd50817da464f0b07cc025b70f80e"
   }
 }

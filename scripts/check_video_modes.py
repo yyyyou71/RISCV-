@@ -33,8 +33,9 @@ def main():
                        stdout=subprocess.DEVNULL)
     files = ['firmware/video_diagnostic.c', 'firmware/preprocess_capture.h',
              'firmware/video_present.c', 'firmware/video_present.h',
+             'firmware/ai_network.c', 'firmware/ai_network.h',
              'csrc/rk_fspi/rk_video_app.c', 'csrc/rk_fspi/comm_protocol.h',
-             'csrc/rk_fspi/rk_comm_cli.c', 'csrc/rk_fspi/test_video_app.c',
+             'csrc/rk_fspi/rk_comm_cli.c', 'csrc/rk_fspi/test_comm_cli.c', 'csrc/rk_fspi/test_video_app.c',
              'sim/video/test_video_direct_capture.c', 'board/acore_video_platform.v',
              'rtl/video_timing_monitor.v']
     result = dict(passed=True, scope=__doc__, cases=cases, hardware_tested=False,
