@@ -115,7 +115,25 @@ module ddr_cpu_window #(
     wire ready = cpu_reset_n && init_sync && !cpu_busy && !cpu_fault;
     wire window_wr = dev_addr_wr[31:8] == 24'h000311 && dev_addr_wr[1:0] == 0;
     wire window_rd = dev_addr_rd[31:8] == 24'h000311 && dev_addr_rd[1:0] == 0;
-    integer cpu_i;
+    wire cpu_window_write = dev_we && !cpu_busy && !cpu_fault && window_wr;
+    wire readback_commit = cpu_busy && ack_sync == request_toggle &&
+        !request_ai && !request_video && !direction_reg && !response_error;
+    wire [63:0] readback_mask = 64'hffffffffffffffff >> (7'd64-length_reg[8:2]);
+    // One statically indexed writer per word preserves the parallel DDR reload.
+    // PDS mis-infers the procedural array reload plus dynamic CPU write as a
+    // RAM/register shadow pair whose CPU read copy retains the last write.
+    // Payload is deliberately not reset; valid_words protects unread words.
+    genvar cpu_word;
+    generate for (cpu_word=0; cpu_word<64; cpu_word=cpu_word+1) begin : g_cpu_buffer
+        always @(posedge clk) begin
+            if (cpu_reset_n) begin
+                if (cpu_window_write && dev_addr_wr[7:2] == cpu_word)
+                    cpu_buf[cpu_word] <= dev_wdata;
+                else if (readback_commit && cpu_word < (length_reg >> 2))
+                    cpu_buf[cpu_word] <= core_buf[cpu_word/4][(cpu_word%4)*32 +: 32];
+            end
+        end
+    end endgenerate
     always @(posedge clk or negedge cpu_reset_n) begin
         if (!cpu_reset_n) begin
             address_reg <= 0; length_reg <= 0; direction_reg <= 0; request_toggle <= 0;
@@ -137,18 +155,12 @@ module ddr_cpu_window #(
                     cpu_oh<=response_oh;cpu_ow<=response_ow;
                 end
                 if(request_video) cpu_video_bytes<=response_video_bytes;
-                if (!request_ai && !request_video && !direction_reg && !response_error) begin
-                    for (cpu_i = 0; cpu_i < 64; cpu_i = cpu_i + 1)
-                        if (cpu_i < (length_reg >> 2)) begin
-                            cpu_buf[cpu_i] <= core_buf[cpu_i / 4][(cpu_i % 4)*32 +: 32];
-                            valid_words[cpu_i] <= 1;
-                        end
-                end
+                if (readback_commit)
+                    valid_words <= valid_words | readback_mask;
             end
             // 忙时所有配置、窗口写和再次启动均忽略，保护正在传递的邮箱。
             if (dev_we && !cpu_busy && !cpu_fault) begin
                 if (window_wr) begin
-                    cpu_buf[dev_addr_wr[7:2]] <= dev_wdata;
                     valid_words[dev_addr_wr[7:2]] <= 1;
                 end
                 case (dev_addr_wr)

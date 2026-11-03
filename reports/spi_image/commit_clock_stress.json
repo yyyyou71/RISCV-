@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "scope": "four-state real CPU/runtime/window and behavioral DDR, directed header retention/commit",
+  "full_upload_verified": false,
+  "physical_vendor_model": false,
+  "routed_delays_simulated": false,
+  "cases": [
+    {
+      "dual": 0,
+      "profile": "random_ddr",
+      "passed": true,
+      "args": [
+        "+ddr3_random_stalls=1",
+        "+ddr3_seed=93827"
+      ]
+    },
+    {
+      "dual": 0,
+      "profile": "slow_ddr",
+      "passed": true,
+      "args": [
+        "+ddr3_read_latency=39",
+        "+ddr3_write_latency=27",
+        "+ddr3_stall_every=13",
+        "+ddr3_stall_cycles=7"
+      ]
+    },
+    {
+      "dual": 0,
+      "profile": "fast_cpu_slow_ddr",
+      "passed": true,
+      "args": [
+        "+cpu_half_ns=7",
+        "+ddr3_core_period_ns=17.13",
+        "+ddr3_random_stalls=1",
+        "+ddr3_seed=12345"
+      ]
+    },
+    {
+      "dual": 0,
+      "profile": "phase_changed",
+      "passed": true,
+      "args": [
+        "+cpu_half_ns=23",
+        "+ddr3_core_period_ns=8.113",
+        "+ddr3_read_latency=0",
+        "+ddr3_write_latency=0"
+      ]
+    },
+    {
+      "dual": 1,
+      "profile": "random_ddr",
+      "passed": true,
+      "args": [
+        "+ddr3_random_stalls=1",
+        "+ddr3_seed=93827"
+      ]
+    },
+    {
+      "dual": 1,
+      "profile": "slow_ddr",
+      "passed": true,
+      "args": [
+        "+ddr3_read_latency=39",
+        "+ddr3_write_latency=27",
+        "+ddr3_stall_every=13",
+        "+ddr3_stall_cycles=7"
+      ]
+    },
+    {
+      "dual": 1,
+      "profile": "fast_cpu_slow_ddr",
+      "passed": true,
+      "args": [
+        "+cpu_half_ns=7",
+        "+ddr3_core_period_ns=17.13",
+        "+ddr3_random_stalls=1",
+        "+ddr3_seed=12345"
+      ]
+    },
+    {
+      "dual": 1,
+      "profile": "phase_changed",
+      "passed": true,
+      "args": [
+        "+cpu_half_ns=23",
+        "+ddr3_core_period_ns=8.113",
+        "+ddr3_read_latency=0",
+        "+ddr3_write_latency=0"
+      ]
+    }
+  ]
+}

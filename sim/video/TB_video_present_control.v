@@ -19,7 +19,8 @@ module TB_video_present_control;
         begin rst_n=0;reader_busy=0;reader_done=0;pixel_ready=0;pixel_valid=0;dma_busy=0;stream_empty=1;
         repeat(4)@(negedge clk);rst_n=1;repeat(8)@(negedge clk);end
     endtask
-    integer i;
+    integer i,box;
+    reg [1023:0] expected_boxes;
     initial begin
         frame_ids[64+:32]=42;reset_all();
         config_job(42);wr(0,1);repeat(4)@(negedge clk);
@@ -27,7 +28,15 @@ module TB_video_present_control;
         pcie_link_up=1;repeat(8)@(negedge clk);
         config_job(43);wr(0,1);wait(rdata[1]);
         if(!rdata[2] || protect_mask)$fatal(1,"mismatched frame not rejected");
-        config_job(42);wr(0,1);wait(reader_frames==4);
+        config_job(42);wr(16,16);
+        for(box=0;box<16;box=box+1)begin
+            wr(20,box);wr(24,32'h00010000+box);wr(28,32'h00050001+box);wr(32,32'h4000+box);
+            expected_boxes[box*64+:64]={4'b0,(16'h4000+box[15:0]),11'd5,(11'd1+box[10:0]),11'd1,box[10:0]};
+        end
+        wr(0,1);wait(reader_frames==4);
+        if(active_count!=16 || active_boxes!==expected_boxes)$fatal(1,"configured box banks not transferred exactly");
+        wr(20,0);wr(32,32'hffff);
+        if(active_boxes!==expected_boxes)$fatal(1,"busy write changed the active boxes");
         if(protect_mask!=4)$fatal(1,"missing frame lease");
         repeat(4)@(negedge clk);
         if(!rdata[0] || rdata[6] || rdata[5])$fatal(1,"busy alone must not grant DMA before reader start");

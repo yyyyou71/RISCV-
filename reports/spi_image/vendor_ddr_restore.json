@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checkpoint_simulation_time_us": 60,
+  "advanced_simulation_time_ns": 1,
+  "exit_code": 0,
+  "log": "build/vendor-ddr/restore_probe.log",
+  "current_run_not_interrupted": true,
+  "ddr_initialization_verified": false
+}

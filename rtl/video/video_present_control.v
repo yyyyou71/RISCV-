@@ -48,10 +48,20 @@ module video_present_control #(
     wire [15:0] required=16'hffff>>(16-cfg_count);
     assign reader_frames=state==START ? (5'b1<<core_slot):5'b0;
     assign protect_mask=core_hold ? (5'b1<<core_slot):5'b0;
+    // Static banks infer a register clock enable, avoiding the dynamic
+    // part-select's very short per-bit LUT feedback path in the fast corner.
+    genvar box;
+    generate for(box=0;box<16;box=box+1)begin:g_cfg_box
+        always @(posedge clk or negedge rst_n)begin
+            if(!rst_n)cfg_boxes[box*64+:64]<=0;
+            else if(dev_we && !cpu_busy && !lock_sync && addr_wr==8'h20 && cfg_index==box)
+                cfg_boxes[box*64+:64]<={4'b0,wdata[15:0],cfg_xy1[26:16],cfg_xy1[10:0],cfg_xy0[26:16],cfg_xy0[10:0]};
+        end
+    end endgenerate
     always @(posedge clk or negedge rst_n)begin
         if(!rst_n)begin
             cfg_id<=0;cfg_slot<=0;cfg_count<=0;cfg_index<=0;cfg_xy0<=0;cfg_xy1<=0;
-            cfg_boxes<=0;cfg_written<=0;request<=0;cpu_busy<=0;cpu_done<=0;cpu_error<=0;cpu_code<=0;
+            cfg_written<=0;request<=0;cpu_busy<=0;cpu_done<=0;cpu_error<=0;cpu_code<=0;
             ack_meta<=0;ack_sync<=0;ready_meta<=0;ready_sync<=0;lock_meta<=0;lock_sync<=0;
             prepared_meta<=0;prepared_sync<=0;
         end else begin
@@ -69,7 +79,6 @@ module video_present_control #(
                 8'h18:cfg_xy0<=wdata;
                 8'h1c:cfg_xy1<=wdata;
                 8'h20:begin
-                    cfg_boxes[cfg_index*64+:64]<={4'b0,wdata[15:0],cfg_xy1[26:16],cfg_xy1[10:0],cfg_xy0[26:16],cfg_xy0[10:0]};
                     cfg_written[cfg_index]<=cfg_xy0[15:11]==0 && cfg_xy0[31:27]==0 && cfg_xy1[15:11]==0 && cfg_xy1[31:27]==0 &&
                         cfg_xy0[10:0]<=cfg_xy1[10:0] && cfg_xy0[26:16]<=cfg_xy1[26:16] &&
                         cfg_xy1[10:0]<WIDTH && cfg_xy1[26:16]<HEIGHT;

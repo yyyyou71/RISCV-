@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "prefix_fast_forwarded_bytes": 13372576,
+  "spi_uploaded_bytes": 144,
+  "physical_phy_verified": false,
+  "routed_delays_simulated": false,
+  "cases": [
+    {
+      "dual": 1,
+      "passed": true,
+      "log": "build/spi-model-commit/cpu-1.log"
+    }
+  ],
+  "firmware_elf_sha256": "1b398354a936c58974b7f228d5ac09a7d826111326d8117b0bf39fbd0d6604ab"
+}

@@ -11,7 +11,11 @@ module ai_address_math(
 );
     localparam [3:0] IDLE=0,MUL1=1,WAIT1=2,INDEX=3,MUL2=4,WAIT2=5,INNER=6,SCALE=7,BASE=8,RESULT=9;
     reg [3:0] state;
-    reg [31:0] a_reg,b_reg,add_reg,pitch_reg,inner_reg,base_reg,work,scaled;
+    // Keep the request snapshot in fabric registers. Otherwise ADS absorbs
+    // these registers into DSP inputs and places the engine's operand select
+    // (including co_base/weight_lane) on the full path to a distant APM.
+    (* syn_preserve=1, syn_keep=1 *) reg [31:0] a_reg,b_reg;
+    reg [31:0] add_reg,pitch_reg,inner_reg,base_reg,work,scaled;
     reg [1:0] shift_reg;
     wire result_valid;wire [63:0] product;
     ai_mul32_pipeline u_mul(.clk(clk),.rst_n(rst_n),.clear(clear),

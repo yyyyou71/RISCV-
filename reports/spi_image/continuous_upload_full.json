@@ -1,0 +1,17 @@
+{
+  "state": "passed",
+  "passed": true,
+  "full_model_verified": true,
+  "model_bytes": 13372720,
+  "firmware_elf_sha256": "1b398354a936c58974b7f228d5ac09a7d826111326d8117b0bf39fbd0d6604ab",
+  "model_sha256": "f60ca150267c99039ce4eab851ebd1ca19a64716e239663e88ed309b00d2d956",
+  "prefix_fast_forwarded_bytes": 0,
+  "header_preloaded": false,
+  "physical_vendor_model": false,
+  "routed_delays_simulated": false,
+  "started": "2026-11-03T19:08:29.721970",
+  "log": "build/spi-model-full/full.log",
+  "exit_code": 0,
+  "wall_seconds": 6856.672946125,
+  "finished": "2026-11-03T21:02:46.399035"
+}

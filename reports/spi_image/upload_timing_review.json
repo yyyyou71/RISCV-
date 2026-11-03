@@ -1,0 +1,49 @@
+{
+  "passed": false,
+  "report": "report_timing/acore_dual_top.rtr",
+  "report_time": "2026-11-03T14:33:14.127562",
+  "sha256": "541cd71168113702006ff877f41b034442690f8df87b3468c0c5e7af0a0bd431",
+  "scope": "Read existing routed timing report; no new synthesis, gate-level simulation, or causal diagnosis",
+  "violations": {
+    "Setup Summary(Slow Corner)": [
+      {
+        "path": "pclk_div2              pclk_div2                   -0.061      -0.061              1          20469",
+        "slack_ns": -0.061,
+        "total_slack_ns": -0.061,
+        "failing_endpoints": 1,
+        "endpoints": 20469
+      },
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk               -2.391   -1774.036           3016          72391",
+        "slack_ns": -2.391,
+        "total_slack_ns": -1774.036,
+        "failing_endpoints": 3016,
+        "endpoints": 72391
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_0             -0.123      -0.123              1            188",
+        "slack_ns": -0.123,
+        "total_slack_ns": -0.123,
+        "failing_endpoints": 1,
+        "endpoints": 188
+      }
+    ],
+    "Hold Summary(Slow Corner)": [],
+    "Recovery Summary(Slow Corner)": [],
+    "Removal Summary(Slow Corner)": [],
+    "Minimum Pulse Width Summary(Slow Corner)": [],
+    "Setup Summary(Fast Corner)": [],
+    "Hold Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                sys_clk                     -0.001      -0.001              1          32151",
+        "slack_ns": -0.001,
+        "total_slack_ns": -0.001,
+        "failing_endpoints": 1,
+        "endpoints": 32151
+      }
+    ],
+    "Recovery Summary(Fast Corner)": [],
+    "Removal Summary(Fast Corner)": [],
+    "Minimum Pulse Width Summary(Fast Corner)": []
+  }
+}

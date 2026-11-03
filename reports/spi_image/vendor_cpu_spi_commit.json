@@ -1,0 +1,17 @@
+{
+  "state": "running",
+  "passed": false,
+  "physical_vendor_model": true,
+  "real_cpu_firmware": true,
+  "actual_spi_pins": true,
+  "prefix_fast_forwarded_bytes": 13372576,
+  "spi_uploaded_bytes": 144,
+  "full_upload_verified": false,
+  "header_seeded_through_native": true,
+  "routed_delays_simulated": false,
+  "started": "2026-11-03T17:04:02.324775",
+  "log": "build/spi-vendor-commit/resume_20261103_190801.log",
+  "resumed": "2026-11-03T19:08:01.860588",
+  "resume_checkpoint": "build/spi-vendor-commit/resume_start_20261103_190801.ckp",
+  "previous_log": "build/spi-vendor-commit/run.log"
+}
