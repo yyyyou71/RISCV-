@@ -12,6 +12,10 @@
 #define WIDTH IMAGE_WIDTH
 #define HEIGHT IMAGE_HEIGHT
 #define FRAME_BYTES (WIDTH*HEIGHT*2u)
+#define PRESENT_HW_BUSY (1u<<0)
+#define PRESENT_HW_ERROR (1u<<2)
+#define PRESENT_HW_LOCKED (1u<<5)
+#define PRESENT_HW_PREPARED (1u<<6)
 static display_ctx_t screen;
 static int have_screen;
 static uint32_t timeout_ms=120000;
@@ -130,14 +134,19 @@ static int prepare_present(uint32_t frame_id,uint32_t run_id){
     }
     do{
         if(present_status(v))return -1;
-        if(v[1]==4){fprintf(stderr,"[present] error=%u hw_error=%u\n",v[2],v[8]);return fail(EIO);}
-        if(v[5]==frame_id && v[1]==2 && (v[3]&33u)==33u){
+        if(v[1]==4 || (v[3]&(PRESENT_HW_ERROR|PRESENT_HW_LOCKED))){
+            fprintf(stderr,"[present] error=%u hw_error=%u hw_status=0x%08x\n",v[2],v[8],v[3]);return fail(EIO);
+        }
+        if(v[5]==frame_id && v[1]==2 &&
+           (v[3]&(PRESENT_HW_BUSY|PRESENT_HW_PREPARED))==(PRESENT_HW_BUSY|PRESENT_HW_PREPARED)){
             if(run_id && v[4]!=run_id)return fail(EPROTO);
             printf("[present] frame=%u run=%u boxes=%u; receiving PCIe image\n",frame_id,v[4],v[7]);
             return 0;
         }
         if(pause_status())return -1;
     }while(now_ms()<until);
+    fprintf(stderr,"[present] waiting for DMA readiness timed out: state=%u hw_status=0x%08x frame=%u expected=%u\n",
+            v[1],v[3],v[5],frame_id);
     return fail(ETIMEDOUT);
 }
 static int finish_present(uint32_t frame_id){
@@ -148,7 +157,7 @@ static int finish_present(uint32_t frame_id){
         if(v[1]==3){
             if(v[5]!=frame_id || v[9]!=frame_id || v[10]!=WIDTH*HEIGHT/8u)
                 return fail(EPROTO);
-            if(!(v[3]&33u))return 0; /* allow lock-release CDC to settle */
+            if(!(v[3]&(PRESENT_HW_BUSY|PRESENT_HW_LOCKED|PRESENT_HW_PREPARED)))return 0;
         }
         if(pause_status())return -1;
     }while(now_ms()<until);

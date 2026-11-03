@@ -7,6 +7,8 @@ volatile int g_running=1;
 static unsigned captured,dma_count,shown,inferred,printed,submitted,resets,closed,mode_changes;
 static uint32_t fid,rid,output,imstate,imsession,committed,imhash,expected_hash;
 static int presentation,dma_done,corrupt_words,corrupt_frame,model_ready,old_firmware;
+static unsigned arm_polls;
+static int present_fault;
 int image_list_open(image_list *list,const char *path){
     assert(!strcmp(path,"fake-dir"));list->count=2;list->paths=calloc(2,sizeof(char *));
     list->paths[0]=strdup("one.png");list->paths[1]=strdup("two.jpg");return 0;
@@ -42,7 +44,13 @@ int rk_control_status(unsigned op,uint32_t abi,uint32_t *v,unsigned words){
         v[10]=fid+(corrupt_frame?1:0);v[11]=v[12]=99;break;
     case COMM_PRESENT_STATUS:
         if(dma_done)presentation=3;
-        v[1]=presentation;v[3]=presentation==2?41:10;v[4]=rid;v[5]=fid;
+        v[1]=presentation;v[3]=0x18u;v[4]=rid;v[5]=fid;
+        if(presentation==2){
+            // Actual RTL layout: bit 5=fault lock, bit 6=armed+reader started.
+            v[3]|=1u;
+            if(++arm_polls>=3)v[3]|=1u<<6;
+            if(present_fault)v[3]|=(1u<<5)|(1u<<2);
+        }
         v[7]=output==VIDEO_OUTPUT_AI&&inferred?1:0;v[9]=dma_done?fid:0;
         v[10]=WIDTH*HEIGHT/8-(corrupt_words?1:0);break;
     default:assert(0);
@@ -69,7 +77,7 @@ int rk_control_exchange(unsigned op,const uint8_t *p,unsigned n,uint8_t *reply,u
         imstate=IMAGE_READY;captured++;
     }else if(op==COMM_NETWORK_RUN){
         assert(output==VIDEO_OUTPUT_AI&&model_ready&&imstate==IMAGE_READY);rid++;inferred++;
-    }else if(op==COMM_PRESENT_RUN){assert(imstate==IMAGE_READY);submitted++;presentation=2;}
+    }else if(op==COMM_PRESENT_RUN){assert(imstate==IMAGE_READY);submitted++;presentation=2;arm_polls=0;}
     else if(op==COMM_VIDEO_RELEASE){assert(presentation!=1&&presentation!=2);imstate=IMAGE_EMPTY;presentation=0;dma_done=0;}
     else assert(0);
     if(op>=COMM_IMAGE_BEGIN&&op<=COMM_IMAGE_COMMIT){
@@ -95,6 +103,7 @@ void write_bar1_reg(pcie_ctx_t *c,uint32_t offset,uint32_t value){
 }
 int transfer_frame(pcie_ctx_t *c){
     assert(presentation==2 && !dma_done && c->skip_dma_reset && c->transfer_dw==FRAME_BYTES/4);
+    assert(arm_polls>=3 && !present_fault); /* No DMA on BUSY alone or fault lock. */
     dma_count++;dma_done=1;return 0;
 }
 int display_init(display_ctx_t *d,uint32_t w,uint32_t h){assert(w==WIDTH && h==HEIGHT);d->sdl_ok=1;return 0;}
@@ -112,6 +121,7 @@ static void reset_case(void){
     captured=dma_count=shown=inferred=printed=submitted=resets=closed=mode_changes=0;
     fid=rid=output=imstate=imsession=committed=expected_hash=0;imhash=2166136261u;
     presentation=dma_done=corrupt_words=corrupt_frame=model_ready=old_firmware=0;
+    arm_polls=0;present_fault=0;
 }
 int main(void){
     char *raw[]={"rk_video_app","fake-spi","--input","fake-dir","--output","raw"};
@@ -123,6 +133,7 @@ int main(void){
     reset_case();corrupt_words=1;assert(rk_video_app_main(6,raw)==1);assert(shown==0&&dma_count==1);
     reset_case();corrupt_frame=1;assert(rk_video_app_main(8,ai)==1);assert(shown==0&&dma_count==0&&inferred==1);
     reset_case();old_firmware=1;assert(rk_video_app_main(6,raw)==1);assert(!shown&&!dma_count&&closed==1);
-    puts("PASS SPI image app: 1296-block frame uploads, RAW/AI directory flow, same-frame DMA/display, bad counts/IDs and old firmware rejected");
+    reset_case();present_fault=1;assert(rk_video_app_main(6,raw)==1);assert(!shown&&!dma_count&&closed==1);
+    puts("PASS SPI image app: delayed DMA readiness, fault lock rejection, RAW/AI directory flow, same-frame DMA/display, bad counts/IDs and old firmware rejected");
     return 0;
 }

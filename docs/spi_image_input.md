@@ -70,6 +70,10 @@ class,score,model_x1,...,original_x1,...
 ```
 
 RAW 不运行整网或打印检测结果。启动日志可能在下一次 SPI 轮询时才读出。
+呈现 MMIO 状态 bit 6 表示 PCIe 已应答且 DDR 读出器已启动，RK 必须等到该位与 busy(bit 0) 同为 1 再开始 DMA。
+bit 5 是故障锁定，不能用作正常就绪条件。本次握手修复需同时更新 FPGA 位流和 RK 程序；软核固件透传状态，不需要修改 C 程序。
+短测现已将实际呈现控制器接入 RAW DDR 读出、叠框和输出 FIFO，并使用与 RK 一致的 busy+prepared 条件启动模拟 DMA。
+另测仅 busy 时等待、故障锁定时禁止 DMA；物理 PCIe IP、RK 驱动及整机回图仍需上板验证。
 上电只等待 SPI 上传，不会因缺少 HDMI 输入而自动抓帧失败。
 退出主程序后可查询 `rk_comm_cli /dev/spidev4.0 image-status`、`network-status`、`present-status`，或用 `video-release` 释放。
 均需按设备权限使用 sudo。旧 `video-retry` 不用于本分支。

@@ -29,25 +29,33 @@ module TB_video_present_control;
         if(!rdata[2] || protect_mask)$fatal(1,"mismatched frame not rejected");
         config_job(42);wr(0,1);wait(reader_frames==4);
         if(protect_mask!=4)$fatal(1,"missing frame lease");
+        repeat(4)@(negedge clk);
+        if(!rdata[0] || rdata[6] || rdata[5])$fatal(1,"busy alone must not grant DMA before reader start");
         @(negedge core_clk);reader_busy=1;repeat(4)@(negedge core_clk);reader_done=1;
         @(negedge core_clk);reader_done=0;reader_busy=0;
         repeat(8)@(negedge clk);
-        if(!rdata[0] || protect_mask!=4)$fatal(1,"released before DMA");
+        if((rdata&32'h65)!=32'h41 || protect_mask!=4)$fatal(1,"normal DMA readiness must be busy+prepared, never locked: %h",rdata);
         @(negedge pcie_clk);dma_busy=1;stream_empty=0;pixel_valid=1;
         for(i=0;i<32;i=i+1)begin pixel_ready=1;@(negedge pcie_clk);pixel_ready=0;@(negedge pcie_clk);end
         pixel_valid=0;repeat(6)@(negedge clk);
         if(!rdata[0] || protect_mask!=4)$fatal(1,"released before DMA/pipe drained");
         dma_busy=0;stream_empty=1;wait(rdata[1]);
         if(rdata[2] || protect_mask)$fatal(1,"completion failed");
+        repeat(4)@(negedge clk);
+        if(rdata[6] || rdata[5] || rdata[0])$fatal(1,"DMA permission not cleared after completion");
         reset_all();config_job(42);wr(0,1);wait(reader_frames==4);
         @(negedge core_clk);reader_busy=1;
         @(negedge pcie_clk);pixel_ready=1;pixel_valid=0;
         wait(rdata[5] && rdata[1]);
         if(!rdata[2] || protect_mask!=4)$fatal(1,"underflow must lock frame until reset");
+        repeat(4)@(negedge clk);
+        if(rdata[6])$fatal(1,"fault lock must revoke DMA permission");
         reset_all();config_job(42);wr(0,1);wait(reader_frames==4);
         pcie_link_up=0;wait(rdata[5] && rdata[1]);
         if(!rdata[2] || protect_mask!=4)$fatal(1,"link loss must lock frame until reset");
-        $display("PASS presentation: no-RK, frame identity, DMA drain, underflow and link-loss leases");$finish;
+        repeat(4)@(negedge clk);
+        if(rdata[6])$fatal(1,"link loss must revoke DMA permission");
+        $display("PASS presentation: busy-before-ready, prepared bit 6 vs fault bit 5, frame identity, DMA drain and fault leases");$finish;
     end
     initial begin #100000;$fatal(1,"presentation timeout status=%h",rdata);end
 endmodule

@@ -38,9 +38,13 @@ module video_present_control #(
     reg [31:0] pc_words;
     (* ASYNC_REG="TRUE" *) reg req_meta,req_sync,ack_meta,ack_sync;
     (* ASYNC_REG="TRUE" *) reg ready_meta,ready_sync,lock_meta,lock_sync;
+    (* ASYNC_REG="TRUE" *) reg prepared_meta,prepared_sync;
     (* ASYNC_REG="TRUE" *) reg link_meta,link_sync,arm_meta,arm_sync,done_meta,done_sync,fault_meta,fault_sync;
     (* ASYNC_REG="TRUE" *) reg pc_req_meta,pc_req_sync;
     wire pc_available=pcie_rst_n&&pcie_link_up;
+    // RUN means the PCIe arm acknowledgement and DDR reader start both arrived.
+    // Bit 5 remains the sticky fault lock; bit 6 grants RK permission to start DMA.
+    wire core_prepared=state==RUN && core_hold && !core_locked;
     wire [15:0] required=16'hffff>>(16-cfg_count);
     assign reader_frames=state==START ? (5'b1<<core_slot):5'b0;
     assign protect_mask=core_hold ? (5'b1<<core_slot):5'b0;
@@ -49,9 +53,11 @@ module video_present_control #(
             cfg_id<=0;cfg_slot<=0;cfg_count<=0;cfg_index<=0;cfg_xy0<=0;cfg_xy1<=0;
             cfg_boxes<=0;cfg_written<=0;request<=0;cpu_busy<=0;cpu_done<=0;cpu_error<=0;cpu_code<=0;
             ack_meta<=0;ack_sync<=0;ready_meta<=0;ready_sync<=0;lock_meta<=0;lock_sync<=0;
+            prepared_meta<=0;prepared_sync<=0;
         end else begin
             ack_meta<=ack;ack_sync<=ack_meta;ready_meta<=pc_available;ready_sync<=ready_meta;
             lock_meta<=core_locked;lock_sync<=lock_meta;
+            prepared_meta<=core_prepared;prepared_sync<=prepared_meta;
             if(cpu_busy && ack_sync==request)begin
                 cpu_busy<=0;cpu_done<=1;cpu_error<=response_error;cpu_code<=response_code;
             end
@@ -83,7 +89,7 @@ module video_present_control #(
     always @*begin
         rdata=0;
         case(addr_rd)
-            8'h04:rdata={26'b0,lock_sync,1'b1,ready_sync,cpu_error,cpu_done,cpu_busy};
+            8'h04:rdata={25'b0,prepared_sync,lock_sync,1'b1,ready_sync,cpu_error,cpu_done,cpu_busy};
             8'h08:rdata=cfg_id;
             8'h0c:rdata={29'b0,cfg_slot};
             8'h10:rdata={27'b0,cfg_count};

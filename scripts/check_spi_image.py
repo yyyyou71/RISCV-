@@ -15,7 +15,7 @@ COMMON=['rtl/video/spi_image_capture.v','rtl/ddr_block_transfer.v',
 CASES={
     'TB_spi_image':COMMON+['sim/video/TB_spi_image.v'],
     'TB_spi_image_pcie':COMMON+['rtl/video/frame_ring_ddr3.v','rtl/video/ddr3_read_ctrl.v',
-        'rtl/video/rgb565_box_overlay.v','rtl/ddr_native_arbiter.v','rtl/ddr_region_check.v',
+        'rtl/video/rgb565_box_overlay.v','rtl/video/video_present_control.v','rtl/ddr_native_arbiter.v','rtl/ddr_region_check.v',
         'sim/ddr3/ddr3.sv','sim/models/pango_video_fifo_model.v','sim/video/TB_spi_image_pcie.v'],
 }
 

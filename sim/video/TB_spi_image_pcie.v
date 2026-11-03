@@ -12,12 +12,24 @@ module TB_spi_image_pcie;
     wire image_awready,image_arready,image_wready,image_wlast,image_rvalid,image_rlast;
     wire [127:0] pixels;wire empty,read_busy,read_done;
     wire [4:0] available;wire [159:0] ids;
-    reg [4:0] present_frames=0;reg [1023:0] boxes=0;reg read_enable=0;
+    wire [4:0] present_frames,present_hold,box_count;
+    wire [1023:0] boxes;
+    reg read_enable=0,present_we=0;
+    reg [7:0] present_addr=0;reg [31:0] present_data=0;
+    wire [31:0] present_status;
     integer clocks=0,got=0;reg d1=0,d2=0;
     wire pop=read_enable&&!empty&&clocks%5!=0;
+    video_present_control #(.WIDTH(128),.HEIGHT(2)) present(
+        .clk(clk),.core_clk(core_clk),.pcie_clk(pcie_clk),.rst_n(rst_n),
+        .pcie_rst_n(rst_n),.pcie_link_up(1'b1),.ddr_ready(ready),
+        .dev_we(present_we),.addr_wr(present_addr),.addr_rd(8'h04),.wdata(present_data),.rdata(present_status),
+        .frame_available(available),.frame_held({4'b0,image_held}),.frame_ids(ids),
+        .write_slot(3'd0),.write_active(image_active),.reader_busy(read_busy),.reader_done(read_done),
+        .pixel_valid(!empty),.pixel_ready(pop),.dma_busy(read_enable),.stream_empty(empty&&!d1&&!d2),
+        .reader_frames(present_frames),.protect_mask(present_hold),.active_count(box_count),.active_boxes(boxes));
     spi_image_capture #(.WIDTH(128),.HEIGHT(2)) capture(
         .clk(clk),.core_clk(core_clk),.rst_n(rst_n),.ddr_ready(ready),.shared_fault(shared_fault),
-        .external_hold({4'b0,read_busy}),.dev_we(we),.addr_wr(wa),.addr_rd(ra),.wdata(wd),.rdata(rd),
+        .external_hold(present_hold|{4'b0,read_busy}),.dev_we(we),.addr_wr(wa),.addr_rd(ra),.wdata(wd),.rdata(rd),
         .active(image_active),.held(image_held),.available(image_available),.frame_id(image_id),.fault(image_fault),
         .axi_awaddr(image_awaddr),
         .axi_araddr(image_araddr),
@@ -66,7 +78,7 @@ module TB_spi_image_pcie;
         .image_rlast(image_rlast),
         .image_rid(image_rid),
         .image_rdata(image_rdata),
-        .present_frames(present_frames),.present_hold(5'b0),.present_box_count(5'd1),.present_boxes(boxes),
+        .present_frames(present_frames),.present_hold(present_hold),.present_box_count(box_count),.present_boxes(boxes),
         .tensor_awaddr('0),.tensor_awvalid(1'b0),.tensor_awap(1'b0),.tensor_fault(1'b0),.tensor_awlen('0),.tensor_awid('0),
         .tensor_wdata('0),.tensor_wstrb('0),.tensor_hold('0),
         .cpu_awaddr('0),.cpu_araddr('0),.cpu_awvalid(1'b0),.cpu_arvalid(1'b0),.cpu_awap(1'b0),.cpu_arap(1'b0),
@@ -92,6 +104,10 @@ module TB_spi_image_pcie;
     task write_reg;input [7:0] a;input [31:0] v;begin
         @(negedge clk);wa=a;wd=v;we=1;@(negedge clk);we=0;
     end endtask
+    task write_present;input [7:0] a;input [31:0] v;begin
+        @(negedge clk);present_addr=a;present_data=v;present_we=1;
+        @(negedge clk);present_we=0;
+    end endtask
     reg [127:0] word_data;integer i,k;
     initial begin
         repeat(10)@(negedge clk);rst_n=1;wait(ready);
@@ -102,13 +118,20 @@ module TB_spi_image_pcie;
         write_reg(8'h08,7);write_reg(8'h2c,0);write_reg(0,1);
         ra=4;#1;while(!rd[1])@(negedge clk);
         if((rd&63)!=26||available!=1||ids[31:0]!=7)$fatal(1,"retained frame metadata");
-        boxes[63:0]={4'b0,16'h07e0,11'd1,11'd20,11'd0,11'd10};
-        @(negedge core_clk);present_frames=1;@(negedge core_clk);present_frames=0;read_enable=1;
+        write_present(8,7);write_present(12,0);write_present(16,1);
+        write_present(20,0);write_present(24,10);write_present(28,(1<<16)|20);write_present(32,16'h07e0);
+        write_present(0,1);
+        // RK's exact DMA admission condition, against the real presentation FSM.
+        wait((present_status&32'h65)==32'h41);
+        if(!read_busy||present_hold!=1)$fatal(1,"prepared before reader and lease");
+        read_enable=1;
         wait(got==32);repeat(8)@(negedge clk);
+        read_enable=0;wait(present_status[1]);repeat(4)@(negedge clk);
+        if((present_status&32'h67)!=2 || present_hold)$fatal(1,"presentation completion/permission mismatch %h",present_status);
         if(read_busy||!empty||!image_held)$fatal(1,"reader/lease did not drain");
         write_reg(0,2);ra=4;#1;while(!rd[1])@(negedge clk);
         if(image_held||available)$fatal(1,"release failed");
-        $display("PASS shared DDR/PCIe integration: uploaded image -> hardware RAW storage -> top-16 overlay -> async output FIFO, 256 pixels");$finish;
+        $display("PASS shared DDR/PCIe integration: RAW storage -> real presentation mailbox/ready -> overlay -> async output FIFO/DMA drain, 256 pixels");$finish;
     end
     initial begin #20000000;$fatal(1,"integration timeout");end
 endmodule
