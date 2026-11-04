@@ -41,3 +41,22 @@ RK 等待呈现状态 bit 6（PCIe 已应答且 DDR 读出器已启动）后才�
 该诊断需要更新 FPGA 内的软核 ROM/RAM 初始化并重新生成位流；只更新 RK 程序无法让旧固件输出字段。
 make test 是仓库开发检查，其中软核服务测试需要仓库 firmware/、csrc/software/；只复制本目录时执行 make all 即可。
 完整说明在仓库 docs/spi_image_input.md，综合报告在 synthesize/acore_dual_top.snr。
+
+## 终端交互浏览图片
+
+把照片放在 RK 的 `images/` 目录，文件名按字典顺序排列。模型只在启动时上传一次：
+
+```sh
+make all
+sudo -E ./rk_video_app /dev/spidev4.0 --input ./images --output ai --model ./face_model.bin --interactive
+```
+
+首张图片自动处理并保持显示。输入 `n` 或 `next` 加回车切到下一张；`p` 或 `prev` 加回车返回上一张；
+`q` 或 `quit` 加回车退出。首尾循环。推理期间也能输入，命令在当前帧完成推理、PCIe 回图和释放后生效。
+多条切图命令累积选择目标图片；退出优先。命令只控制当前进程，不要同时运行另一个 SPI 客户端。
+`--interactive` 与 `--loop` 互斥；原有批处理、`--frames`、`--save`、RAW 模式继续可用。
+`--use-loaded-model` 可以复用仍在 FPGA DDR 中的模型；复位或重新烧录后须用 `--model` 上传。
+终端输入 EOF 也会在当前帧结束后退出。Ctrl+C 或关闭 SDL 窗口沿用原先的中断行为。
+
+模型装载安排在输出模式切换前，避免上次上传中断留下 LOADING 状态时反复被模式切换的 BUSY 拒绝。
+模型与固件 ABI 保持不变；RK 程序更新需要将整个本目录重新复制到 RK 并执行 `make all`。

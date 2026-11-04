@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "scope": "up to all valid fixtures/operator, C golden, invalid configs, backpressure/reset/fault",
+  "full_network_run": false,
+  "cases": [
+    {
+      "mode": 2,
+      "passed": true,
+      "initial_layers_checked": 12,
+      "fixture_layers": 12,
+      "summary": "PASS conv_ddr layers=12 words=128 AW=183 AR=3980"
+    },
+    {
+      "mode": 3,
+      "passed": true,
+      "initial_layers_checked": 15,
+      "fixture_layers": 15,
+      "summary": "PASS conv_ddr layers=15 words=236 AW=236 AR=496"
+    },
+    {
+      "mode": 4,
+      "passed": true,
+      "initial_layers_checked": 16,
+      "fixture_layers": 16,
+      "summary": "PASS conv_ddr layers=16 words=878 AW=878 AR=881"
+    },
+    {
+      "mode": 5,
+      "passed": true,
+      "initial_layers_checked": 16,
+      "fixture_layers": 16,
+      "summary": "PASS conv_ddr layers=16 words=746 AW=746 AR=7598"
+    },
+    {
+      "mode": 6,
+      "passed": true,
+      "initial_layers_checked": 16,
+      "fixture_layers": 16,
+      "summary": "PASS conv_ddr layers=16 words=1256 AW=1258 AR=292"
+    }
+  ]
+}

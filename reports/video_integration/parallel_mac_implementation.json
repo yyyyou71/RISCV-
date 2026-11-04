@@ -1,0 +1,38 @@
+{
+  "build": {
+    "phase": "stopped_by_user",
+    "pid": 1536,
+    "started": "2026-11-04T09:09:24.049180",
+    "command": [
+      "C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/bin/pds_shell.exe",
+      "-project",
+      "C:\\diskE\\FPGA_Learning\\mywork\\PG\\RV32I\\rv32I\\rv32I.pds",
+      "-run",
+      "gen_bit_stream",
+      "-skip_actions",
+      "report_power gen_netlist"
+    ],
+    "returncode": 1,
+    "finished": "2026-11-04T09:23:47.198834",
+    "note": "User requested stopping place/route and then stopping further optimization. Source and simulation evidence preserved; cache remains isolated candidate.",
+    "stopped": "2026-11-04T09:25:42.430681"
+  },
+  "sources_unchanged": true,
+  "final_report_fresh": false,
+  "cpu_internal_timing_passed": false,
+  "cpu_timing": {},
+  "all_timing_passed": false,
+  "remaining_violations": {},
+  "violations_requiring_further_work": {},
+  "full_design_window_mapping": {
+    "cpu_payload_ff": 2048,
+    "cpu_payload_shadow_ram": false
+  },
+  "bitstream_generated": false,
+  "bitstream_sha256": null,
+  "board_tested": false,
+  "full_network_speed_measured": false,
+  "delivery_ready": false,
+  "cpu_timing_status": "not_available_build_stopped_before_final_STA",
+  "note": "False timing acceptance means no current final report; it does not establish a CPU timing violation."
+}

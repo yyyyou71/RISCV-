@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "checks": {
+    "mac_gate": true,
+    "full_12_convolution_fixtures": true,
+    "five_operators": true
+  },
+  "previous_cycles": [
+    7959,
+    13228
+  ],
+  "parallel_cycles": [
+    7557,
+    12578
+  ],
+  "additional_cycle_reduction_percent": [
+    5.05,
+    4.91
+  ],
+  "peak_products_per_enabled_issue": {
+    "before": 8,
+    "after": 16
+  },
+  "model_format_changed": false,
+  "rk_program_change_required": false,
+  "quantization_changed": false,
+  "gate_warning_count": 23,
+  "gate_warnings_scope": "23 vendor GTP_DRM36K_E1 template warnings: 22 initialization part-select and one unused mem_read_a return-value warning; zero simulation errors; all tested cache locations explicitly loaded",
+  "full_network_speed_measured": false,
+  "sources": {
+    "rtl/conv_mac_tile.v": "e7cf47f0597afb8cfc4751e9f2dd6314bcf36807a46a7696f9f0eef31dc3217b",
+    "rtl/conv2d_ddr_engine.v": "ab8331866040ced1361059fd9e12eb58b73a76c5e48175c2ef4a521d872ec894",
+    "sim/ai/TB_parallel_mac.v": "2fa713128a78fc214c9a14db048bb6b97beaf526c3da64fdc73cdf9074d8d2f0"
+  },
+  "performance_12_cases": {
+    "cases": [
+      {
+        "case": 0,
+        "before": 7959,
+        "after": 7557,
+        "reduction_percent": 5.05
+      },
+      {
+        "case": 1,
+        "before": 13228,
+        "after": 12578,
+        "reduction_percent": 4.91
+      },
+      {
+        "case": 2,
+        "before": 13425,
+        "after": 13196,
+        "reduction_percent": 1.71
+      },
+      {
+        "case": 3,
+        "before": 43993,
+        "after": 43039,
+        "reduction_percent": 2.17
+      },
+      {
+        "case": 4,
+        "before": 18081,
+        "after": 17600,
+        "reduction_percent": 2.66
+      },
+      {
+        "case": 5,
+        "before": 6788,
+        "after": 6612,
+        "reduction_percent": 2.59
+      },
+      {
+        "case": 6,
+        "before": 33531,
+        "after": 31037,
+        "reduction_percent": 7.44
+      },
+      {
+        "case": 7,
+        "before": 1430,
+        "after": 1417,
+        "reduction_percent": 0.91
+      },
+      {
+        "case": 8,
+        "before": 16630,
+        "after": 15812,
+        "reduction_percent": 4.92
+      },
+      {
+        "case": 9,
+        "before": 8354,
+        "after": 8271,
+        "reduction_percent": 0.99
+      },
+      {
+        "case": 10,
+        "before": 1150,
+        "after": 1151,
+        "reduction_percent": -0.09
+      },
+      {
+        "case": 11,
+        "before": 1172,
+        "after": 1167,
+        "reduction_percent": 0.43
+      }
+    ],
+    "summed_example_cycle_reduction_percent": 3.8,
+    "full_network_speed_measured": false
+  }
+}

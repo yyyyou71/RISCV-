@@ -12,7 +12,10 @@ def main():
     parser.add_argument('--reference', type=Path, required=True)
     parser.add_argument('--stage', default='final')
     parser.add_argument('--operators', type=int, nargs='+', default=[2,3,4,5,6])
+    parser.add_argument('--max-layers', type=int, default=2, help='Valid fixtures per operator; 0 checks all')
+    parser.add_argument('--rtl-overlay',type=Path,help='Explicit candidate RTL files, leaving live PDS sources unchanged')
     args = parser.parse_args()
+    if args.max_layers < 0: parser.error('--max-layers must be nonnegative')
     out = ROOT / 'build/timing-closure' / args.stage
     out.mkdir(parents=True, exist_ok=True)
     reference = args.reference.resolve()
@@ -49,18 +52,19 @@ def main():
         binary = case / 'engine.vvp'
         run(['iverilog', '-g2012', '-s', 'TB_conv2d_ddr_engine', '-y', ROOT / 'sim/models', '-y', ROOT / 'rtl',
              '-DDDR3_MODEL_SLOTS=32768', '-DDDR3_MODEL_STRICT_READS',
-             f'-PTB_conv2d_ddr_engine.QUANT_TEST={mode}', '-PTB_conv2d_ddr_engine.MAX_LAYERS=2',
-             '-o', binary, ROOT / 'sim/ai/TB_conv2d_ddr_engine.v', ROOT / 'sim/ddr3/ddr3.sv'], case, f'compile_{mode}')
+             f'-PTB_conv2d_ddr_engine.QUANT_TEST={mode}', f'-PTB_conv2d_ddr_engine.MAX_LAYERS={args.max_layers}',
+             '-o', binary, ROOT / 'sim/ai/TB_conv2d_ddr_engine.v', ROOT / 'sim/ddr3/ddr3.sv',
+             *(sorted(args.rtl_overlay.resolve().glob('*.v')) if args.rtl_overlay else [])], case, f'compile_{mode}')
         text = run(['vvp', binary, f'+JOBS={counts["layers"]}', f'+INITIAL={initial_count}',
                     f'+GOLDEN={golden_count}', '+ddr3_random_stalls=1'], vectors, f'run_{mode}')
         summary = next((line for line in text.splitlines() if line.startswith('PASS ')), None)
         if not summary:
             raise RuntimeError(f'missing PASS for operator {mode}')
-        records.append(dict(mode=mode, passed=True, initial_layers_checked=min(2,counts['layers']),
+        records.append(dict(mode=mode, passed=True, initial_layers_checked=min(args.max_layers,counts['layers']) if args.max_layers else counts['layers'],
                             fixture_layers=counts['layers'], summary=summary))
         print(f'operator {mode}: {summary}', flush=True)
     destination = ROOT / 'reports/video_integration' / ('timing_' + args.stage + '_checks.json')
-    destination.write_text(json.dumps(dict(passed=True, scope='two small layers/operator, C golden, invalid configs, backpressure/reset/fault',
+    destination.write_text(json.dumps(dict(passed=True, scope=f'up to {args.max_layers or "all"} valid fixtures/operator, C golden, invalid configs, backpressure/reset/fault',
                                           full_network_run=False, cases=records), indent=2) + '\n')
 
 

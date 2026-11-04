@@ -9,12 +9,17 @@ static uint32_t fid,rid,output,imstate,imsession,committed,imhash,expected_hash;
 static int presentation,dma_done,corrupt_words,corrupt_frame,model_ready,old_firmware;
 static unsigned arm_polls;
 static int present_fault;
+static int nav_pipe[2],browse_test,browse_busy;
+static unsigned busy_polls;
+static int model_loading;
+static char loaded_paths[8][16];
 int image_list_open(image_list *list,const char *path){
     assert(!strcmp(path,"fake-dir"));list->count=2;list->paths=calloc(2,sizeof(char *));
     list->paths[0]=strdup("one.png");list->paths[1]=strdup("two.jpg");return 0;
 }
 void image_list_close(image_list *list){for(unsigned i=0;i<list->count;i++)free(list->paths[i]);free(list->paths);list->count=0;list->paths=0;}
 uint8_t *image_load_384(const char *path){
+    if(browse_test){assert(captured<8);snprintf(loaded_paths[captured],16,"%s",path);}
     assert(!strcmp(path,"one.png")||!strcmp(path,"two.jpg"));uint8_t *p=malloc(IMAGE_BYTES);
     for(unsigned i=0;i<IMAGE_BYTES;i++)p[i]=(uint8_t)(i*29u);
     return p;
@@ -23,7 +28,7 @@ int rk_control_open(const char *p){assert(!strcmp(p,"fake-spi"));return 0;}
 void rk_control_close(void){closed++;}
 void rk_control_set_idle_hook(int (*hook)(void)){(void)hook;}
 void rk_control_set_quiet(int value){(void)value;}
-int rk_control_upload(const char *p,int resume){assert(!strcmp(p,"fake-model"));assert(!resume);model_ready=1;return 0;}
+int rk_control_upload(const char *p,int resume){assert(!strcmp(p,"fake-model"));assert(!resume);model_ready=1;model_loading=0;return 0;}
 int rk_control_results(uint32_t frame_id,uint32_t run_id){assert(frame_id==fid&&run_id==rid);printed++;return 0;}
 int rk_control_status(unsigned op,uint32_t abi,uint32_t *v,unsigned words){
     memset(v,0,words*4);v[0]=abi;
@@ -40,7 +45,7 @@ int rk_control_status(unsigned op,uint32_t abi,uint32_t *v,unsigned words){
         v[1]=v[2]=output;v[3]=imstate==IMAGE_READY?COMM_VIDEO_SUCCESS:COMM_VIDEO_IDLE;break;
     case COMM_NETWORK_STATUS:
         assert(output==VIDEO_OUTPUT_AI);
-        v[1]=inferred?NW_DONE:(model_ready?NW_READY:NW_EMPTY);v[3]=77;v[9]=rid;
+        v[1]=browse_busy&&inferred&&++busy_polls<3?NW_RUNNING:inferred?NW_DONE:(model_ready?NW_READY:NW_EMPTY);v[3]=77;v[9]=rid;
         v[10]=fid+(corrupt_frame?1:0);v[11]=v[12]=99;break;
     case COMM_PRESENT_STATUS:
         if(dma_done)presentation=3;
@@ -60,7 +65,7 @@ int rk_control_status(unsigned op,uint32_t abi,uint32_t *v,unsigned words){
 int rk_control_exchange(unsigned op,const uint8_t *p,unsigned n,uint8_t *reply,unsigned cap,unsigned *bytes){
     *bytes=0;
     if(op==COMM_VIDEO_MODE){
-        assert(n==4&&cap==16&&imstate==IMAGE_EMPTY);if(output!=comm_u32(p))mode_changes++;
+        assert(n==4&&cap==16&&imstate==IMAGE_EMPTY&&!model_loading);if(output!=comm_u32(p))mode_changes++;
         output=comm_u32(p);comm_put32(reply,COMM_VIDEO_MODE_ABI);comm_put32(reply+4,output);
         comm_put32(reply+8,output);comm_put32(reply+12,COMM_VIDEO_IDLE);*bytes=16;
     }else if(op==COMM_IMAGE_BEGIN){
@@ -76,7 +81,8 @@ int rk_control_exchange(unsigned op,const uint8_t *p,unsigned n,uint8_t *reply,u
         assert(committed==IMAGE_BYTES&&imhash==expected_hash&&comm_u32(p+12)==expected_hash);
         imstate=IMAGE_READY;captured++;
     }else if(op==COMM_NETWORK_RUN){
-        assert(output==VIDEO_OUTPUT_AI&&model_ready&&imstate==IMAGE_READY);rid++;inferred++;
+        assert(output==VIDEO_OUTPUT_AI&&model_ready&&imstate==IMAGE_READY);rid++;inferred++;busy_polls=0;
+        if(browse_busy){const char *cmd=inferred==1?"n\n":"q\n";assert(write(nav_pipe[1],cmd,2)==2);}
     }else if(op==COMM_PRESENT_RUN){assert(imstate==IMAGE_READY);submitted++;presentation=2;arm_polls=0;}
     else if(op==COMM_VIDEO_RELEASE){assert(presentation!=1&&presentation!=2);imstate=IMAGE_EMPTY;presentation=0;dma_done=0;}
     else assert(0);
@@ -112,6 +118,7 @@ int display_poll_quit(display_ctx_t *d){(void)d;return 0;}
 void display_show_frame(display_ctx_t *d,const uint8_t *p,uint32_t w,uint32_t h,uint32_t stride){
     assert(d->sdl_ok && p && w==WIDTH && h==HEIGHT && stride==WIDTH);
     assert(dma_done && presentation==3 && !corrupt_words);shown++;
+    if(browse_test&&!browse_busy){const char *cmd=shown==1?"next\n":shown==2?"prev\n":"quit\n";assert(write(nav_pipe[1],cmd,strlen(cmd))==(ssize_t)strlen(cmd));}
 }
 int save_ppm(const char *path,const uint8_t *p,uint32_t w,uint32_t h,uint32_t stride){
     (void)path;(void)p;(void)w;(void)h;(void)stride;assert(0);
@@ -121,7 +128,7 @@ static void reset_case(void){
     captured=dma_count=shown=inferred=printed=submitted=resets=closed=mode_changes=0;
     fid=rid=output=imstate=imsession=committed=expected_hash=0;imhash=2166136261u;
     presentation=dma_done=corrupt_words=corrupt_frame=model_ready=old_firmware=0;
-    arm_polls=0;present_fault=0;
+    arm_polls=0;present_fault=0;model_loading=0;browse_test=0;browse_busy=0;busy_polls=0;
 }
 int main(void){
     char *raw[]={"rk_video_app","fake-spi","--input","fake-dir","--output","raw"};
@@ -130,10 +137,24 @@ int main(void){
     char *ai[]={"rk_video_app","fake-spi","--input","fake-dir","--output","ai","--model","fake-model"};
     reset_case();assert(rk_video_app_main(8,ai)==0);
     assert(captured==2&&shown==2&&inferred==2&&printed==2&&submitted==2&&mode_changes==1);
+    reset_case();model_loading=1;assert(rk_video_app_main(8,ai)==0);assert(!model_loading&&captured==2&&shown==2);
     reset_case();corrupt_words=1;assert(rk_video_app_main(6,raw)==1);assert(shown==0&&dma_count==1);
     reset_case();corrupt_frame=1;assert(rk_video_app_main(8,ai)==1);assert(shown==0&&dma_count==0&&inferred==1);
     reset_case();old_firmware=1;assert(rk_video_app_main(6,raw)==1);assert(!shown&&!dma_count&&closed==1);
     reset_case();present_fault=1;assert(rk_video_app_main(6,raw)==1);assert(!shown&&!dma_count&&closed==1);
+    char *browse[]={"rk_video_app","fake-spi","--input","fake-dir","--output","ai","--model","fake-model","--interactive"};
+    reset_case();browse_test=1;assert(pipe(nav_pipe)==0);int old_stdin=dup(0);assert(old_stdin>=0&&dup2(nav_pipe[0],0)==0);
+    assert(rk_video_app_main(9,browse)==0);
+    assert(captured==3&&shown==3&&inferred==3&&dma_count==3&&closed==1&&imstate==IMAGE_EMPTY);
+    assert(!strcmp(loaded_paths[0],"one.png")&&!strcmp(loaded_paths[1],"two.jpg")&&!strcmp(loaded_paths[2],"one.png"));
+    assert(dup2(old_stdin,0)==0);close(old_stdin);close(nav_pipe[0]);close(nav_pipe[1]);
+    reset_case();browse_test=browse_busy=1;assert(pipe(nav_pipe)==0);old_stdin=dup(0);assert(old_stdin>=0&&dup2(nav_pipe[0],0)==0);
+    assert(rk_video_app_main(9,browse)==0);
+    assert(captured==2&&shown==2&&inferred==2&&dma_count==2&&closed==1&&imstate==IMAGE_EMPTY);
+    assert(!strcmp(loaded_paths[0],"one.png")&&!strcmp(loaded_paths[1],"two.jpg"));
+    assert(dup2(old_stdin,0)==0);close(old_stdin);close(nav_pipe[0]);close(nav_pipe[1]);
+    puts("PASS busy navigation: queued next/quit finish inference, DMA and frame release before exit");
+    puts("PASS interactive browser: next/previous/quit, unique frame IDs, release before navigation");
     puts("PASS SPI image app: delayed DMA readiness, fault lock rejection, RAW/AI directory flow, same-frame DMA/display, bad counts/IDs and old firmware rejected");
     return 0;
 }

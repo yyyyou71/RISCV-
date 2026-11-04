@@ -1,0 +1,159 @@
+{
+  "build": {
+    "phase": "finished",
+    "pid": 24004,
+    "started": "2026-11-04T01:10:40.785799",
+    "command": [
+      "C:/diskE/FPGA_Learning/PGenvironment/PDS_2022.2-SP6.1/bin/pds_shell.exe",
+      "-project",
+      "C:\\diskE\\FPGA_Learning\\mywork\\PG\\RV32I\\rv32I\\rv32I.pds",
+      "-run",
+      "gen_bit_stream",
+      "-skip_actions",
+      "report_power gen_netlist"
+    ],
+    "returncode": 0,
+    "finished": "2026-11-04T01:52:57.054592"
+  },
+  "sources_unchanged": true,
+  "final_report_fresh": true,
+  "cpu_internal_timing_passed": true,
+  "cpu_timing": {
+    "Setup Summary(Slow Corner)": [
+      {
+        "path": "sys_clk                sys_clk                      9.733       0.000              0          30600",
+        "slack_ns": 9.733,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 30600
+      }
+    ],
+    "Hold Summary(Slow Corner)": [
+      {
+        "path": "sys_clk                sys_clk                      0.161       0.000              0          30600",
+        "slack_ns": 0.161,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 30600
+      }
+    ],
+    "Recovery Summary(Slow Corner)": [
+      {
+        "path": "sys_clk                sys_clk                     30.457       0.000              0           1917",
+        "slack_ns": 30.457,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1917
+      }
+    ],
+    "Removal Summary(Slow Corner)": [
+      {
+        "path": "sys_clk                sys_clk                      0.156       0.000              0           1917",
+        "slack_ns": 0.156,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1917
+      }
+    ],
+    "Minimum Pulse Width Summary(Slow Corner)": [
+      {
+        "path": "sys_clk                                            19.040       0.000              0           7791",
+        "slack_ns": 19.04,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 7791
+      }
+    ],
+    "Setup Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                sys_clk                     20.760       0.000              0          30600",
+        "slack_ns": 20.76,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 30600
+      }
+    ],
+    "Hold Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                sys_clk                      0.029       0.000              0          30600",
+        "slack_ns": 0.029,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 30600
+      }
+    ],
+    "Recovery Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                sys_clk                     33.914       0.000              0           1917",
+        "slack_ns": 33.914,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1917
+      }
+    ],
+    "Removal Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                sys_clk                      0.048       0.000              0           1917",
+        "slack_ns": 0.048,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 1917
+      }
+    ],
+    "Minimum Pulse Width Summary(Fast Corner)": [
+      {
+        "path": "sys_clk                                            19.345       0.000              0           7791",
+        "slack_ns": 19.345,
+        "total_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 7791
+      }
+    ]
+  },
+  "all_timing_passed": false,
+  "remaining_violations": {
+    "Setup Summary(Slow Corner)": [
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk               -1.152     -19.030             78          72052",
+        "slack_ns": -1.152,
+        "total_slack_ns": -19.03,
+        "failing_endpoints": 78,
+        "endpoints": 72052
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1             -0.891      -1.021              2            210",
+        "slack_ns": -0.891,
+        "total_slack_ns": -1.021,
+        "failing_endpoints": 2,
+        "endpoints": 210
+      }
+    ]
+  },
+  "violations_requiring_further_work": {
+    "Setup Summary(Slow Corner)": [
+      {
+        "path": "ddrphy_sysclk          ddrphy_sysclk               -1.152     -19.030             78          72052",
+        "slack_ns": -1.152,
+        "total_slack_ns": -19.03,
+        "failing_endpoints": 78,
+        "endpoints": 72052
+      },
+      {
+        "path": "ddrphy_sysclk          phy_dq_sysclk_1             -0.891      -1.021              2            210",
+        "slack_ns": -0.891,
+        "total_slack_ns": -1.021,
+        "failing_endpoints": 2,
+        "endpoints": 210
+      }
+    ]
+  },
+  "full_design_window_mapping": {
+    "cpu_payload_ff": 2048,
+    "cpu_payload_shadow_ram": false
+  },
+  "bitstream_generated": true,
+  "bitstream_sha256": "43375f8902ac4a9f73c6994020766737a783e84dd0399fac0d9e085ca2ca9e40",
+  "board_tested": false,
+  "full_network_speed_measured": false,
+  "delivery_ready": false
+}

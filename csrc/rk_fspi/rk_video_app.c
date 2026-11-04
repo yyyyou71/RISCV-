@@ -7,6 +7,7 @@
 #include "video/pcie_dma.h"
 #include "video/display.h"
 #include "image_input.h"
+#include "terminal_nav.h"
 #include <time.h>
 
 #define WIDTH IMAGE_WIDTH
@@ -19,11 +20,14 @@
 static display_ctx_t screen;
 static int have_screen;
 static uint32_t timeout_ms=120000;
+static int interactive;
+static terminal_nav navigation;
 
 static uint64_t now_ms(void){struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);return (uint64_t)t.tv_sec*1000+t.tv_nsec/1000000;}
 static int fail(int e){errno=e;return -1;}
 static void stop(int sig){(void)sig;g_running=0;}
 static int window_poll(void){
+    if(interactive && terminal_nav_poll(&navigation)){g_running=0;return 1;}
     if(have_screen && display_poll_quit(&screen))g_running=0;
     return !g_running;
 }
@@ -209,10 +213,12 @@ int main(int argc,char **argv){
     int ai=0,explicit_mode=-1,resume=0,headless=0,rc=1,spi_open=0,pcie_open=0,dma_allocated=0,dma_pending=0;
     pcie_ctx_t ctx={0};ctx.dma_drv_fd=ctx.cma_buf_fd=ctx.cma_heap_fd=-1;
     memset(&screen,0,sizeof(screen));have_screen=0;g_running=1;
+    interactive=0;memset(&navigation,0,sizeof(navigation));timeout_ms=120000;
     if(argc<2)goto usage;
     for(int i=2;i<argc;i++){
         if(!strcmp(argv[i],"--input") && i+1<argc)input=argv[++i];
         else if(!strcmp(argv[i],"--loop"))loop=1;
+        else if(!strcmp(argv[i],"--interactive"))interactive=1;
         else if(!strcmp(argv[i],"--model") && i+1<argc){model=argv[++i];ai=1;}
         else if(!strcmp(argv[i],"--use-loaded-model"))ai=1;
         else if(!strcmp(argv[i],"--resume"))resume=1;
@@ -230,8 +236,10 @@ int main(int argc,char **argv){
         else goto usage;
     }
     if(explicit_mode>=0)ai=explicit_mode==VIDEO_OUTPUT_AI;
-    if(!input || (resume&&!model) || (model&&!ai))goto usage;
+    if(!input || (resume&&!model) || (model&&!ai) || (interactive&&loop))goto usage;
     if(image_list_open(&images,input))goto error;
+    navigation.count=images.count;
+    if(interactive)terminal_nav_help();
     if(headless&&!save){fprintf(stderr,"--headless requires --save PREFIX for captured images.\n");goto usage;}
     signal(SIGINT,stop);signal(SIGTERM,stop);
     rk_control_set_idle_hook(window_poll);
@@ -265,16 +273,20 @@ int main(int argc,char **argv){
         }
         have_screen=1;
     }
-    if(select_output(&ctx,&dma_pending,ai))goto error;
+    // Recover/replace a partial model before changing mode: firmware rejects
+    // mode changes while NW_LOADING, so doing this after select_output deadlocks.
     if(model){
+        if(drain_pending(&ctx,&dma_pending) || input_empty())goto error;
         if(rk_control_upload(model,resume))goto error;
-
     }
+    if(select_output(&ctx,&dma_pending,ai))goto error;
     printf("[video-app] %s; SPI controls/results, PCIe RGB565 %ux%u, desktop SDL2 display\n",ai?"FPGA inference":"preview",WIDTH,HEIGHT);
     uint32_t session=(uint32_t)(now_ms()^((uint32_t)getpid()<<16));if(!session)session=1;
-    while(g_running && (!frames || completed<frames) && (loop || completed<images.count)){
+    unsigned image_index=0;
+    while(g_running && !navigation.quit && (!frames || completed<frames) && (interactive || loop || completed<images.count)){
         uint64_t frame_started=now_ms();
-        const char *path=images.paths[completed%images.count];
+        const char *path=images.paths[interactive?image_index:completed%images.count];
+        if(interactive){navigation.index=image_index;navigation.requested=0;printf("[browse] image %u/%u: %s\n",image_index+1,images.count,path);}
         printf("[input] file=%s\n",path);
         rgb=image_load_384(path);if(!rgb)goto error;
         frame_id=completed+1;
@@ -300,6 +312,14 @@ int main(int argc,char **argv){
         completed++;printf("[frame] displayed=%u frame_id=%u run_id=%u infer+results=%.3fs PCIe=%.3fs total=%.3fs bytes=%u\n",
             completed,frame_id,run_id,(inferred-prepared)/1000.0,(returned-inferred)/1000.0,(now_ms()-frame_started)/1000.0,FRAME_BYTES);
         if(command(COMM_VIDEO_RELEASE,0,0) || input_empty())goto error;
+        if(interactive && (!frames || completed<frames)){
+            printf("[browse] showing %u/%u; enter n, p or q: ",image_index+1,images.count);fflush(stdout);
+            while(g_running && !navigation.quit && !navigation.requested){
+                if(window_poll())break;
+                struct timespec delay={0,50000000};nanosleep(&delay,0);
+            }
+            image_index=navigation.index;
+        }
     }
     rc=0;goto done;
 error:
@@ -317,6 +337,6 @@ done:
     if(spi_open)rk_control_close();
     return rc;
 usage:
-    fprintf(stderr,"Usage: %s SPI_DEVICE --input FILE_OR_DIR [--loop] [--output raw|ai] [--model FILE|--use-loaded-model] [--preview] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
+    fprintf(stderr,"Usage: %s SPI_DEVICE --input FILE_OR_DIR [--loop|--interactive] [--output raw|ai] [--model FILE|--use-loaded-model] [--preview] [--resume] [--frames N] [--wait-ms N] [--save PREFIX] [--headless]\n",argv[0]);
     return 2;
 }

@@ -44,7 +44,7 @@ module conv2d_ddr_engine #(
         CAT_PREP=30,CAT_REQ=31,CAT_WAIT=32,CAT_COPY=33,CAT_OREQ=34,CAT_OWAIT=35,
         POOL_INIT=36,POOL_PREP=37,POOL_REQ=38,POOL_WAIT=39,POOL_OREQ=40,POOL_OWAIT=41,
         UP_PREP=42,UP_REQ=43,UP_WAIT=44,UP_OREQ=45,UP_OWAIT=46,
-        CFG_PITCH=47,CFG_DIMS=48,CFG_START=49,CFG_WAIT=50,CFG_END=51,CFG_CHECK=52;
+        CFG_PITCH=47,CFG_DIMS=48,CFG_START=49,CFG_WAIT=50,CFG_END=51,CFG_CHECK=52,CFG_VALIDATE=53;
     reg [5:0] state;
     reg [31:0] input_addr, weight_addr, bias_addr, output_addr, quant_addr;
     reg [15:0] height, width, input_channels, output_channels;
@@ -97,18 +97,18 @@ module conv2d_ddr_engine #(
         .kernel(held_kernel),.quantized(cfg_quantized),.done(sizes_done),
         .input_size(input_size),.weight_size(weight_size),.output_size(output_size),
         .add_size(add_size),.cat_b_size(cat_b_size),.cat_o_size(cat_o_size));
-    wire add_address_bad=add_ae>64'h20000000 || add_be>64'h20000000 || add_oe>64'h20000000 || add_qe>64'h20000000;
-    wire add_overlap_bad=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe) ||
+    wire add_address_bad_raw=add_ae>64'h20000000 || add_be>64'h20000000 || add_oe>64'h20000000 || add_qe>64'h20000000;
+    wire add_overlap_bad_raw=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe) ||
         ({32'd0,held_output_addr}<add_be && {32'd0,held_weight_addr}<add_oe) ||
         ({32'd0,held_output_addr}<add_qe && {32'd0,held_quant_addr}<add_oe);
-    wire cat_address_bad=add_ae>64'h20000000 || cat_be>64'h20000000 || cat_oe>64'h20000000;
-    wire cat_overlap_bad=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<cat_oe) ||
+    wire cat_address_bad_raw=add_ae>64'h20000000 || cat_be>64'h20000000 || cat_oe>64'h20000000;
+    wire cat_overlap_bad_raw=({32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<cat_oe) ||
         ({32'd0,held_output_addr}<cat_be && {32'd0,held_weight_addr}<cat_oe);
-    wire pool_address_bad=add_ae>64'h20000000 || add_oe>64'h20000000;
-    wire pool_overlap_bad={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe;
+    wire pool_address_bad_raw=add_ae>64'h20000000 || add_oe>64'h20000000;
+    wire pool_overlap_bad_raw={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<add_oe;
     wire [63:0] up_oe={32'd0,held_output_addr}+(add_size<<2);
-    wire up_address_bad=add_ae>64'h20000000 || up_oe>64'h20000000;
-    wire up_overlap_bad={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<up_oe;
+    wire up_address_bad_raw=add_ae>64'h20000000 || up_oe>64'h20000000;
+    wire up_overlap_bad_raw={32'd0,held_output_addr}<add_ae && {32'd0,held_input_addr}<up_oe;
     wire [31:0] up_write_addr=output_addr+(up_channel<<1)+
         (up_copy[0] ? (ci_pitch<<1):32'd0)+(up_copy[1] ? up_row_bytes:32'd0);
     wire signed [31:0] pool_iy=$signed(pool_y)+$signed({29'd0,pool_ky})-32'sd2;
@@ -127,13 +127,14 @@ module conv2d_ddr_engine #(
     // 每个像素完成后推进基址，供数路径不需要逐元素计算像素索引乘通道间距。
     wire [31:0] cat_source_addr=(cat_source_b ? weight_addr:input_addr)+(cat_source_channel&32'hfffffff8)*2;
     wire [31:0] cat_output_addr=output_addr+cat_channel*2;
-    wire address_bad=ie>64'h20000000 || we>64'h20000000 || oe>64'h20000000 ||
+    wire address_bad_raw=ie>64'h20000000 || we>64'h20000000 || oe>64'h20000000 ||
         (held_bias_enable && be>64'h20000000) || (cfg_quantized && quant_end>64'h20000000);
     // 只读区域允许相互重叠；输出禁止覆盖任意正在读取的区域。
-    wire overlap_bad=({32'd0,held_output_addr}<ie && {32'd0,held_input_addr}<oe) ||
+    wire overlap_bad_raw=({32'd0,held_output_addr}<ie && {32'd0,held_input_addr}<oe) ||
         ({32'd0,held_output_addr}<we && {32'd0,held_weight_addr}<oe) ||
         (held_bias_enable && {32'd0,held_output_addr}<be && {32'd0,held_bias_addr}<oe) ||
         (cfg_quantized && {32'd0,held_output_addr}<quant_end && {32'd0,held_quant_addr}<oe);
+    reg address_bad,overlap_bad,add_address_bad,add_overlap_bad,cat_address_bad,cat_overlap_bad,pool_address_bad,pool_overlap_bad,up_address_bad,up_overlap_bad;
     wire [3:0] ty=taps==1 ? 4'd0 : tap/4'd3, tx=taps==1 ? 4'd0 : tap%4'd3;
     wire signed [31:0] iy=$signed(stride==2 ? y<<1 : y)+$signed({28'd0,ty})-$signed({30'd0,padding});
     wire [31:0] ox=x_tile+{29'd0,pixel};
@@ -194,6 +195,25 @@ module conv2d_ddr_engine #(
         state==UP_REQ ? input_addr+(up_channel<<1):state==UP_OREQ ? up_write_addr:
         request_address;
     wire load_ready, tile_start_ready, tile_out_valid, tile_error, tile_busy, issue;
+    wire tile_cache_ready,tile_start_ready_raw;
+    reg cache_pending,cache_weight;
+    reg [1:0] cache_lane;
+    reg [3:0] cache_tap;
+    reg [16*ACT_WIDTH-1:0] cache_payload;
+    assign load_ready=!cache_pending || tile_cache_ready;
+    assign tile_start_ready=tile_start_ready_raw && !cache_pending;
+    // Payload and cache tags advance together; start waits for the final load.
+    always @(posedge clk or negedge rst_n)begin
+        if(!rst_n)begin cache_pending<=0;cache_weight<=0;cache_lane<=0;cache_tap<=0;cache_payload<=0;end
+        else if(state==IDLE)cache_pending<=0;
+        else if(load_ready)begin
+            cache_pending<=tile_load_valid;
+            if(tile_load_valid)begin
+                cache_weight<=state==W_REQ || state==W_WAIT;
+                cache_lane<=weight_lane;cache_tap<=tap;cache_payload<=cache_data;
+            end
+        end
+    end
     wire [255:0] tile_result;
     wire tile_load_valid=(state==W_REQ && !lane_valid) || (state==P_REQ && !inside_image) ||
         ((state==W_WAIT || state==P_WAIT) && crsp_valid && !crsp_error);
@@ -285,10 +305,10 @@ module conv2d_ddr_engine #(
         .dma_rd_ready(dma_rd_ready),
         .dma_rd_data(dma_rd_data)
     );
-    conv_mac_tile #(.ACT_WIDTH(ACT_WIDTH)) u_tile (
-        .clk(clk), .rst_n(rst_n), .load_valid(tile_load_valid), .load_ready(load_ready),
-        .load_weight(state==W_REQ || state==W_WAIT), .load_lane(weight_lane), .load_tap(tap), .load_data(cache_data),
-        .start_valid(state==T_START), .start_ready(tile_start_ready), .tap_count(taps),
+    conv_mac_tile #(.ACT_WIDTH(ACT_WIDTH),.REDUCE_PAIRS(ACT_WIDTH==16?2:1)) u_tile (
+        .clk(clk), .rst_n(rst_n), .load_valid(cache_pending), .load_ready(tile_cache_ready),
+        .load_weight(cache_weight), .load_lane(cache_lane), .load_tap(cache_tap), .load_data(cache_payload),
+        .start_valid(state==T_START && !cache_pending), .start_ready(tile_start_ready_raw), .tap_count(taps),
         .initial_sums(current_group ? partials1[pixel[1:0]] : partials[pixel[1:0]]),
         .compute_enable(1'b1), .busy(tile_busy), .error(tile_error),
         .out_valid(tile_out_valid), .out_ready(state==T_WAIT), .out_sums(tile_result), .issue_valid(issue)
@@ -379,6 +399,7 @@ module conv2d_ddr_engine #(
             held_bias_enable<=0;
             cfg_ci_pitch<=0;cfg_co_pitch<=0;cfg_output_pitch<=0;cfg_cat_b_pitch<=0;
             padded_h<=0;padded_w<=0;calc_h<=0;calc_w<=0;
+            address_bad<=0;overlap_bad<=0;add_address_bad<=0;add_overlap_bad<=0;cat_address_bad<=0;cat_overlap_bad<=0;pool_address_bad<=0;pool_overlap_bad<=0;up_address_bad<=0;up_overlap_bad<=0;
             ie<=0;we<=0;be<=0;oe<=0;quant_end<=0;add_ae<=0;add_be<=0;add_oe<=0;add_qe<=0;cat_be<=0;cat_oe<=0;
 
             input_addr<=0; weight_addr<=0; bias_addr<=0; output_addr<=0;
@@ -400,7 +421,7 @@ module conv2d_ddr_engine #(
             end
         end else begin
             if(busy) total_cycles<=total_cycles+1'b1;
-            if(issue) mac_issues<=mac_issues+1'b1;
+            if(issue) mac_issues<=mac_issues+(ACT_WIDTH==16?32'd2:32'd1);
             if(state==IDLE && clear_status) begin done<=0; error<=0; error_code<=0; end
             case(state)
                 IDLE: if(cmd_valid && cmd_ready) begin
@@ -448,6 +469,11 @@ module conv2d_ddr_engine #(
                     add_ae<={32'd0,held_input_addr}+add_size;add_be<={32'd0,held_weight_addr}+add_size;
                     add_oe<={32'd0,held_output_addr}+add_size;add_qe<={32'd0,held_quant_addr}+64'd16;
                     cat_be<={32'd0,held_weight_addr}+cat_b_size;cat_oe<={32'd0,held_output_addr}+cat_o_size;
+                    state<=CFG_VALIDATE;
+                end
+                // Separate wide region comparisons from dispatch/register enables.
+                CFG_VALIDATE:begin
+                    address_bad<=address_bad_raw;overlap_bad<=overlap_bad_raw;add_address_bad<=add_address_bad_raw;add_overlap_bad<=add_overlap_bad_raw;cat_address_bad<=cat_address_bad_raw;cat_overlap_bad<=cat_overlap_bad_raw;pool_address_bad<=pool_address_bad_raw;pool_overlap_bad<=pool_overlap_bad_raw;up_address_bad<=up_address_bad_raw;up_overlap_bad<=up_overlap_bad_raw;
                     state<=CFG_CHECK;
                 end
                 CFG_CHECK:begin

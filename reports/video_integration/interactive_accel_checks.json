@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "checks": {
+    "rk_all": true,
+    "browser_busy_recovery": true,
+    "address_gate": true,
+    "window_gate": true,
+    "operators": true
+  },
+  "performance": {
+    "interactive-baseline": [
+      {
+        "layer": 0,
+        "cycles": 8990,
+        "issues": 864
+      },
+      {
+        "layer": 1,
+        "cycles": 15432,
+        "issues": 1440
+      }
+    ],
+    "interactive-final-staged": [
+      {
+        "layer": 0,
+        "cycles": 7959,
+        "issues": 864
+      },
+      {
+        "layer": 1,
+        "cycles": 13228,
+        "issues": 1440
+      }
+    ],
+    "scope": "Two directed convolution examples, deterministic random DDR stalls; no full-network speed claim",
+    "cycle_reduction_percent": [
+      11.47,
+      14.28
+    ]
+  },
+  "rtl_simulator": "WSL Icarus Verilog",
+  "gate_simulator": "ModelSim + PDS vendor primitives",
+  "full_network_speed_measured": false,
+  "board_tested": false,
+  "cpu_timing_requires_current_post_route_report": true
+}

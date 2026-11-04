@@ -1,0 +1,35 @@
+{
+  "stopped_by_user": true,
+  "stage_cycles": {
+    "initial": [
+      8990,
+      15432
+    ],
+    "address_pipeline": [
+      7959,
+      13228
+    ],
+    "parallel_pipeline": [
+      7557,
+      12578
+    ],
+    "cache_candidate": [
+      6636,
+      12236
+    ]
+  },
+  "twelve_examples": {
+    "address_pipeline": 165741,
+    "parallel_pipeline": 159437,
+    "cache_candidate": 153135
+  },
+  "cache_native_read_requests": {
+    "parallel": 4560,
+    "cache_candidate": 3980
+  },
+  "full_network_speed_measured": false,
+  "cache_in_production_rtl": false,
+  "latest_completed_bitstream": "build/parallel-mac/baseline/generate_bitstream/acore_dual_top.sbit",
+  "latest_completed_cpu_timing_passed": true,
+  "parallel_build_final_timing_available": false
+}
